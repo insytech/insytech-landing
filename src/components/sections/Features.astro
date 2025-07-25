@@ -1,0 +1,63 @@
+---
+import Container from "../shared/Container.astro";
+import Paragraph from "../shared/Paragraph.astro";
+import Title from "../shared/Title.astro";
+---
+
+<section id="features">
+    <Container className="flex flex-col midmd:flex-row gap-10 lg:gap-12">
+        <div class="flex-1 flex midmd:w-7/12 lg:w-1/2 flex-col">
+            <Title> Experiencia Probada en Distintos Sectores </Title>
+            <Paragraph className="mt-8">
+                Implementaciones exitosas en diversos sectores industriales,
+                adaptándonos a las necesidades específicas de cada cliente.
+            </Paragraph>
+            <ul class="mt-8 space-y-4 text-heading-3 font-medium">
+                <li>
+                    <span
+                        class="font-bold bg-box-bg rounded-full w-8 h-8 mr-3 text-primary inline-flex justify-center items-center"
+                        >&checkmark;</span
+                    > Automotriz
+                </li>
+                <li>
+                    <span
+                        class="font-bold bg-box-bg rounded-full w-8 h-8 mr-3 text-primary inline-flex justify-center items-center"
+                        >&checkmark;</span
+                    > Electrónica
+                </li>
+                <li>
+                    <span
+                        class="font-bold bg-box-bg rounded-full w-8 h-8 mr-3 text-primary inline-flex justify-center items-center"
+                        >&checkmark;</span
+                    > Empaque y Logística
+                </li>
+                <li>
+                    <span
+                        class="font-bold bg-box-bg rounded-full w-8 h-8 mr-3 text-primary inline-flex justify-center items-center"
+                        >&checkmark;</span
+                    > Metal-mecánica
+                </li>
+            </ul>
+            <a
+                href="#contact"
+                class="mt-8 text-primary font-semibold underline"
+            >
+                Contáctanos
+            </a>
+        </div>
+
+        <div
+            class="max-w-md mx-auto midmd:max-w-none lg:mx-0 lg:pr-10 xl:pr-2 flex-1 flex w-11/12 midmd:w-5/12 lg:w-1/2 midmd:h-auto"
+        >
+            <div class="w-full h-80 sm:h-96 midmd:h-full relative">
+                <img
+                    src="/images/Inicio_optimizada_01_version02.webp"
+                    alt="Sectores industriales"
+                    width="1240"
+                    height="1385"
+                    class="w-auto left-1/2 -translate-x-1/2 absolute bottom-0 max-h-full"
+                />
+            </div>
+        </div>
+    </Container>
+</section>
