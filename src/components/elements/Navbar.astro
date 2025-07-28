@@ -1,8 +1,8 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
-import Navitem from "../shared/Navitem.astro";
 
+// Estructura mejorada de navegación con submenús
 const navItems = [
     {
         href: "#",
@@ -11,10 +11,27 @@ const navItems = [
     {
         href: "#services",
         text: "Servicios",
+        hasDropdown: true,
+        dropdownItems: [
+            {
+                href: "#service-automation",
+                text: "Ingeniería de Automatización y Control",
+            },
+            {
+                href: "#service-software",
+                text: "Desarrollo de Software Personalizado",
+            },
+        ],
     },
     {
         href: "#about-us",
         text: "Soluciones",
+        hasDropdown: true,
+        dropdownItems: [
+            { href: "#infoguard", text: "InfoGuard" },
+            { href: "#industrial-vision", text: "Industrial Vision" },
+            { href: "#planner", text: "Planner" },
+        ],
     },
     {
         href: "#features",
@@ -23,109 +40,264 @@ const navItems = [
 ];
 ---
 
-<header class="absolute inset-x-0 top-0 z-50 py-6">
+<header
+    id="header"
+    class="fixed w-full top-0 left-0 z-50 transition-all duration-300"
+>
     <Container>
-        <nav class="w-full flex justify-between gap-6 relative">
-            <!-- logo -->
-            <div class="min-w-max inline-flex relative">
-                <a href="/" class="relative flex items-center gap-3">
-                    <img
-                        src="/images/Versiones de logotipo-01.png"
-                        alt="Insytech Logo"
-                        class="h-10 rounded-xl"
-                    />
-                </a>
-            </div>
-
-            <div
-                data-nav-overlay
-                aria-hidden="true"
-                class="fixed hidden inset-0 lg:!hidden bg-box-bg bg-opacity-50 backdrop-filter backdrop-blur-xl"
-            >
-            </div>
-            <div
-                data-navbar
-                class="flex h-0 overflow-hidden lg:!h-auto lg:scale-y-100 duration-300 ease-linear flex-col gap-y-6 gap-x-4 lg:flex-row w-full lg:justify-between lg:items-center absolute lg:relative top-full lg:top-0 bg-body lg:bg-transparent border-x border-x-box-border lg:border-x-0"
-            >
-                <ul
-                    class="border-t border-box-border lg:border-t-0 px-6 lg:px-0 pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-3 text-lg text-heading-2 w-full lg:justify-center lg:items-center"
-                >
-                    {
-                        navItems.map((item) => {
-                            return <Navitem {...item} />;
-                        })
-                    }
-                </ul>
-
-                <div
-                    class="lg:min-w-max flex items-center sm:w-max w-full pb-6 lg:pb-0 border-b border-box-bg lg:border-0 px-6 lg:px-0"
-                >
-                    <BtnLink
-                        text="Contáctanos"
-                        href="#cta"
-                        className="flex justify-center w-full sm:w-max"
-                        variant="primary"
-                    />
+        <div
+            class="relative z-40 bg-white bg-opacity-90 backdrop-blur-md rounded-full py-3 px-6 shadow-lg border border-gray-200/50 dark:bg-gray-900/80 dark:border-gray-700/50"
+        >
+            <nav class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="flex items-center">
+                        <img
+                            src="/images/Versiones de logotipo-01.png"
+                            alt="Insytech Logo"
+                            class="h-12"
+                        />
+                    </a>
                 </div>
-            </div>
 
-            <div class="min-w-max flex items-center gap-x-3">
-                <button
-                    data-switch-theme
-                    class="outline-none flex relative text-heading-2 rounded-full p-2 lg:p-3 border border-box-border"
+                <!-- Desktop Navigation -->
+                <div
+                    class="hidden lg:flex lg:items-center lg:justify-center flex-1 px-10"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6 dark:flex hidden"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
-                        ></path>
-                    </svg>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6 dark:hidden"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                        ></path>
-                    </svg>
+                    <ul class="flex space-x-8">
+                        {
+                            navItems.map((item) => (
+                                <li class="relative group">
+                                    <a
+                                        href={item.href}
+                                        class="text-heading-2 font-medium text-lg py-2 hover:text-primary transition-colors duration-300 flex items-center"
+                                    >
+                                        {item.text}
+                                        {item.hasDropdown && (
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-4 w-4 ml-1"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                        )}
+                                    </a>
 
-                    <span class="sr-only">switch theme</span>
-                </button>
+                                    {/* Decorative underline indicator */}
+                                    <span class="absolute left-0 bottom-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
 
-                <button
-                    data-toggle-nav
-                    data-open-nav="false"
-                    class="lg:hidden lg:invisible outline-none w-7 h-auto flex flex-col relative"
-                >
-                    <span
-                        id="line1"
-                        class="w-6 h-0.5 rounded-full bg-heading-2 transition-all duration-300 ease-linear"
-                    ></span>
-                    <span
-                        id="line2"
-                        class="w-6 origin-center mt-1 h-0.5 rounded-ful bg-heading-2 transition-all duration-300 ease-linear"
-                    ></span>
-                    <span
-                        id="line3"
-                        class="w-6 mt-1 h-0.5 rounded-ful bg-heading-2 transition-all duration-300 ease-linear"
-                    ></span>
-                    <span class="sr-only">togglenav</span>
-                </button>
-            </div>
-        </nav>
+                                    {/* Dropdown menu */}
+                                    {item.hasDropdown && (
+                                        <div class="absolute left-0 mt-2 w-72 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+                                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-4 border border-gray-100 dark:border-gray-700">
+                                                <ul class="space-y-2">
+                                                    {item.dropdownItems &&
+                                                        item.dropdownItems.map(
+                                                            (dropdownItem) => (
+                                                                <li>
+                                                                    <a
+                                                                        href={
+                                                                            dropdownItem.href
+                                                                        }
+                                                                        class="block px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-heading-2 hover:text-primary transition-colors duration-200"
+                                                                    >
+                                                                        {
+                                                                            dropdownItem.text
+                                                                        }
+                                                                    </a>
+                                                                </li>
+                                                            ),
+                                                        )}
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    )}
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <!-- Theme switcher -->
+                    <button
+                        data-switch-theme
+                        class="outline-none flex items-center justify-center w-10 h-10 rounded-full text-heading-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                        aria-label="Cambiar tema"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-5 h-5 dark:flex hidden"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+                            ></path>
+                        </svg>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-5 h-5 dark:hidden"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                            ></path>
+                        </svg>
+                    </button>
+
+                    <!-- CTA Button -->
+                    <div class="hidden lg:block">
+                        <BtnLink
+                            text="Contáctanos"
+                            href="#cta"
+                            className="flex justify-center"
+                            variant="primary"
+                        />
+                    </div>
+
+                    <!-- Mobile menu button -->
+                    <button
+                        data-toggle-nav
+                        data-open-nav="false"
+                        class="lg:hidden outline-none flex flex-col items-center justify-center"
+                        aria-label="Abrir menú"
+                    >
+                        <span
+                            id="line1"
+                            class="w-6 h-0.5 rounded-full bg-heading-2 transition-all duration-300 ease-linear"
+                        ></span>
+                        <span
+                            id="line2"
+                            class="w-6 origin-center mt-1 h-0.5 rounded-full bg-heading-2 transition-all duration-300 ease-linear"
+                        ></span>
+                        <span
+                            id="line3"
+                            class="w-6 mt-1 h-0.5 rounded-full bg-heading-2 transition-all duration-300 ease-linear"
+                        ></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
     </Container>
+
+    <!-- Mobile navigation overlay -->
+    <div
+        data-nav-overlay
+        aria-hidden="true"
+        class="fixed hidden inset-0 lg:!hidden bg-box-bg bg-opacity-50 backdrop-filter backdrop-blur-xl"
+    >
+    </div>
+
+    <!-- Mobile navigation menu -->
+    <div
+        data-navbar
+        class="lg:!hidden fixed inset-x-0 top-20 h-0 overflow-hidden duration-300 ease-linear flex flex-col w-full bg-body border-t border-box-border shadow-xl"
+    >
+        <Container className="flex flex-col py-4">
+            <ul
+                class="flex flex-col gap-y-5 text-lg text-heading-2 font-medium"
+            >
+                {
+                    navItems.map((item) => (
+                        <li>
+                            <a
+                                href={item.href}
+                                class="flex items-center justify-between py-2 hover:text-primary"
+                            >
+                                {item.text}
+                                {item.hasDropdown && (
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 9l-7 7-7-7"
+                                        />
+                                    </svg>
+                                )}
+                            </a>
+                            {item.hasDropdown && (
+                                <ul class="pl-4 mt-2 space-y-2 border-l border-box-border">
+                                    {item.dropdownItems &&
+                                        item.dropdownItems.map(
+                                            (dropdownItem) => (
+                                                <li>
+                                                    <a
+                                                        href={dropdownItem.href}
+                                                        class="block py-2 hover:text-primary"
+                                                    >
+                                                        {dropdownItem.text}
+                                                    </a>
+                                                </li>
+                                            ),
+                                        )}
+                                </ul>
+                            )}
+                        </li>
+                    ))
+                }
+            </ul>
+            <div class="mt-8">
+                <BtnLink
+                    text="Contáctanos"
+                    href="#cta"
+                    className="flex justify-center w-full"
+                    variant="primary"
+                />
+            </div>
+        </Container>
+    </div>
 </header>
+
+<script>
+    // Añadir clase cuando se hace scroll
+    document.addEventListener("DOMContentLoaded", () => {
+        const header = document.getElementById("header");
+
+        if (header) {
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 50) {
+                    header.classList.add("scrolled");
+                } else {
+                    header.classList.remove("scrolled");
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    /* Animación para el botón móvil */
+    [data-toggle-nav][data-open-nav="true"] #line1 {
+        transform: translateY(0.375rem) rotate(45deg);
+    }
+    [data-toggle-nav][data-open-nav="true"] #line2 {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+    [data-toggle-nav][data-open-nav="true"] #line3 {
+        transform: translateY(-0.375rem) rotate(-45deg);
+    }
+</style>

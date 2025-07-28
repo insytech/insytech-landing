@@ -5,75 +5,41 @@ import FooterNav from "../shared/FooterNav.astro";
 import Paragraph from "../shared/Paragraph.astro";
 const footerNav1 = [
     {
-        itemText: "Marketing",
+        itemText: "Automatización y Control Industrial",
         itemLink: "#",
     },
     {
-        itemText: "Analylitics",
+        itemText: "Trazabilidad Industrial 4.0 en Tiempo Real",
         itemLink: "#",
     },
     {
-        itemText: "Commerce",
-        itemLink: "#",
-    },
-    {
-        itemText: "Insights",
-        itemLink: "#",
-    },
-];
-
-const footerSupport = [
-    {
-        itemText: "Pricing",
-        itemLink: "#",
-    },
-    {
-        itemText: "Guides",
-        itemLink: "#",
-    },
-    {
-        itemText: "FAQ",
-        itemLink: "#",
-    },
-    {
-        itemText: "Contact",
+        itemText: "Visión Computacional",
         itemLink: "#",
     },
 ];
 
 const footerCompany = [
     {
-        itemText: "About",
-        itemLink: "/about",
-    },
-    {
         itemText: "Blog",
         itemLink: "#",
     },
     {
-        itemText: "Jobs",
-        itemLink: "#",
-    },
-    {
-        itemText: "Parteners",
-        itemLink: "#",
-    },
-    {
-        itemText: "Jobs",
-        itemLink: "#",
+        itemText: "Contacto",
+        itemLink: "/contacto",
     },
 ];
-const footerLegal = [
+
+const footerContact = [
     {
-        itemText: "Claim",
+        itemText: "8:00 AM a 6:00 PM, L-V",
         itemLink: "/#",
     },
     {
-        itemText: "Privacy",
+        itemText: "Monterrey, NL, México, C.P. 64800",
         itemLink: "#",
     },
     {
-        itemText: "Terms",
+        itemText: "info@insytech.mx",
         itemLink: "#",
     },
 ];
@@ -81,18 +47,18 @@ const footerLegal = [
 
 <div class="mt-16"></div>
 <footer
-    class="relative bg-gradient-to-tr from-gray-100 to-gray-200 dark:from-gray-900 dark:to-transparent pt-28 rounded-t-3xl"
+    class="relative bg-gradient-to-tr from-[#FFFFFF] to-[#F5F5F5] dark:from-[#211915] dark:to-transparent pt-28 rounded-t-3xl"
 >
     <div class="absolute right-0 top-0 h-full w-full flex justify-end">
         <div class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl">
             <span
-                class="absolute w-16 h-16 -top-1 -right-1 bg-green-500 rounded-md rotate-45"
+                class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
             ></span>
             <span
-                class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#FCDC58] rounded-md rotate-45"
+                class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
             ></span>
             <span
-                class="absolute w-16 h-16 -bottom-1 -left-1 bg-primary rounded-md rotate-45"
+                class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
             ></span>
         </div>
     </div>
@@ -100,19 +66,19 @@ const footerLegal = [
     <div class="absolute left-0 bottom-0 h-full w-full flex items-end">
         <div class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl">
             <span
-                class="absolute w-16 h-16 -top-1 -right-1 bg-green-500 rounded-md rotate-45"
+                class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
             ></span>
             <span
-                class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#FCDC58] rounded-md rotate-45"
+                class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
             ></span>
             <span
-                class="absolute w-16 h-16 -bottom-1 -left-1 bg-primary rounded-md rotate-45"
+                class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
             ></span>
         </div>
     </div>
     <Container className="pb-8 relative overflow-auto">
         <span
-            class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-2xl opacity-20 w-24 h-16 sm:w-48 sm:h-36 rounded-full rotate-12 skew-x-6 bg-primary"
+            class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-2xl opacity-20 w-24 h-16 sm:w-48 sm:h-36 rounded-full rotate-12 skew-x-6 bg-[#001489]"
         ></span>
         <div
             class="grid grid-cols-2 lg:grid-cols-3 lg:items-stretch gap-8 relative"
@@ -127,8 +93,11 @@ const footerLegal = [
                         />
                     </a>
                     <Paragraph className={"mt-8"}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Beatae, maiores nam doloribus id magni
+                        Automatización, trazabilidad y visión computacional
+                    </Paragraph>
+                    <Paragraph className={"mt-8"}>
+                        Integradores especializados en tecnología industrial
+                        para sectores exigentes.
                     </Paragraph>
                 </div>
 
@@ -138,7 +107,7 @@ const footerLegal = [
                 >
                     <a
                         href="#"
-                        class="transition hover:text-heading-1 hover:scale-105"
+                        class="transition hover:text-[#001489] hover:scale-105"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +126,7 @@ const footerLegal = [
 
                     <a
                         href="#"
-                        class="transition hover:text-heading-1 hover:scale-105"
+                        class="transition hover:text-[#001489] hover:scale-105"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -176,7 +145,7 @@ const footerLegal = [
 
                     <a
                         href="#"
-                        class="transition hover:text-heading-1 hover:scale-105"
+                        class="transition hover:text-[#001489] hover:scale-105"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +164,7 @@ const footerLegal = [
 
                     <a
                         href="#"
-                        class="transition hover:text-heading-1 hover:scale-105"
+                        class="transition hover:text-[#001489] hover:scale-105"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -215,23 +184,22 @@ const footerLegal = [
             </div>
 
             <GroupFooterNav>
-                <FooterNav title={"Company"} navItems={footerCompany} />
-                <FooterNav title={"Solutions"} navItems={footerNav1} />
+                <FooterNav title={"Empresa"} navItems={footerCompany} />
+                <FooterNav title={"Servicios"} navItems={footerNav1} />
             </GroupFooterNav>
 
             <GroupFooterNav>
-                <FooterNav title={"Support"} navItems={footerSupport} />
-                <FooterNav title={"Ressources"} navItems={footerLegal} />
+                <FooterNav title={"Contacto"} navItems={footerContact} />
             </GroupFooterNav>
         </div>
     </Container>
-    <div class="bg-gradient-to-tl from-box-bg py-2 relative">
+    <div>
         <Container>
             <div
                 class="flex justify-between items-center gap-6 md:text-lg text-heading-3"
             >
                 <div>
-                    &copy; <span id="year"></span> Insytech. All right reserved
+                    &copy; <span id="year"></span> Insytech. Todos los derechos reservados.
                 </div>
             </div>
         </Container>
