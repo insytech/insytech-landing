@@ -2,50 +2,185 @@
 import Button from "../shared/Button.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
-import ByNumber from "./ByNumber.astro";
+import Brands from "./Brands.astro";
 ---
 
-<section class="relative pt-32 lg:pt-36">
-    <Container className={"flex flex-col lg:flex-row gap-10 lg:gap-12"}>
-        <div class="absolute w-full lg:w-1/2 inset-y-0 lg:right-0">
-            <span
-                class="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-[#00B5E2] blur-xl opacity-60 lg:opacity-95 lg:block hidden"
-            ></span>
-            <span
-                class="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-[#005EB8] blur-xl opacity-80"
-            ></span>
-        </div>
+<section class="relative overflow-hidden pt-28 lg:pt-32 pb-10">
+    <!-- Manchas -->
+    <div class="absolute w-full lg:w-1/2 inset-y-0 lg:right-0">
         <span
-            class="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-[#005EB8] to-[#00B5E2] absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"
+            class="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-[#00B5E2] blur-xl opacity-60 lg:opacity-95 lg:block hidden"
         ></span>
+        <span
+            class="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-[#005EB8] blur-xl opacity-80"
+        ></span>
+    </div>
+    <span
+        class="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-[#005EB8] to-[#00B5E2] absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"
+    ></span>
+    <!-- Fondo decorativo moderno -->
+    <div class="absolute inset-0 z-0">
         <div
-            class="relative flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8
-        lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2"
+            class="absolute top-0 right-0 w-2/3 h-1/2 bg-gradient-to-bl from-[#001489]/10 to-transparent rounded-bl-full opacity-70"
         >
-            <h1
-                class="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight
-             font-bold text-heading-1"
+        </div>
+        <div
+            class="hidden lg:block absolute bottom-0 left-0 w-1/2 h-1/3 bg-gradient-to-tr from-[#001489]/10 to-transparent rounded-tr-full opacity-60"
+        >
+        </div>
+        <div
+            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
+        >
+        </div>
+    </div>
+
+    <Container className="relative z-10">
+        <!-- Navegación de etiquetas del tipo badge -->
+        <div class="flex justify-center lg:justify-start mb-6">
+            <div
+                class="bg-[#00B5E2]/10 border border-[#00B5E2]/20 rounded-full px-5 py-2 flex items-center gap-2"
             >
-                Soluciones <span
-                    class="text-transparent bg-clip-text bg-gradient-to-br from-[#001489] from-20% via-[#005EB8] via-30% to-[#00B5E2]"
-                    >Tecnológicas</span
-                > para tu Negocio
-            </h1>
-            <Paragraph className="mt-8">
-                Integradores especializados en tecnología industrial para
-                sectores exigentes.
-            </Paragraph>
-            <div class="mt-10 w-full flex max-w-md mx-auto lg:mx-0">
-                <div class="flex sm:flex-row flex-col gap-5 w-full">
-                    <form
-                        action="#"
-                        class="py-1 pl-6 w-full pr-1 flex gap-3 items-center text-heading-3 shadow-lg shadow-box-shadow
-                      border border-box-border bg-box-bg rounded-full ease-linear focus-within:bg-body focus-within:border-primary"
+                <span class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
+                ></span>
+                <span class="text-sm font-medium text-[#005EB8]"
+                    >Tecnología industrial de alta precisión</span
+                >
+            </div>
+        </div>
+
+        <!-- Contenido principal en dos columnas -->
+        <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+            <!-- Columna izquierda: Texto y formulario -->
+            <div class="w-full lg:w-1/2 space-y-8">
+                <!-- Título con diseño impactante -->
+                <div class="space-y-3">
+                    <h1
+                        class="text-4xl/tight sm:text-5xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1"
                     >
-                        <span class="min-w-max pr-2 border-r border-box-border">
+                        <span>Soluciones </span>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-30% via-[#001489] to-[#00B5E2] to-95% dark:from-[#0070db] dark:via-[#001a9e] dark:to-[#00c8f5] block"
+                        >
+                            Tecnológicas
+                        </span>
+                        <span> </span>
+                    </h1>
+                </div>
+
+                <!-- Descripción con mayor impacto -->
+                <div class="max-w-xl">
+                    <Paragraph className="text-lg">
+                        Potenciamos la <span class="font-semibold"
+                            >industria 4.0</span
+                        > con soluciones tecnológicas avanzadas que optimizan procesos,
+                        reducen costos y aumentan la eficiencia operativa.
+                    </Paragraph>
+                </div>
+
+                <!-- Estadísticas clave -->
+                <div
+                    class="flex justify-between items-center py-4 px-5 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-100 dark:border-gray-800 rounded-2xl"
+                >
+                    <div class="text-center px-4">
+                        <div class="text-3xl font-bold text-[#005EB8]">
+                            100+
+                        </div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">
+                            Proyectos exitosos
+                        </div>
+                    </div>
+                    <div class="h-12 w-px bg-gray-200 dark:bg-gray-700"></div>
+                    <div class="text-center px-4">
+                        <div class="text-3xl font-bold text-[#005EB8]">8+</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">
+                            Años
+                        </div>
+                    </div>
+                    <div class="h-12 w-px bg-gray-200 dark:bg-gray-700"></div>
+                    <div class="text-center px-4">
+                        <div class="text-3xl font-bold text-[#005EB8]">97%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-300">
+                            Satisfacción
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de contacto con diseño mejorado -->
+                <form action="#" class="relative mt-6">
+                    <div class="flex sm:flex-row flex-col gap-4">
+                        <div class="relative flex-1">
+                            <div
+                                class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-5 h-5 text-gray-500"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                                    ></path>
+                                </svg>
+                            </div>
+                            <input
+                                type="email"
+                                class="w-full pl-12 pr-4 py-4 placeholder-gray-400 dark:placeholder-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:border-[#005EB8] focus:ring-2 focus:ring-[#005EB8]/20 outline-none transition-all"
+                                placeholder="Tu correo electrónico"
+                            />
+                        </div>
+                        <Button
+                            variant="primary"
+                            className="py-4 px-8 text-white font-medium"
+                        >
+                            <span class="relative z-[5]">Solicitar demo</span>
+                        </Button>
+                    </div>
+                    <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                        Respuesta garantizada en menos de 24 horas
+                    </p>
+                </form>
+            </div>
+
+            <!-- Columna derecha: Imagen destacada -->
+            <div class="w-full lg:w-1/2 relative">
+                <!-- Contenedor de la imagen con efectos -->
+                <div
+                    class="relative z-10 rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl"
+                >
+                    <!-- Bordes con gradiente -->
+                    <div
+                        class="absolute inset-0 rounded-2xl border-2 border-[#005EB8]/30"
+                    >
+                    </div>
+
+                    <!-- Imagen con overlay -->
+                    <div class="absolute inset-0">
+                        <img
+                            src="/images/hero-insytech.webp"
+                            alt="Soluciones tecnológicas Insytech"
+                            class="w-full h-full object-cover"
+                        />
+                        <!-- Overlay para mejorar contraste -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
+                        >
+                        </div>
+                    </div>
+
+                    <!-- Elementos flotantes decorativos -->
+                    <div
+                        class="absolute top-4 right-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-800 flex items-center gap-2"
+                    >
+                        <span
+                            class="text-[#005EB8] bg-[#00B5E2]/10 p-2 rounded-md"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="20"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke-width="1.5"
@@ -55,61 +190,53 @@ import ByNumber from "./ByNumber.astro";
                                 <path
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
-                                    d="M21.75 9v.906a2.25 2.25 0 01-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 001.183 1.981l6.478 3.488m8.839 2.51l-4.66-2.51m0 0l-1.023-.55a2.25 2.25 0 00-2.134 0l-1.022.55m0 0l-4.661 2.51m16.5 1.615a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V8.844a2.25 2.25 0 011.183-1.98l7.5-4.04a2.25 2.25 0 012.134 0l7.5 4.04a2.25 2.25 0 011.183 1.98V19.5z"
+                                    d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z"
                                 ></path>
                             </svg>
                         </span>
-                        <input
-                            type="email"
-                            name=""
-                            id=""
-                            placeholder="tucorreo@empresa.com"
-                            class="w-full py-3 outline-none bg-transparent"
-                        />
-                        <Button
-                            variant={"primary"}
-                            className={"min-w-max text-white"}
-                        >
-                            <span class="hidden sm:flex relative z-[5]">
-                                Contáctanos
-                            </span>
-                            <span class="flex sm:hidden relative z-[5]">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="w-5 h-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                                    ></path>
-                                </svg>
-                            </span>
-                        </Button>
-                    </form>
+                        <div class="text-sm">
+                            <p
+                                class="font-semibold *:text-gray-800 dark:text-gray-200"
+                            >
+                                Profesionales capacitados
+                            </p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                                Más de 50 expertos en automatización
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="absolute bottom-4 left-4 max-w-[220px] bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-800"
+                    >
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="h-2 w-2 rounded-full bg-green-500">
+                            </div>
+                            <p
+                                class="font-medium text-sm *:text-gray-800 dark:text-gray-200"
+                            >
+                                Solución en tiempo real
+                            </p>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                            Monitoreo continuo con precisión milimétrica para
+                            tus procesos críticos
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Elementos decorativos de fondo -->
+                <div
+                    class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-600 rounded-full filter blur-3xl"
+                >
+                </div>
+                <div
+                    class="absolute -top-10 -left-10 w-40 h-40 bg-orange-600 rounded-full filter blur-3xl"
+                >
                 </div>
             </div>
         </div>
 
-        <div
-            class="flex flex-1 lg:w-1/2 lg:h-auto relative lg:max-w-none lg:mx-0 mx-auto max-w-3xl"
-        >
-            <img
-                src="/images/hero-insytech.webp"
-                alt="Soluciones tecnológicas"
-                width="2350"
-                height="2359"
-                class="lg:absolute lg:w-full lg:h-full rounded-3xl object-cover lg:max-h-none max-h-96"
-            />
-        </div>
+        <Brands />
     </Container>
-    <!-- <div
-        class="w-full h-1/2 lg:h-1/3 bottom-0 left-0 bg-gradient-to-t from-body to-transparent flex justify-center items-center"
-    >
-        <ByNumber className="mt-10 lg:mt-0" />
-    </div> -->
 </section>
