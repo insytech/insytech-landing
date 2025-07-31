@@ -1,25 +1,104 @@
 ---
-import Paragraph from '../shared/Paragraph.astro';
+import Paragraph from "../shared/Paragraph.astro";
 
-export interface Props{
-    title:string,
-    description:string
-    icon: string
+export interface Props {
+    title: string;
+    description: string;
+    icon: string;
+    image: string;
+    features: string[];
 }
 
-const {title, description, icon} = Astro.props
+const { title, description, icon, image, features } = Astro.props;
 ---
-<div class="p-5 sm:p-6 lg:p-8 rounded-3xl border border-box-border bg-box-bg shadow-lg shadow-box-shadow relative overflow-hidden">
-    <div class="rounded-xl bg-gray-300 dark:bg-gray-950 p-3 text-heading-1 w-max relative">
-            <slot set:html={icon} />
+
+<div
+    class="p-5 sm:p-6 lg:p-8 rounded-3xl border border-box-border bg-box-bg shadow-lg shadow-box-shadow relative overflow-hidden h-full flex flex-col"
+>
+    <!-- Imagen con superposición -->
+    <div class="rounded-xl">
+        <div class="relative w-full h-full">
+            <img src={image} alt={title} class="w-full h-full object-cover" />
+            <!-- <div
+                class="absolute inset-0 bg-gradient-to-tr from-[#001489]/30 to-transparent"
+            >
+            </div> -->
+        </div>
     </div>
-    <div class="mt-6 space-y-4 relative">
+
+    <!-- Icono con efecto visual -->
+    <div
+        class="rounded-xl bg-[#00B5E2]/10 p-3 text-[#005EB8] w-max relative -mt-12 ml-4 border-4 border-box-bg"
+    >
+        <span set:html={icon} />
+    </div>
+
+    <!-- Contenido de la tarjeta -->
+    <div class="mt-4 space-y-4 relative flex-grow">
         <h2 class="text-lg md:text-xl font-semibold text-heading-2">
             {title}
         </h2>
         <Paragraph>
             {description}
         </Paragraph>
+
+        <!-- Lista de características -->
+        {
+            features && features.length > 0 && (
+                <ul class="mt-4 space-y-2">
+                    {features.map((feature) => (
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#005EB8]">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2"
+                                    stroke="currentColor"
+                                    class="w-4 h-4"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M4.5 12.75l6 6 9-13.5"
+                                    />
+                                </svg>
+                            </span>
+                            <span class="text-sm text-gray-700 dark:text-gray-300">
+                                {feature}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+            )
+        }
+
+        <!-- Botón/enlace
+        <div class="pt-4 mt-auto">
+            <a
+                href="#contact"
+                class="inline-flex items-center text-[#005EB8] hover:text-[#004a92] font-medium text-sm"
+            >
+                Conocer más
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-4 h-4 ml-1"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+                </svg>
+            </a>
+        </div> -->
     </div>
-    <span class="absolute w-32 aspect-square -bottom-16 -right-16 bg-primary/10 rounded-full"></span>
+
+    <!-- Elemento decorativo -->
+    <span
+        class="absolute w-32 aspect-square -bottom-16 -right-16 bg-primary/10 rounded-full"
+    ></span>
 </div>

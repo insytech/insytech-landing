@@ -9,29 +9,65 @@ type ServicesProps = {
     title: string;
     description: string;
     icon: string;
+    image: string;
+    features: string[];
 };
 ---
 
-<section id="services">
-    <Container className="space-y-10 md:space-y-12">
-        <div class="text-center max-w-3xl mx-auto space-y-4">
+<section id="services" class="relative py-20 overflow-hidden">
+    <!-- Elementos decorativos de fondo similares al Hero -->
+    <div class="absolute inset-0 z-0">
+        <div
+            class="absolute top-0 left-0 w-1/2 h-1/3 bg-gradient-to-br from-[#001489]/5 to-transparent rounded-br-full"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-[#00B5E2]/5 to-transparent rounded-tl-full"
+        >
+        </div>
+        <div
+            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
+        >
+        </div>
+    </div>
+
+    <Container className="relative z-10">
+        <!-- Encabezado de la sección -->
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <!-- Badge similar al del Hero -->
+            <div class="flex justify-center mb-4">
+                <div
+                    class="bg-[#00B5E2]/10 border border-[#00B5E2]/20 rounded-full px-5 py-2 flex items-center gap-2"
+                >
+                    <span
+                        class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
+                    ></span>
+                    <span class="text-sm font-medium text-[#005EB8]"
+                        >Servicios Especializados</span
+                    >
+                </div>
+            </div>
+
             <Title> Servicios Especializados en Ingeniería </Title>
+
             <Paragraph>
                 Descubre nuestras soluciones avanzadas para optimizar procesos
-                industriales y mejorar la eficiencia.
+                industriales y mejorar la eficiencia en tu operación.
             </Paragraph>
         </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+
+        <!-- Grid de 3 tarjetas en una sola fila -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {
-                services.map((service: ServicesProps) => {
-                    return (
-                        <Service
-                            title={service.title}
-                            description={service.description}
-                            icon={service.icon}
-                        />
-                    );
-                })
+                services.map((service: ServicesProps) => (
+                    <Service
+                        title={service.title}
+                        description={service.description}
+                        icon={service.icon}
+                        image={service.image}
+                        features={service.features}
+                    />
+                ))
             }
         </div>
     </Container>
