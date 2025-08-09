@@ -5,7 +5,7 @@ import Container from "../shared/Container.astro";
 // Estructura mejorada de navegación con submenús
 const navItems = [
     {
-        href: "#",
+        href: "/",
         text: "Inicio",
     },
     {
@@ -32,10 +32,6 @@ const navItems = [
             { href: "#industrial-vision", text: "Industrial Vision" },
             { href: "#planner", text: "Planner" },
         ],
-    },
-    {
-        href: "#features",
-        text: "Contacto",
     },
 ];
 ---
@@ -170,7 +166,7 @@ const navItems = [
                     <div class="hidden lg:block">
                         <BtnLink
                             text="Contáctanos"
-                            href="#cta"
+                            href="/Contact"
                             className="flex justify-center"
                             variant="primary"
                         />
@@ -267,7 +263,7 @@ const navItems = [
             <div class="mt-8">
                 <BtnLink
                     text="Contáctanos"
-                    href="#cta"
+                    href="/Contact"
                     className="flex justify-center w-full"
                     variant="primary"
                 />

@@ -1,0 +1,293 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/shared/Container.astro";
+import Title from "../components/shared/Title.astro";
+import Paragraph from "../components/shared/Paragraph.astro";
+import ContactForm from "../components/sections/ContactForm.astro";
+---
+
+<Layout title="Contacto - Insytech">
+    <!-- Divider superior -->
+    <section class="relative w-full overflow-hidden">
+        <div class="w-full">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1200 366"
+                preserveAspectRatio="none"
+                class="w-full h-[180px] md:h-[260px]"
+            >
+                <polygon fill="url(#grad3)" points="0 240 1200 0 1200 366 0 366"
+                ></polygon>
+                <polygon
+                    fill="url(#grad2)"
+                    points="0 300 1200 60 1200 366 0 366"></polygon>
+                <polygon
+                    fill="url(#grad1)"
+                    points="0 360 1200 120 1200 366 0 366"></polygon>
+                <defs>
+                    <linearGradient
+                        id="grad3"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#FFFFFF"></stop>
+                        <stop offset="100%" stop-color="#EAECF7"></stop>
+                    </linearGradient>
+                    <linearGradient
+                        id="grad2"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#F8F9FA"></stop>
+                        <stop offset="100%" stop-color="#F8F9FA"></stop>
+                    </linearGradient>
+                    <linearGradient
+                        id="grad1"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#FFFFFF"></stop>
+                        <stop offset="100%" stop-color="#E9ECEF"></stop>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Hero / encabezado -->
+    <section class="pt-4 pb-10">
+        <Container className="flex flex-col items-center text-center max-w-4xl">
+            <div class="mb-4 inline-flex">
+                <span
+                    class="px-4 py-1 rounded-full text-sm font-semibold bg-[#00B5E2]/10 text-[#005EB8] border border-[#00B5E2]/20"
+                >
+                    Contáctanos
+                </span>
+            </div>
+            <Title className="mb-4">¡Implemente una solución hoy!</Title>
+            <Paragraph className="text-lg">
+                Puedes contactar con nosotros por diferentes medios.
+            </Paragraph>
+        </Container>
+    </section>
+
+    <!-- Tarjetas de medios de contacto -->
+    <section class="py-4">
+        <Container className="grid gap-6 md:grid-cols-3">
+            <!-- Teléfono -->
+            <a
+                href="tel:+528128927509"
+                class="group rounded-2xl border border-box-border bg-box-bg shadow-lg p-6 flex flex-col items-start hover:border-[#00B5E2] transition"
+            >
+                <div
+                    class="w-14 h-14 rounded-full bg-gradient-to-br from-[#00B5E2]/15 to-[#005EB8]/20 flex items-center justify-center text-[#005EB8]"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 6.75c0 8.284 6.716 15 15 15h1.5a2.25 2.25 0 002.25-2.25v-2.1a1.125 1.125 0 00-.852-1.089l-3.543-.886a1.125 1.125 0 00-1.173.417l-.97 1.293a1.125 1.125 0 01-1.21.402 12.035 12.035 0 01-7.143-7.143 1.125 1.125 0 01.402-1.21l1.293-.97a1.125 1.125 0 00.417-1.173L6.69 3.102A1.125 1.125 0 005.602 2.25h-2.1A1.125 1.125 0 002.25 3.375v3.375z"
+                        ></path>
+                    </svg>
+                </div>
+                <h3 class="mt-5 font-semibold text-heading-2">Llámanos hoy</h3>
+                <p class="mt-1 text-heading-3 text-sm">+52 (81) 2892 7509</p>
+            </a>
+            <!-- Email -->
+            <a
+                href="mailto:info@insytech.com"
+                class="group rounded-2xl border border-box-border bg-box-bg shadow-lg p-6 flex flex-col items-start hover:border-[#00B5E2] transition"
+            >
+                <div
+                    class="w-14 h-14 rounded-full bg-gradient-to-br from-[#00B5E2]/15 to-[#005EB8]/20 flex items-center justify-center text-[#005EB8]"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75M21.75 6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91A2.25 2.25 0 012.25 6.993V6.75"
+                        ></path>
+                    </svg>
+                </div>
+                <h3 class="mt-5 font-semibold text-heading-2">
+                    Envíanos un correo
+                </h3>
+                <p class="mt-1 text-heading-3 text-sm break-all">
+                    info@insytech.com
+                </p>
+            </a>
+            <!-- Dirección -->
+            <div
+                class="group rounded-2xl border border-box-border bg-box-bg shadow-lg p-6 flex flex-col items-start hover:border-[#00B5E2] transition"
+            >
+                <div
+                    class="w-14 h-14 rounded-full bg-gradient-to-br from-[#00B5E2]/15 to-[#005EB8]/20 flex items-center justify-center text-[#005EB8]"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-7 h-7"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 21c-4.5-4.167-7.5-8-7.5-11.25A7.5 7.5 0 0112 2.25a7.5 7.5 0 017.5 7.5C19.5 13 16.5 16.833 12 21z"
+                        ></path>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="mt-5 font-semibold text-heading-2">
+                    Parque España 249B
+                </h3>
+                <p class="mt-1 text-heading-3 text-sm">Monterrey, NL, México</p>
+            </div>
+        </Container>
+    </section>
+
+    <!-- Mapa + Formulario -->
+    <section class="py-14">
+        <Container className="grid gap-12 lg:grid-cols-2">
+            <div class="flex flex-col gap-6">
+                <div
+                    class="rounded-2xl overflow-hidden border border-box-border shadow-lg h-[340px]"
+                >
+                    <iframe
+                        class="w-full h-full"
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d115073.11080427779!2d-100.28330000000001!3d25.670144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8662bfddf277afc5%3A0x888df146e1230fce!2sParque%20Espa%C3%B1a%2C%20Buenos%20Aires%2C%2064800%20Monterrey%2C%20N.L.%2C%20M%C3%A9xico!5e0!3m2!1ses!2sus!4v1701369736837!5m2!1ses!2sus"
+                        style="border:0;"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        allowfullscreen
+                    >
+                    </iframe>
+                </div>
+                <div class="space-y-2">
+                    <h4 class="text-heading-2 font-semibold">Visítanos</h4>
+                    <p class="text-heading-3 text-sm">
+                        Parque España 249B, Buenos Aires, Monterrey, NL, México,
+                        C.P. 64800
+                    </p>
+                    <div class="flex gap-3 pt-2">
+                        <a
+                            href="#"
+                            class="w-10 h-10 rounded-full bg-box-bg border border-box-border flex items-center justify-center text-heading-2 hover:text-[#005EB8] transition"
+                        >
+                            <i class="pixicon-facebook3 text-sm"></i>
+                        </a>
+                        <a
+                            href="#"
+                            class="w-10 h-10 rounded-full bg-box-bg border border-box-border flex items-center justify-center text-heading-2 hover:text-[#005EB8] transition"
+                        >
+                            <i class="pixicon-instagram2 text-sm"></i>
+                        </a>
+                        <a
+                            href="https://wa.me/528128927509"
+                            class="w-10 h-10 rounded-full bg-box-bg border border-box-border flex items-center justify-center text-heading-2 hover:text-[#005EB8] transition"
+                        >
+                            <i class="pixicon-whatsapp text-sm"></i>
+                        </a>
+                        <a
+                            href="#"
+                            class="w-10 h-10 rounded-full bg-box-bg border border-box-border flex items-center justify-center text-heading-2 hover:text-[#005EB8] transition"
+                        >
+                            <i class="pixicon-linkedin text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Reuso del formulario existente -->
+            <div>
+                <div class="mb-6">
+                    <h4 class="text-heading-2 font-semibold mb-2">
+                        Envíanos un mensaje
+                    </h4>
+                    <Paragraph className="text-sm">
+                        Contáctanos hoy y nuestro equipo se comunicará lo antes
+                        posible.
+                    </Paragraph>
+                </div>
+                <ContactForm />
+            </div>
+        </Container>
+    </section>
+
+    <!-- Divider inferior -->
+    <section class="relative w-full overflow-hidden pt-4">
+        <div class="w-full rotate-180">
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 1200 366"
+                preserveAspectRatio="none"
+                class="w-full h-[160px] md:h-[220px]"
+            >
+                <polygon
+                    fill="url(#grad3b)"
+                    points="0 240 1200 0 1200 366 0 366"></polygon>
+                <polygon
+                    fill="url(#grad2b)"
+                    points="0 300 1200 60 1200 366 0 366"></polygon>
+                <polygon
+                    fill="url(#grad1b)"
+                    points="0 360 1200 120 1200 366 0 366"></polygon>
+                <defs>
+                    <linearGradient
+                        id="grad3b"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#EAECF7"></stop>
+                        <stop offset="100%" stop-color="#FFFFFF"></stop>
+                    </linearGradient>
+                    <linearGradient
+                        id="grad2b"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#F8F9FA"></stop>
+                        <stop offset="100%" stop-color="#F8F9FA"></stop>
+                    </linearGradient>
+                    <linearGradient
+                        id="grad1b"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#E9ECEF"></stop>
+                        <stop offset="100%" stop-color="#FFFFFF"></stop>
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    </section>
+</Layout>
