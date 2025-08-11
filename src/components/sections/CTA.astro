@@ -1,5 +1,6 @@
 ---
 import Button from "../shared/Button.astro";
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 ---
@@ -161,11 +162,12 @@ import Paragraph from "../shared/Paragraph.astro";
           </div>
         </div>
         <div class="mx-auto max-w-md sm:max-w-xl pt-10">
-          <Button variant={"primary"}>
-            <span class="text-[#FFFFFF] relative z-[5]">
-              Solicita diagnóstico técnico
-            </span>
-          </Button>
+          <BtnLink
+            text="Solicita diagnóstico técnico"
+            href="#contact"
+            className="flex justify-center w-full"
+            variant="primary"
+          />
         </div>
       </div>
     </div>
