@@ -29,7 +29,7 @@ import Button from "../shared/Button.astro";
         <div
             class="max-w-3xl mx-auto bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 shadow-lg rounded-2xl p-6 sm:p-8"
         >
-            <form action="#" class="space-y-6">
+            <form id="contact-form" class="space-y-6">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label
@@ -109,7 +109,7 @@ import Button from "../shared/Button.astro";
                         class="w-full px-4 py-3 border border-gray-300 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#005EB8]"
                     ></textarea>
                 </div>
-                <div class="text-center">
+                <div class="text-center" data-contact-submit>
                     <Button
                         variant="primary"
                         className="w-full sm:w-auto text-white"
@@ -117,6 +117,11 @@ import Button from "../shared/Button.astro";
                         Solicitar diagnóstico técnico
                     </Button>
                 </div>
+                <p
+                    id="contact-status"
+                    class="text-center text-sm mt-2 text-gray-600 dark:text-gray-400 hidden"
+                >
+                </p>
             </form>
             <Paragraph
                 className="text-center text-sm mt-4 text-gray-600 dark:text-gray-400"
@@ -139,3 +144,114 @@ import Button from "../shared/Button.astro";
         clip-path: polygon(0 0, 100% 0, 100% 10%, 0 100%);
     }
 </style>
+
+<script>
+    // Adjuntar listeners cuando el DOM está listo y forzar submit aunque el Button no sea nativo
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("contact-form");
+        if (!form) return;
+        const statusEl = document.getElementById("contact-status");
+        const submitWrapper = form.querySelector("[data-contact-submit]");
+
+        // Por si el Button no emite submit nativo, forzamos requestSubmit().
+        if (submitWrapper) {
+            submitWrapper.addEventListener("click", (ev) => {
+                // Evita duplicados si ya viene el submit nativo
+                if (
+                    !(
+                        ev.target instanceof HTMLButtonElement &&
+                        ev.target.type === "submit"
+                    )
+                ) {
+                    ev.preventDefault();
+                    if ("requestSubmit" in form) {
+                        (form as HTMLFormElement).requestSubmit();
+                    } else {
+                        form.dispatchEvent(
+                            new Event("submit", { cancelable: true }),
+                        );
+                    }
+                }
+            });
+        }
+
+        async function submitForm(e: { preventDefault: () => void }) {
+            e.preventDefault();
+            const fd = new FormData(form as HTMLFormElement);
+            const name = (fd.get("name") || "").toString().trim();
+            const email = (fd.get("email") || "").toString().trim();
+            const payload = {
+                name,
+                company: (fd.get("company") || "").toString().trim(),
+                email,
+                phone: (fd.get("phone") || "").toString().trim(),
+                message: (fd.get("message") || "").toString().trim(),
+            };
+
+            // Validación simple: requiere al menos nombre o email
+            if (!name && !email) {
+                if (statusEl) {
+                    statusEl.textContent = "Ingrese al menos Nombre o Email.";
+                    statusEl.classList.remove("hidden");
+                }
+                return;
+            }
+
+            if (!form) return;
+            const submitBtn = form.querySelector(
+                'button[type="submit"], button',
+            );
+            const originalText = submitBtn ? submitBtn.textContent : "";
+            if (submitBtn) {
+                (submitBtn as HTMLButtonElement).disabled = true;
+                (submitBtn as HTMLButtonElement).textContent = "Enviando...";
+            }
+            if (statusEl) {
+                statusEl.classList.add("hidden");
+                statusEl.textContent = "";
+            }
+
+            try {
+                const res = await fetch("/api/sendToPipedrive", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload),
+                });
+
+                const ct = res.headers.get("content-type") || "";
+                if (!res.ok) {
+                    let msg = `Error ${res.status}`;
+                    if (ct.includes("application/json")) {
+                        const j = await res.json().catch(() => null);
+                        if (j?.error) msg = j.error;
+                    }
+                    throw new Error(msg);
+                }
+                if (!ct.includes("application/json"))
+                    throw new Error("Respuesta no válida del servidor");
+
+                await res.json();
+                if (statusEl) {
+                    statusEl.textContent = "Enviado correctamente. ¡Gracias!";
+                    statusEl.classList.remove("hidden");
+                }
+                (form as HTMLFormElement).reset();
+            } catch (err) {
+                if (statusEl) {
+                    statusEl.textContent =
+                        "No se pudo enviar. Intenta más tarde.";
+                    statusEl.classList.remove("hidden");
+                }
+                console.error(err);
+            } finally {
+                if (submitBtn) {
+                    (submitBtn as HTMLButtonElement).disabled = false;
+                    (submitBtn as HTMLButtonElement).textContent =
+                        originalText || "Enviar";
+                }
+            }
+        }
+
+        form.addEventListener("submit", submitForm);
+    });
+</script>
