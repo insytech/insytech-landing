@@ -1,4 +1,5 @@
 ---
+import Badge from "@components/shared/Badge.astro";
 import Service from "../cards/Service.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
@@ -36,16 +37,7 @@ type ServicesProps = {
         <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <!-- Badge similar al del Hero -->
             <div class="flex justify-center mb-4">
-                <div
-                    class="bg-[#00B5E2]/10 border border-[#00B5E2]/20 rounded-full px-5 py-2 flex items-center gap-2"
-                >
-                    <span
-                        class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
-                    ></span>
-                    <span class="text-sm font-medium text-[#005EB8]"
-                        >Servicios Especializados</span
-                    >
-                </div>
+                <Badge text="Servicios Especializados" />
             </div>
 
             <Title> Servicios Especializados en Ingeniería </Title>

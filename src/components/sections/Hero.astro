@@ -1,9 +1,8 @@
 ---
-import Button from "../shared/Button.astro";
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
-import Paragraph from "../shared/Paragraph.astro";
 import Brands from "./Brands.astro";
+import Badge from "../shared/Badge.astro";
 ---
 
 <section class="relative overflow-hidden pt-28 lg:pt-32 pb-10">
@@ -38,15 +37,7 @@ import Brands from "./Brands.astro";
     <Container className="relative z-10">
         <!-- Navegación de etiquetas del tipo badge -->
         <div class="flex justify-center lg:justify-start mb-6">
-            <div
-                class="bg-[#00B5E2]/10 border border-[#00B5E2]/20 rounded-full px-5 py-2 flex items-center gap-2"
-            >
-                <span class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
-                ></span>
-                <span class="text-sm font-medium text-[#005EB8]"
-                    >Tecnología industrial de alta precisión</span
-                >
-            </div>
+            <Badge text="Tecnología industrial de alta precisión" />
         </div>
 
         <!-- Contenido principal en dos columnas -->
@@ -59,7 +50,7 @@ import Brands from "./Brands.astro";
                         class="text-4xl/tight sm:text-5xl/tight md:text-5xl/tight xl:text-5xl/tight font-bold text-heading-1"
                     >
                         <span
-                            class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-30% via-[#001489] to-[#00B5E2] to-95% dark:from-[#0070db] dark:via-[#001a9e] dark:to-[#00c8f5] block"
+                            class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-40% via-[#001489] to-[#00B5E2] to-95% dark:from-[#0056f5] dark:via-[#2a5ecc] dark:to-[#71b5f5] block"
                         >
                             <span class="inline-flex items-center gap-2">
                                 Soluciones integradas en ingeniería, software,
