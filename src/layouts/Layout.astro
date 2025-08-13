@@ -19,8 +19,8 @@ export interface Props {
 }
 
 const {
-  title = "Automatización y Software a Medida - Insytech Automatización, trazabilidad y visión computacional",
-  description = "Soluciones de automatización y desarrollo de software a medida para optimizar procesos industriales. 100+ proyectos exitosos.",
+  title = "Soluciones integradas en ingeniería, software, IA y automatización - Insytech",
+  description = "Insytech transforma procesos industriales con soluciones inteligentes y tecnología que se adapta a ti.",
   ogImage = "/images/futuro_digital.webp",
   noindex = false,
   // NUEVO: defaults
@@ -47,6 +47,16 @@ const ogImageAbs = toAbsolute(ogImage);
     <title>{title}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta
+      name="keywords"
+      lang="es_MX"
+      content="automatización, software, ingeniería, IA, Insytech"
+    />
+    <meta
+      name="keywords"
+      lang="en_US"
+      content="automation, software, engineering, AI, Insytech"
+    />
 
     <!-- Descripción SEO -->
     <meta name="description" content={description} />
