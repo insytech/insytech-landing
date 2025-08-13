@@ -23,11 +23,11 @@ const imgSecondary = imageSecondary ?? image;
     <div class="rounded-xl">
         <div class="relative w-full overflow-visible">
             <div
-                class="relative w-full aspect-[16/10] sm:aspect-[7/4] md:aspect-[16/9]"
+                class="relative lg:min-h-[350px] md:min-h-[220px] w-full aspect-[16/10] sm:aspect-[7/4] md:aspect-[16/9]"
             >
                 <!-- Imagen principal (arriba-izquierda) -->
                 <div
-                    class="absolute top-0 left-0 w-[88%] sm:w-[82%] lg:w-[78%] aspect-[4/3] rounded-3xl overflow-hidden shadow-xl"
+                    class="absolute top-0 left-2 sm:left-4 md:left-6 w-[88%] sm:w-[82%] lg:w-[78%] aspect-[4/3] rounded-3xl overflow-hidden shadow-xl"
                 >
                     <img
                         src={imgPrimary}
@@ -38,7 +38,7 @@ const imgSecondary = imageSecondary ?? image;
 
                 <!-- Imagen secundaria (ligeramente más abajo en ambos escenarios) -->
                 <div
-                    class="absolute bottom-0 right-2 sm:right-4 md:right-6 translate-y-2 sm:translate-y-4 md:translate-y-5 w-[54%] sm:w-[48%] lg:w-[44%] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-[6px] sm:ring-8 ring-white dark:ring-gray-950 bg-white/40 dark:bg-gray-900/40 z-10"
+                    class="absolute bottom-0 right-2 sm:right-4 md:right-6 translate-y-2 sm:translate-y-4 md:translate-y-5 w-[54%] sm:w-[48%] lg:w-[44%] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-[6px] sm:ring-8 ring-white dark:ring-[#050b16] bg-white/40 dark:bg-gray-900/40 z-10"
                 >
                     <img
                         src={imgSecondary}
