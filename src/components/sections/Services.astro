@@ -11,6 +11,7 @@ type ServicesProps = {
     description: string;
     icon: string;
     image: string;
+    imageSecondary: string;
     features: string[];
 };
 ---
@@ -49,7 +50,7 @@ type ServicesProps = {
         </div>
 
         <!-- Grid de 3 tarjetas en una sola fila -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-8">
             {
                 services.map((service: ServicesProps) => (
                     <Service
@@ -57,6 +58,7 @@ type ServicesProps = {
                         description={service.description}
                         icon={service.icon}
                         image={service.image}
+                        imageSecondary={service.imageSecondary}
                         features={service.features}
                     />
                 ))

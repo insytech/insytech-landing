@@ -1,35 +1,52 @@
 const services = [
     {
-        title: "Automatización y Control Industrial",
-        description: "Proyectos llave en mano de ingeniería, hardware PLC/SCADA, robótica e IoT para optimizar tus procesos de planta y reducir costos.",
+        title: "Desarrollo de Software y Automatización",
+        description: "Te ayudamos a digitalizar tus procesos, automatizar flujos y poner en marcha plataformas clave para tu negocio..",
         icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v16.5m8.25-8.25H3.75" /> </svg>`,
-        image: "/images/Ingenieria_optimizada_05-1024x999.webp",
+        image: "/images/software1.webp",
+        imageSecondary: "/images/software2.webp",
         features: [
-            "Integración de sistemas PLC/SCADA",
-            "Desarrollo de soluciones IoT",
-            "Optimización de procesos industriales"
+            "Aplicaciones web, móviles y desktop",
+            "Automatización de flujos entre sistemas mediante APIs y conectores",
+            "Implementación técnica de plataformas empresariales (CRM, ERP, e-commerce)"
         ]
     },
     {
-        title: "Trazabilidad Industrial 4.0 en Tiempo Real",
-        description: "Unificamos datos, software y protocolos industriales para que monitorees y audites cada etapa de producción al instante, sin puntos ciegos.",
+        title: "Trazabilidad, Monitoreo de Producción",
+        description: "Digitalizamos procesos industriales para obtener trazabilidad en tiempo real, visualizar indicadores operativos y mejorar la toma de decisiones.",
         icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" /> </svg>`,
-        image: "/images/Desarrollo_software_optimizada_02-1024x999.webp",
+        image: "/images/tracking1.webp",
+        imageSecondary: "/images/tracking2.webp",
         features: [
-            "Monitoreo en tiempo real",
-            "Integración de datos multi-plataforma",
-            "Reportes personalizados y dashboards"
+            "Sistemas MES, ANDON y OEE",
+            "Dashboards personalizados para áreas operativas",
+            "Integración con PLCs, sensores e IoT"
         ]
     },
     {
-        title: "Visión Computacional",
-        description: "Implementamos IA y análisis de imágenes industriales para inspección visual, detección de defectos y clasificación con precisión milimétrica.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v16.5m8.25-8.25H3.75" /> </svg>`,
-        image: "/images/Ingenieria_optimizada_02-1024x999.webp",
+        title: "Automatización y Control",
+        description: "Automatizamos procesos industriales con sistemas de control diseñados para mejorar la eficiencia, confiabilidad y escalabilidad operativa.",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" /> </svg>`,
+        image: "/images/control1.webp",
+        imageSecondary: "/images/control2.webp",
         features: [
-            "Detección de defectos en tiempo real",
-            "Algoritmos de IA personalizados",
-            "Integración con sistemas existentes"
+            "Programación de PLCs, HMIs y robots industriales",
+            "Fabricación de tableros eléctricos",
+            "Proyectos llave en mano",
+            "Respaldos, migraciones y actualización de sistemas de control"
+        ]
+    },
+    {
+        title: "Visión con Inteligencia Artificial",
+        description: "Aplicamos tecnologías de visión computacional e inteligencia artificial para automatizar inspecciones, clasificaciones y procesos críticos en entornos industriales.",
+        icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v16.5m8.25-8.25H3.75" /> </svg>`,
+        image: "/images/vision1.webp",
+        imageSecondary: "/images/vision2.webp",
+        features: [
+            "Sistemas de visión para inspección de calidad",
+            "Reconocimiento de patrones y objetos",
+            "Clasificación automática mediante IA",
+            "Desarrollo de modelos personalizados de machine learning"
         ]
     },
 ];

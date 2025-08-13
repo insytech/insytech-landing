@@ -7,34 +7,51 @@ export interface Props {
     icon: string;
     image: string;
     features: string[];
+    imageSecondary?: string;
 }
 
-const { title, description, icon, image, features } = Astro.props;
+const { title, description, icon, image, imageSecondary, features } =
+    Astro.props;
+const imgPrimary = image;
+const imgSecondary = imageSecondary ?? image;
 ---
 
 <div
     class="p-5 sm:p-6 lg:p-8 rounded-3xl border border-box-border shadow-lg light:bg-box-bg dark:bg-gray-900/20 shadow-box-shadow relative overflow-hidden h-full flex flex-col"
 >
-    <!-- Imagen con superposición -->
+    <!-- Imagen con superposición (collage 2 imágenes) -->
     <div class="rounded-xl">
-        <div class="relative w-full h-full">
-            <img src={image} alt={title} class="w-full h-full object-cover" />
-            <!-- <div
-                class="absolute inset-0 bg-gradient-to-tr from-[#001489]/30 to-transparent"
+        <div class="relative w-full overflow-visible">
+            <div
+                class="relative w-full aspect-[16/10] sm:aspect-[7/4] md:aspect-[16/9]"
             >
-            </div> -->
+                <!-- Imagen principal (arriba-izquierda) -->
+                <div
+                    class="absolute top-0 left-0 w-[88%] sm:w-[82%] lg:w-[78%] aspect-[4/3] rounded-3xl overflow-hidden shadow-xl"
+                >
+                    <img
+                        src={imgPrimary}
+                        alt={`${title} - imagen principal`}
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+
+                <!-- Imagen secundaria (ligeramente más abajo en ambos escenarios) -->
+                <div
+                    class="absolute bottom-0 right-2 sm:right-4 md:right-6 translate-y-2 sm:translate-y-4 md:translate-y-5 w-[54%] sm:w-[48%] lg:w-[44%] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ring-[6px] sm:ring-8 ring-white dark:ring-gray-950 bg-white/40 dark:bg-gray-900/40 z-10"
+                >
+                    <img
+                        src={imgSecondary}
+                        alt={`${title} - imagen secundaria`}
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Icono con efecto visual -->
-    <div
-        class="rounded-xl bg-[#00B5E2]/10 p-3 text-[#005EB8] w-max relative -mt-12 ml-4 border-4 border-box-bg"
-    >
-        <span set:html={icon} />
-    </div>
-
     <!-- Contenido de la tarjeta -->
-    <div class="mt-4 space-y-4 relative flex-grow">
+    <div class="mt-10 space-y-4 relative flex-grow">
         <h2 class="text-lg md:text-xl font-semibold text-heading-2">
             {title}
         </h2>
@@ -72,29 +89,6 @@ const { title, description, icon, image, features } = Astro.props;
                 </ul>
             )
         }
-
-        <!-- Botón/enlace
-        <div class="pt-4 mt-auto">
-            <a
-                href="#contact"
-                class="inline-flex items-center text-[#005EB8] hover:text-[#004a92] font-medium text-sm"
-            >
-                Conocer más
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-4 h-4 ml-1"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-                </svg>
-            </a>
-        </div> -->
     </div>
 
     <!-- Elemento decorativo -->
