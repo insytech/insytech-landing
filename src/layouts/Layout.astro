@@ -6,31 +6,54 @@ import CookieConsent from "../components/elements/CookieConsent.astro";
 import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
 
 export interface Props {
-  title: string;
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noindex?: boolean;
 }
 
-const { title } = Astro.props;
+const {
+  title = "Automatización y Software a Medida - Insytech Automatización, trazabilidad y visión computacional",
+  description = "Soluciones de automatización y desarrollo de software a medida para optimizar procesos industriales. 100+ proyectos exitosos.",
+  ogImage = "/images/futuro_digital.webp",
+  noindex = false,
+} = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <title>
-      Automatización y Software a Medida - Insytech Automatización, trazabilidad
-      y visión computacional
-    </title>
+    <title>{title}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+
+    <!-- Descripción SEO -->
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- Canonical -->
+    {Astro.url && <link rel="canonical" href={Astro.url.href} />}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    {Astro.url && <meta property="og:url" content={Astro.url.href} />}
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link
       rel="icon"
       type="image/webp"
       href="/Favicon_16x16px_Mesa-de-trabajo-1.webp"
     />
     <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Soluciones de automatización y desarrollo de software a medida para optimizar procesos industriales. 100+ proyectos exitosos."
-    />
     <link
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
