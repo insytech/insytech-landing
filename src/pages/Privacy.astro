@@ -17,9 +17,9 @@ import Badge from "@components/shared/Badge.astro";
                     <Badge text="Privacidad" />
                 </div>
                 <Title className="mb-4">Aviso de Privacidad</Title>
-                <p class="text-sm text-heading-3">
+                <Paragraph>
                     Fecha de actualización: 15 de julio de 2024
-                </p>
+                </Paragraph>
             </Container>
         </section>
 
@@ -27,7 +27,7 @@ import Badge from "@components/shared/Badge.astro";
         <section class="py-4">
             <Container className="max-w-4xl">
                 <div
-                    class="rounded-2xl border border-box-border dark:bg-gray-900/20 bg-box-bg shadow-lg p-6 sm:p-8 space-y-6"
+                    class="rounded-2xl border border-box-border dark:bg-gray-900/20 bg-box-bg shadow-lg p-6 sm:p-8 space-y-6 content-typography"
                 >
                     <Paragraph>
                         En Insytech, entendemos la importancia de proteger la
@@ -52,11 +52,11 @@ import Badge from "@components/shared/Badge.astro";
                         <h2 class="text-heading-2 font-semibold">
                             Información que Recopilamos
                         </h2>
-                        <Paragraph
-                            >Podemos recopilar los siguientes datos personales
-                            cuando utiliza nuestros servicios:</Paragraph
-                        >
-                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                        <Paragraph>
+                            Podemos recopilar los siguientes datos personales
+                            cuando utiliza nuestros servicios:
+                        </Paragraph>
+                        <ul class="list-disc pl-6">
                             <li>Nombre completo</li>
                             <li>Dirección de correo electrónico</li>
                             <li>Número de teléfono</li>
@@ -71,11 +71,11 @@ import Badge from "@components/shared/Badge.astro";
                         <h2 class="text-heading-2 font-semibold">
                             Finalidades del Tratamiento de sus Datos Personales
                         </h2>
-                        <Paragraph
-                            >Los datos personales que recopilamos serán
-                            utilizados para las siguientes finalidades:</Paragraph
-                        >
-                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                        <Paragraph>
+                            Los datos personales que recopilamos serán
+                            utilizados para las siguientes finalidades:
+                        </Paragraph>
+                        <ul class="list-disc pl-6">
                             <li>
                                 Proveer los servicios y productos solicitados.
                             </li>
@@ -104,7 +104,7 @@ import Badge from "@components/shared/Badge.astro";
                             No compartimos sus datos personales con terceros sin
                             su consentimiento, excepto en los siguientes casos:
                         </Paragraph>
-                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                        <ul class="list-disc pl-6">
                             <li>
                                 Cuando sea necesario para cumplir con una
                                 obligación legal.
@@ -190,15 +190,13 @@ import Badge from "@components/shared/Badge.astro";
                             Si tiene alguna pregunta o inquietud sobre este
                             aviso de privacidad, puede contactarnos en:
                         </Paragraph>
-                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                        <ul class="list-disc pl-6">
                             <li>
                                 Correo electrónico:
                                 <a
                                     href="mailto:info@insytech.mx"
-                                    class="text-[#005EB8] dark:text-[#00B5E2] underline"
+                                    class="underline">info@insytech.mx</a
                                 >
-                                    info@insytech.mx
-                                </a>
                             </li>
                             <li>
                                 Dirección: Parque España 249, Buenos Aires,
@@ -211,3 +209,27 @@ import Badge from "@components/shared/Badge.astro";
         </section>
     </div>
 </Layout>
+será publicado en esta página y entrará en vigor en el momento de su publicación.
+
+<div class="space-y-3">
+    <h2 class="text-heading-2 font-semibold">Contacto</h2>
+    <Paragraph>
+        Si tiene alguna pregunta o inquietud sobre este aviso de privacidad,
+        puede contactarnos en:
+    </Paragraph>
+    <ul class="list-disc pl-6 text-heading-1 space-y-1">
+        <li>
+            Correo electrónico:
+            <a
+                href="mailto:info@insytech.mx"
+                class="text-[#005EB8] dark:text-[#00B5E2] underline"
+            >
+                info@insytech.mx
+            </a>
+        </li>
+        <li>
+            Dirección: Parque España 249, Buenos Aires, Monterrey, Nuevo León,
+            México. C.P. 64800
+        </li>
+    </ul>
+</div>
