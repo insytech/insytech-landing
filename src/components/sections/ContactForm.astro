@@ -3,12 +3,17 @@ import Container from "../shared/Container.astro";
 import Title from "../shared/Title.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Button from "../shared/Button.astro";
+import Badge from "@components/shared/Badge.astro";
 ---
 
-<section id="contact" class="relative overflow-hidden">
+<section id="contact" class="relative overflow-hidden py-20">
     <Container className="relative z-10 space-y-10">
         <!-- Título y descripción -->
+
         <div class="text-center max-w-3xl mx-auto space-y-4">
+            <div class="mb-4 inline-flex">
+                <Badge text="Contáctanos" />
+            </div>
             <Title> ¿Tienes un proyecto en mente? </Title>
             <Paragraph>
                 Conversemos sobre cómo aplicar automatización, trazabilidad o
