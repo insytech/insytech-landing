@@ -1,0 +1,214 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/shared/Container.astro";
+import Title from "../components/shared/Title.astro";
+import Paragraph from "../components/shared/Paragraph.astro";
+import Badge from "@components/shared/Badge.astro";
+---
+
+<Layout title="Aviso de Privacidad - Insytech">
+    <div class="p-10 m-10">
+        <!-- Encabezado -->
+        <section class="p-10">
+            <Container
+                className="flex flex-col items-center text-center max-w-4xl"
+            >
+                <div class="mb-4 inline-flex">
+                    <Badge text="Privacidad" />
+                </div>
+                <Title className="mb-4">Aviso de Privacidad</Title>
+                <p class="text-sm text-heading-3">
+                    Fecha de actualización: 15 de julio de 2024
+                </p>
+            </Container>
+        </section>
+
+        <!-- Contenido -->
+        <section class="py-4">
+            <Container className="max-w-4xl">
+                <div
+                    class="rounded-2xl border border-box-border dark:bg-gray-900/20 bg-box-bg shadow-lg p-6 sm:p-8 space-y-6"
+                >
+                    <Paragraph>
+                        En Industrial Vision, entendemos la importancia de
+                        proteger la privacidad y los datos personales de
+                        nuestros usuarios. Este aviso de privacidad describe
+                        cómo recopilamos, usamos, compartimos y protegemos su
+                        información personal.
+                    </Paragraph>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Responsable del Tratamiento de sus Datos Personales
+                        </h2>
+                        <Paragraph>
+                            Industrial Vision, con domicilio en Parque España
+                            249, Buenos Aires, Monterrey, Nuevo León, México.
+                            C.P. 64800, es responsable del tratamiento de sus
+                            datos personales.
+                        </Paragraph>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Información que Recopilamos
+                        </h2>
+                        <Paragraph
+                            >Podemos recopilar los siguientes datos personales
+                            cuando utiliza nuestros servicios:</Paragraph
+                        >
+                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                            <li>Nombre completo</li>
+                            <li>Dirección de correo electrónico</li>
+                            <li>Número de teléfono</li>
+                            <li>Información de contacto</li>
+                            <li>
+                                Datos de facturación (en caso de ser necesario)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Finalidades del Tratamiento de sus Datos Personales
+                        </h2>
+                        <Paragraph
+                            >Los datos personales que recopilamos serán
+                            utilizados para las siguientes finalidades:</Paragraph
+                        >
+                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                            <li>
+                                Proveer los servicios y productos solicitados.
+                            </li>
+                            <li>
+                                Informar sobre cambios o nuevos productos o
+                                servicios relacionados con el contrato o
+                                adquirido por el cliente.
+                            </li>
+                            <li>
+                                Dar cumplimiento a obligaciones contraídas con
+                                nuestros clientes.
+                            </li>
+                            <li>Evaluar la calidad del servicio.</li>
+                            <li>
+                                Realizar estudios internos sobre hábitos de
+                                consumo.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Transferencias de Datos Personales
+                        </h2>
+                        <Paragraph>
+                            No compartimos sus datos personales con terceros sin
+                            su consentimiento, excepto en los siguientes casos:
+                        </Paragraph>
+                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                            <li>
+                                Cuando sea necesario para cumplir con una
+                                obligación legal.
+                            </li>
+                            <li>
+                                Para proteger y defender los derechos o
+                                propiedad de Industrial Vision.
+                            </li>
+                            <li>
+                                Para actuar en circunstancias urgentes para
+                                proteger la seguridad personal de los usuarios
+                                de Industrial Vision.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Seguridad de sus Datos Personales
+                        </h2>
+                        <Paragraph>
+                            Implementamos las medidas de seguridad necesarias
+                            para proteger sus datos personales contra el acceso
+                            no autorizado, alteración, divulgación o
+                            destrucción.
+                        </Paragraph>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Derechos ARCO (Acceso, Rectificación, Cancelación y
+                            Oposición)
+                        </h2>
+                        <Paragraph>Usted tiene derecho a:</Paragraph>
+                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                            <li>
+                                Acceder a sus datos personales que poseemos.
+                            </li>
+                            <li>
+                                Rectificar sus datos en caso de ser inexactos o
+                                incompletos.
+                            </li>
+                            <li>
+                                Cancelar sus datos personales cuando considere
+                                que no se requieren para alguna de las
+                                finalidades señaladas en el presente aviso de
+                                privacidad.
+                            </li>
+                            <li>
+                                Oponerse al tratamiento de sus datos personales
+                                para fines específicos.
+                            </li>
+                        </ul>
+                        <Paragraph>
+                            Para ejercer sus derechos ARCO, por favor envíe una
+                            solicitud al correo electrónico
+                            <a
+                                href="mailto:info@insytech.mx"
+                                class="text-[#005EB8] dark:text-[#00B5E2] underline"
+                            >
+                                info@insytech.mx
+                            </a>
+                            especificando el derecho que desea ejercer y proporcionando
+                            una copia de su identificación oficial.
+                        </Paragraph>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">
+                            Cambios en el Aviso de Privacidad
+                        </h2>
+                        <Paragraph>
+                            Nos reservamos el derecho de modificar este aviso de
+                            privacidad en cualquier momento. Cualquier cambio
+                            será publicado en esta página y entrará en vigor en
+                            el momento de su publicación.
+                        </Paragraph>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h2 class="text-heading-2 font-semibold">Contacto</h2>
+                        <Paragraph>
+                            Si tiene alguna pregunta o inquietud sobre este
+                            aviso de privacidad, puede contactarnos en:
+                        </Paragraph>
+                        <ul class="list-disc pl-6 text-heading-3 space-y-1">
+                            <li>
+                                Correo electrónico:
+                                <a
+                                    href="mailto:info@insytech.mx"
+                                    class="text-[#005EB8] dark:text-[#00B5E2] underline"
+                                >
+                                    info@insytech.mx
+                                </a>
+                            </li>
+                            <li>
+                                Dirección: Parque España 249, Buenos Aires,
+                                Monterrey, Nuevo León, México. C.P. 64800
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </Container>
+        </section>
+    </div>
+</Layout>
