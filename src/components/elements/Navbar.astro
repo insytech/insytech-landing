@@ -84,7 +84,8 @@ const navItems = [
 
                                     {/* Dropdown menu */}
                                     {item.hasDropdown && (
-                                        <div class="absolute left-0 mt-2 w-72 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300">
+                                        <div class="absolute left-0 top-full w-72 z-50 opacity-0 translate-y-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0 group-focus-within:pointer-events-auto">
+                                            <div class="pt-3" />
                                             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-4 border border-gray-100 dark:border-gray-700">
                                                 <ul class="space-y-2">
                                                     {item.dropdownItems &&
