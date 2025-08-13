@@ -5,16 +5,7 @@ import Paragraph from "../shared/Paragraph.astro";
 import Button from "../shared/Button.astro";
 ---
 
-<section id="contact" class="py-20 relative overflow-hidden">
-    <!-- Fondo de dos colores con diagonal -->
-    <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gray-100 dark:bg-gray-900/20"></div>
-        <div
-            class="absolute top-0 left-0 w-full h-1/3 bg-white dark:bg-gray-950 clip-path-diagonal"
-        >
-        </div>
-    </div>
-
+<section id="contact" class="relative overflow-hidden">
     <Container className="relative z-10 space-y-10">
         <!-- Título y descripción -->
         <div class="text-center max-w-3xl mx-auto space-y-4">
@@ -138,12 +129,6 @@ import Button from "../shared/Button.astro";
         </div>
     </Container>
 </section>
-
-<style>
-    .clip-path-diagonal {
-        clip-path: polygon(0 0, 100% 0, 100% 10%, 0 100%);
-    }
-</style>
 
 <script>
     // Adjuntar listeners cuando el DOM está listo y forzar submit aunque el Button no sea nativo

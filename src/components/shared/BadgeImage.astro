@@ -1,0 +1,22 @@
+---
+interface Props {
+    title: string;
+    subtitle: string;
+    svg: string; // SVG como string
+}
+const { title, subtitle, svg } = Astro.props as Props;
+---
+
+<div
+    class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-800 flex items-center gap-2"
+>
+    <span
+        class="text-[#005EB8] dark:text-[#71b5f5] bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 p-2 rounded-md"
+    >
+        <span set:html={svg} />
+    </span>
+    <div class="text-sm">
+        <p class="font-semibold text-gray-800 dark:text-gray-200">{title}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400">{subtitle}</p>
+    </div>
+</div>
