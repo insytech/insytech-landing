@@ -35,7 +35,10 @@ type ServicesProps = {
 
     <Container className="relative z-10">
         <!-- Encabezado de la sección -->
-        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <div
+            class="text-center max-w-3xl mx-auto space-y-4 mb-16"
+            data-animate="fade-up"
+        >
             <!-- Badge similar al del Hero -->
             <div class="flex justify-center mb-4">
                 <Badge text="Servicios Especializados" />
@@ -43,7 +46,7 @@ type ServicesProps = {
 
             <Title> Servicios Especializados en Ingeniería </Title>
 
-            <Paragraph>
+            <Paragraph data-animate="fade" data-animate-delay=".08s">
                 Descubre nuestras soluciones avanzadas para optimizar procesos
                 industriales y mejorar la eficiencia en tu operación.
             </Paragraph>
@@ -52,15 +55,20 @@ type ServicesProps = {
         <!-- Grid de 3 tarjetas en una sola fila -->
         <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-8">
             {
-                services.map((service: ServicesProps) => (
-                    <Service
-                        title={service.title}
-                        description={service.description}
-                        icon={service.icon}
-                        image={service.image}
-                        imageSecondary={service.imageSecondary}
-                        features={service.features}
-                    />
+                services.map((service: ServicesProps, i) => (
+                    <div
+                        data-animate="fade-up"
+                        data-animate-delay={`${0.06 * i}s`}
+                    >
+                        <Service
+                            title={service.title}
+                            description={service.description}
+                            icon={service.icon}
+                            image={service.image}
+                            imageSecondary={service.imageSecondary}
+                            features={service.features}
+                        />
+                    </div>
                 ))
             }
         </div>

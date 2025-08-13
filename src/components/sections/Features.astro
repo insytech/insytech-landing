@@ -23,7 +23,10 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
         className="relative z-10 flex flex-col midmd:flex-row gap-10 lg:gap-12"
     >
         <!-- Columna de contenido -->
-        <div class="flex flex-col w-full lg:w-1/2 space-y-8">
+        <div
+            class="flex flex-col w-full lg:w-1/2 space-y-8"
+            data-animate="fade-up"
+        >
             <!-- Badge de navegación -->
             <div class="flex justify-center lg:justify-start">
                 <Badge text="Sectores Industriales" />
@@ -31,15 +34,25 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
 
             <!-- Título y descripción -->
             <div>
-                <Title>Experiencia Probada en Distintos Sectores</Title>
-                <Paragraph className="mt-8">
+                <Title data-animate="fade-up"
+                    >Experiencia Probada en Distintos Sectores</Title
+                >
+                <Paragraph
+                    className="mt-8"
+                    data-animate="fade"
+                    data-animate-delay=".08s"
+                >
                     Implementaciones exitosas en diversos sectores industriales,
                     adaptándonos a las necesidades específicas de cada cliente.
                 </Paragraph>
             </div>
 
             <!-- Lista de sectores -->
-            <ul class="mt-8 space-y-4 text-heading-3 font-medium">
+            <ul
+                class="mt-8 space-y-4 text-heading-3 font-medium"
+                data-animate="fade-up"
+                data-animate-delay=".12s"
+            >
                 <li class="flex items-center gap-3">
                     <span
                         class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
@@ -123,7 +136,7 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
             </ul>
 
             <!-- Botón de acción -->
-            <div class="pt-4">
+            <div class="pt-4" data-animate="fade-up" data-animate-delay=".16s">
                 <a
                     href="#contact"
                     class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#005EB8] text-white hover:bg-[#004a92] transition-colors"
@@ -147,7 +160,11 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
         </div>
 
         <!-- Columna de imagen con efectos visuales -->
-        <div class="w-full lg:w-1/2 relative mt-16">
+        <div
+            class="w-full lg:w-1/2 relative mt-16"
+            data-animate="slide-right"
+            data-animate-delay=".1s"
+        >
             <div
                 class="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-xl"
             >
@@ -174,6 +191,8 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
                 <!-- Elemento flotante decorativo -->
                 <div
                     class="absolute top-4 right-4 rounded-lg flex items-center gap-2"
+                    data-animate="scale"
+                    data-animate-delay=".22s"
                 >
                     <BadgeImage
                         title="Sectores clave"

@@ -113,6 +113,34 @@ const ogImageAbs = toAbsolute(ogImage);
     */
     }
     <WhatsappWidget />
+    <script>
+      // Reveal on scroll para [data-animate]
+      (() => {
+        const els = Array.from(document.querySelectorAll("[data-animate]"));
+        if (!els.length) return;
+        if (!("IntersectionObserver" in window)) {
+          els.forEach((el) => el.classList.add("in"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const el = entry.target;
+                if (el instanceof HTMLElement) {
+                  const d = el.getAttribute("data-animate-delay");
+                  if (d) el.style.setProperty("--delay", d);
+                  el.classList.add("in");
+                }
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
+        );
+        els.forEach((el) => io.observe(el));
+      })();
+    </script>
   </body>
 </html>
 
@@ -202,5 +230,109 @@ const ogImageAbs = toAbsolute(ogImage);
   }
   .dark .content-typography a {
     color: #00b5e2;
+  }
+
+  /* Animations: utilidades discretas para landing industrial */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes floatSoft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  [data-animate] {
+    opacity: 0;
+    will-change: opacity, transform;
+  }
+  [data-animate].in {
+    animation-duration: var(--dur, 0.7s);
+    animation-timing-function: var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1));
+    animation-fill-mode: both;
+    animation-delay: var(--delay, 0s);
+  }
+  [data-animate="fade"].in {
+    animation-name: fadeIn;
+  }
+  [data-animate="fade-up"].in {
+    animation-name: fadeInUp;
+  }
+  [data-animate="slide-left"].in {
+    animation-name: slideInLeft;
+  }
+  [data-animate="slide-right"].in {
+    animation-name: slideInRight;
+  }
+  [data-animate="scale"].in {
+    animation-name: scaleIn;
+  }
+
+  .float-slow {
+    animation: floatSoft 6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-animate],
+    [data-animate].in {
+      opacity: 1;
+      animation: none !important;
+      transform: none !important;
+    }
+    .float-slow {
+      animation: none !important;
+    }
+    html {
+      scroll-behavior: auto;
+    }
   }
 </style>
