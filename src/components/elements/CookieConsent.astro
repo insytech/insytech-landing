@@ -1,0 +1,576 @@
+---
+
+---
+
+<!-- Banner de cookies -->
+<div
+    data-cookie-banner
+    hidden
+    role="region"
+    aria-label="Aviso de cookies"
+    class="fixed z-[60] bottom-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 max-w-3xl mx-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-xl p-4 md:p-5"
+>
+    <div class="flex items-start gap-4">
+        <div class="flex-1 text-sm text-gray-700 dark:text-gray-300">
+            <p class="font-semibold text-gray-900 dark:text-gray-100">
+                Usamos cookies
+            </p>
+            <p class="mt-1">
+                Utilizamos cookies propias y de terceros para mejorar tu
+                experiencia, analizar el tráfico y personalizar contenido.
+                <a
+                    href="#"
+                    data-open-cookie-modal
+                    class="underline text-[#005EB8] dark:text-[#00B5E2]"
+                    >Más información</a
+                >.
+            </p>
+        </div>
+        <div class="flex-shrink-0 flex flex-col md:flex-row gap-2">
+            <button
+                type="button"
+                data-cc-reject
+                class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >Rechazar</button
+            >
+            <button
+                type="button"
+                data-cc-accept
+                class="px-4 py-2 rounded-lg bg-[#005EB8] text-white hover:bg-[#004a92]"
+                >Aceptar</button
+            >
+        </div>
+    </div>
+</div>
+
+<!-- Modal de preferencias de cookies -->
+<div
+    data-cookie-modal
+    hidden
+    aria-hidden="true"
+    class="fixed inset-0 z-[70] flex items-end sm:items-center justify-center"
+>
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" data-cc-backdrop>
+    </div>
+    <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Preferencias de cookies"
+        class="relative w-full sm:w-[720px] max-h-[90vh] overflow-hidden rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-2xl m-0 sm:m-6"
+    >
+        <div
+            class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800"
+        >
+            <h2 class="text-lg font-semibold text-heading-2">
+                Preferencias de cookies
+            </h2>
+            <button
+                type="button"
+                data-cc-close
+                class="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Cerrar"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    ><path
+                        d="M6.225 4.811a1 1 0 0 0-1.414 1.414L10.586 12l-5.775 5.775a1 1 0 1 0 1.414 1.414L12 13.414l5.775 5.775a1 1 0 0 0 1.414-1.414L13.414 12l5.775-5.775a1 1 0 1 0-1.414-1.414L12 10.586 6.225 4.811Z"
+                    ></path></svg
+                >
+            </button>
+        </div>
+        <div
+            class="p-5 space-y-4 overflow-y-auto max-h-[65vh] text-sm text-gray-700 dark:text-gray-300"
+        >
+            <p>
+                Te ayudamos a navegar eficientemente y realizar funciones
+                básicas. Las cookies “Necesarias” son esenciales para el
+                funcionamiento del sitio. Las demás categorías se almacenarán
+                solo con tu consentimiento.
+            </p>
+
+            <details
+                class="border border-gray-200 dark:border-gray-800 rounded-lg"
+            >
+                <summary
+                    class="cursor-pointer select-none px-4 py-3 font-medium flex items-center justify-between"
+                >
+                    <span>Necesarias</span>
+                    <span class="text-xs text-green-600 dark:text-green-400"
+                        >Siempre activas</span
+                    >
+                </summary>
+                <div class="px-4 pb-4 text-sm">
+                    Cookies imprescindibles para funciones básicas (sesión,
+                    seguridad, recordar esta preferencia). No almacenan
+                    información personal identificable.
+                </div>
+            </details>
+
+            <details
+                class="border border-gray-200 dark:border-gray-800 rounded-lg"
+            >
+                <summary
+                    class="cursor-pointer select-none px-4 py-3 font-medium flex items-center justify-between"
+                >
+                    <span>Funcionales</span>
+                    <label class="inline-flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            data-cc-toggle-func
+                            class="w-5 h-5 accent-[#005EB8]"
+                        />
+                        <span class="text-xs">Activar</span>
+                    </label>
+                </summary>
+                <div class="px-4 pb-4 text-sm">
+                    Permiten funcionalidades como recordar preferencias y
+                    mejorar la experiencia del usuario.
+                </div>
+            </details>
+
+            <details
+                class="border border-gray-200 dark:border-gray-800 rounded-lg"
+            >
+                <summary
+                    class="cursor-pointer select-none px-4 py-3 font-medium flex items-center justify-between"
+                >
+                    <span>Analíticas</span>
+                    <label class="inline-flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            data-cc-toggle-ana
+                            class="w-5 h-5 accent-[#005EB8]"
+                        />
+                        <span class="text-xs">Activar</span>
+                    </label>
+                </summary>
+                <div class="px-4 pb-4 text-sm">
+                    Nos ayudan a entender cómo interactúan los visitantes para
+                    mejorar el sitio. Se activan solo con tu consentimiento.
+                </div>
+            </details>
+        </div>
+        <div
+            class="flex flex-col sm:flex-row gap-2 justify-end px-5 py-4 border-t border-gray-200 dark:border-gray-800"
+        >
+            <button
+                type="button"
+                data-cc-reject-all
+                class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >Rechazar todo</button
+            >
+            <button
+                type="button"
+                data-cc-save
+                class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                >Guardar mis preferencias</button
+            >
+            <button
+                type="button"
+                data-cc-accept-all
+                class="px-4 py-2 rounded-lg bg-[#005EB8] text-white hover:bg-[#004a92]"
+                >Aceptar todo</button
+            >
+        </div>
+    </div>
+</div>
+<script>
+    // Gestión de consentimiento de cookies (init robusto)
+    (() => {
+        const init = () => {
+            const banner = document.querySelector("[data-cookie-banner]");
+            const acceptBtn = document.querySelector("[data-cc-accept]");
+            const rejectBtn = document.querySelector("[data-cc-reject]");
+
+            const getCookie = (name: string) => {
+                const m = document.cookie.match(
+                    new RegExp("(?:^|; )" + name + "=([^;]*)"),
+                );
+                return m ? decodeURIComponent(m[1]) : undefined;
+            };
+
+            const hideBanner = () => banner?.setAttribute("hidden", "");
+            const showBanner = () => banner?.removeAttribute("hidden");
+
+            const setConsent = (value: string | number | boolean) => {
+                try {
+                    localStorage.setItem("cookieConsent", String(value));
+                    document.cookie = `cookie_consent=${encodeURIComponent(value)}; max-age=31536000; path=/; SameSite=Lax`;
+                    window.dispatchEvent(
+                        new CustomEvent("cookie-consent", { detail: value }),
+                    );
+                } catch {}
+                hideBanner();
+            };
+
+            const saved = (
+                localStorage.getItem("cookieConsent") ||
+                getCookie("cookie_consent") ||
+                ""
+            ).trim();
+            if (!saved) showBanner();
+
+            acceptBtn?.addEventListener("click", () => setConsent("accepted"));
+            rejectBtn?.addEventListener("click", () => setConsent("rejected"));
+
+            // Botones para reabrir preferencias (por ejemplo, en el footer)
+            document
+                .querySelectorAll("[data-open-cookie-preferences]")
+                .forEach((el) => {
+                    el.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        showBanner();
+                    });
+                });
+        };
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", init, { once: true });
+        } else {
+            init();
+        }
+    })();
+</script>
+<!-- Gestión de consentimiento y preferencias -->
+<script>
+    declare global {
+        interface Window {
+            cookieConsent: {
+                get: () => { functional: boolean; analytics: boolean };
+                isAllowed: (cat: string | number) => boolean;
+                showPreferences: () => void;
+            };
+        }
+    }
+
+    (() => {
+        const ONE_YEAR = 60 * 60 * 24 * 365;
+
+        const getCookie = (name: string) => {
+            const m = document.cookie.match(
+                new RegExp("(?:^|; )" + name + "=([^;]*)"),
+            );
+            return m ? decodeURIComponent(m[1]) : undefined;
+        };
+        const setCookie = (name: string, value: string | number | boolean) => {
+            document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${ONE_YEAR}; path=/; SameSite=Lax`;
+        };
+
+        const defaultPrefs = {
+            necessary: true,
+            functional: false,
+            analytics: false,
+        };
+
+        const readPrefs = () => {
+            try {
+                const ls = localStorage.getItem("cookiePrefs");
+                if (ls) return { ...defaultPrefs, ...JSON.parse(ls) };
+            } catch {}
+            try {
+                const ck = getCookie("cookie_prefs");
+                if (ck) return { ...defaultPrefs, ...JSON.parse(ck) };
+            } catch {}
+            return { ...defaultPrefs };
+        };
+
+        const writePrefs = (prefs: {
+            functional: boolean;
+            analytics: boolean;
+        }) => {
+            const norm = { ...defaultPrefs, ...prefs };
+            try {
+                localStorage.setItem("cookiePrefs", JSON.stringify(norm));
+            } catch {}
+            try {
+                setCookie("cookie_prefs", JSON.stringify(norm));
+            } catch {}
+            const status =
+                norm.functional || norm.analytics
+                    ? "accepted"
+                    : "necessary-only";
+            try {
+                localStorage.setItem("cookieConsent", status);
+                setCookie("cookie_consent", status);
+            } catch {}
+            window.dispatchEvent(
+                new CustomEvent("cookie-consent", {
+                    detail: { status, prefs: norm },
+                }),
+            );
+            return norm;
+        };
+
+        // Exponer pequeña API global
+        window.cookieConsent = {
+            get: () => readPrefs(),
+            isAllowed: (cat: string | number) => !!readPrefs()[cat],
+            showPreferences: () => showModal(),
+        };
+
+        // Elementos
+        const banner = document.querySelector("[data-cookie-banner]");
+        const modal = document.querySelector("[data-cookie-modal]");
+        const backdrop = document.querySelector("[data-cc-backdrop]");
+        const acceptBtn = document.querySelector("[data-cc-accept]");
+        const rejectBtn = document.querySelector("[data-cc-reject]");
+        const openInfoEls = document.querySelectorAll(
+            "[data-open-cookie-modal]",
+        );
+        const reopenEls = document.querySelectorAll(
+            "[data-open-cookie-preferences]",
+        );
+        const closeBtn = document.querySelector("[data-cc-close]");
+        const rejectAll = document.querySelector("[data-cc-reject-all]");
+        const acceptAll = document.querySelector("[data-cc-accept-all]");
+        const saveBtn = document.querySelector("[data-cc-save]");
+        const toggleFunc = document.querySelector("[data-cc-toggle-func]");
+        const toggleAna = document.querySelector("[data-cc-toggle-ana]");
+
+        const hideBanner = () => banner?.setAttribute("hidden", "");
+        const showBanner = () => banner?.removeAttribute("hidden");
+        const hideModal = () => modal?.setAttribute("hidden", "");
+        const showModal = () => {
+            // Sincroniza toggles con el estado actual
+            const prefs = readPrefs();
+            if (toggleFunc)
+                (toggleFunc as HTMLInputElement).checked = !!prefs.functional;
+            if (toggleAna)
+                (toggleAna as HTMLInputElement).checked = !!prefs.analytics;
+            modal?.removeAttribute("hidden");
+        };
+
+        // Mostrar banner si no hay preferencias guardadas
+        const hasAnyPref =
+            !!localStorage.getItem("cookiePrefs") ||
+            !!getCookie("cookie_prefs");
+        if (!hasAnyPref) showBanner();
+
+        // Banner: aceptar = todo, rechazar = solo necesarias
+        acceptBtn?.addEventListener("click", () => {
+            writePrefs({ functional: true, analytics: true });
+            hideBanner();
+        });
+        rejectBtn?.addEventListener("click", () => {
+            writePrefs({ functional: false, analytics: false });
+            hideBanner();
+        });
+
+        // Abrir modal desde “Más información” o desde el footer
+        openInfoEls.forEach((el) =>
+            el.addEventListener("click", (e) => {
+                e.preventDefault();
+                hideBanner();
+                showModal();
+            }),
+        );
+        reopenEls.forEach((el) =>
+            el.addEventListener("click", (e) => {
+                e.preventDefault();
+                showModal();
+            }),
+        );
+
+        // Modal: cerrar por botón o backdrop (sin guardar cambios)
+        closeBtn?.addEventListener("click", () => hideModal());
+        backdrop?.addEventListener("click", () => hideModal());
+
+        // Modal: acciones
+        rejectAll?.addEventListener("click", () => {
+            writePrefs({ functional: false, analytics: false });
+            hideModal();
+            hideBanner();
+        });
+        acceptAll?.addEventListener("click", () => {
+            writePrefs({ functional: true, analytics: true });
+            hideModal();
+            hideBanner();
+        });
+        saveBtn?.addEventListener("click", () => {
+            const prefs = {
+                functional: !!(
+                    toggleFunc && (toggleFunc as HTMLInputElement).checked
+                ),
+                analytics: !!(
+                    toggleAna && (toggleAna as HTMLInputElement).checked
+                ),
+            };
+            writePrefs(prefs);
+            hideModal();
+            hideBanner();
+        });
+
+        // Accesibilidad: cerrar con ESC
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !modal?.hasAttribute("hidden"))
+                hideModal();
+        });
+    })();
+</script>
+<script>
+    (() => {
+        const ONE_YEAR = 60 * 60 * 24 * 365;
+
+        const getCookie = (name: string) => {
+            const m = document.cookie.match(
+                new RegExp("(?:^|; )" + name + "=([^;]*)"),
+            );
+            return m ? decodeURIComponent(m[1]) : undefined;
+        };
+        const setCookie = (name: string, value: string | number | boolean) => {
+            document.cookie = `${name}=${encodeURIComponent(value)}; max-age=${ONE_YEAR}; path=/; SameSite=Lax`;
+        };
+
+        const defaultPrefs = {
+            necessary: true,
+            functional: false,
+            analytics: false,
+        };
+
+        const readPrefs = () => {
+            try {
+                const ls = localStorage.getItem("cookiePrefs");
+                if (ls) return { ...defaultPrefs, ...JSON.parse(ls) };
+            } catch {}
+            try {
+                const ck = getCookie("cookie_prefs");
+                if (ck) return { ...defaultPrefs, ...JSON.parse(ck) };
+            } catch {}
+            return { ...defaultPrefs };
+        };
+
+        const writePrefs = (prefs: {
+            functional: boolean;
+            analytics: boolean;
+        }) => {
+            const norm = { ...defaultPrefs, ...prefs };
+            try {
+                localStorage.setItem("cookiePrefs", JSON.stringify(norm));
+            } catch {}
+            try {
+                setCookie("cookie_prefs", JSON.stringify(norm));
+            } catch {}
+            const status =
+                norm.functional || norm.analytics
+                    ? "accepted"
+                    : "necessary-only";
+            try {
+                localStorage.setItem("cookieConsent", status);
+                setCookie("cookie_consent", status);
+            } catch {}
+            window.dispatchEvent(
+                new CustomEvent("cookie-consent", {
+                    detail: { status, prefs: norm },
+                }),
+            );
+            return norm;
+        };
+
+        // API global sencilla
+        window.cookieConsent = {
+            get: () => readPrefs(),
+            isAllowed: (cat) => !!readPrefs()[cat],
+            showPreferences: () => showModal(),
+        };
+
+        // Elementos
+        const banner = document.querySelector("[data-cookie-banner]");
+        const modal = document.querySelector("[data-cookie-modal]");
+        const backdrop = document.querySelector("[data-cc-backdrop]");
+        const acceptBtn = document.querySelector("[data-cc-accept]");
+        const rejectBtn = document.querySelector("[data-cc-reject]");
+        const openInfoEls = document.querySelectorAll(
+            "[data-open-cookie-modal]",
+        );
+        const reopenEls = document.querySelectorAll(
+            "[data-open-cookie-preferences]",
+        );
+        const closeBtn = document.querySelector("[data-cc-close]");
+        const rejectAll = document.querySelector("[data-cc-reject-all]");
+        const acceptAll = document.querySelector("[data-cc-accept-all]");
+        const saveBtn = document.querySelector("[data-cc-save]");
+        const toggleFunc = document.querySelector("[data-cc-toggle-func]");
+        const toggleAna = document.querySelector("[data-cc-toggle-ana]");
+
+        const hideBanner = () => banner?.setAttribute("hidden", "");
+        const showBanner = () => banner?.removeAttribute("hidden");
+        const hideModal = () => modal?.setAttribute("hidden", "");
+        const showModal = () => {
+            const prefs = readPrefs();
+            if (toggleFunc)
+                (toggleFunc as HTMLInputElement).checked = !!prefs.functional;
+            if (toggleAna)
+                (toggleAna as HTMLInputElement).checked = !!prefs.analytics;
+            modal?.removeAttribute("hidden");
+        };
+
+        // Mostrar banner si no hay preferencias guardadas
+        const hasAnyPref =
+            !!localStorage.getItem("cookiePrefs") ||
+            !!getCookie("cookie_prefs");
+        if (!hasAnyPref) showBanner();
+
+        // Banner: aceptar = todo, rechazar = solo necesarias
+        acceptBtn?.addEventListener("click", () => {
+            writePrefs({ functional: true, analytics: true });
+            hideBanner();
+        });
+        rejectBtn?.addEventListener("click", () => {
+            writePrefs({ functional: false, analytics: false });
+            hideBanner();
+        });
+
+        // Abrir modal desde “Más información” o desde el footer
+        openInfoEls.forEach((el) =>
+            el.addEventListener("click", (e) => {
+                e.preventDefault();
+                hideBanner();
+                showModal();
+            }),
+        );
+        reopenEls.forEach((el) =>
+            el.addEventListener("click", (e) => {
+                e.preventDefault();
+                showModal();
+            }),
+        );
+
+        // Modal: cerrar por botón o backdrop (sin guardar cambios)
+        closeBtn?.addEventListener("click", () => hideModal());
+        backdrop?.addEventListener("click", () => hideModal());
+
+        // Modal: acciones
+        rejectAll?.addEventListener("click", () => {
+            writePrefs({ functional: false, analytics: false });
+            hideModal();
+            hideBanner();
+        });
+        acceptAll?.addEventListener("click", () => {
+            writePrefs({ functional: true, analytics: true });
+            hideModal();
+            hideBanner();
+        });
+        saveBtn?.addEventListener("click", () => {
+            const prefs = {
+                functional: !!(
+                    toggleFunc && (toggleFunc as HTMLInputElement).checked
+                ),
+                analytics: !!(
+                    toggleAna && (toggleAna as HTMLInputElement).checked
+                ),
+            };
+            writePrefs(prefs);
+            hideModal();
+            hideBanner();
+        });
+
+        // Accesibilidad: cerrar con ESC
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !modal?.hasAttribute("hidden"))
+                hideModal();
+        });
+    })();
+</script>

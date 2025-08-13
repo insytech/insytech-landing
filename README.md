@@ -57,3 +57,18 @@ Para más información, visita nuestra página de contacto o escríbenos directa
 ## 👀 Más Información
 
 Consulta nuestra [documentación interna](#) o explora el código fuente para aprender más sobre cómo está construido este proyecto.
+
+## 🔐 Banner de cookies
+
+Esta landing integra un aviso de cookies con persistencia de consentimiento:
+
+- Persistencia: localStorage `cookieConsent` y cookie `cookie_consent` (1 año).
+- Estados: `accepted` | `rejected`.
+- Reapertura: cualquier elemento con `data-open-cookie-preferences` vuelve a mostrar el banner.
+
+Para escuchar cambios de consentimiento en scripts propios:
+```js
+window.addEventListener("cookie-consent", (e) => {
+  // e.detail === 'accepted' | 'rejected'
+});
+```
