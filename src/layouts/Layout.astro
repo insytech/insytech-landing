@@ -10,6 +10,12 @@ export interface Props {
   description?: string;
   ogImage?: string;
   noindex?: boolean;
+  // NUEVO
+  siteName?: string; // Aparece arriba del título en la tarjeta
+  twitterHandle?: string; // Ej: @insytech
+  imageAlt?: string; // Texto alternativo para la imagen OG/Twitter
+  imageWidth?: number; // Ancho de la imagen OG (px)
+  imageHeight?: number; // Alto de la imagen OG (px)
 }
 
 const {
@@ -17,7 +23,22 @@ const {
   description = "Soluciones de automatización y desarrollo de software a medida para optimizar procesos industriales. 100+ proyectos exitosos.",
   ogImage = "/images/futuro_digital.webp",
   noindex = false,
+  // NUEVO: defaults
+  siteName = "Insytech",
+  twitterHandle = "@insytech",
+  imageAlt = "Insytech: automatización, trazabilidad y visión computacional",
+  imageWidth = 1200,
+  imageHeight = 630,
 } = Astro.props;
+
+// NUEVO: asegurar URL absoluta para la imagen OG/Twitter
+const toAbsolute = (src: string) =>
+  src?.startsWith("http")
+    ? src
+    : Astro.url
+      ? new URL(src, Astro.url).href
+      : src;
+const ogImageAbs = toAbsolute(ogImage);
 ---
 
 <!doctype html>
@@ -35,18 +56,29 @@ const {
     {Astro.url && <link rel="canonical" href={Astro.url.href} />}
 
     <!-- Open Graph -->
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
     {Astro.url && <meta property="og:url" content={Astro.url.href} />}
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:image:secure_url" content={ogImageAbs} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:width" content={String(imageWidth)} />
+    <meta property="og:image:height" content={String(imageHeight)} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={twitterHandle} />
+    <meta name="twitter:creator" content={twitterHandle} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image" content={ogImageAbs} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+
+    <!-- Opcional: nombre de la app (algunos UAs lo muestran) -->
+    <meta name="application-name" content={siteName} />
 
     <link
       rel="icon"
