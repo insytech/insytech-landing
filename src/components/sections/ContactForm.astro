@@ -222,7 +222,8 @@ import BtnLink from "@components/shared/BtnLink.astro";
 
                 await res.json();
                 if (statusEl) {
-                    statusEl.textContent = "Enviado correctamente. ¡Gracias!";
+                    statusEl.textContent =
+                        "Hemos recibido su información y en breve nos pondremos en contacto con usted.";
                     statusEl.classList.remove("hidden");
                 }
                 (form as HTMLFormElement).reset();
