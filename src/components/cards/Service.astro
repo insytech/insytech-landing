@@ -33,6 +33,11 @@ const imgSecondary = imageSecondary ?? image;
                         src={imgPrimary}
                         alt={`${title} - imagen principal`}
                         class="w-full h-full object-cover"
+                        sizes="(max-width: 600px) 178px, 290px"
+                        width="178"
+                        height="178"
+                        alt="Control 2"
+                        loading="lazy"
                     />
                 </div>
 
@@ -44,6 +49,10 @@ const imgSecondary = imageSecondary ?? image;
                         src={imgSecondary}
                         alt={`${title} - imagen secundaria`}
                         class="w-full h-full object-cover"
+                        width="178"
+                        height="178"
+                        alt="Control 2"
+                        loading="lazy"
                     />
                 </div>
             </div>
