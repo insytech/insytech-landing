@@ -5,15 +5,19 @@ import FooterNav from "../shared/FooterNav.astro";
 import Paragraph from "../shared/Paragraph.astro";
 const footerNav1 = [
     {
-        itemText: "Automatización y Control Industrial",
+        itemText: "Desarrollo de Software y Automatización",
         itemLink: "#",
     },
     {
-        itemText: "Trazabilidad Industrial 4.0 en Tiempo Real",
+        itemText: "Trazabilidad y Monitoreo de Producción",
         itemLink: "#",
     },
     {
-        itemText: "Visión Computacional",
+        itemText: "Automatización y Control",
+        itemLink: "#",
+    },
+    {
+        itemText: "Visión con Inteligencia Artificial",
         itemLink: "#",
     },
 ];
@@ -40,7 +44,7 @@ const footerContact = [
     },
     {
         itemText: "info@insytech.mx",
-        itemLink: "#",
+        itemLink: "mailto:info@insytech.mx",
     },
 ];
 ---
@@ -79,10 +83,12 @@ const footerContact = [
         <span
             class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 blur-2xl opacity-20 w-24 h-16 sm:w-48 sm:h-36 rounded-full rotate-12 skew-x-6 bg-[#001489]"
         ></span>
+        <!-- Cambiar a 6 columnas en lg -->
         <div
-            class="grid grid-cols-2 lg:grid-cols-3 lg:items-stretch gap-8 relative"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 lg:items-stretch gap-8 relative"
         >
-            <div class="col-span-2 lg:col-span-1 h-auto flex flex-col">
+            <!-- Primera columna: ahora ocupa 2 en lg -->
+            <div class="sm:col-span-2 lg:col-span-2 h-auto flex flex-col">
                 <div class="h-full">
                     <a href="#" class="relative flex items-center gap-3">
                         <img
@@ -109,6 +115,7 @@ const footerContact = [
                 <div
                     class="min-h-max flex items-center gap-4 text-heading-3 mt-8"
                 >
+                    <!-- Facebook -->
                     <a
                         href="#"
                         class="transition hover:text-[#001489] hover:scale-105"
@@ -127,9 +134,9 @@ const footerContact = [
                         </svg>
                         <span class="sr-only">social link</span>
                     </a>
-
+                    <!-- Linkedin -->
                     <a
-                        href="#"
+                        href="https://www.linkedin.com/company/insytech/"
                         class="transition hover:text-[#001489] hover:scale-105"
                     >
                         <svg
@@ -187,32 +194,39 @@ const footerContact = [
                 </div>
             </div>
 
-            <GroupFooterNav>
+            <!-- Empresa: 1 columna -->
+            <div class="lg:col-span-1">
                 <FooterNav title={"Empresa"} navItems={footerCompany} />
-                <FooterNav title={"Servicios"} navItems={footerNav1} />
-            </GroupFooterNav>
+            </div>
 
-            <GroupFooterNav>
+            <!-- Soluciones: 2 columnas -->
+            <div class="lg:col-span-2">
+                <FooterNav title={"Soluciones"} navItems={footerNav1} />
+            </div>
+
+            <!-- Contacto: 1 columna -->
+            <div class="lg:col-span-1">
                 <FooterNav title={"Contacto"} navItems={footerContact} />
-            </GroupFooterNav>
+            </div>
+        </div>
+        <div class="mt-12 flex justify-center">
+            <Container>
+                <div
+                    class="flex flex-col md:flex-row justify-center md:justify-between items-center gap-6 md:text-lg text-heading-3"
+                >
+                    <div class="text-center md:text-left">
+                        &copy; <span id="year"></span> Insytech. Todos los derechos
+                        reservados.
+                    </div>
+                    <button
+                        type="button"
+                        data-open-cookie-preferences
+                        class="text-sm md:text-base underline hover:text-[#005EB8] dark:hover:text-[#00B5E2] z-50"
+                    >
+                        Preferencias de cookies
+                    </button>
+                </div>
+            </Container>
         </div>
     </Container>
-    <div>
-        <Container>
-            <div
-                class="flex justify-between items-center gap-6 md:text-lg text-heading-3"
-            >
-                <div>
-                    &copy; <span id="year"></span> Insytech. Todos los derechos reservados.
-                </div>
-                <button
-                    type="button"
-                    data-open-cookie-preferences
-                    class="text-sm md:text-base underline hover:text-[#005EB8] dark:hover:text-[#00B5E2] z-50"
-                >
-                    Preferencias de cookies
-                </button>
-            </div>
-        </Container>
-    </div>
 </footer>
