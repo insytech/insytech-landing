@@ -4,6 +4,7 @@ import Title from "../shared/Title.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Button from "../shared/Button.astro";
 import Badge from "@components/shared/Badge.astro";
+import BtnLink from "@components/shared/BtnLink.astro";
 ---
 
 <section id="contact" class="relative overflow-hidden py-20">
@@ -103,12 +104,12 @@ import Badge from "@components/shared/Badge.astro";
                     ></textarea>
                 </div>
                 <div class="text-center" data-contact-submit>
-                    <Button
+                    <BtnLink
+                        text="Contáctanos"
+                        href="#"
+                        className="justify-center inline-block"
                         variant="primary"
-                        className="w-full sm:w-auto text-white"
-                    >
-                        Solicitar diagnóstico técnico
-                    </Button>
+                    />
                 </div>
                 <p
                     id="contact-status"
