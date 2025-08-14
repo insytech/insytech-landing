@@ -44,6 +44,29 @@ const ogImageAbs = toAbsolute(ogImage);
 <!doctype html>
 <html lang="en">
   <head>
+    <!-- Acelera el handshake/TLS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Carga no bloqueante del CSS de Google Fonts -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+      as="style"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+      /></noscript
+    >
+
     <title>{title}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -96,10 +119,6 @@ const ogImageAbs = toAbsolute(ogImage);
       href="/Favicon_16x16px_Mesa-de-trabajo-1.webp"
     />
     <meta name="generator" content={Astro.generator} />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body class="overflow-hidden overflow-y-auto bg-body">
     <Navbar />
