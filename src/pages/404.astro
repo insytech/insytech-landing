@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/shared/Container.astro";
+import Title from "../components/shared/Title.astro";
+import Paragraph from "../components/shared/Paragraph.astro";
+import BtnLink from "../components/shared/BtnLink.astro";
+---
+
+<Layout title="404 - Página no encontrada | Insytech" noindex={true}>
+    <main class="min-h-[70vh] flex items-center">
+        <Container className="max-w-3xl mx-auto text-center space-y-6">
+            <div
+                class="inline-flex px-3 py-1 rounded-full bg-[#00B5E2]/10 text-[#005EB8] text-sm font-medium"
+            >
+                En construcción
+            </div>
+            <Title>Página no encontrada</Title>
+            <Paragraph>
+                El sitio o sección que esperabas está bajo construcción por
+                Insytech. Estamos trabajando para habilitar este contenido
+                pronto.
+            </Paragraph>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                <BtnLink
+                    text="Volver al inicio"
+                    href="/"
+                    variant="primary"
+                    className="justify-center"
+                />
+                <BtnLink
+                    text="Contáctanos"
+                    href="/Contact"
+                    variant="primary"
+                    className="justify-center"
+                />
+            </div>
+        </Container>
+    </main>
+</Layout>
