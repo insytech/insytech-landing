@@ -1,0 +1,156 @@
+---
+import "../styles/global.css";
+import Navbar from "@components/elements/Navbar.astro";
+import Footer from "@components/elements/Footer.astro";
+import CookieConsent from "../components/elements/CookieConsent.astro";
+import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
+
+export interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    noindex?: boolean;
+    siteName?: string;
+    twitterHandle?: string;
+    imageAlt?: string;
+    imageWidth?: number;
+    imageHeight?: number;
+}
+
+const {
+    title = "Chatbots, Automatización y RPA para empresas - Insytech",
+    description = "Soluciones de chatbots, automatización de procesos, n8n y RPA para optimizar tu negocio. Insytech impulsa tu transformación digital.",
+    ogImage = "/images/chatbots_og.webp",
+    noindex = false,
+    siteName = "Insytech Chatbots",
+    twitterHandle = "@insytech",
+    imageAlt = "Chatbots, automatización, n8n y RPA para empresas",
+    imageWidth = 1200,
+    imageHeight = 630,
+} = Astro.props;
+
+const toAbsolute = (src: string) =>
+    src?.startsWith("http")
+        ? src
+        : Astro.url
+          ? new URL(src, Astro.url).href
+          : src;
+const ogImageAbs = toAbsolute(ogImage);
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            as="style"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            media="print"
+            onload="this.media='all'"
+        />
+        <noscript>
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            />
+        </noscript>
+
+        <title>{title}</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta
+            name="keywords"
+            lang="es_MX"
+            content="chatbots, automatización, n8n, rpa, software, inteligencia artificial, Insytech"
+        />
+        <meta
+            name="keywords"
+            lang="en_US"
+            content="chatbots, automation, n8n, rpa, software, artificial intelligence, Insytech"
+        />
+        <meta name="description" content={description} />
+        {noindex && <meta name="robots" content="noindex,nofollow" />}
+        {Astro.url && <link rel="canonical" href={Astro.url.href} />}
+
+        <!-- Open Graph -->
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_MX" />
+        {Astro.url && <meta property="og:url" content={Astro.url.href} />}
+        <meta property="og:image" content={ogImageAbs} />
+        <meta property="og:image:secure_url" content={ogImageAbs} />
+        <meta property="og:image:alt" content={imageAlt} />
+        <meta property="og:image:width" content={String(imageWidth)} />
+        <meta property="og:image:height" content={String(imageHeight)} />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={twitterHandle} />
+        <meta name="twitter:creator" content={twitterHandle} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageAbs} />
+        <meta name="twitter:image:alt" content={imageAlt} />
+
+        <meta name="application-name" content={siteName} />
+
+        <link
+            rel="icon"
+            type="image/webp"
+            href="/Favicon_16x16px_Mesa-de-trabajo-1.webp"
+        />
+        <meta name="generator" content={Astro.generator} />
+    </head>
+    <body class="overflow-hidden overflow-y-auto bg-body">
+        <Navbar />
+        <main>
+            <slot />
+        </main>
+        <Footer />
+        <CookieConsent />
+        <WhatsappWidget />
+        <script>
+            // Reveal on scroll para [data-animate]
+            (() => {
+                const els = Array.from(
+                    document.querySelectorAll("[data-animate]"),
+                );
+                if (!els.length) return;
+                if (!("IntersectionObserver" in window)) {
+                    els.forEach((el) => el.classList.add("in"));
+                    return;
+                }
+                const io = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const el = entry.target;
+                                if (el instanceof HTMLElement) {
+                                    const d =
+                                        el.getAttribute("data-animate-delay");
+                                    if (d) el.style.setProperty("--delay", d);
+                                    el.classList.add("in");
+                                }
+                                io.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
+                );
+                els.forEach((el) => io.observe(el));
+            })();
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    /* ...existing code from Layout.astro... */
+</style>
