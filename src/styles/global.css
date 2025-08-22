@@ -59,3 +59,226 @@ body {
   visibility: visible;
   display: flex;
 }
+
+/* Animaciones personalizadas que no se pueden hacer solo con Tailwind */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+/* Nodos flotantes */
+.floating-nodes {
+  @apply absolute w-full h-full;
+}
+
+.floating-node {
+  @apply absolute min-w-[50px] p-2 rounded-xl bg-white/8 dark:bg-white/8 border border-purple-400/20 dark:border-purple-400/20 backdrop-blur-md;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-node .node-icon {
+  @apply text-base text-slate-700 dark:text-slate-200;
+}
+
+.floating-node .node-label {
+  @apply text-[10px] text-slate-700 dark:text-slate-200;
+}
+
+/* Posicionamiento de nodos flotantes */
+.node-1 {
+  top: 15%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.node-2 {
+  top: 65%;
+  left: 65%;
+  animation-delay: 1s;
+}
+
+.node-3 {
+  top: 30%;
+  left: 80%;
+  animation-delay: 2s;
+}
+
+.node-4 {
+  top: 25%;
+  left: 50%;
+  animation-delay: 3s;
+}
+
+.node-5 {
+  top: 5%;
+  left: 20%;
+  animation-delay: 4s;
+  transform: translateY(-50%);
+}
+
+/* Efecto de nodo presionado */
+.flow-node.pressed {
+  @apply scale-95 border-emerald-400/70 shadow-emerald-400/30 shadow-lg transition-all duration-150 ease-out;
+  box-shadow:
+    0 0 0 1px rgba(6, 255, 165, 0.3),
+    0 0 30px rgba(6, 255, 165, 0.4),
+    0 0 0 4px rgba(6, 255, 165, 0.1);
+}
+
+.flow-node.pressed::before {
+  background: radial-gradient(circle at center,
+      rgba(6, 255, 165, 0.4),
+      transparent 70%);
+  opacity: 1;
+  animation: pulseGlow 0.5s ease-out;
+}
+
+.flow-node.pressed .node-icon {
+  @apply scale-110 text-emerald-400 transition-all duration-150 ease-out;
+  filter: drop-shadow(0 0 10px rgba(6, 255, 165, 0.6));
+}
+
+/* Tipos de nodos específicos */
+.trigger-node,
+.notify-node {
+  @apply border-amber-500/40 dark:border-amber-400/40;
+}
+
+.trigger-node:hover,
+.notify-node:hover,
+.trigger-node.pressed,
+.notify-node.pressed {
+  @apply border-amber-500/70 dark:border-amber-400/70;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 25px rgba(245, 158, 11, 0.2);
+}
+
+.ai-node {
+  @apply border-cyan-500/40 dark:border-cyan-400/40;
+}
+
+.ai-node:hover,
+.ai-node.pressed {
+  @apply border-cyan-500/70 dark:border-cyan-400/70;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 25px rgba(6, 182, 212, 0.2);
+}
+
+.action-node {
+  @apply border-emerald-400/40 dark:border-emerald-400/40;
+}
+
+.action-node:hover,
+.action-node.pressed {
+  @apply border-emerald-400/70 dark:border-emerald-400/70;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+    0 0 25px rgba(6, 255, 165, 0.2);
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .flow-node {
+    @apply shadow-md backdrop-blur-lg;
+  }
+
+  .flow-node::after {
+    @apply hidden;
+  }
+
+  .node-label {
+    @apply text-[10px] max-w-full overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+
+  .flow-node.pressed {
+    box-shadow:
+      0 0 0 1px rgba(6, 255, 165, 0.3),
+      0 0 15px rgba(6, 255, 165, 0.3);
+  }
+}
+
+@media (max-width: 480px) {
+  .node-1 {
+    left: 10%;
+    top: 20%;
+  }
+
+  .node-2 {
+    left: 70%;
+    top: 60%;
+  }
+
+  .node-3 {
+    left: 5%;
+    top: 60%;
+  }
+
+  .node-4 {
+    left: 35%;
+    top: 56%;
+  }
+
+  .node-5 {
+    left: 10%;
+    top: 2%;
+  }
+
+  .node-6 {
+    left: 35%;
+    transform: translate(20%, 80%);
+  }
+
+  .flow-node {
+    @apply p-3 min-w-[70px];
+  }
+}
+
+@media (max-width: 375px) {
+  .flow-node {
+    @apply p-3 min-w-[60px];
+  }
+
+  .small-node {
+    @apply min-w-[50px] p-2;
+  }
+
+  .node-icon {
+    @apply text-lg mb-1;
+  }
+
+  .node-label {
+    @apply text-[10px];
+  }
+
+  .node-3 .node-4 {
+    @apply hidden;
+  }
+}

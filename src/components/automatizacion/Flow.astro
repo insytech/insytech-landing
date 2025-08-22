@@ -54,6 +54,7 @@ const {} = Astro.props;
             icon="📧"
             label="Email Marketing"
             size="small"
+            className="node-6"
             animateType="fade-up"
             animateDelay="0.5s"
         />
@@ -435,7 +436,7 @@ const {} = Astro.props;
             {
                 from: "node-pipeline",
                 to: "node-email",
-                type: "curve",
+                type: "line",
                 importance: "secondary",
             },
             {
@@ -471,7 +472,7 @@ const {} = Astro.props;
             {
                 from: "node-targeting",
                 to: "node-forms",
-                type: "curve",
+                type: "line",
                 importance: "tertiary",
             },
         ];
