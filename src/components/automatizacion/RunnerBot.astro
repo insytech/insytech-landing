@@ -157,36 +157,112 @@ const {} = Astro.props;
                 fill="url(#armGrad)"
                 opacity="0.8"></rect>
 
-            <!-- Propulsores (solo visibles cuando se mueve) -->
+            <!-- Propulsores rediseñados (solo visibles cuando se mueve) -->
             <g class="thruster" opacity="0">
-                <ellipse
-                    cx="26"
-                    cy="42"
-                    rx="6"
-                    ry="8"
-                    fill="url(#thrustGrad)"
-                    opacity="0.8"
-                >
-                    <animate
-                        attributeName="ry"
-                        values="8;12;8"
-                        dur="0.3s"
-                        repeatCount="indefinite"></animate>
-                </ellipse>
+                <!-- Tobera principal del propulsor -->
+                <path
+                    d="M 20 40 Q 20 36 26 36 Q 32 36 32 40 L 30 44 Q 26 46 26 46 Q 26 46 22 44 Z"
+                    fill="url(#thrusterNozzle)"
+                    stroke="#0052cc"
+                    stroke-width="0.5"></path>
+
+                <!-- Llama principal -->
                 <ellipse
                     cx="26"
                     cy="44"
-                    rx="3"
-                    ry="5"
-                    fill="url(#thrustGrad2)"
+                    rx="4"
+                    ry="6"
+                    fill="url(#thrustFlame1)"
                     opacity="0.9"
                 >
                     <animate
                         attributeName="ry"
-                        values="5;8;5"
-                        dur="0.25s"
+                        values="6;9;6"
+                        dur="0.15s"
+                        repeatCount="indefinite"></animate>
+                    <animate
+                        attributeName="opacity"
+                        values="0.9;1;0.9"
+                        dur="0.15s"
                         repeatCount="indefinite"></animate>
                 </ellipse>
+
+                <!-- Llama interior más intensa -->
+                <ellipse
+                    cx="26"
+                    cy="43"
+                    rx="2.5"
+                    ry="4"
+                    fill="url(#thrustFlame2)"
+                    opacity="0.8"
+                >
+                    <animate
+                        attributeName="ry"
+                        values="4;6;4"
+                        dur="0.12s"
+                        repeatCount="indefinite"></animate>
+                </ellipse>
+
+                <!-- Núcleo brillante -->
+                <ellipse
+                    cx="26"
+                    cy="42"
+                    rx="1"
+                    ry="2"
+                    fill="#ffffff"
+                    opacity="0.9"
+                >
+                    <animate
+                        attributeName="ry"
+                        values="2;3;2"
+                        dur="0.1s"
+                        repeatCount="indefinite"></animate>
+                    <animate
+                        attributeName="opacity"
+                        values="0.9;1;0.9"
+                        dur="0.1s"
+                        repeatCount="indefinite"></animate>
+                </ellipse>
+
+                <!-- Partículas laterales -->
+                <g class="side-particles">
+                    <circle
+                        cx="22"
+                        cy="45"
+                        r="0.8"
+                        fill="#06ffa5"
+                        opacity="0.7"
+                    >
+                        <animate
+                            attributeName="cy"
+                            values="45;48;45"
+                            dur="0.2s"
+                            repeatCount="indefinite"></animate>
+                        <animate
+                            attributeName="opacity"
+                            values="0.7;0;0.7"
+                            dur="0.2s"
+                            repeatCount="indefinite"></animate>
+                    </circle>
+                    <circle
+                        cx="30"
+                        cy="45"
+                        r="0.8"
+                        fill="#00b5e2"
+                        opacity="0.7"
+                    >
+                        <animate
+                            attributeName="cy"
+                            values="45;48;45"
+                            dur="0.25s"
+                            repeatCount="indefinite"></animate>
+                        <animate
+                            attributeName="opacity"
+                            values="0.7;0;0.7"
+                            dur="0.25s"
+                            repeatCount="indefinite"></animate>
+                    </circle>
+                </g>
             </g>
 
             <!-- Definiciones de gradientes -->
@@ -223,22 +299,36 @@ const {} = Astro.props;
                     <stop offset="100%" stop-color="#00b5e2"></stop>
                 </linearGradient>
 
-                <linearGradient id="thrustGrad" x1="26" y1="42" x2="26" y2="50">
-                    <stop offset="0%" stop-color="#06ffa5"></stop>
-                    <stop offset="50%" stop-color="#00b5e2"></stop>
-                    <stop offset="100%" stop-color="#0066ff"></stop>
+                <linearGradient
+                    id="thrusterNozzle"
+                    x1="26"
+                    y1="36"
+                    x2="26"
+                    y2="44"
+                >
+                    <stop offset="0%" stop-color="#0066ff"></stop>
+                    <stop offset="50%" stop-color="#0052cc"></stop>
+                    <stop offset="100%" stop-color="#003d99"></stop>
                 </linearGradient>
 
-                <linearGradient
-                    id="thrustGrad2"
-                    x1="26"
-                    y1="44"
-                    x2="26"
-                    y2="49"
-                >
+                <radialGradient id="thrustFlame1" cx="0.5" cy="0.3" r="0.8">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"
+                    ></stop>
+                    <stop offset="30%" stop-color="#06ffa5" stop-opacity="0.8"
+                    ></stop>
+                    <stop offset="60%" stop-color="#00b5e2" stop-opacity="0.7"
+                    ></stop>
+                    <stop offset="100%" stop-color="#0066ff" stop-opacity="0.3"
+                    ></stop>
+                </radialGradient>
+
+                <radialGradient id="thrustFlame2" cx="0.5" cy="0.2" r="0.6">
                     <stop offset="0%" stop-color="#ffffff"></stop>
-                    <stop offset="100%" stop-color="#06ffa5"></stop>
-                </linearGradient>
+                    <stop offset="40%" stop-color="#06ffa5"></stop>
+                    <stop offset="80%" stop-color="#00b5e2"></stop>
+                    <stop offset="100%" stop-color="#0066ff" stop-opacity="0.5"
+                    ></stop>
+                </radialGradient>
 
                 <linearGradient
                     id="activityGrad"
@@ -311,6 +401,7 @@ const {} = Astro.props;
 
     .runner.moving .thruster {
         opacity: 1 !important;
+        filter: drop-shadow(0 0 8px rgba(6, 255, 165, 0.6));
     }
 
     .runner.moving .signal-waves {
@@ -322,15 +413,15 @@ const {} = Astro.props;
     }
 
     .runner.moving .bot-svg {
-        animation: subtle-vibration 0.1s infinite alternate;
+        animation: enhanced-vibration 0.08s infinite alternate;
     }
 
-    @keyframes subtle-vibration {
+    @keyframes enhanced-vibration {
         0% {
-            transform: rotate(var(--rotation, 0)) scale(1);
+            transform: rotate(var(--rotation, 0)) scale(1) translateY(0);
         }
         100% {
-            transform: rotate(var(--rotation, 0)) scale(1.02);
+            transform: rotate(var(--rotation, 0)) scale(1.01) translateY(-0.5px);
         }
     }
 
@@ -424,7 +515,11 @@ const {} = Astro.props;
         }
 
         .runner.moving .bot-svg {
-            animation: none;
+            animation: none; /* Desactivar vibración en móvil para mejor rendimiento */
+        }
+
+        .runner.moving {
+            filter: drop-shadow(0 4px 15px rgba(0, 102, 255, 0.3));
         }
 
         .bot-status {
