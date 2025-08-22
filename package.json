@@ -13,6 +13,7 @@
     "@astrojs/react": "^4.3.0",
     "@astrojs/tailwind": "^6.0.2",
     "@astrojs/vercel": "^8.2.5",
+    "@lucide/astro": "^0.541.0",
     "@tailwindcss/vite": "^4.1.11",
     "astro": "^5.7.12",
     "framer-motion": "^12.23.12",

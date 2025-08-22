@@ -3,6 +3,20 @@ import FlowNode from "@components/shared/FlowNode.astro";
 import AnimatedFlowConnections from "./AnimatedFlowConnections.jsx";
 import AnimatedRunner from "./AnimatedRunner.jsx";
 import RunnerBot from "./RunnerBot.astro";
+import {
+    Zap,
+    Bot,
+    Settings,
+    Bell,
+    Mail,
+    MessageCircle,
+    ChartColumn,
+    Globe,
+    Link,
+    Smartphone,
+    Target,
+    ClipboardList,
+} from "@lucide/astro";
 
 export interface Props {}
 
@@ -14,7 +28,7 @@ const {} = Astro.props;
     <div class="flow-container main-flow">
         <FlowNode
             id="node-trigger"
-            icon="⚡"
+            icon={Zap}
             label="Trigger"
             className="trigger-node"
             animateType="scale"
@@ -23,7 +37,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-ai"
-            icon="🤖"
+            icon={Bot}
             label="Agente IA"
             className="ai-node"
             animateType="scale"
@@ -32,7 +46,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-action"
-            icon="⚙️"
+            icon={Settings}
             label="Acción"
             className="action-node"
             animateType="scale"
@@ -41,7 +55,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-notify"
-            icon="🔔"
+            icon={Bell}
             label="Notificación"
             className="notify-node"
             animateType="scale"
@@ -53,7 +67,7 @@ const {} = Astro.props;
     <div class="flow-container secondary-flow top-flow">
         <FlowNode
             id="node-email"
-            icon="📧"
+            icon={Mail}
             label="Email Marketing"
             size="small"
             className="node-6"
@@ -63,7 +77,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-chat"
-            icon="💬"
+            icon={MessageCircle}
             label="Chat Empresarial"
             size="small"
             className="node-5"
@@ -76,7 +90,7 @@ const {} = Astro.props;
     <div class="flow-container secondary-flow bottom-flow">
         <FlowNode
             id="node-crm"
-            icon="📊"
+            icon={ChartColumn}
             label="CRM"
             size="small"
             animateType="fade-up"
@@ -84,7 +98,7 @@ const {} = Astro.props;
         />
         <FlowNode
             id="node-api"
-            icon="🌐"
+            icon={Globe}
             label="API"
             size="small"
             animateType="fade-up"
@@ -96,7 +110,7 @@ const {} = Astro.props;
     <div class="floating-nodes">
         <FlowNode
             id="node-pipeline"
-            icon="🔗"
+            icon={Link}
             label="Pipeline"
             className="floating-node node-1"
             animateType="scale"
@@ -105,7 +119,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-whatsapp"
-            icon="📱"
+            icon={Smartphone}
             label="WhatsApp"
             className="floating-node node-2"
             animateType="scale"
@@ -114,7 +128,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-targeting"
-            icon="🎯"
+            icon={Target}
             label="Targeting"
             className="floating-node node-4"
             animateType="scale"
@@ -123,7 +137,7 @@ const {} = Astro.props;
 
         <FlowNode
             id="node-forms"
-            icon="📋"
+            icon={ClipboardList}
             label="Leads"
             className="floating-node node-3"
             animateType="scale"

@@ -1,6 +1,6 @@
 ---
 export interface Props {
-    icon: string;
+    icon: any; // Solo componente de Lucide
     label: string;
     id?: string;
     size?: "normal" | "small";
@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const {
-    icon,
+    icon: Icon,
     label,
     id,
     size = "normal",
@@ -63,7 +63,7 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
         ${size === "small" ? "text-xl" : ""}
     `}
     >
-        {icon}
+        <Icon size={size === "small" ? 20 : 24} />
     </div>
     <span
         class={`
