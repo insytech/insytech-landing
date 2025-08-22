@@ -22,7 +22,7 @@ const {} = Astro.props;
         <FlowNode
             id="node-ai"
             icon="🤖"
-            label="AI Agent"
+            label="Agente IA"
             className="ai-node"
             animateType="scale"
             animateDelay="0.9s"
@@ -40,7 +40,7 @@ const {} = Astro.props;
         <FlowNode
             id="node-notify"
             icon="🔔"
-            label="Notify"
+            label="Notificación"
             className="notify-node"
             animateType="scale"
             animateDelay="2.1s"
@@ -52,7 +52,7 @@ const {} = Astro.props;
         <FlowNode
             id="node-email"
             icon="📧"
-            label="Email"
+            label="Email Marketing"
             size="small"
             animateType="fade-up"
             animateDelay="0.5s"
@@ -61,7 +61,7 @@ const {} = Astro.props;
         <FlowNode
             id="node-chat"
             icon="💬"
-            label="Chat"
+            label="Chat Empresarial"
             size="small"
             className="node-5"
             animateType="fade-up"
@@ -81,7 +81,7 @@ const {} = Astro.props;
         />
         <FlowNode
             id="node-api"
-            icon="🔔"
+            icon="🌐"
             label="API"
             size="small"
             animateType="fade-up"
@@ -93,7 +93,7 @@ const {} = Astro.props;
     <div class="floating-nodes">
         <FlowNode
             id="node-pipeline"
-            icon="🌐"
+            icon="🔗"
             label="Pipeline"
             className="floating-node node-1"
             animateType="scale"
@@ -121,7 +121,7 @@ const {} = Astro.props;
         <FlowNode
             id="node-forms"
             icon="📋"
-            label="Forms"
+            label="Leads"
             className="floating-node node-3"
             animateType="scale"
             animateDelay="2.4s"
@@ -365,7 +365,7 @@ const {} = Astro.props;
             {
                 from: "node-action",
                 to: "node-whatsapp",
-                type: "curve",
+                type: "line",
                 importance: "secondary",
             },
             {
@@ -978,8 +978,10 @@ const {} = Astro.props;
 
     .bottom-flow {
         top: 75%;
-        left: 25%;
-        transform: translateX(50%);
+        left: 20%; /* Modificado para mover a la izquierda */
+        transform: translateY(
+            -50%
+        ); /* Mantener solo el translateY, eliminar translateX */
         flex-direction: row;
         gap: 5rem;
     }
@@ -1088,20 +1090,10 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
-            transform: translateX(0);
-            left: 45%;
-        }
-
-        .dynamic-connection-path.primary-path {
-            stroke-width: 1.4;
-        }
-
-        .dynamic-connection-path.secondary-path {
-            stroke-width: 1;
-        }
-
-        .dynamic-connection-path.tertiary-path {
-            stroke-width: 0.6;
+            left: 15%; /* Ajustado para pantallas más grandes */
+            transform: translateY(
+                -50%
+            ); /* Solo mantener transformación vertical */
         }
     }
 
@@ -1120,7 +1112,8 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
-            left: 45%;
+            left: 20%;
+            transform: translateY(-50%);
         }
     }
 
@@ -1140,8 +1133,8 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
-            left: 40%;
-            gap: 2rem;
+            left: 15%;
+            gap: 3rem;
         }
     }
 
@@ -1167,9 +1160,10 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
-            left: 35%;
-            top: 78%;
-            gap: 1.5rem;
+            left: 10%;
+            top: 75%;
+            gap: 2rem;
+            transform: translateY(-50%);
         }
     }
 
