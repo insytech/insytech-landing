@@ -97,6 +97,10 @@ const detectPerformanceLevel = () => {
   return level;
 };
 
+// NUEVO: Throttling para resize
+let resizeTimeout;
+const RESIZE_DELAY = 300;
+
 const AnimatedFlowConnections = () => {
   const svgRef = useRef(null);
   const [connections, setConnections] = useState([]);
@@ -107,13 +111,12 @@ const AnimatedFlowConnections = () => {
     const performance = detectPerformanceLevel();
     setPerformanceLevel(performance);
     
-    // Número de conexiones según rendimiento - AUMENTADO para mostrar más conexiones
+    // OPTIMIZADO: Límites más agresivos según rendimiento
     const connectionLimit = 
-      performance === 'low' ? 10 :
-      performance === 'medium' ? 14 : 
-      connectionDefinitions.length;
+      performance === 'low' ? 6 :      // Reducido de 10
+      performance === 'medium' ? 10 :  // Reducido de 14
+      Math.min(connectionDefinitions.length, 12); // Máximo absoluto
     
-    // Ordenar por importancia y limitar cantidad
     const sortedConnections = [...connectionDefinitions]
       .sort((a, b) => {
         const importanceOrder = { primary: 3, secondary: 2, tertiary: 1 };
@@ -121,28 +124,30 @@ const AnimatedFlowConnections = () => {
       })
       .slice(0, connectionLimit);
       
-    // Esperar a que los nodos estén renderizados
     const initializeConnections = () => {
       const firstNode = document.getElementById('node-trigger');
       if (firstNode) {
         calculateConnections(sortedConnections);
       } else {
-        // Reintentar después de un breve delay
-        setTimeout(initializeConnections, 100);
+        setTimeout(initializeConnections, 200); // Aumentado delay
       }
     };
     
     initializeConnections();
     
-    // Agregar listener de resize con debounce
-    const handleResize = debounce(() => {
-      calculateConnections(sortedConnections);
-    }, 200);
+    // OPTIMIZADO: Resize con throttling más agresivo
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        calculateConnections(sortedConnections);
+      }, RESIZE_DELAY);
+    };
     
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
     
     return () => {
       window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
     };
   }, []);
   
@@ -159,126 +164,180 @@ const AnimatedFlowConnections = () => {
     };
   };
   
-  // Calcula las conexiones una sola vez (no en cada frame)
+  // OPTIMIZADO: Cálculo de conexiones más eficiente
   const calculateConnections = (connectionsToCalc) => {
-    const flowsContainer = document.querySelector(".automation-flows");
-    if (!flowsContainer) return;
-    
-    const flowsRect = flowsContainer.getBoundingClientRect();
-    
-    const calculatedConnections = connectionsToCalc.map((conn, index) => {
-      const fromNode = document.getElementById(conn.from);
-      const toNode = document.getElementById(conn.to);
+    // NUEVO: RequestIdleCallback para no bloquear el hilo principal
+    const performCalculation = () => {
+      const flowsContainer = document.querySelector(".automation-flows");
+      if (!flowsContainer) return;
       
-      if (!fromNode || !toNode) return null;
+      const flowsRect = flowsContainer.getBoundingClientRect();
       
-      const fromRect = fromNode.getBoundingClientRect();
-      const toRect = toNode.getBoundingClientRect();
+      // OPTIMIZADO: Batch DOM reads
+      const nodeData = new Map();
+      connectionsToCalc.forEach(conn => {
+        if (!nodeData.has(conn.from)) {
+          const fromNode = document.getElementById(conn.from);
+          if (fromNode) {
+            nodeData.set(conn.from, {
+              element: fromNode,
+              rect: fromNode.getBoundingClientRect()
+            });
+          }
+        }
+        if (!nodeData.has(conn.to)) {
+          const toNode = document.getElementById(conn.to);
+          if (toNode) {
+            nodeData.set(conn.to, {
+              element: toNode,
+              rect: toNode.getBoundingClientRect()
+            });
+          }
+        }
+      });
       
-      // Calcular posiciones relativas
-      const fromCenterX = ((fromRect.left - flowsRect.left + fromRect.width/2) / flowsRect.width) * 100;
-      const fromCenterY = ((fromRect.top - flowsRect.top + fromRect.height/2) / flowsRect.height) * 100;
-      const toCenterX = ((toRect.left - flowsRect.left + toRect.width/2) / flowsRect.width) * 100;
-      const toCenterY = ((toRect.top - flowsRect.top + toRect.height/2) / flowsRect.height) * 100;
-      
-      // Calcular tamaños relativos
-      const fromWidthPercent = (fromRect.width / flowsRect.width) * 100;
-      const fromHeightPercent = (fromRect.height / flowsRect.height) * 100;
-      const toWidthPercent = (toRect.width / flowsRect.width) * 100;
-      const toHeightPercent = (toRect.height / flowsRect.height) * 100;
-      
-      // Simplificar cálculos
-      const dx = toCenterX - fromCenterX;
-      const dy = toCenterY - fromCenterY;
-      const angle = Math.atan2(dy, dx);
-      
-      // MEJORADO: Determinar puntos de conexión en bordes de nodos con mejor precisión
-      let fromX;
-      let fromY;
-      let toX;
-      let toY;
-      
-      // Para líneas principales, usar conexiones más precisas
-      if (conn.importance === 'primary') {
-        // Conexiones horizontales directas para líneas principales
-        if (Math.abs(dx) > Math.abs(dy)) {
-          fromX = fromCenterX + Math.sign(dx) * (fromWidthPercent / 2);
-          fromY = fromCenterY;
-          toX = toCenterX - Math.sign(dx) * (toWidthPercent / 2);
-          toY = toCenterY;
+      const calculatedConnections = connectionsToCalc.map((conn, index) => {
+        const fromData = nodeData.get(conn.from);
+        const toData = nodeData.get(conn.to);
+        
+        if (!fromData || !toData) return null;
+        
+        // OPTIMIZADO: Cálculos simplificados para dispositivos lentos
+        if (performanceLevel === 'low') {
+          const fromX = ((fromData.rect.left - flowsRect.left + fromData.rect.width/2) / flowsRect.width) * 100;
+          const fromY = ((fromData.rect.top - flowsRect.top + fromData.rect.height/2) / flowsRect.height) * 100;
+          const toX = ((toData.rect.left - flowsRect.left + toData.rect.width/2) / flowsRect.width) * 100;
+          const toY = ((toData.rect.top - flowsRect.top + toData.rect.height/2) / flowsRect.height) * 100;
+          
+          return {
+            id: `path-${index}`,
+            pathData: `M ${fromX.toFixed(1)} ${fromY.toFixed(1)} L ${toX.toFixed(1)} ${toY.toFixed(1)}`,
+            importance: conn.importance,
+            type: conn.type
+          };
+        }
+        
+        // Cálculos completos para dispositivos rápidos
+        const fromNode = document.getElementById(conn.from);
+        const toNode = document.getElementById(conn.to);
+        
+        if (!fromNode || !toNode) return null;
+        
+        const fromRect = fromNode.getBoundingClientRect();
+        const toRect = toNode.getBoundingClientRect();
+        
+        // Calcular posiciones relativas
+        const fromCenterX = ((fromRect.left - flowsRect.left + fromRect.width/2) / flowsRect.width) * 100;
+        const fromCenterY = ((fromRect.top - flowsRect.top + fromRect.height/2) / flowsRect.height) * 100;
+        const toCenterX = ((toRect.left - flowsRect.left + toRect.width/2) / flowsRect.width) * 100;
+        const toCenterY = ((toRect.top - flowsRect.top + toRect.height/2) / flowsRect.height) * 100;
+        
+        // Calcular tamaños relativos
+        const fromWidthPercent = (fromRect.width / flowsRect.width) * 100;
+        const fromHeightPercent = (fromRect.height / flowsRect.height) * 100;
+        const toWidthPercent = (toRect.width / flowsRect.width) * 100;
+        const toHeightPercent = (toRect.height / flowsRect.height) * 100;
+        
+        // Simplificar cálculos
+        const dx = toCenterX - fromCenterX;
+        const dy = toCenterY - fromCenterY;
+        const angle = Math.atan2(dy, dx);
+        
+        // MEJORADO: Determinar puntos de conexión en bordes de nodos con mejor precisión
+        let fromX;
+        let fromY;
+        let toX;
+        let toY;
+        
+        // Para líneas principales, usar conexiones más precisas
+        if (conn.importance === 'primary') {
+          // Conexiones horizontales directas para líneas principales
+          if (Math.abs(dx) > Math.abs(dy)) {
+            fromX = fromCenterX + Math.sign(dx) * (fromWidthPercent / 2);
+            fromY = fromCenterY;
+            toX = toCenterX - Math.sign(dx) * (toWidthPercent / 2);
+            toY = toCenterY;
+          } else {
+            fromX = fromCenterX;
+            fromY = fromCenterY + Math.sign(dy) * (fromHeightPercent / 2);
+            toX = toCenterX;
+            toY = toCenterY - Math.sign(dy) * (toHeightPercent / 2);
+          }
         } else {
+          // Para conexiones secundarias y terciarias, usar el método original
+          if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
+            fromX = fromCenterX + Math.sign(dx) * fromWidthPercent/2;
+            fromY = fromCenterY + Math.tan(angle) * Math.sign(dx) * fromWidthPercent/2;
+            toX = toCenterX - Math.sign(dx) * toWidthPercent/2;
+            toY = toCenterY - Math.tan(angle) * Math.sign(dx) * toWidthPercent/2;
+          } else {
+            fromY = fromCenterY + Math.sign(dy) * fromHeightPercent/2;
+            fromX = fromCenterX + (Math.sign(dy) * fromHeightPercent/2) / Math.tan(angle);
+            toY = toCenterY - Math.sign(dy) * toHeightPercent/2;
+            toX = toCenterX - (Math.sign(dy) * toHeightPercent/2) / Math.tan(angle);
+          }
+        }
+        
+        // Prevenir NaN
+        if (isNaN(fromX) || isNaN(fromY) || isNaN(toX) || isNaN(toY)) {
           fromX = fromCenterX;
-          fromY = fromCenterY + Math.sign(dy) * (fromHeightPercent / 2);
+          fromY = fromCenterY;
           toX = toCenterX;
-          toY = toCenterY - Math.sign(dy) * (toHeightPercent / 2);
+          toY = toCenterY;
         }
-      } else {
-        // Para conexiones secundarias y terciarias, usar el método original
-        if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
-          fromX = fromCenterX + Math.sign(dx) * fromWidthPercent/2;
-          fromY = fromCenterY + Math.tan(angle) * Math.sign(dx) * fromWidthPercent/2;
-          toX = toCenterX - Math.sign(dx) * toWidthPercent/2;
-          toY = toCenterY - Math.tan(angle) * Math.sign(dx) * toWidthPercent/2;
+        
+        // NUEVO: Generar path data con curvatura sutil para líneas tipo "line"
+        let pathData;
+        if (conn.type === "curve" && performanceLevel !== 'low') {
+          // Curvas normales para conexiones secundarias y terciarias
+          const distance = Math.sqrt(dx*dx + dy*dy);
+          const curveFactor = conn.importance === 'primary' ? 
+            Math.min(Math.max(distance * 0.1, 3), 15) : 
+            Math.min(Math.max(distance * 0.15, 5), 20);
+          
+          const controlX1 = fromX + (toX - fromX) * 0.3;
+          const controlY1 = fromCenterY > toCenterY ? 
+            fromY - curveFactor : fromY + curveFactor;
+          
+          const controlX2 = fromX + (toX - fromX) * 0.7;
+          const controlY2 = fromCenterY > toCenterY ?
+            toY - curveFactor : toY + curveFactor;
+          
+          pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} C ${controlX1.toFixed(2)} ${controlY1.toFixed(2)}, ${controlX2.toFixed(2)} ${controlY2.toFixed(2)}, ${toX.toFixed(2)} ${toY.toFixed(2)}`;
+        } else if (conn.type === "line") {
+          // NUEVO: Líneas con curvatura sutil hacia arriba
+          const midX = (fromX + toX) / 2;
+          const midY = (fromY + toY) / 2;
+          
+          // Calcular curvatura sutil hacia arriba (2-4 píxeles en coordenadas del viewBox)
+          const distance = Math.sqrt(dx*dx + dy*dy);
+          const curvature = Math.min(distance * 0.02, 2); // Muy sutil, máximo 2 unidades
+          const curveY = midY - curvature; // Hacia arriba
+          
+          // Usar curva cuadrática para la curvatura sutil
+          pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} Q ${midX.toFixed(2)} ${curveY.toFixed(2)} ${toX.toFixed(2)} ${toY.toFixed(2)}`;
         } else {
-          fromY = fromCenterY + Math.sign(dy) * fromHeightPercent/2;
-          fromX = fromCenterX + (Math.sign(dy) * fromHeightPercent/2) / Math.tan(angle);
-          toY = toCenterY - Math.sign(dy) * toHeightPercent/2;
-          toX = toCenterX - (Math.sign(dy) * toHeightPercent/2) / Math.tan(angle);
+          // Línea recta como fallback
+          pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} L ${toX.toFixed(2)} ${toY.toFixed(2)}`;
         }
-      }
+        
+        return {
+          id: `path-${index}`,
+          pathData,
+          importance: conn.importance,
+          type: conn.type
+        };
+      }).filter(Boolean);
       
-      // Prevenir NaN
-      if (isNaN(fromX) || isNaN(fromY) || isNaN(toX) || isNaN(toY)) {
-        fromX = fromCenterX;
-        fromY = fromCenterY;
-        toX = toCenterX;
-        toY = toCenterY;
-      }
-      
-      // NUEVO: Generar path data con curvatura sutil para líneas tipo "line"
-      let pathData;
-      if (conn.type === "curve" && performanceLevel !== 'low') {
-        // Curvas normales para conexiones secundarias y terciarias
-        const distance = Math.sqrt(dx*dx + dy*dy);
-        const curveFactor = conn.importance === 'primary' ? 
-          Math.min(Math.max(distance * 0.1, 3), 15) : 
-          Math.min(Math.max(distance * 0.15, 5), 20);
-        
-        const controlX1 = fromX + (toX - fromX) * 0.3;
-        const controlY1 = fromCenterY > toCenterY ? 
-          fromY - curveFactor : fromY + curveFactor;
-        
-        const controlX2 = fromX + (toX - fromX) * 0.7;
-        const controlY2 = fromCenterY > toCenterY ?
-          toY - curveFactor : toY + curveFactor;
-        
-        pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} C ${controlX1.toFixed(2)} ${controlY1.toFixed(2)}, ${controlX2.toFixed(2)} ${controlY2.toFixed(2)}, ${toX.toFixed(2)} ${toY.toFixed(2)}`;
-      } else if (conn.type === "line") {
-        // NUEVO: Líneas con curvatura sutil hacia arriba
-        const midX = (fromX + toX) / 2;
-        const midY = (fromY + toY) / 2;
-        
-        // Calcular curvatura sutil hacia arriba (2-4 píxeles en coordenadas del viewBox)
-        const distance = Math.sqrt(dx*dx + dy*dy);
-        const curvature = Math.min(distance * 0.02, 2); // Muy sutil, máximo 2 unidades
-        const curveY = midY - curvature; // Hacia arriba
-        
-        // Usar curva cuadrática para la curvatura sutil
-        pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} Q ${midX.toFixed(2)} ${curveY.toFixed(2)} ${toX.toFixed(2)} ${toY.toFixed(2)}`;
-      } else {
-        // Línea recta como fallback
-        pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} L ${toX.toFixed(2)} ${toY.toFixed(2)}`;
-      }
-      
-      return {
-        id: `path-${index}`,
-        pathData,
-        importance: conn.importance,
-        type: conn.type
-      };
-    }).filter(Boolean);
+      setConnections(calculatedConnections);
+    };
     
-    setConnections(calculatedConnections);
+    // NUEVO: Usar requestIdleCallback si está disponible
+    if (window.requestIdleCallback && performanceLevel !== 'high') {
+      requestIdleCallback(performCalculation, { timeout: 100 });
+    } else {
+      performCalculation();
+    }
   };
   
   // Variantes de animación mejoradas para los paths

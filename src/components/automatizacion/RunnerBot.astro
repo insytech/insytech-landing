@@ -383,6 +383,10 @@ const {} = Astro.props;
         transition:
             opacity 0.3s ease,
             visibility 0.3s ease;
+        will-change: auto; /* Cambiado de transform, left, top */
+    }
+
+    .runner.moving {
         will-change: transform, left, top;
     }
 
@@ -392,36 +396,96 @@ const {} = Astro.props;
         transform-origin: center;
         transform: rotate(var(--rotation, 0));
         backface-visibility: hidden;
-        will-change: transform;
+        will-change: auto; /* Cambiado de transform */
     }
 
     .runner.rotating .bot-svg {
         transition: none;
     }
 
-    .runner.moving .thruster {
-        opacity: 1 !important;
-        filter: drop-shadow(0 0 8px rgba(6, 255, 165, 0.6));
-    }
-
-    .runner.moving .signal-waves {
-        opacity: 1 !important;
-    }
-
-    .runner.moving .eyes circle {
-        animation-duration: 1s !important;
-    }
-
     .runner.moving .bot-svg {
-        animation: enhanced-vibration 0.08s infinite alternate;
+        will-change: transform;
+        /* OPTIMIZADO: Animación más eficiente para móvil */
+        animation: enhanced-vibration 0.16s infinite alternate;
     }
 
+    /* OPTIMIZADO: Usar transform3d para activar aceleración de hardware */
     @keyframes enhanced-vibration {
         0% {
-            transform: rotate(var(--rotation, 0)) scale(1) translateY(0);
+            transform: rotate(var(--rotation, 0)) scale3d(1, 1, 1)
+                translate3d(0, 0, 0);
         }
         100% {
-            transform: rotate(var(--rotation, 0)) scale(1.01) translateY(-0.5px);
+            transform: rotate(var(--rotation, 0)) scale3d(1.01, 1.01, 1)
+                translate3d(0, -0.5px, 0);
+        }
+    }
+
+    /* OPTIMIZADO: Thruster más eficiente */
+    .runner.moving .thruster {
+        opacity: 1 !important;
+        /* Reducir filtros costosos en dispositivos lentos */
+        filter: drop-shadow(0 0 4px rgba(6, 255, 165, 0.4));
+    }
+
+    /* OPTIMIZADO: Trail más eficiente */
+    .movement-trail {
+        position: absolute;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            rgba(6, 255, 165, 0.8),
+            rgba(0, 181, 226, 0.6)
+        );
+        opacity: 0;
+        transform-origin: 0 50%;
+        border-radius: 1px;
+        will-change: opacity, transform;
+        pointer-events: none;
+        z-index: 3;
+        transition: opacity 0.3s ease;
+        /* NUEVO: Optimizaciones de rendimiento */
+        contain: layout style paint;
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    .movement-trail.active {
+        opacity: 0.7;
+    }
+
+    /* Mejoras para dispositivos móviles */
+    @media (max-width: 768px) {
+        .runner {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(
+                0 2px 8px rgba(0, 102, 255, 0.2)
+            ); /* Reducido */
+        }
+
+        .runner.moving .bot-svg {
+            animation: none; /* Desactivar para mejor rendimiento */
+        }
+
+        .runner.moving .thruster {
+            filter: none; /* Sin filtros en móvil */
+        }
+
+        /* OPTIMIZADO: Animaciones simplificadas */
+        .thruster animate {
+            animation-duration: 0.3s; /* Más lento para menos carga */
+        }
+    }
+
+    /* NUEVO: Optimizaciones adicionales para dispositivos muy lentos */
+    @media (max-width: 480px) {
+        .side-particles {
+            display: none; /* Eliminar partículas en dispositivos lentos */
+        }
+
+        .signal-waves circle {
+            animation-duration: 4s !important; /* Más lento */
         }
     }
 
