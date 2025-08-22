@@ -303,4 +303,80 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
             0 0 0 1px rgba(255, 255, 255, 0.1) inset,
             0 0 25px rgba(6, 255, 165, 0.2);
     }
+
+    /* Mejoras para dispositivos móviles */
+    @media (max-width: 768px) {
+        .flow-node {
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            backdrop-filter: blur(
+                8px
+            ); /* Reducir intensidad de blur para mejor rendimiento */
+        }
+
+        .flow-node::after {
+            display: none; /* Desactivar animación de barrido para mejorar rendimiento */
+        }
+
+        .node-label {
+            font-size: 0.65rem; /* Reducir tamaño de texto */
+            max-width: 100%; /* Asegurar que el texto se ajuste */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Mantener efectos de presión pero reducir intensidad de sombras */
+        .flow-node.pressed {
+            box-shadow:
+                0 0 0 1px rgba(6, 255, 165, 0.3),
+                0 0 15px rgba(6, 255, 165, 0.3);
+        }
+
+        /* Optimización de posiciones para nodos flotantes en móviles pequeños */
+        @media (max-width: 480px) {
+            .node-1 {
+                left: 10%;
+                top: 10%;
+            }
+
+            .node-2 {
+                left: 70%;
+                top: 60%;
+            }
+
+            .node-3 {
+                left: 65%;
+                top: 30%;
+            }
+
+            .node-4 {
+                left: 30%;
+                top: 20%;
+            }
+        }
+    }
+
+    /* Arreglos para dispositivos pequeños */
+    @media (max-width: 375px) {
+        .flow-node {
+            padding: 0.7rem 0.6rem; /* Reducir padding aún más */
+            min-width: 60px; /* Reducir ancho mínimo */
+        }
+
+        .small-node {
+            min-width: 50px;
+            padding: 0.6rem 0.5rem;
+        }
+
+        .node-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .node-label {
+            font-size: 0.6rem;
+        }
+    }
 </style>
