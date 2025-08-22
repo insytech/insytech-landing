@@ -76,9 +76,9 @@ const connectionDefinitions = [
 ];
 
 const colors = {
-  primary: ["#06ffa5", "#00b5e2"],
-  secondary: ["#00b5e2", "#0066ff"],
-  tertiary: ["#a78bfa", "#8b5cf6"]
+  primary: ["#06ffa5", "#00b5e2", "#0066ff"], // Añadido tercer color para más riqueza
+  secondary: ["#00b5e2", "#0066ff", "#8b5cf6"],
+  tertiary: ["#a78bfa", "#8b5cf6", "#6366f1"]
 };
 
 // Detectar nivel de rendimiento del dispositivo
@@ -235,10 +235,10 @@ const AnimatedFlowConnections = () => {
         toY = toCenterY;
       }
       
-      // Generar path data según tipo - convertir porcentajes a coordenadas del viewBox
+      // NUEVO: Generar path data con curvatura sutil para líneas tipo "line"
       let pathData;
       if (conn.type === "curve" && performanceLevel !== 'low') {
-        // MEJORADO: Curvas más suaves para conexiones principales
+        // Curvas normales para conexiones secundarias y terciarias
         const distance = Math.sqrt(dx*dx + dy*dy);
         const curveFactor = conn.importance === 'primary' ? 
           Math.min(Math.max(distance * 0.1, 3), 15) : 
@@ -253,8 +253,20 @@ const AnimatedFlowConnections = () => {
           toY - curveFactor : toY + curveFactor;
         
         pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} C ${controlX1.toFixed(2)} ${controlY1.toFixed(2)}, ${controlX2.toFixed(2)} ${controlY2.toFixed(2)}, ${toX.toFixed(2)} ${toY.toFixed(2)}`;
+      } else if (conn.type === "line") {
+        // NUEVO: Líneas con curvatura sutil hacia arriba
+        const midX = (fromX + toX) / 2;
+        const midY = (fromY + toY) / 2;
+        
+        // Calcular curvatura sutil hacia arriba (2-4 píxeles en coordenadas del viewBox)
+        const distance = Math.sqrt(dx*dx + dy*dy);
+        const curvature = Math.min(distance * 0.02, 2); // Muy sutil, máximo 2 unidades
+        const curveY = midY - curvature; // Hacia arriba
+        
+        // Usar curva cuadrática para la curvatura sutil
+        pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} Q ${midX.toFixed(2)} ${curveY.toFixed(2)} ${toX.toFixed(2)} ${toY.toFixed(2)}`;
       } else {
-        // Línea recta para conexiones principales y rendimiento bajo
+        // Línea recta como fallback
         pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} L ${toX.toFixed(2)} ${toY.toFixed(2)}`;
       }
       
@@ -350,76 +362,144 @@ const AnimatedFlowConnections = () => {
               x2="100%"
               y2="0%"
             >
-              <stop offset="0%" stopColor={colors[conn.importance][0]} />
-              <stop offset="100%" stopColor={colors[conn.importance][1]} />
+              <stop offset="0%" stopColor={colors[conn.importance][0]} stopOpacity="0.9" />
+              <stop offset="50%" stopColor={colors[conn.importance][1]} stopOpacity="1" />
+              <stop offset="100%" stopColor={colors[conn.importance][2]} stopOpacity="0.8" />
             </linearGradient>
           );
         })}
-        
-        {/* Filtros de glow mejorados */}
-        {performanceLevel === 'high' && (
-          <>
-            <filter id="glow-primary" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-              <feMerge> 
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-            <filter id="glow-secondary" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge> 
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </>
-        )}
+
+        {/* NUEVO: Gradientes especiales para líneas tipo "line" */}
+        {connections.map((conn, index) => {
+          if (conn.type !== 'line' || performanceLevel === 'low') return null;
+          
+          return (
+            <linearGradient
+              key={`line-gradient-${index}`}
+              id={`lineSpecialGradient-${index}`}
+              x1="0%"
+              y1="0%"
+              x2="100%"
+              y2="0%"
+            >
+              <stop offset="0%" stopColor={colors[conn.importance][0]} stopOpacity="0.3" />
+              <stop offset="20%" stopColor={colors[conn.importance][0]} stopOpacity="0.8" />
+              <stop offset="50%" stopColor={colors[conn.importance][1]} stopOpacity="1" />
+              <stop offset="80%" stopColor={colors[conn.importance][2]} stopOpacity="0.8" />
+              <stop offset="100%" stopColor={colors[conn.importance][2]} stopOpacity="0.3" />
+            </linearGradient>
+          );
+        })}
       </defs>
       
       {connections.map((conn, index) => {
-        // MEJORADO: Mejor grosor para líneas principales
+        // MEJORADO: Anchos más delgados y elegantes
         const strokeWidth = 
           conn.importance === 'primary' ? 
-            (performanceLevel === 'low' ? 1.5 : 2) :
+            (performanceLevel === 'low' ? 1.4 : 1.8) : // Reducido de 2.2 a 1.8
           conn.importance === 'secondary' ? 
-            (performanceLevel === 'low' ? 0.8 : 1) :
-            (performanceLevel === 'low' ? 0.5 : 0.7);
+            (performanceLevel === 'low' ? 1 : 1.2) : // Reducido de 1.5 a 1.2
+            (performanceLevel === 'low' ? 0.7 : 0.9);
+
+        // MEJORADO: Opacidades más balanceadas
+        const baseOpacity = 
+          conn.importance === 'primary' ? 0.95 :
+          conn.importance === 'secondary' ? 0.8 :
+          0.65;
+
+        // NUEVO: Gradientes especiales para líneas tipo "line"
+        const strokeColor = conn.type === 'line' ? 
+          (performanceLevel === 'low' ? colors[conn.importance][1] : `url(#lineSpecialGradient-${index})`) : 
+          (performanceLevel === 'low' ? colors[conn.importance][0] : `url(#lineGradient-${index})`);
             
         return (
           <g key={conn.id} className={`path-group ${conn.importance}-connection`}>
+            {/* NUEVO: Capa de sombra más sutil para líneas principales */}
+            {(conn.importance === 'primary' && performanceLevel === 'high') && (
+              <motion.path
+                d={conn.pathData}
+                stroke={colors[conn.importance][0]}
+                strokeWidth={strokeWidth + 0.5} // Reducido de 0.8 a 0.5
+                fill="none"
+                strokeLinecap="round"
+                opacity="0.1" // Reducido de 0.15 a 0.1
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ 
+                  pathLength: 1, 
+                  opacity: 0.1,
+                  transition: { 
+                    pathLength: { duration: 1.2, ease: "easeOut" },
+                    opacity: { duration: 0.4, delay: 0.3 }
+                  }
+                }}
+              />
+            )}
+            
+            {/* Línea principal - MEJORADA */}
             <motion.path
               id={conn.id}
               d={conn.pathData}
-              stroke={performanceLevel === 'low' ? colors[conn.importance][0] : `url(#lineGradient-${index})`}
+              stroke={strokeColor}
               strokeWidth={strokeWidth}
               fill="none"
               strokeLinecap="round"
               strokeDasharray={performanceLevel === 'low' ? 'none' : 
-                              conn.importance === 'primary' ? '15 5' : 
-                              conn.importance === 'secondary' ? '10 4' : '6 3'}
-              filter={performanceLevel === 'high' && conn.importance !== 'tertiary' ? 
-                     `url(#glow-${conn.importance})` : 'none'}
+                              conn.importance === 'primary' ? 'none' : 
+                              conn.importance === 'secondary' ? '5 2' : '3 2'}
+              opacity={baseOpacity}
               initial="initial"
               animate="animate"
               custom={conn.importance}
               variants={pathVariants}
+              style={{
+                // MEJORADO: Efectos más sutiles
+                filter: conn.importance === 'primary' ? 
+                  'drop-shadow(0 0 1px rgba(6, 255, 165, 0.3))' : 
+                  conn.importance === 'secondary' ?
+                  'drop-shadow(0 0 0.5px rgba(0, 181, 226, 0.2))' : 'none'
+              }}
             />
             
+            {/* NUEVO: Brillo interno más sutil para líneas principales */}
+            {(conn.importance === 'primary' && performanceLevel === 'high') && (
+              <motion.path
+                d={conn.pathData}
+                stroke="rgba(255, 255, 255, 0.4)" // Reducido de 0.6 a 0.4
+                strokeWidth={strokeWidth * 0.25} // Reducido de 0.3 a 0.25
+                fill="none"
+                strokeLinecap="round"
+                opacity="0.6" // Reducido de 0.8 a 0.6
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ 
+                  pathLength: 1, 
+                  opacity: 0.6,
+                  transition: { 
+                    pathLength: { duration: 1.5, ease: "easeOut", delay: 0.2 },
+                    opacity: { duration: 0.3, delay: 0.8 }
+                  }
+                }}
+              />
+            )}
+            
+            {/* Partículas de movimiento - MEJORADAS */}
             {(conn.importance !== 'tertiary' && performanceLevel !== 'low') && (
               <motion.circle
                 cx="0"
                 cy="0"
-                r={conn.importance === 'primary' ? "0.8" : "0.6"}
+                r={conn.importance === 'primary' ? "0.9" : "0.7"}
                 fill={conn.importance === 'primary' ? "#06ffa5" : "#00b5e2"}
                 initial="initial"
                 animate="animate"
                 variants={particleVariants}
+                style={{
+                  filter: 'drop-shadow(0 0 3px currentColor)',
+                  opacity: 0.9
+                }}
               >
                 <motion.animateMotion
                   dur={`${performanceLevel === 'high' ? 3 + Math.random() * 2 : 5}s`}
                   repeatCount="indefinite"
-                  begin={`${index * 0.2}s`}
+                  begin={`${index * 0.3}s`}
                   calcMode="linear"
                 >
                   <mpath href={`#${conn.id}`} />
@@ -427,21 +507,24 @@ const AnimatedFlowConnections = () => {
               </motion.circle>
             )}
             
+            {/* Partícula secundaria más elegante */}
             {(conn.importance === 'primary' && performanceLevel === 'high') && (
               <motion.circle
                 cx="0"
                 cy="0"
-                r="0.8"
-                fill="#06ffa5"
-                fillOpacity="0.6"
+                r="0.4"
+                fill="rgba(255, 255, 255, 0.8)"
                 initial="initial"
                 animate="animate"
                 variants={particleVariants}
+                style={{
+                  filter: 'drop-shadow(0 0 2px rgba(6, 255, 165, 0.6))'
+                }}
               >
                 <motion.animateMotion
-                  dur={`${4 + Math.random() * 2}s`}
+                  dur={`${6 + Math.random() * 2}s`}
                   repeatCount="indefinite"
-                  begin={`${index * 0.2 + 1.5}s`}
+                  begin={`${index * 0.3 + 3}s`}
                   calcMode="linear"
                 >
                   <mpath href={`#${conn.id}`} />
@@ -456,3 +539,4 @@ const AnimatedFlowConnections = () => {
 };
 
 export default AnimatedFlowConnections;
+
