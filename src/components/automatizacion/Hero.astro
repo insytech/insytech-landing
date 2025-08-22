@@ -271,31 +271,32 @@ import Flow from "./Flow.astro";
         }
 
         .hero-content {
-            flex: none; /* Resetear flex en móvil */
+            flex: none;
             max-width: 100%;
         }
 
         .hero-visual-area {
             order: 2;
             width: 100%;
-            min-height: 400px; /* Mantener altura considerable en tablet */
+            min-height: 500px; /* Aumentado de 400px a 500px */
             padding: 1rem;
         }
     }
 
     @media (max-width: 768px) {
         .automation-hero {
-            min-height: 80vh;
+            min-height: 100vh; /* Aumentado de 80vh a 100vh */
             padding: 1rem;
         }
 
         .hero-main-container {
             gap: 2rem;
+            min-height: 90vh; /* Aumentado para dar más altura total */
         }
 
         .hero-visual-area {
-            min-height: 350px; /* Altura apropiada para móvil */
-            padding: 0.5rem;
+            min-height: 450px; /* Aumentado significativamente de 350px */
+            padding: 1rem; /* Aumentado el padding */
         }
 
         .cta-buttons {
@@ -308,6 +309,19 @@ import Flow from "./Flow.astro";
 
         .hero-content p {
             font-size: 1.1rem;
+        }
+    }
+
+    /* Nuevas reglas específicas para móviles pequeños */
+    @media (max-width: 480px) {
+        .automation-hero {
+            min-height: 155vh; /* Aún más altura en móviles muy pequeños */
+        }
+
+        .hero-visual-area {
+            min-height: 800px; /* Mantener altura considerable */
+            padding-top: -10px;
+            padding-bottom: 0;
         }
     }
 </style>
