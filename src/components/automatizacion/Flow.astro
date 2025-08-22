@@ -63,6 +63,7 @@ const {} = Astro.props;
             icon="💬"
             label="Chat"
             size="small"
+            className="node-5"
             animateType="fade-up"
             animateDelay="0.8s"
         />
@@ -78,7 +79,6 @@ const {} = Astro.props;
             animateType="fade-up"
             animateDelay="0.7s"
         />
-
         <FlowNode
             id="node-api"
             icon="🔔"
@@ -162,8 +162,8 @@ const {} = Astro.props;
             "node-chat",
             "node-action",
             "node-whatsapp",
-            "node-crm",
             "node-api",
+            "node-crm",
             "node-action",
             "node-targeting",
             "node-forms",
@@ -347,7 +347,7 @@ const {} = Astro.props;
             {
                 from: "node-action",
                 to: "node-pipeline",
-                type: "curve",
+                type: "line",
                 importance: "primary",
             },
             {
@@ -370,20 +370,20 @@ const {} = Astro.props;
             },
             {
                 from: "node-whatsapp",
-                to: "node-crm",
+                to: "node-api",
                 type: "curve",
                 importance: "tertiary",
             },
             {
-                from: "node-crm",
-                to: "node-api",
+                from: "node-api",
+                to: "node-crm",
                 type: "line",
                 importance: "tertiary",
             },
             {
                 from: "node-action",
                 to: "node-targeting",
-                type: "curve",
+                type: "line",
                 importance: "secondary",
             },
             {
@@ -394,7 +394,7 @@ const {} = Astro.props;
             },
         ];
 
-        // Función mejorada para crear conexiones con estética profesional y corrección de líneas rectas
+        // Función mejorada para crear conexiones con estética profesional
         const createDynamicConnections = () => {
             dynamicSvg.innerHTML = "";
             const flowsContainer = document.querySelector(".automation-flows");
@@ -414,6 +414,98 @@ const {} = Astro.props;
                     importanceOrder[a.importance]
                 );
             });
+
+            // Crear un filtro de glow una sola vez para todas las líneas
+            const defs = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "defs",
+            );
+
+            // Crear tres filtros diferentes para cada tipo de importancia
+            ["primary", "secondary", "tertiary"].forEach((importance, i) => {
+                const glowColor =
+                    importance === "primary"
+                        ? "rgba(6, 255, 165, 0.6)"
+                        : importance === "secondary"
+                          ? "rgba(0, 181, 226, 0.5)"
+                          : "rgba(139, 92, 246, 0.4)";
+
+                const filterId = `glow-${importance}`;
+                const filter = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "filter",
+                );
+                filter.setAttribute("id", filterId);
+                filter.setAttribute("x", "-50%");
+                filter.setAttribute("y", "-50%");
+                filter.setAttribute("width", "200%");
+                filter.setAttribute("height", "200%");
+
+                const feGaussianBlur = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feGaussianBlur",
+                );
+                feGaussianBlur.setAttribute("stdDeviation", "2");
+                feGaussianBlur.setAttribute("result", "blur");
+
+                const feColorMatrix = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feColorMatrix",
+                );
+                feColorMatrix.setAttribute("in", "blur");
+                feColorMatrix.setAttribute("type", "matrix");
+                feColorMatrix.setAttribute(
+                    "values",
+                    "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 18 -7",
+                );
+                feColorMatrix.setAttribute("result", "glow");
+
+                const feFlood = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feFlood",
+                );
+                feFlood.setAttribute("flood-color", glowColor);
+                feFlood.setAttribute("result", "color");
+
+                const feComposite = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feComposite",
+                );
+                feComposite.setAttribute("in", "color");
+                feComposite.setAttribute("in2", "glow");
+                feComposite.setAttribute("operator", "in");
+                feComposite.setAttribute("result", "coloredGlow");
+
+                const feMerge = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feMerge",
+                );
+
+                const feMergeNode1 = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feMergeNode",
+                );
+                feMergeNode1.setAttribute("in", "coloredGlow");
+
+                const feMergeNode2 = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "feMergeNode",
+                );
+                feMergeNode2.setAttribute("in", "SourceGraphic");
+
+                feMerge.appendChild(feMergeNode1);
+                feMerge.appendChild(feMergeNode2);
+
+                filter.appendChild(feGaussianBlur);
+                filter.appendChild(feColorMatrix);
+                filter.appendChild(feFlood);
+                filter.appendChild(feComposite);
+                filter.appendChild(feMerge);
+
+                defs.appendChild(filter);
+            });
+
+            dynamicSvg.appendChild(defs);
 
             sortedConnections.forEach(
                 ({ from, to, type, importance }, index) => {
@@ -450,7 +542,6 @@ const {} = Astro.props;
                         100;
 
                     // Calcular puntos de bordes para conexión en lugar de centro a centro
-                    // Convertir ancho y alto a porcentaje del contenedor
                     const fromWidthPercent =
                         (fromWidth / flowsRect.width) * 100;
                     const fromHeightPercent =
@@ -458,70 +549,124 @@ const {} = Astro.props;
                     const toWidthPercent = (toWidth / flowsRect.width) * 100;
                     const toHeightPercent = (toHeight / flowsRect.height) * 100;
 
-                    // Calcular ángulo entre nodos para determinar punto de conexión en el borde
+                    // Calcular vectores y ángulos para las conexiones
                     const dx = toCenterX - fromCenterX;
                     const dy = toCenterY - fromCenterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
                     const angle = Math.atan2(dy, dx);
 
-                    // Calcular puntos de inicio y fin en los bordes de los nodos
+                    // Determinar los puntos exactos de intersección con los bordes de los nodos
                     let fromX, fromY, toX, toY;
 
-                    // Punto inicial (desde el borde del nodo de origen)
-                    if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
-                        // Conexión horizontal principalmente
-                        fromX =
-                            fromCenterX +
-                            (Math.sign(dx) * fromWidthPercent) / 2;
-                        fromY =
-                            fromCenterY +
-                            (Math.tan(angle) *
-                                Math.sign(dx) *
-                                fromWidthPercent) /
-                                2;
+                    // Para conexiones de tipo línea, mejorar los puntos de inicio y fin
+                    if (type === "line") {
+                        // Obtener las coordenadas reales del borde del nodo de origen
+                        const halfWidthFrom = fromWidthPercent / 2;
+                        const halfHeightFrom = fromHeightPercent / 2;
+                        const halfWidthTo = toWidthPercent / 2;
+                        const halfHeightTo = toHeightPercent / 2;
+
+                        // Calcular los factores de escala para la intersección con el rectángulo
+                        const fromScaleX =
+                            Math.abs(Math.cos(angle)) < 0.001
+                                ? Infinity
+                                : halfWidthFrom / Math.abs(Math.cos(angle));
+                        const fromScaleY =
+                            Math.abs(Math.sin(angle)) < 0.001
+                                ? Infinity
+                                : halfHeightFrom / Math.abs(Math.sin(angle));
+                        const toScaleX =
+                            Math.abs(Math.cos(angle)) < 0.001
+                                ? Infinity
+                                : halfWidthTo / Math.abs(Math.cos(angle));
+                        const toScaleY =
+                            Math.abs(Math.sin(angle)) < 0.001
+                                ? Infinity
+                                : halfHeightTo / Math.abs(Math.sin(angle));
+
+                        // Tomar el factor de escala más pequeño para la intersección
+                        const fromScale = Math.min(fromScaleX, fromScaleY);
+                        const toScale = Math.min(toScaleX, toScaleY);
+
+                        // Calcular los puntos de intersección exactos
+                        fromX = fromCenterX + Math.cos(angle) * fromScale;
+                        fromY = fromCenterY + Math.sin(angle) * fromScale;
+                        toX = toCenterX - Math.cos(angle) * toScale;
+                        toY = toCenterY - Math.sin(angle) * toScale;
+
+                        // Ajuste fino para evitar problemas con ángulos extremos
+                        if (
+                            isNaN(fromX) ||
+                            isNaN(fromY) ||
+                            isNaN(toX) ||
+                            isNaN(toY)
+                        ) {
+                            fromX = fromCenterX + Math.sign(dx) * halfWidthFrom;
+                            fromY =
+                                fromCenterY + Math.sign(dy) * halfHeightFrom;
+                            toX = toCenterX - Math.sign(dx) * halfWidthTo;
+                            toY = toCenterY - Math.sign(dy) * halfHeightTo;
+                        }
                     } else {
-                        // Conexión vertical principalmente
-                        fromY =
-                            fromCenterY +
-                            (Math.sign(dy) * fromHeightPercent) / 2;
-                        fromX =
-                            fromCenterX +
-                            (Math.sign(dy) * fromHeightPercent) /
-                                2 /
-                                Math.tan(angle);
+                        // Para curvas, usar la aproximación anterior que funciona bien
+                        if (
+                            Math.abs(Math.cos(angle)) >
+                            Math.abs(Math.sin(angle))
+                        ) {
+                            fromX =
+                                fromCenterX +
+                                (Math.sign(dx) * fromWidthPercent) / 2;
+                            fromY =
+                                fromCenterY +
+                                (Math.tan(angle) *
+                                    Math.sign(dx) *
+                                    fromWidthPercent) /
+                                    2;
+
+                            toX =
+                                toCenterX -
+                                (Math.sign(dx) * toWidthPercent) / 2;
+                            toY =
+                                toCenterY -
+                                (Math.tan(angle) *
+                                    Math.sign(dx) *
+                                    toWidthPercent) /
+                                    2;
+                        } else {
+                            fromY =
+                                fromCenterY +
+                                (Math.sign(dy) * fromHeightPercent) / 2;
+                            fromX =
+                                fromCenterX +
+                                (Math.sign(dy) * fromHeightPercent) /
+                                    2 /
+                                    Math.tan(angle);
+
+                            toY =
+                                toCenterY -
+                                (Math.sign(dy) * toHeightPercent) / 2;
+                            toX =
+                                toCenterX -
+                                (Math.sign(dy) * toHeightPercent) /
+                                    2 /
+                                    Math.tan(angle);
+                        }
+
+                        // Prevenir NaN
+                        if (
+                            isNaN(fromX) ||
+                            isNaN(fromY) ||
+                            isNaN(toX) ||
+                            isNaN(toY)
+                        ) {
+                            fromX = fromCenterX;
+                            fromY = fromCenterY;
+                            toX = toCenterX;
+                            toY = toCenterY;
+                        }
                     }
 
-                    // Punto final (hasta el borde del nodo destino)
-                    if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
-                        // Conexión horizontal principalmente
-                        toX = toCenterX - (Math.sign(dx) * toWidthPercent) / 2;
-                        toY =
-                            toCenterY -
-                            (Math.tan(angle) * Math.sign(dx) * toWidthPercent) /
-                                2;
-                    } else {
-                        // Conexión vertical principalmente
-                        toY = toCenterY - (Math.sign(dy) * toHeightPercent) / 2;
-                        toX =
-                            toCenterX -
-                            (Math.sign(dy) * toHeightPercent) /
-                                2 /
-                                Math.tan(angle);
-                    }
-
-                    // Prevenir NaN o valores inválidos
-                    if (
-                        isNaN(fromX) ||
-                        isNaN(fromY) ||
-                        isNaN(toX) ||
-                        isNaN(toY)
-                    ) {
-                        fromX = fromCenterX;
-                        fromY = fromCenterY;
-                        toX = toCenterX;
-                        toY = toCenterY;
-                    }
-
-                    // Crear el grupo para contener la línea y el gradiente
+                    // Crear el grupo para contener la línea
                     const pathGroup = document.createElementNS(
                         "http://www.w3.org/2000/svg",
                         "g",
@@ -538,49 +683,62 @@ const {} = Astro.props;
                     );
                     let pathData = "";
 
-                    // Generar el path según el tipo
+                    // Generar path según tipo
                     if (type === "curve") {
-                        // Para curvas, usar puntos de control para Bezier
-                        const distance = Math.sqrt(
-                            Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2),
-                        );
+                        // Calcular puntos de control para curva Bézier cúbica
                         const curveFactor = Math.min(
-                            Math.max(distance * 0.2, 10),
-                            40,
+                            Math.max(distance * 0.2, 8),
+                            35,
                         );
+                        const midX = (fromX + toX) / 2;
+                        const midY = (fromY + toY) / 2;
 
-                        // Ajustar dirección de la curvatura según posición relativa
+                        // Ajustar dirección de curvatura según posición relativa
                         let controlX1, controlY1, controlX2, controlY2;
 
                         if (fromCenterY > toCenterY) {
-                            // Si el origen está abajo, curva hacia arriba
                             controlX1 = fromX + (toX - fromX) * 0.25;
                             controlY1 = fromY - curveFactor;
                             controlX2 = fromX + (toX - fromX) * 0.75;
                             controlY2 = toY - curveFactor;
                         } else {
-                            // Si el origen está arriba, curva hacia abajo
                             controlX1 = fromX + (toX - fromX) * 0.25;
                             controlY1 = fromY + curveFactor;
                             controlX2 = fromX + (toX - fromX) * 0.75;
                             controlY2 = toY + curveFactor;
                         }
 
-                        // Usar curva Bezier cúbica para más control sobre la forma
+                        // Si la línea es principalmente horizontal, ajustar controles
+                        if (Math.abs(dx) > Math.abs(dy) * 2) {
+                            controlY1 =
+                                fromY + Math.sign(dy) * curveFactor * 0.5;
+                            controlY2 = toY + Math.sign(dy) * curveFactor * 0.5;
+                        }
+
                         pathData = `M ${fromX} ${fromY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${toX} ${toY}`;
                     } else {
-                        // Línea recta simple
-                        pathData = `M ${fromX} ${fromY} L ${toX} ${toY}`;
+                        // Para líneas rectas, añadir un ligero efecto de curva para mayor elegancia
+                        const straightOffset = Math.min(distance * 0.05, 3); // Curvatura muy sutil
+
+                        // Calcular punto de control para una curva cuadrática muy sutil
+                        const controlX = (fromX + toX) / 2;
+                        const controlY = (fromY + toY) / 2 - straightOffset;
+
+                        // Usar curva cuadrática sutil en lugar de línea recta
+                        pathData = `M ${fromX} ${fromY} Q ${controlX} ${controlY}, ${toX} ${toY}`;
                     }
 
                     path.setAttribute("id", `connection-path-${index}`);
                     path.setAttribute("d", pathData);
                     path.setAttribute(
                         "class",
-                        `dynamic-connection-path ${importance}-path`,
+                        `dynamic-connection-path ${importance}-path ${type}-path`,
                     );
 
-                    // Ajustar grosor según importancia
+                    // Aplicar filtro de glow según importancia
+                    path.setAttribute("filter", `url(#glow-${importance})`);
+
+                    // Grosor según importancia
                     const baseWidth =
                         importance === "primary"
                             ? 1.2
@@ -588,46 +746,35 @@ const {} = Astro.props;
                               ? 0.8
                               : 0.5;
                     path.setAttribute("stroke-width", baseWidth.toString());
-                    path.setAttribute(
-                        "stroke",
-                        "url(#lineGradient-" + index + ")",
-                    );
-                    path.setAttribute("fill", "none");
 
-                    // Crear definiciones de gradiente para cada línea
-                    const defs = document.createElementNS(
-                        "http://www.w3.org/2000/svg",
-                        "defs",
-                    );
-                    const gradient = document.createElementNS(
+                    // Gradiente para la línea
+                    const gradientId = `lineGradient-${index}`;
+                    const linearGradient = document.createElementNS(
                         "http://www.w3.org/2000/svg",
                         "linearGradient",
                     );
-                    gradient.setAttribute("id", "lineGradient-" + index);
+                    linearGradient.setAttribute("id", gradientId);
 
-                    // Ajustar el gradiente para seguir la dirección de la línea
+                    // Alinear el gradiente con la dirección de la línea
                     if (fromX !== toX || fromY !== toY) {
-                        const length = Math.sqrt(
-                            Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2),
-                        );
-                        const normX = (toX - fromX) / length;
-                        const normY = (toY - fromY) / length;
-
-                        gradient.setAttribute("x1", "0%");
-                        gradient.setAttribute("y1", "0%");
-                        gradient.setAttribute("x2", "100%");
-                        gradient.setAttribute("y2", "0%");
-                        gradient.setAttribute(
+                        const normX = dx / distance;
+                        const normY = dy / distance;
+                        linearGradient.setAttribute(
                             "gradientTransform",
                             `rotate(${(Math.atan2(normY, normX) * 180) / Math.PI}, 0.5, 0.5)`,
                         );
                     }
 
-                    // Colores refinados según importancia
+                    linearGradient.setAttribute("x1", "0%");
+                    linearGradient.setAttribute("y1", "0%");
+                    linearGradient.setAttribute("x2", "100%");
+                    linearGradient.setAttribute("y2", "0%");
+
+                    // Colores según importancia con mejores gradientes
                     const colors = {
                         primary: ["#06ffa5", "#00b5e2"],
                         secondary: ["#00b5e2", "#0066ff"],
-                        tertiary: ["#8b5cf6", "#5a5eeb"],
+                        tertiary: ["#a78bfa", "#8b5cf6"],
                     };
 
                     const [color1, color2] = colors[importance];
@@ -646,54 +793,71 @@ const {} = Astro.props;
                     stop2.setAttribute("offset", "100%");
                     stop2.setAttribute("stop-color", color2);
 
-                    gradient.appendChild(stop1);
-                    gradient.appendChild(stop2);
-                    defs.appendChild(gradient);
-                    pathGroup.appendChild(defs);
+                    linearGradient.appendChild(stop1);
+                    linearGradient.appendChild(stop2);
+                    defs.appendChild(linearGradient);
 
-                    // Añadir el path después del gradiente
+                    path.setAttribute("stroke", `url(#${gradientId})`);
+                    path.setAttribute("fill", "none");
+
                     pathGroup.appendChild(path);
 
-                    // Solo añadir partículas a conexiones primarias y secundarias
+                    // Partículas para líneas primarias y secundarias
                     if (importance !== "tertiary") {
-                        // Crear partícula que se mueve a lo largo de la línea
-                        const particle = document.createElementNS(
-                            "http://www.w3.org/2000/svg",
-                            "circle",
-                        );
-                        particle.setAttribute(
-                            "r",
-                            importance === "primary" ? "0.9" : "0.6",
-                        );
-                        particle.setAttribute(
-                            "fill",
-                            importance === "primary" ? "#06ffa5" : "#00b5e2",
-                        );
-                        particle.setAttribute("class", "data-particle");
+                        const count = importance === "primary" ? 2 : 1;
 
-                        // Animación de movimiento
-                        const animateMotion = document.createElementNS(
-                            "http://www.w3.org/2000/svg",
-                            "animateMotion",
-                        );
-                        animateMotion.setAttribute(
-                            "dur",
-                            `${4 + Math.random() * 3}s`,
-                        );
-                        animateMotion.setAttribute("repeatCount", "indefinite");
-                        animateMotion.setAttribute("begin", `${index * 0.3}s`);
-                        animateMotion.setAttribute("calcMode", "spline");
-                        animateMotion.setAttribute("keySplines", ".42,0,.58,1");
+                        for (let i = 0; i < count; i++) {
+                            const particle = document.createElementNS(
+                                "http://www.w3.org/2000/svg",
+                                "circle",
+                            );
+                            particle.setAttribute(
+                                "r",
+                                importance === "primary" ? "0.9" : "0.6",
+                            );
+                            particle.setAttribute(
+                                "fill",
+                                importance === "primary"
+                                    ? "#06ffa5"
+                                    : "#00b5e2",
+                            );
+                            particle.setAttribute("class", "data-particle");
 
-                        const mpath = document.createElementNS(
-                            "http://www.w3.org/2000/svg",
-                            "mpath",
-                        );
-                        mpath.setAttribute("href", `#connection-path-${index}`);
+                            const animateMotion = document.createElementNS(
+                                "http://www.w3.org/2000/svg",
+                                "animateMotion",
+                            );
+                            animateMotion.setAttribute(
+                                "dur",
+                                `${4 + Math.random() * 3}s`,
+                            );
+                            animateMotion.setAttribute(
+                                "repeatCount",
+                                "indefinite",
+                            );
+                            animateMotion.setAttribute(
+                                "begin",
+                                `${index * 0.3 + i * 2}s`,
+                            );
+                            animateMotion.setAttribute("calcMode", "spline");
+                            animateMotion.setAttribute(
+                                "keySplines",
+                                ".42,0,.58,1",
+                            );
 
-                        animateMotion.appendChild(mpath);
-                        particle.appendChild(animateMotion);
-                        pathGroup.appendChild(particle);
+                            const mpath = document.createElementNS(
+                                "http://www.w3.org/2000/svg",
+                                "mpath",
+                            );
+                            mpath.setAttribute(
+                                "href",
+                                `#connection-path-${index}`,
+                            );
+
+                            animateMotion.appendChild(mpath);
+                            particle.appendChild(animateMotion);
+                            pathGroup.appendChild(particle);
+                        }
                     }
 
                     dynamicSvg.appendChild(pathGroup);
@@ -805,20 +969,19 @@ const {} = Astro.props;
     }
 
     .top-flow {
-        top: 20%;
+        top: 10%;
         left: 65%;
-        transform: translateY(-50%);
+        transform: translateX(-10%);
         flex-direction: row;
         gap: 3rem;
     }
 
     .bottom-flow {
         top: 75%;
-        left: 50%;
-        transform: translateY(-50%);
-        transform: translateX(-20%);
+        left: 25%;
+        transform: translateX(50%);
         flex-direction: row;
-        gap: 3rem;
+        gap: 5rem;
     }
 
     /* SVG dinámico para conexiones */
@@ -833,31 +996,40 @@ const {} = Astro.props;
         overflow: visible;
     }
 
-    /* Estilos refinados para las conexiones */
+    /* Estilos refinados para conexiones */
     .dynamic-connection-path {
         stroke-linecap: round;
+        stroke-linejoin: round;
         fill: none;
-        filter: drop-shadow(0 0 1px rgba(0, 181, 226, 0.1));
         transition: all 0.8s ease;
-        opacity: 0.8;
     }
 
-    /* Estilos según importancia */
+    /* Estilos refinados según importancia */
     .primary-path {
-        stroke-dasharray: 8 4;
+        stroke-dasharray: 12 4;
         animation: flowPrimary 30s linear infinite;
+        opacity: 0.85;
     }
 
     .secondary-path {
-        stroke-dasharray: 6 4;
-        opacity: 0.6;
+        stroke-dasharray: 8 4;
         animation: flowSecondary 40s linear infinite;
+        opacity: 0.7;
     }
 
     .tertiary-path {
-        stroke-dasharray: 2 4;
-        opacity: 0.4;
+        stroke-dasharray: 4 4;
         animation: flowTertiary 60s linear infinite;
+        opacity: 0.5;
+    }
+
+    /* Estilos específicos por tipo de conexión */
+    .line-path {
+        stroke-dasharray: 10 4; /* Patrón más largo para líneas */
+    }
+
+    .curve-path {
+        stroke-dasharray: 8 5; /* Patrón con más espacio para curvas */
     }
 
     @keyframes flowPrimary {
@@ -868,7 +1040,7 @@ const {} = Astro.props;
 
     @keyframes flowSecondary {
         to {
-            stroke-dashoffset: -40;
+            stroke-dashoffset: -36;
         }
     }
 
@@ -880,40 +1052,33 @@ const {} = Astro.props;
 
     /* Partículas de datos mejoradas */
     .data-particle {
-        filter: drop-shadow(0 0 2px currentColor);
-        opacity: 0.7;
+        filter: drop-shadow(0 0 3px currentColor);
+        opacity: 0.8;
     }
 
-    /* Línea de movimiento más elegante */
-    .movement-trail {
-        position: absolute;
-        height: 2px;
-        background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(6, 255, 165, 0.2) 20%,
-            rgba(6, 255, 165, 0.6) 50%,
-            rgba(6, 255, 165, 0.2) 80%,
-            transparent 100%
-        );
-        border-radius: 4px;
-        opacity: 0;
-        z-index: 6;
-        pointer-events: none;
-        transition: opacity 0.4s ease;
+    /* Transición suave al hacer hover en la zona */
+    .automation-flows:hover .dynamic-connection-path.primary-path {
+        opacity: 1;
+        stroke-width: 1.5;
     }
 
-    .movement-trail.active {
-        opacity: 0.7;
+    .automation-flows:hover .dynamic-connection-path.secondary-path {
+        opacity: 0.9;
+        stroke-width: 1;
     }
 
-    /* Responsive refinado */
+    .automation-flows:hover .data-particle {
+        opacity: 1;
+    }
+
+    /* Responsive refinado con valores ajustados */
     @media (min-width: 1440px) {
         .automation-flows {
             width: 55%;
         }
 
         .main-flow {
+            transform: translateX(0);
             left: 8%;
             gap: 5rem;
         }
@@ -923,19 +1088,20 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
+            transform: translateX(0);
             left: 45%;
         }
 
         .dynamic-connection-path.primary-path {
-            stroke-width: 1.4 !important;
+            stroke-width: 1.4;
         }
 
         .dynamic-connection-path.secondary-path {
-            stroke-width: 1 !important;
+            stroke-width: 1;
         }
 
         .dynamic-connection-path.tertiary-path {
-            stroke-width: 0.7 !important;
+            stroke-width: 0.6;
         }
     }
 
