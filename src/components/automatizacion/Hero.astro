@@ -3,6 +3,123 @@ import Flow from "./Flow.astro";
 ---
 
 <section class="automation-hero">
+    <!-- Background pattern with curved lines and beams -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <!-- Curved beam patterns -->
+        <svg
+            class="absolute inset-0 w-full h-full opacity-30 dark:opacity-20"
+            viewBox="0 0 1440 900"
+            preserveAspectRatio="xMidYMid slice"
+        >
+            <!-- Animated curved beams -->
+            <defs>
+                <linearGradient id="beam1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop
+                        offset="0%"
+                        class="text-blue-400/60 dark:text-purple-400/40"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="50%"
+                        class="text-indigo-500/80 dark:text-blue-500/60"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="100%"
+                        class="text-purple-500/40 dark:text-indigo-400/30"
+                        stop-color="currentColor"></stop>
+                </linearGradient>
+                <linearGradient id="beam2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop
+                        offset="0%"
+                        class="text-emerald-400/50 dark:text-cyan-400/30"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="50%"
+                        class="text-blue-500/70 dark:text-indigo-500/50"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="100%"
+                        class="text-indigo-500/30 dark:text-purple-400/20"
+                        stop-color="currentColor"></stop>
+                </linearGradient>
+            </defs>
+
+            <!-- Curved path 1 -->
+            <path
+                d="M0,500 Q360,400 720,600 T1440,550"
+                stroke="url(#beam1)"
+                stroke-width="3"
+                fill="none"
+                opacity="0.3"
+            >
+                <animate
+                    attributeName="stroke-width"
+                    values="2;4;2"
+                    dur="12s"
+                    repeatCount="indefinite"></animate>
+            </path>
+
+            <!-- Curved path 2 -->
+            <path
+                d="M0,400 Q480,250 960,450 T1440,400"
+                stroke="url(#beam2)"
+                stroke-width="2"
+                fill="none"
+                opacity="0.7"
+            >
+                <animate
+                    attributeName="opacity"
+                    values="0.5;1;0.5"
+                    dur="15s"
+                    repeatCount="indefinite"></animate>
+            </path>
+
+            <!-- Curved path 3 -->
+            <path
+                d="M1440,150 Q1080,300 720,200 T0,250"
+                stroke="url(#beam1)"
+                stroke-width="2"
+                fill="none"
+                opacity="0.6"
+            >
+                <animate
+                    attributeName="stroke-width"
+                    values="1;3;1"
+                    dur="18s"
+                    repeatCount="indefinite"></animate>
+            </path>
+        </svg>
+
+        <!-- Geometric beam overlays -->
+        <div
+            class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-purple-500/20 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl"
+            style="animation: slow-pulse 8s ease-in-out infinite;"
+        >
+        </div>
+        <div
+            class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-tl from-emerald-400/15 to-indigo-500/15 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
+            style="animation: slow-pulse 12s ease-in-out infinite 3s;"
+        >
+        </div>
+
+        <!-- Grid pattern overlay -->
+        <div
+            class="absolute inset-0 opacity-20 dark:opacity-10"
+            style="background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.3) 1px, transparent 0); background-size: 50px 50px;"
+        >
+        </div>
+
+        <!-- Flowing beam lines -->
+        <div class="absolute top-0 left-0 w-full h-full">
+            <div
+                class="absolute top-1/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent dark:via-purple-400/30 animate-pulse"
+            >
+            </div>
+            <div
+                class="absolute top-2/3 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent dark:via-cyan-400/20 animate-pulse delay-500"
+            >
+            </div>
+        </div>
+    </div>
     <!-- Contenedor principal de dos columnas -->
     <div class="hero-main-container">
         <!-- Columna izquierda: Contenido principal -->
