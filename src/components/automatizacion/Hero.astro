@@ -465,12 +465,13 @@
             "node-trigger",
             "node-ai",
             "node-action",
-            "node-chat",
             "node-email",
+            "node-chat",
             "node-crm",
             "node-api",
             "node-whatsapp",
             "node-targeting",
+            "node-forms",
             "node-notify",
             "node-trigger",
         ];
@@ -481,121 +482,63 @@
                 .filter(([id, el]) => el),
         );
 
-        // CORREGIR: Simplificar las conexiones para que solo se muestren las del flujo principal
-        const connections = [
-            // ["node-trigger", "node-ai"],
-            // ["node-ai", "node-action"],
-            // // Eliminar las conexiones múltiples desde action que causan líneas negras
-            // ["node-action", "node-email"],
-            // ["node-action", "node-crm"],
-            // ["node-action", "node-api"],
-            // ["node-action", "node-whatsapp"],
-            // ["node-action", "node-targeting"],
-            // ["node-action", "node-notify"],
-        ];
-
         const getRect = (el) => el.getBoundingClientRect();
         const getContainerRect = () => container.getBoundingClientRect();
 
-        // CORREGIR: Función center mejorada para calcular exactamente el centro del nodo
+        // CORREGIR: Función center mejorada
         const center = (el) => {
             const containerRect = getContainerRect();
             const elRect = getRect(el);
-
-            // Calcular el centro exacto del elemento
-            const centerX = elRect.left - containerRect.left + elRect.width / 2;
-            const centerY = elRect.top - containerRect.top + elRect.height / 2;
-
-            console.log(
-                `Centro de ${el.id}: x=${centerX.toFixed(1)}, y=${centerY.toFixed(1)}`,
-            );
-
             return {
-                x: centerX,
-                y: centerY,
+                x: elRect.left - containerRect.left + elRect.width / 2,
+                y: elRect.top - containerRect.top + elRect.height / 2,
             };
         };
 
-        // Normalizar coordenadas al viewBox 0-100
-        const toViewBox = (point) => {
-            const containerRect = getContainerRect();
-            return {
-                x: (point.x / containerRect.width) * 100,
-                y: (point.y / containerRect.height) * 100,
-            };
-        };
+        // CORREGIR: Función simple para mostrar línea de movimiento
+        let currentTrail = null;
 
-        // CORREGIR: Mejorar la creación de paths
-        const getConnectionPath = (fromId, toId) => {
-            const key = `${fromId}-${toId}`;
-            let path = svg.querySelector(`path[data-connection="${key}"]`);
-            if (!path) {
-                path = document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "path",
-                );
-                path.classList.add("connection-path");
-                path.setAttribute("data-connection", key);
-                path.setAttribute("fill", "none"); // Asegurar que no tenga relleno
-                path.setAttribute("stroke", "#0066ff"); // Color explícito
-                path.setAttribute("stroke-width", "3");
-                svg.appendChild(path);
+        const createMovementTrail = (fromNode, toNode) => {
+            // Limpiar línea anterior
+            if (currentTrail) {
+                currentTrail.remove();
+                currentTrail = null;
             }
-            return path;
-        };
 
-        // CORREGIR: Mejorar updateConnections para evitar NaN
-        const updateConnections = () => {
-            connections.forEach(([fromId, toId]) => {
-                const fromNode = nodes[fromId];
-                const toNode = nodes[toId];
-                if (!fromNode || !toNode) return;
+            const fromPos = center(fromNode);
+            const toPos = center(toNode);
 
-                const fromPoint = toViewBox(center(fromNode));
-                const toPoint = toViewBox(center(toNode));
+            // Crear una línea simple con CSS
+            const trail = document.createElement("div");
+            trail.className = "movement-trail";
 
-                // Validar que los puntos sean válidos
-                if (
-                    isNaN(fromPoint.x) ||
-                    isNaN(fromPoint.y) ||
-                    isNaN(toPoint.x) ||
-                    isNaN(toPoint.y)
-                ) {
-                    console.warn(
-                        `Puntos inválidos para conexión ${fromId} -> ${toId}`,
-                    );
-                    return;
-                }
+            // Calcular ángulo y distancia
+            const dx = toPos.x - fromPos.x;
+            const dy = toPos.y - fromPos.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
 
-                // Crear línea recta simple en lugar de curva para evitar errores
-                const pathData = `M ${fromPoint.x.toFixed(2)} ${fromPoint.y.toFixed(2)} L ${toPoint.x.toFixed(2)} ${toPoint.y.toFixed(2)}`;
+            // Posicionar la línea
+            trail.style.left = `${fromPos.x}px`;
+            trail.style.top = `${fromPos.y}px`;
+            trail.style.width = `${distance}px`;
+            trail.style.transform = `rotate(${angle}deg)`;
+            trail.style.transformOrigin = "0 50%";
 
-                const path = getConnectionPath(fromId, toId);
-                path.setAttribute("d", pathData);
-            });
-        };
+            container.appendChild(trail);
+            currentTrail = trail;
 
-        // CORREGIR: Simplificar highlightConnection
-        const highlightConnection = (fromId, toId, duration = 1000) => {
-            const path = svg.querySelector(
-                `path[data-connection="${fromId}-${toId}"]`,
-            );
-            if (path) {
-                path.classList.add("active");
-                setTimeout(() => path.classList.remove("active"), duration);
-            }
+            // Animar la línea
+            setTimeout(() => trail.classList.add("active"), 10);
+
+            return trail;
         };
 
         // CORREGIR: Funciones del runner con mejor precisión
         const setRunnerPosition = (x, y) => {
-            // Asegurarse de que el bot esté exactamente centrado en las coordenadas dadas
             runner.style.left = `${x}px`;
             runner.style.top = `${y}px`;
             runner.style.transform = `translate(-50%, -50%)`;
-
-            console.log(
-                `Runner posicionado en: x=${x.toFixed(1)}, y=${y.toFixed(1)}`,
-            );
         };
 
         const setRunnerDirection = (dx, dy) => {
@@ -609,18 +552,11 @@
                 const toNode = nodes[toId];
                 if (!fromNode || !toNode) return resolve();
 
-                // Obtener posiciones exactas del centro de cada nodo
+                // Crear línea de movimiento
+                const trail = createMovementTrail(fromNode, toNode);
+
                 const fromPos = center(fromNode);
                 const toPos = center(toNode);
-
-                console.log(`Moviendo de ${fromId} a ${toId}`);
-                console.log(
-                    `Desde: (${fromPos.x.toFixed(1)}, ${fromPos.y.toFixed(1)})`,
-                );
-                console.log(
-                    `Hacia: (${toPos.x.toFixed(1)}, ${toPos.y.toFixed(1)})`,
-                );
-
                 const dx = toPos.x - fromPos.x;
                 const dy = toPos.y - fromPos.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -636,7 +572,6 @@
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
 
-                    // Easing function
                     const eased =
                         progress < 0.5
                             ? 2 * progress * progress
@@ -651,6 +586,10 @@
                         requestAnimationFrame(animate);
                     } else {
                         runner.classList.remove("moving");
+                        // Ocultar línea después del movimiento
+                        setTimeout(() => {
+                            if (trail) trail.classList.remove("active");
+                        }, 200);
                         resolve();
                     }
                 };
@@ -668,7 +607,7 @@
             node.classList.remove("pressed");
         };
 
-        // CORREGIR: Ajustar el flujo para que sea secuencial
+        // CORREGIR: Loop principal simplificado
         const runFlowLoop = async () => {
             const firstNode = nodes[flow[0]];
             if (firstNode) {
@@ -682,26 +621,14 @@
                     const fromId = flow[i];
                     const toId = flow[i + 1];
 
-                    // Solo resaltar conexiones que existen
-                    const connectionExists = connections.some(
-                        ([from, to]) =>
-                            (from === fromId && to === toId) ||
-                            (from === toId && to === fromId),
-                    );
-
-                    if (connectionExists) {
-                        highlightConnection(fromId, toId);
-                    }
-
                     await moveRunner(fromId, toId);
                     await pressNode(toId);
-                    await new Promise((resolve) => setTimeout(resolve, 200));
+                    await new Promise((resolve) => setTimeout(resolve, 300));
                 }
             }
         };
 
-        // Inicializar
-        updateConnections();
+        // Inicializar sin conexiones complejas
         runFlowLoop();
 
         // Actualizar en resize
@@ -709,13 +636,10 @@
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                updateConnections();
-                // Reposicionar runner exactamente en el centro del primer nodo
                 const firstNode = nodes[flow[0]];
                 if (firstNode) {
                     const pos = center(firstNode);
                     setRunnerPosition(pos.x, pos.y);
-                    console.log("Runner reposicionado después de resize");
                 }
             }, 100);
         });
@@ -1240,6 +1164,41 @@
             opacity: 0;
             transform: scale(1.3);
             border-width: 1px;
+        }
+    }
+
+    /* NUEVO: Línea de movimiento simple con CSS */
+    .movement-trail {
+        position: absolute;
+        height: 3px;
+        background: linear-gradient(
+            90deg,
+            var(--accent) 0%,
+            var(--primary) 50%,
+            var(--accent) 100%
+        );
+        border-radius: 2px;
+        opacity: 0;
+        z-index: 6;
+        pointer-events: none;
+        box-shadow: 0 0 8px rgba(0, 181, 226, 0.6);
+        transition: opacity 0.3s ease;
+    }
+
+    .movement-trail.active {
+        opacity: 1;
+        animation: trailPulse 1s ease-in-out;
+    }
+
+    @keyframes trailPulse {
+        0%,
+        100% {
+            transform: scaleY(1);
+            box-shadow: 0 0 8px rgba(0, 181, 226, 0.6);
+        }
+        50% {
+            transform: scaleY(1.5);
+            box-shadow: 0 0 16px rgba(0, 181, 226, 0.8);
         }
     }
 </style>
