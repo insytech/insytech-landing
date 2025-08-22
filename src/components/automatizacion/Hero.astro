@@ -125,17 +125,31 @@ import Flow from "./Flow.astro";
         <!-- Columna izquierda: Contenido principal -->
         <div class="hero-content">
             <div class="content-wrapper">
-                <h1>Automatización Inteligente para tu Negocio</h1>
-                <p>
+                <h1
+                    class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 bg-gradient-to-r from-slate-700 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-300 bg-clip-text text-transparent leading-tight"
+                >
+                    Automatización Inteligente para tu Negocio
+                </h1>
+                <p
+                    class="text-lg md:text-xl leading-relaxed mb-8 text-gray-700 dark:text-gray-300"
+                >
                     Transforma tus procesos with chatbots, RPA y flujos de
                     automatización personalizados. Conecta sistemas, optimiza
                     operaciones y escala sin límites.
                 </p>
-                <div class="cta-buttons">
-                    <a href="#cta" class="btn btn-primary">Solicita una demo</a>
-                    <a href="#services" class="btn btn-secondary"
-                        >Ver soluciones</a
+                <div class="flex flex-wrap gap-4 justify-start">
+                    <a
+                        href="#cta"
+                        class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 hover:from-blue-700 hover:to-purple-700 dark:hover:from-blue-400 dark:hover:to-purple-400 transition-all duration-300 ease-in-out"
                     >
+                        Solicita una demo
+                    </a>
+                    <a
+                        href="#services"
+                        class="inline-flex items-center px-8 py-4 bg-transparent border-2 border-gray-400 dark:border-gray-500 text-gray-800 dark:text-white font-semibold rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-gray-600 dark:hover:border-gray-300 backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-105"
+                    >
+                        Ver soluciones
+                    </a>
                 </div>
             </div>
         </div>
@@ -225,7 +239,6 @@ import Flow from "./Flow.astro";
         font-size: clamp(2.5rem, 5vw, 4rem);
         font-weight: 800;
         margin-bottom: 1.5rem;
-        background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -236,7 +249,6 @@ import Flow from "./Flow.astro";
         font-size: 1.2rem;
         line-height: 1.6;
         margin-bottom: 2rem;
-        color: #e2e8f0;
     }
 
     .cta-buttons {
