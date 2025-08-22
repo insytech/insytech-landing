@@ -1,0 +1,604 @@
+---
+
+---
+
+<section class="automation-hero">
+    <div class="hero-content">
+        <div class="content-wrapper">
+            <h1>Automatización Inteligente para tu Negocio</h1>
+            <p>
+                Transforma tus procesos con chatbots, RPA y flujos de
+                automatización personalizados. Conecta sistemas, optimiza
+                operaciones y escala sin límites.
+            </p>
+            <div class="cta-buttons">
+                <a href="#cta" class="btn btn-primary">Solicita una demo</a>
+                <a href="#services" class="btn btn-secondary">Ver soluciones</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flujos de automatización animados -->
+    <div class="automation-flows">
+        <!-- Flujo principal central -->
+        <div class="flow-container main-flow">
+            <div
+                class="flow-node trigger-node"
+                data-animate="scale"
+                data-animate-delay="0.3s"
+            >
+                <div class="node-icon">⚡</div>
+                <span class="node-label">Trigger</span>
+            </div>
+
+            <svg
+                class="connection-line"
+                data-animate="fade"
+                data-animate-delay="0.6s"
+            >
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="animated-line"
+                ></line>
+                <circle r="3" class="flow-dot">
+                    <animateMotion dur="2s" repeatCount="indefinite">
+                        <mpath href="#line1"></mpath>
+                    </animateMotion>
+                </circle>
+            </svg>
+
+            <div
+                class="flow-node ai-node"
+                data-animate="scale"
+                data-animate-delay="0.9s"
+            >
+                <div class="node-icon">🤖</div>
+                <span class="node-label">AI Agent</span>
+            </div>
+
+            <svg
+                class="connection-line"
+                data-animate="fade"
+                data-animate-delay="1.2s"
+            >
+                <line x1="0" y1="50%" x2="100%" y2="50%" class="animated-line"
+                ></line>
+                <circle r="3" class="flow-dot">
+                    <animateMotion
+                        dur="2s"
+                        repeatCount="indefinite"
+                        begin="0.5s"
+                    >
+                        <mpath href="#line2"></mpath>
+                    </animateMotion>
+                </circle>
+            </svg>
+
+            <div
+                class="flow-node action-node"
+                data-animate="scale"
+                data-animate-delay="1.5s"
+            >
+                <div class="node-icon">⚙️</div>
+                <span class="node-label">Acción</span>
+            </div>
+        </div>
+
+        <!-- Flujo secundario superior -->
+        <div class="flow-container secondary-flow top-flow">
+            <div
+                class="flow-node small-node"
+                data-animate="fade-up"
+                data-animate-delay="0.5s"
+            >
+                <div class="node-icon">📧</div>
+                <span class="node-label">Email</span>
+            </div>
+
+            <svg class="connection-curve">
+                <path d="M 10 20 Q 60 5 110 20" class="curved-line"></path>
+                <circle r="2" class="flow-dot-small">
+                    <animateMotion dur="3s" repeatCount="indefinite">
+                        <mpath href="#curve1"></mpath>
+                    </animateMotion>
+                </circle>
+            </svg>
+
+            <div
+                class="flow-node small-node"
+                data-animate="fade-up"
+                data-animate-delay="0.8s"
+            >
+                <div class="node-icon">💬</div>
+                <span class="node-label">Chat</span>
+            </div>
+        </div>
+
+        <!-- Flujo secundario inferior -->
+        <div class="flow-container secondary-flow bottom-flow">
+            <div
+                class="flow-node small-node"
+                data-animate="fade-up"
+                data-animate-delay="0.7s"
+            >
+                <div class="node-icon">📊</div>
+                <span class="node-label">CRM</span>
+            </div>
+
+            <svg class="connection-curve">
+                <path d="M 10 10 Q 60 25 110 10" class="curved-line"></path>
+                <circle r="2" class="flow-dot-small">
+                    <animateMotion dur="3s" repeatCount="indefinite" begin="1s">
+                        <mpath href="#curve2"></mpath>
+                    </animateMotion>
+                </circle>
+            </svg>
+
+            <div
+                class="flow-node small-node"
+                data-animate="fade-up"
+                data-animate-delay="1s"
+            >
+                <div class="node-icon">🔔</div>
+                <span class="node-label">Notificaciones</span>
+            </div>
+        </div>
+
+        <!-- Nodos flotantes adicionales -->
+        <div class="floating-nodes">
+            <div
+                class="floating-node node-1"
+                data-animate="scale"
+                data-animate-delay="1.8s"
+            >
+                <div class="node-icon">🌐</div>
+                <span class="node-label">API</span>
+            </div>
+
+            <div
+                class="floating-node node-2"
+                data-animate="scale"
+                data-animate-delay="2.1s"
+            >
+                <div class="node-icon">📱</div>
+                <span class="node-label">WhatsApp</span>
+            </div>
+
+            <div
+                class="floating-node node-3"
+                data-animate="scale"
+                data-animate-delay="2.4s"
+            >
+                <div class="node-icon">📋</div>
+                <span class="node-label">Forms</span>
+            </div>
+
+            <div
+                class="floating-node node-4"
+                data-animate="scale"
+                data-animate-delay="2.7s"
+            >
+                <div class="node-icon">🎯</div>
+                <span class="node-label">Targeting</span>
+            </div>
+        </div>
+
+        <!-- Líneas de conexión adicionales -->
+        <svg
+            class="background-connections"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+        >
+            <defs>
+                <path id="line1" d="M 0 50 L 100 50"></path>
+                <path id="line2" d="M 0 50 L 100 50"></path>
+                <path id="curve1" d="M 10 20 Q 60 5 110 20"></path>
+                <path id="curve2" d="M 10 10 Q 60 25 110 10"></path>
+            </defs>
+
+            <!-- Líneas de fondo con animación sutil -->
+            <path
+                d="M 20 80 Q 50 20 80 80"
+                class="bg-line"
+                opacity="0.3"
+                data-animate="fade"
+                data-animate-delay="3s"></path>
+            <path
+                d="M 10 30 Q 90 60 90 30"
+                class="bg-line"
+                opacity="0.2"
+                data-animate="fade"
+                data-animate-delay="3.3s"></path>
+            <path
+                d="M 30 10 Q 70 90 90 10"
+                class="bg-line"
+                opacity="0.25"
+                data-animate="fade"
+                data-animate-delay="3.6s"></path>
+        </svg>
+    </div>
+
+    <!-- Partículas de fondo -->
+    <div class="background-particles">
+        <div class="particle particle-1"></div>
+        <div class="particle particle-2"></div>
+        <div class="particle particle-3"></div>
+        <div class="particle particle-4"></div>
+        <div class="particle particle-5"></div>
+    </div>
+</section>
+
+<style>
+    .automation-hero {
+        position: relative;
+        min-height: 100vh;
+        background: linear-gradient(
+            135deg,
+            #0f0f23 0%,
+            #1a1a3e 50%,
+            #2d1b69 100%
+        );
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        color: white;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .content-wrapper {
+        max-width: 600px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 800;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.1;
+    }
+
+    .hero-content p {
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        color: #e2e8f0;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        color: white;
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+        background: transparent;
+        color: white;
+        border-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* Flujos de automatización */
+    .automation-flows {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 5;
+    }
+
+    .flow-container {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .main-flow {
+        top: 50%;
+        right: 10%;
+        transform: translateY(-50%);
+        flex-direction: row;
+    }
+
+    .top-flow {
+        top: 20%;
+        right: 15%;
+        transform: translateY(-50%);
+    }
+
+    .bottom-flow {
+        top: 80%;
+        right: 15%;
+        transform: translateY(-50%);
+    }
+
+    .flow-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(139, 92, 246, 0.3);
+        border-radius: 16px;
+        backdrop-filter: blur(20px);
+        min-width: 80px;
+        transition: all 0.3s ease;
+    }
+
+    .flow-node:hover {
+        transform: scale(1.05);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(139, 92, 246, 0.5);
+    }
+
+    .small-node {
+        min-width: 60px;
+        padding: 0.75rem;
+    }
+
+    .node-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .small-node .node-icon {
+        font-size: 1.2rem;
+    }
+
+    .node-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-align: center;
+        color: #e2e8f0;
+    }
+
+    .connection-line {
+        width: 100px;
+        height: 4px;
+    }
+
+    .connection-curve {
+        width: 120px;
+        height: 30px;
+    }
+
+    .animated-line,
+    .curved-line {
+        stroke: #8b5cf6;
+        stroke-width: 2;
+        fill: none;
+        opacity: 0.7;
+    }
+
+    .bg-line {
+        stroke: #6366f1;
+        stroke-width: 1;
+        fill: none;
+    }
+
+    .flow-dot,
+    .flow-dot-small {
+        fill: #06ffa5;
+        filter: drop-shadow(0 0 6px #06ffa5);
+    }
+
+    /* Nodos flotantes */
+    .floating-nodes {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+
+    .floating-node {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.75rem;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        border-radius: 12px;
+        backdrop-filter: blur(15px);
+        min-width: 50px;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .node-1 {
+        top: 15%;
+        left: 20%;
+        animation-delay: 0s;
+    }
+
+    .node-2 {
+        top: 65%;
+        left: 10%;
+        animation-delay: 1s;
+    }
+
+    .node-3 {
+        top: 35%;
+        left: 80%;
+        animation-delay: 2s;
+    }
+
+    .node-4 {
+        top: 85%;
+        left: 70%;
+        animation-delay: 3s;
+    }
+
+    .floating-node .node-icon {
+        font-size: 1rem;
+    }
+
+    .floating-node .node-label {
+        font-size: 0.6rem;
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Conexiones de fondo */
+    .background-connections {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    /* Partículas de fondo */
+    .background-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #06ffa5;
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: particle-float 8s ease-in-out infinite;
+        filter: blur(0.5px);
+    }
+
+    .particle-1 {
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .particle-2 {
+        top: 40%;
+        left: 85%;
+        animation-delay: 2s;
+    }
+
+    .particle-3 {
+        top: 70%;
+        left: 15%;
+        animation-delay: 4s;
+    }
+
+    .particle-4 {
+        top: 80%;
+        left: 80%;
+        animation-delay: 6s;
+    }
+
+    .particle-5 {
+        top: 10%;
+        left: 60%;
+        animation-delay: 1s;
+    }
+
+    @keyframes particle-float {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px);
+            opacity: 0.6;
+        }
+        50% {
+            transform: translateY(-20px) translateX(10px);
+            opacity: 1;
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .automation-flows {
+            width: 60%;
+        }
+
+        .main-flow {
+            right: 5%;
+            gap: 1rem;
+        }
+
+        .connection-line {
+            width: 60px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .automation-hero {
+            min-height: 80vh;
+        }
+
+        .automation-flows {
+            width: 100%;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .content-wrapper {
+            max-width: 100%;
+        }
+
+        .cta-buttons {
+            justify-content: center;
+        }
+
+        .floating-node {
+            display: none;
+        }
+    }
+</style>
