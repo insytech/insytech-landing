@@ -259,15 +259,17 @@ const {} = Astro.props;
         height: 60px;
         z-index: 10;
         pointer-events: none;
-        left: 0; /* CAMBIO: Inicializar en 0 en lugar de -9999px */
-        top: 0; /* CAMBIO: Inicializar en 0 en lugar de -9999px */
-        opacity: 0; /* NUEVO: Inicialmente invisible hasta que se posicione */
-        visibility: hidden; /* NUEVO: Inicialmente oculto */
+        left: 0;
+        top: 0;
+        opacity: 0;
+        visibility: hidden;
         filter: drop-shadow(0 8px 25px rgba(0, 102, 255, 0.4));
         transform-origin: 50% 50%;
         transition:
             opacity 0.3s ease,
-            visibility 0.3s ease; /* NUEVO: Transición suave */
+            visibility 0.3s ease;
+        /* NUEVO: Asegurar que el runner esté contenido dentro del área visual */
+        will-change: transform, left, top;
     }
 
     .bot-svg {
@@ -276,6 +278,8 @@ const {} = Astro.props;
         transform-origin: center;
         transform: rotate(var(--rotation, 0));
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* NUEVO: Mejorar renderizado */
+        backface-visibility: hidden;
     }
 
     .runner.moving .thruster {
@@ -328,14 +332,13 @@ const {} = Astro.props;
     /* Mejoras para dispositivos móviles */
     @media (max-width: 768px) {
         .runner {
-            transform: scale(0.85) translate(-50%, -50%); /* Reducir tamaño */
-            filter: drop-shadow(
-                0 4px 15px rgba(0, 102, 255, 0.3)
-            ); /* Reducir sombra */
+            width: 50px; /* Reducir tamaño base */
+            height: 50px;
+            filter: drop-shadow(0 4px 15px rgba(0, 102, 255, 0.3));
         }
 
         .bot-status {
-            bottom: -20px;
+            bottom: -18px;
             font-size: 8px;
             gap: 3px;
         }
@@ -348,16 +351,23 @@ const {} = Astro.props;
 
     @media (max-width: 480px) {
         .runner {
-            transform: scale(0.75) translate(-50%, -50%); /* Reducir aún más */
+            width: 45px; /* Tamaño aún más pequeño */
+            height: 45px;
         }
 
         .bot-status {
             opacity: 0.8;
+            bottom: -15px;
         }
 
         /* Simplificar animaciones para dispositivos de gama baja */
         .signal-waves circle {
             animation-duration: 3s !important;
+        }
+
+        /* NUEVO: Optimizar transform para móviles */
+        .bot-svg {
+            transition: transform 0.2s ease;
         }
     }
 </style>

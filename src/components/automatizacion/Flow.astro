@@ -145,11 +145,20 @@ const {} = Astro.props;
     // Animación mejorada con conexiones dinámicas y runner bot
     document.addEventListener("DOMContentLoaded", () => {
         const heroContainer = document.querySelector(".automation-hero");
+        const visualArea = document.querySelector(".hero-visual-area");
+        const flowsContainer = document.querySelector(".automation-flows");
         const dynamicContainer = document.getElementById("dynamic-container");
         const runner = document.getElementById("runner");
         const dynamicSvg = document.getElementById("dynamic-connections-svg");
 
-        if (!heroContainer || !dynamicContainer || !runner || !dynamicSvg)
+        if (
+            !heroContainer ||
+            !visualArea ||
+            !flowsContainer ||
+            !dynamicContainer ||
+            !runner ||
+            !dynamicSvg
+        )
             return;
 
         const flow = [
@@ -180,9 +189,14 @@ const {} = Astro.props;
 
         const getRect = (el: { getBoundingClientRect: () => any }) =>
             el.getBoundingClientRect();
-        const getContainerRect = () => heroContainer.getBoundingClientRect();
 
-        // CORREGIR: Función center mejorada
+        // CORREGIR: Usar el área visual como contenedor de referencia en lugar del hero completo
+        const getContainerRect = () => {
+            // Usar el área visual como referencia para coordenadas más precisas
+            return visualArea.getBoundingClientRect();
+        };
+
+        // CORREGIR: Función center mejorada con mejor precisión
         const center = (el: any) => {
             const containerRect = getContainerRect();
             const elRect = getRect(el);
@@ -215,14 +229,14 @@ const {} = Astro.props;
             const distance = Math.sqrt(dx * dx + dy * dy);
             const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
 
-            // Posicionar la línea
+            // CORREGIR: Posicionar la línea relativa al área visual
             trail.style.left = `${fromPos.x}px`;
             trail.style.top = `${fromPos.y}px`;
             trail.style.width = `${distance}px`;
             trail.style.transform = `rotate(${angle}deg)`;
             trail.style.transformOrigin = "0 50%";
 
-            // CAMBIO CRÍTICO: Usar el contenedor dedicado
+            // Usar el contenedor dedicado
             dynamicContainer.appendChild(trail);
             currentTrail = trail;
 
@@ -232,19 +246,9 @@ const {} = Astro.props;
             return trail;
         };
 
-        // ALTERNATIVA: Si el problema persiste, usar requestAnimationFrame para evitar reflows
-        const safeAppendTrail = (trail: HTMLElement) => {
-            requestAnimationFrame(() => {
-                dynamicContainer.appendChild(trail);
-                requestAnimationFrame(() => {
-                    trail.classList.add("active");
-                });
-            });
-        };
-
-        // CORREGIR: Funciones del runner con mejor precisión
+        // CORREGIR: Funciones del runner con coordenadas relativas al área visual
         const setRunnerPosition = (x: number, y: number) => {
-            // CAMBIO: Usar left/top en lugar de transform3d para posicionamiento inicial
+            // IMPORTANTE: Las coordenadas ya son relativas al área visual
             runner.style.left = `${x}px`;
             runner.style.top = `${y}px`;
             runner.style.transform = `translate(-50%, -50%)`;
@@ -261,7 +265,7 @@ const {} = Astro.props;
                 const toNode = nodes[toId];
                 if (!fromNode || !toNode) return resolve();
 
-                // Crear línea de movimiento usando el método seguro
+                // Crear línea de movimiento
                 const trail = createMovementTrail(fromNode, toNode);
 
                 const fromPos = center(fromNode);
@@ -299,7 +303,6 @@ const {} = Astro.props;
                         setTimeout(() => {
                             if (trail && trail.parentNode) {
                                 trail.classList.remove("active");
-                                // Remover después de la animación
                                 setTimeout(() => {
                                     if (trail.parentNode) {
                                         trail.parentNode.removeChild(trail);
@@ -397,8 +400,8 @@ const {} = Astro.props;
         // Función mejorada para crear conexiones con estética profesional
         const createDynamicConnections = () => {
             dynamicSvg.innerHTML = "";
-            const flowsContainer = document.querySelector(".automation-flows");
-            const flowsRect = flowsContainer?.getBoundingClientRect();
+            // CORREGIR: Usar el contenedor de flows como referencia para las conexiones SVG
+            const flowsRect = flowsContainer.getBoundingClientRect();
 
             if (!flowsRect) return;
 
@@ -517,13 +520,12 @@ const {} = Astro.props;
                     const fromRect = fromNode.getBoundingClientRect();
                     const toRect = toNode.getBoundingClientRect();
 
-                    // Calcular dimensiones y centro de cada nodo
+                    // CORREGIR: Calcular posiciones relativas al contenedor de flows
                     const fromWidth = fromRect.width;
                     const fromHeight = fromRect.height;
                     const toWidth = toRect.width;
                     const toHeight = toRect.height;
 
-                    // Calcular posiciones relativas de los centros
                     const fromCenterX =
                         ((fromRect.left - flowsRect.left + fromWidth / 2) /
                             flowsRect.width) *
@@ -874,6 +876,9 @@ const {} = Astro.props;
 
         // CORREGIR: Loop principal simplificado
         const runFlowLoop = async () => {
+            // Esperar un momento para asegurar que el layout esté completo
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
             const firstNode = nodes[flow[0]];
             if (firstNode) {
                 const pos = center(firstNode);
@@ -882,7 +887,7 @@ const {} = Astro.props;
                 runner.style.opacity = "1";
                 runner.style.visibility = "visible";
 
-                // NUEVO: Crear conexiones dinámicas iniciales
+                // Crear conexiones dinámicas iniciales
                 createDynamicConnections();
 
                 await pressNode(flow[0]);
@@ -903,11 +908,12 @@ const {} = Astro.props;
         // Inicializar
         runFlowLoop();
 
-        // NUEVO: Actualizar conexiones en resize
+        // CORREGIR: Actualizar coordenadas en resize
         let resizeTimeout: string | number | NodeJS.Timeout | undefined;
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
+                // Recalcular posición del runner
                 const firstNode = nodes[flow[0]];
                 if (firstNode) {
                     const pos = center(firstNode);
@@ -918,10 +924,14 @@ const {} = Astro.props;
             }, 100);
         });
 
-        // NUEVO: Observer para cambios en el layout
+        // Observer para cambios en el layout
         const resizeObserver = new ResizeObserver(() => {
             updateDynamicConnections();
         });
+
+        // Observar cambios en el área visual y contenedor de flows
+        if (visualArea) resizeObserver.observe(visualArea);
+        if (flowsContainer) resizeObserver.observe(flowsContainer);
 
         // Observar cambios en los nodos principales
         ["node-action", "node-email", "node-crm"].forEach((id) => {
@@ -941,49 +951,45 @@ const {} = Astro.props;
         --tertiary: #8b5cf6;
     }
 
-    /* Flujos de automatización */
+    /* Flujos de automatización - expandido */
     .automation-flows {
-        position: absolute;
-        top: 6em;
-        right: 0;
-        width: 60%;
-        height: 80%;
+        position: relative;
+        width: 100%;
+        height: 500px; /* Aumentado de 400px a 500px */
         pointer-events: none;
         z-index: 5;
+        margin: 0 auto;
     }
 
     .flow-container {
         position: absolute;
         display: flex;
         align-items: center;
-        gap: 2.5rem;
+        gap: 3rem; /* Aumentado el gap entre nodos */
     }
 
     .main-flow {
-        top: 45%;
-        right: 25%;
-        transform: translateY(-50%);
-        transform: translateX(10%);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         flex-direction: row;
-        gap: 3.5rem;
+        gap: 2.5rem; /* Aumentado el gap */
+        width: 85%; /* Reducido para dar más margen */
+        justify-content: space-between;
     }
 
     .top-flow {
-        top: 10%;
-        left: 65%;
-        transform: translateX(-10%);
+        top: 10%; /* Ajustado para mejor distribución */
+        right: 8%;
         flex-direction: row;
-        gap: 3rem;
+        gap: 2.5rem; /* Aumentado */
     }
 
     .bottom-flow {
-        top: 75%;
-        left: 20%; /* Modificado para mover a la izquierda */
-        transform: translateY(
-            -50%
-        ); /* Mantener solo el translateY, eliminar translateX */
+        bottom: 10%; /* Ajustado para mejor distribución */
+        left: 8%;
         flex-direction: row;
-        gap: 5rem;
+        gap: 2.5rem; /* Aumentado */
     }
 
     /* SVG dinámico para conexiones */
@@ -1027,11 +1033,11 @@ const {} = Astro.props;
 
     /* Estilos específicos por tipo de conexión */
     .line-path {
-        stroke-dasharray: 10 4; /* Patrón más largo para líneas */
+        stroke-dasharray: 10 4;
     }
 
     .curve-path {
-        stroke-dasharray: 8 5; /* Patrón con más espacio para curvas */
+        stroke-dasharray: 8 5;
     }
 
     @keyframes flowPrimary {
@@ -1073,121 +1079,123 @@ const {} = Astro.props;
         opacity: 1;
     }
 
-    /* Responsive refinado con valores ajustados */
-    @media (min-width: 1440px) {
+    /* Responsive refinado */
+    @media (min-width: 1200px) {
         .automation-flows {
-            width: 55%;
+            height: 600px; /* Aún más altura en pantallas grandes */
         }
 
         .main-flow {
-            transform: translateX(0);
-            left: 8%;
-            gap: 5rem;
+            gap: 4rem; /* Más espacio entre nodos */
+            width: 80%;
         }
 
-        .top-flow {
-            left: 60%;
-        }
-
+        .top-flow,
         .bottom-flow {
-            left: 15%; /* Ajustado para pantallas más grandes */
-            transform: translateY(
-                -50%
-            ); /* Solo mantener transformación vertical */
+            gap: 3.5rem;
         }
     }
 
-    @media (min-width: 1024px) and (max-width: 1439px) {
+    @media (min-width: 1440px) {
         .automation-flows {
-            width: 60%;
+            height: 700px; /* Máxima altura para pantallas muy grandes */
         }
 
         .main-flow {
-            left: 5%;
+            gap: 5rem; /* Máximo espacio entre nodos */
+        }
+    }
+
+    @media (min-width: 1024px) and (max-width: 1199px) {
+        .automation-flows {
+            height: 550px; /* Altura intermedia */
+        }
+
+        .main-flow {
             gap: 3.5rem;
+            width: 82%;
         }
 
-        .top-flow {
-            left: 60%;
-        }
-
+        .top-flow,
         .bottom-flow {
-            left: 20%;
-            transform: translateY(-50%);
+            gap: 3rem;
         }
     }
 
     @media (max-width: 1024px) {
         .automation-flows {
-            width: 65%;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .main-flow {
-            left: 2%;
-            gap: 2.5rem;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            gap: 2rem;
+            width: 95%;
         }
 
         .top-flow {
-            left: 50%;
+            top: 10%;
+            right: 5%;
             gap: 2rem;
         }
 
         .bottom-flow {
-            left: 15%;
-            gap: 3rem;
+            bottom: 10%;
+            left: 5%;
+            gap: 2rem;
         }
     }
 
     @media (max-width: 768px) {
         .automation-flows {
-            width: 100%;
-            height: 85%; /* Aumentar altura para mejor visualización */
-            opacity: 1; /* Aumentar opacidad para mejor visualización */
-            top: 5em; /* Ajustar posición vertical */
+            height: 85%;
+            top: 5%;
         }
 
         .flow-container {
-            gap: 1.2rem; /* Reducir espaciado entre nodos */
+            gap: 1.2rem;
         }
 
         .main-flow {
-            left: 0;
             width: 100%;
-            justify-content: space-around; /* Distribuir nodos uniformemente */
-            gap: 0; /* Eliminar gap ya que usamos justify-content */
-            padding: 0 1rem; /* Añadir padding lateral */
+            justify-content: space-around;
+            gap: 0;
+            padding: 0 1rem;
         }
 
         .top-flow {
-            left: auto;
             right: 2%;
             top: 12%;
             gap: 1rem;
-            transform: translateX(0); /* Eliminar transformación horizontal */
         }
 
         .bottom-flow {
             left: 2%;
-            top: 70%;
+            bottom: 12%;
             gap: 1rem;
-            transform: translateY(-50%);
         }
 
         .floating-node {
-            display: none; /* Ocultar nodos flotantes en móvil */
+            display: none;
         }
 
         /* Redimensionar nodos para móviles */
         .flow-node {
             padding: 0.8rem 0.7rem;
             min-width: 65px;
-            transform: scale(0.85); /* Reducir tamaño general */
+            transform: scale(0.85);
         }
 
         .small-node {
             min-width: 55px;
             padding: 0.7rem 0.6rem;
-            transform: scale(0.8); /* Reducir tamaño de nodos pequeños */
+            transform: scale(0.8);
         }
 
         .node-icon {
@@ -1200,7 +1208,7 @@ const {} = Astro.props;
 
         .node-label {
             font-size: 0.7rem;
-            max-width: 70px; /* Limitar ancho del texto */
+            max-width: 70px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1208,7 +1216,7 @@ const {} = Astro.props;
 
         /* Ajustes para conexiones en móvil */
         .dynamic-connection-path {
-            stroke-width: 1 !important; /* Forzar grosor uniforme */
+            stroke-width: 1 !important;
             opacity: 0.7;
         }
 
@@ -1228,7 +1236,7 @@ const {} = Astro.props;
         }
 
         .data-particle {
-            r: 0.6 !important; /* Reducir tamaño de partículas */
+            r: 0.6 !important;
         }
 
         /* Optimizar performance en móviles */
@@ -1254,15 +1262,15 @@ const {} = Astro.props;
     /* Ajustes específicos para dispositivos muy pequeños */
     @media (max-width: 480px) {
         .automation-flows {
-            transform: scale(0.9); /* Reducir toda la visualización */
-            transform-origin: top center;
+            transform: scale(0.9);
+            transform-origin: center center;
         }
 
         .main-flow {
-            flex-wrap: wrap; /* Permitir que los nodos se envuelvan */
+            flex-wrap: wrap;
             justify-content: center;
             padding-top: 2rem;
-            gap: 1rem; /* Restaurar gap para el wrap */
+            gap: 1rem;
         }
 
         .top-flow {
@@ -1272,7 +1280,7 @@ const {} = Astro.props;
 
         .bottom-flow {
             left: 5%;
-            top: 75%;
+            bottom: 8%;
         }
 
         .flow-node {
@@ -1280,7 +1288,7 @@ const {} = Astro.props;
             transform: scale(0.8);
         }
 
-        /* Ocultar algunas conexiones menos importantes en pantallas muy pequeñas */
+        /* Ocultar algunas conexiones menos importantes */
         .tertiary-path {
             display: none;
         }
@@ -1291,11 +1299,10 @@ const {} = Astro.props;
         }
     }
 
-    /* Ajustes para altura reducida (teléfonos en horizontal) */
+    /* Ajustes para altura reducida */
     @media (max-height: 600px) {
         .automation-flows {
             height: 90vh;
-            top: 4em;
         }
 
         .top-flow {
@@ -1303,7 +1310,7 @@ const {} = Astro.props;
         }
 
         .bottom-flow {
-            top: 80%;
+            bottom: 15%;
         }
 
         .main-flow {

@@ -3,25 +3,34 @@ import Flow from "./Flow.astro";
 ---
 
 <section class="automation-hero">
-    <div class="hero-content">
-        <div class="content-wrapper">
-            <h1>Automatización Inteligente para tu Negocio</h1>
-            <p>
-                Transforma tus procesos with chatbots, RPA y flujos de
-                automatización personalizados. Conecta sistemas, optimiza
-                operaciones y escala sin límites.
-            </p>
-            <div class="cta-buttons">
-                <a href="#cta" class="btn btn-primary">Solicita una demo</a>
-                <a href="#services" class="btn btn-secondary">Ver soluciones</a>
+    <!-- Contenedor principal de dos columnas -->
+    <div class="hero-main-container">
+        <!-- Columna izquierda: Contenido principal -->
+        <div class="hero-content">
+            <div class="content-wrapper">
+                <h1>Automatización Inteligente para tu Negocio</h1>
+                <p>
+                    Transforma tus procesos with chatbots, RPA y flujos de
+                    automatización personalizados. Conecta sistemas, optimiza
+                    operaciones y escala sin límites.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#cta" class="btn btn-primary">Solicita una demo</a>
+                    <a href="#services" class="btn btn-secondary"
+                        >Ver soluciones</a
+                    >
+                </div>
             </div>
+        </div>
+
+        <!-- Columna derecha: Área visual/animaciones -->
+        <div class="hero-visual-area">
+            <Flow />
         </div>
     </div>
 
     <!-- Contenedor dedicado para animaciones dinámicas -->
     <div class="dynamic-animations-container" id="dynamic-container"></div>
-
-    <Flow />
 
     <!-- Partículas de fondo -->
     <div class="background-particles">
@@ -47,28 +56,48 @@ import Flow from "./Flow.astro";
         display: flex;
         align-items: center;
         color: white;
-        contain: layout style; /* NUEVO: Contener cambios de layout */
+        contain: layout style;
+        padding: 2rem;
     }
 
-    .hero-content {
+    /* Contenedor principal de dos columnas con nuevas proporciones */
+    .hero-main-container {
         position: relative;
         z-index: 10;
         width: 100%;
-        max-width: 1200px;
+        max-width: 1400px; /* Aumentado para dar más espacio */
         margin: 0 auto;
-        padding: 2rem;
-        contain: layout style; /* NUEVO: Aislar completamente el contenido */
+        display: flex;
+        align-items: center;
+        gap: 3rem; /* Aumentado el gap */
+        min-height: 60vh;
+    }
+
+    .hero-content {
+        flex: 0 0 40%; /* Reducido de flex: 1 a 40% fijo */
+        max-width: 500px; /* Reducido el max-width */
+        contain: layout style;
         transform: none !important;
         will-change: auto;
     }
 
     .content-wrapper {
-        max-width: 600px;
-        position: static; /* CAMBIO: Usar static en lugar de relative */
-        contain: layout; /* NUEVO: Contener cambios de layout */
+        position: static;
+        contain: layout;
     }
 
-    /* NUEVO: Contenedor dedicado para animaciones dinámicas */
+    /* Área visual expandida para más protagonismo */
+    .hero-visual-area {
+        flex: 1; /* Toma todo el espacio restante (60%) */
+        position: relative;
+        min-height: 600px; /* Aumentado significativamente */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Añadir más espacio visual */
+        padding: 2rem;
+    }
+
     .dynamic-animations-container {
         position: absolute;
         top: 0;
@@ -78,7 +107,7 @@ import Flow from "./Flow.astro";
         pointer-events: none;
         z-index: 8;
         overflow: hidden;
-        contain: layout style paint; /* NUEVO: Contener todos los cambios */
+        contain: layout style paint;
     }
 
     .hero-content h1 {
@@ -149,7 +178,7 @@ import Flow from "./Flow.astro";
         overflow: hidden;
         z-index: 1;
         pointer-events: none;
-        contain: layout style paint; /* NUEVO: Contener cambios */
+        contain: layout style paint;
     }
 
     .particle {
@@ -211,21 +240,74 @@ import Flow from "./Flow.astro";
         }
     }
 
-    @media (max-width: 768px) {
-        .automation-hero {
-            min-height: 80vh;
+    /* Responsividad móvil - contenido se apila verticalmente */
+    @media (min-width: 1200px) {
+        .hero-main-container {
+            max-width: 1600px; /* Aún más espacio en pantallas grandes */
+            gap: 4rem;
         }
 
         .hero-content {
-            text-align: center;
+            flex: 0 0 35%; /* Aún menos espacio para el texto en pantallas grandes */
         }
 
-        .content-wrapper {
+        .hero-visual-area {
+            min-height: 700px; /* Más altura en pantallas grandes */
+            padding: 3rem;
+        }
+    }
+
+    @media (min-width: 1440px) {
+        .hero-visual-area {
+            min-height: 800px; /* Máxima altura para pantallas muy grandes */
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .hero-main-container {
+            flex-direction: column;
+            text-align: center;
+            gap: 3rem;
+        }
+
+        .hero-content {
+            flex: none; /* Resetear flex en móvil */
             max-width: 100%;
+        }
+
+        .hero-visual-area {
+            order: 2;
+            width: 100%;
+            min-height: 400px; /* Mantener altura considerable en tablet */
+            padding: 1rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .automation-hero {
+            min-height: 80vh;
+            padding: 1rem;
+        }
+
+        .hero-main-container {
+            gap: 2rem;
+        }
+
+        .hero-visual-area {
+            min-height: 350px; /* Altura apropiada para móvil */
+            padding: 0.5rem;
         }
 
         .cta-buttons {
             justify-content: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
         }
     }
 </style>
