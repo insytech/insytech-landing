@@ -199,6 +199,47 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
         font-size: 0.6rem;
     }
 
+    /* Efecto de nodo presionado */
+    .flow-node.pressed {
+        transform: scale(0.92);
+        border-color: var(--accent);
+        box-shadow:
+            0 0 0 6px rgba(0, 181, 226, 0.4),
+            0 0 30px rgba(0, 181, 226, 0.7);
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .flow-node.pressed::after {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        border-radius: 24px;
+        border: 3px solid var(--success);
+        opacity: 0.9;
+        animation: pressRing 0.6s ease-out forwards;
+    }
+
+    @keyframes pressRing {
+        0% {
+            opacity: 0.9;
+            transform: scale(0.7);
+            border-width: 4px;
+        }
+        50% {
+            opacity: 0.5;
+            transform: scale(1.1);
+            border-width: 2px;
+        }
+        100% {
+            opacity: 0;
+            transform: scale(1.5);
+            border-width: 1px;
+        }
+    }
+
     @keyframes float {
         0%,
         100% {
