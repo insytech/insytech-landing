@@ -324,95 +324,381 @@ const {} = Astro.props;
             node.classList.remove("pressed");
         };
 
-        // NUEVO: Sistema de conexiones dinámicas
+        // Sistema de conexiones refinado para mejor visualización
         const connections = [
-            { from: "node-trigger", to: "node-ai", type: "line" },
-            { from: "node-ai", to: "node-action", type: "line" },
-            { from: "node-action", to: "node-pipeline", type: "line" },
-            { from: "node-action", to: "node-notify", type: "line" },
-            { from: "node-pipeline", to: "node-email", type: "curve" },
-            { from: "node-pipeline", to: "node-chat", type: "curve" },
-            { from: "node-crm", to: "node-api", type: "line" },
-            { from: "node-action", to: "node-whatsapp", type: "line" },
-            { from: "node-action", to: "node-targeting", type: "curve" },
-            { from: "node-whatsapp", to: "node-crm", type: "curve" },
-            { from: "node-targeting", to: "node-forms", type: "curve" },
+            {
+                from: "node-trigger",
+                to: "node-ai",
+                type: "line",
+                importance: "primary",
+            },
+            {
+                from: "node-ai",
+                to: "node-action",
+                type: "line",
+                importance: "primary",
+            },
+            {
+                from: "node-action",
+                to: "node-notify",
+                type: "line",
+                importance: "primary",
+            },
+            {
+                from: "node-action",
+                to: "node-pipeline",
+                type: "curve",
+                importance: "primary",
+            },
+            {
+                from: "node-pipeline",
+                to: "node-email",
+                type: "curve",
+                importance: "secondary",
+            },
+            {
+                from: "node-pipeline",
+                to: "node-chat",
+                type: "curve",
+                importance: "secondary",
+            },
+            {
+                from: "node-action",
+                to: "node-whatsapp",
+                type: "curve",
+                importance: "secondary",
+            },
+            {
+                from: "node-whatsapp",
+                to: "node-crm",
+                type: "curve",
+                importance: "tertiary",
+            },
+            {
+                from: "node-crm",
+                to: "node-api",
+                type: "line",
+                importance: "tertiary",
+            },
+            {
+                from: "node-action",
+                to: "node-targeting",
+                type: "curve",
+                importance: "secondary",
+            },
+            {
+                from: "node-targeting",
+                to: "node-forms",
+                type: "curve",
+                importance: "tertiary",
+            },
         ];
 
-        // NUEVO: Función para crear conexiones dinámicas
+        // Función mejorada para crear conexiones con estética profesional y corrección de líneas rectas
         const createDynamicConnections = () => {
-            // Limpiar conexiones existentes
             dynamicSvg.innerHTML = "";
+            const flowsContainer = document.querySelector(".automation-flows");
+            const flowsRect = flowsContainer?.getBoundingClientRect();
 
-            const containerRect = getContainerRect();
+            if (!flowsRect) return;
 
-            connections.forEach(({ from, to, type }) => {
-                const fromNode = document.getElementById(from);
-                const toNode = document.getElementById(to);
-
-                if (!fromNode || !toNode) return;
-
-                const fromRect = fromNode.getBoundingClientRect();
-                const toRect = toNode.getBoundingClientRect();
-
-                // Calcular posiciones relativas al contenedor automation-flows
-                const flowsContainer =
-                    document.querySelector(".automation-flows");
-                const flowsRect = flowsContainer?.getBoundingClientRect();
-
-                if (!flowsRect) return;
-
-                const fromX =
-                    ((fromRect.left - flowsRect.left + fromRect.width / 2) /
-                        flowsRect.width) *
-                    100;
-                const fromY =
-                    ((fromRect.top - flowsRect.top + fromRect.height / 2) /
-                        flowsRect.height) *
-                    100;
-                const toX =
-                    ((toRect.left - flowsRect.left + toRect.width / 2) /
-                        flowsRect.width) *
-                    100;
-                const toY =
-                    ((toRect.top - flowsRect.top + toRect.height / 2) /
-                        flowsRect.height) *
-                    100;
-
-                // Crear el path SVG
-                const path = document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "path",
+            // Ordenar conexiones por importancia para que las primarias estén encima
+            const sortedConnections = [...connections].sort((a, b) => {
+                const importanceOrder = {
+                    primary: 3,
+                    secondary: 2,
+                    tertiary: 1,
+                };
+                return (
+                    importanceOrder[b.importance] -
+                    importanceOrder[a.importance]
                 );
-
-                if (type === "curve") {
-                    // Mejorar cálculo de curva
-                    const controlX = (fromX + toX) / 2;
-                    const controlY =
-                        fromY < toY
-                            ? Math.min(fromY, toY) - 20
-                            : Math.max(fromY, toY) + 20;
-
-                    const pathData = `M ${fromX} ${fromY} Q ${controlX} ${controlY} ${toX} ${toY}`;
-                    path.setAttribute("d", pathData);
-                } else {
-                    // Línea recta
-                    const pathData = `M ${fromX} ${fromY} L ${toX} ${toY}`;
-                    path.setAttribute("d", pathData);
-                }
-
-                // Aplicar estilos mejorados
-                path.setAttribute("class", "dynamic-connection-path");
-                path.setAttribute("stroke", "var(--accent)");
-                path.setAttribute("stroke-width", ".3");
-                path.setAttribute("z-index", "-40");
-                path.setAttribute("fill", "none");
-                path.setAttribute("opacity", "0.2");
-                path.setAttribute("stroke-linecap", "round");
-                path.setAttribute("stroke-dasharray", "1 1");
-
-                dynamicSvg.appendChild(path);
             });
+
+            sortedConnections.forEach(
+                ({ from, to, type, importance }, index) => {
+                    const fromNode = document.getElementById(from);
+                    const toNode = document.getElementById(to);
+
+                    if (!fromNode || !toNode) return;
+
+                    const fromRect = fromNode.getBoundingClientRect();
+                    const toRect = toNode.getBoundingClientRect();
+
+                    // Calcular dimensiones y centro de cada nodo
+                    const fromWidth = fromRect.width;
+                    const fromHeight = fromRect.height;
+                    const toWidth = toRect.width;
+                    const toHeight = toRect.height;
+
+                    // Calcular posiciones relativas de los centros
+                    const fromCenterX =
+                        ((fromRect.left - flowsRect.left + fromWidth / 2) /
+                            flowsRect.width) *
+                        100;
+                    const fromCenterY =
+                        ((fromRect.top - flowsRect.top + fromHeight / 2) /
+                            flowsRect.height) *
+                        100;
+                    const toCenterX =
+                        ((toRect.left - flowsRect.left + toWidth / 2) /
+                            flowsRect.width) *
+                        100;
+                    const toCenterY =
+                        ((toRect.top - flowsRect.top + toHeight / 2) /
+                            flowsRect.height) *
+                        100;
+
+                    // Calcular puntos de bordes para conexión en lugar de centro a centro
+                    // Convertir ancho y alto a porcentaje del contenedor
+                    const fromWidthPercent =
+                        (fromWidth / flowsRect.width) * 100;
+                    const fromHeightPercent =
+                        (fromHeight / flowsRect.height) * 100;
+                    const toWidthPercent = (toWidth / flowsRect.width) * 100;
+                    const toHeightPercent = (toHeight / flowsRect.height) * 100;
+
+                    // Calcular ángulo entre nodos para determinar punto de conexión en el borde
+                    const dx = toCenterX - fromCenterX;
+                    const dy = toCenterY - fromCenterY;
+                    const angle = Math.atan2(dy, dx);
+
+                    // Calcular puntos de inicio y fin en los bordes de los nodos
+                    let fromX, fromY, toX, toY;
+
+                    // Punto inicial (desde el borde del nodo de origen)
+                    if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
+                        // Conexión horizontal principalmente
+                        fromX =
+                            fromCenterX +
+                            (Math.sign(dx) * fromWidthPercent) / 2;
+                        fromY =
+                            fromCenterY +
+                            (Math.tan(angle) *
+                                Math.sign(dx) *
+                                fromWidthPercent) /
+                                2;
+                    } else {
+                        // Conexión vertical principalmente
+                        fromY =
+                            fromCenterY +
+                            (Math.sign(dy) * fromHeightPercent) / 2;
+                        fromX =
+                            fromCenterX +
+                            (Math.sign(dy) * fromHeightPercent) /
+                                2 /
+                                Math.tan(angle);
+                    }
+
+                    // Punto final (hasta el borde del nodo destino)
+                    if (Math.abs(Math.cos(angle)) > Math.abs(Math.sin(angle))) {
+                        // Conexión horizontal principalmente
+                        toX = toCenterX - (Math.sign(dx) * toWidthPercent) / 2;
+                        toY =
+                            toCenterY -
+                            (Math.tan(angle) * Math.sign(dx) * toWidthPercent) /
+                                2;
+                    } else {
+                        // Conexión vertical principalmente
+                        toY = toCenterY - (Math.sign(dy) * toHeightPercent) / 2;
+                        toX =
+                            toCenterX -
+                            (Math.sign(dy) * toHeightPercent) /
+                                2 /
+                                Math.tan(angle);
+                    }
+
+                    // Prevenir NaN o valores inválidos
+                    if (
+                        isNaN(fromX) ||
+                        isNaN(fromY) ||
+                        isNaN(toX) ||
+                        isNaN(toY)
+                    ) {
+                        fromX = fromCenterX;
+                        fromY = fromCenterY;
+                        toX = toCenterX;
+                        toY = toCenterY;
+                    }
+
+                    // Crear el grupo para contener la línea y el gradiente
+                    const pathGroup = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "g",
+                    );
+                    pathGroup.setAttribute(
+                        "class",
+                        `path-group ${importance}-connection`,
+                    );
+
+                    // Crear la línea de conexión
+                    const path = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "path",
+                    );
+                    let pathData = "";
+
+                    // Generar el path según el tipo
+                    if (type === "curve") {
+                        // Para curvas, usar puntos de control para Bezier
+                        const distance = Math.sqrt(
+                            Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2),
+                        );
+                        const curveFactor = Math.min(
+                            Math.max(distance * 0.2, 10),
+                            40,
+                        );
+
+                        // Ajustar dirección de la curvatura según posición relativa
+                        let controlX1, controlY1, controlX2, controlY2;
+
+                        if (fromCenterY > toCenterY) {
+                            // Si el origen está abajo, curva hacia arriba
+                            controlX1 = fromX + (toX - fromX) * 0.25;
+                            controlY1 = fromY - curveFactor;
+                            controlX2 = fromX + (toX - fromX) * 0.75;
+                            controlY2 = toY - curveFactor;
+                        } else {
+                            // Si el origen está arriba, curva hacia abajo
+                            controlX1 = fromX + (toX - fromX) * 0.25;
+                            controlY1 = fromY + curveFactor;
+                            controlX2 = fromX + (toX - fromX) * 0.75;
+                            controlY2 = toY + curveFactor;
+                        }
+
+                        // Usar curva Bezier cúbica para más control sobre la forma
+                        pathData = `M ${fromX} ${fromY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${toX} ${toY}`;
+                    } else {
+                        // Línea recta simple
+                        pathData = `M ${fromX} ${fromY} L ${toX} ${toY}`;
+                    }
+
+                    path.setAttribute("id", `connection-path-${index}`);
+                    path.setAttribute("d", pathData);
+                    path.setAttribute(
+                        "class",
+                        `dynamic-connection-path ${importance}-path`,
+                    );
+
+                    // Ajustar grosor según importancia
+                    const baseWidth =
+                        importance === "primary"
+                            ? 1.2
+                            : importance === "secondary"
+                              ? 0.8
+                              : 0.5;
+                    path.setAttribute("stroke-width", baseWidth.toString());
+                    path.setAttribute(
+                        "stroke",
+                        "url(#lineGradient-" + index + ")",
+                    );
+                    path.setAttribute("fill", "none");
+
+                    // Crear definiciones de gradiente para cada línea
+                    const defs = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "defs",
+                    );
+                    const gradient = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "linearGradient",
+                    );
+                    gradient.setAttribute("id", "lineGradient-" + index);
+
+                    // Ajustar el gradiente para seguir la dirección de la línea
+                    if (fromX !== toX || fromY !== toY) {
+                        const length = Math.sqrt(
+                            Math.pow(toX - fromX, 2) + Math.pow(toY - fromY, 2),
+                        );
+                        const normX = (toX - fromX) / length;
+                        const normY = (toY - fromY) / length;
+
+                        gradient.setAttribute("x1", "0%");
+                        gradient.setAttribute("y1", "0%");
+                        gradient.setAttribute("x2", "100%");
+                        gradient.setAttribute("y2", "0%");
+                        gradient.setAttribute(
+                            "gradientTransform",
+                            `rotate(${(Math.atan2(normY, normX) * 180) / Math.PI}, 0.5, 0.5)`,
+                        );
+                    }
+
+                    // Colores refinados según importancia
+                    const colors = {
+                        primary: ["#06ffa5", "#00b5e2"],
+                        secondary: ["#00b5e2", "#0066ff"],
+                        tertiary: ["#8b5cf6", "#5a5eeb"],
+                    };
+
+                    const [color1, color2] = colors[importance];
+
+                    const stop1 = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "stop",
+                    );
+                    stop1.setAttribute("offset", "0%");
+                    stop1.setAttribute("stop-color", color1);
+
+                    const stop2 = document.createElementNS(
+                        "http://www.w3.org/2000/svg",
+                        "stop",
+                    );
+                    stop2.setAttribute("offset", "100%");
+                    stop2.setAttribute("stop-color", color2);
+
+                    gradient.appendChild(stop1);
+                    gradient.appendChild(stop2);
+                    defs.appendChild(gradient);
+                    pathGroup.appendChild(defs);
+
+                    // Añadir el path después del gradiente
+                    pathGroup.appendChild(path);
+
+                    // Solo añadir partículas a conexiones primarias y secundarias
+                    if (importance !== "tertiary") {
+                        // Crear partícula que se mueve a lo largo de la línea
+                        const particle = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "circle",
+                        );
+                        particle.setAttribute(
+                            "r",
+                            importance === "primary" ? "0.9" : "0.6",
+                        );
+                        particle.setAttribute(
+                            "fill",
+                            importance === "primary" ? "#06ffa5" : "#00b5e2",
+                        );
+                        particle.setAttribute("class", "data-particle");
+
+                        // Animación de movimiento
+                        const animateMotion = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "animateMotion",
+                        );
+                        animateMotion.setAttribute(
+                            "dur",
+                            `${4 + Math.random() * 3}s`,
+                        );
+                        animateMotion.setAttribute("repeatCount", "indefinite");
+                        animateMotion.setAttribute("begin", `${index * 0.3}s`);
+                        animateMotion.setAttribute("calcMode", "spline");
+                        animateMotion.setAttribute("keySplines", ".42,0,.58,1");
+
+                        const mpath = document.createElementNS(
+                            "http://www.w3.org/2000/svg",
+                            "mpath",
+                        );
+                        mpath.setAttribute("href", `#connection-path-${index}`);
+
+                        animateMotion.appendChild(mpath);
+                        particle.appendChild(animateMotion);
+                        pathGroup.appendChild(particle);
+                    }
+
+                    dynamicSvg.appendChild(pathGroup);
+                },
+            );
         };
 
         // NUEVO: Actualizar conexiones dinámicas
@@ -488,14 +774,15 @@ const {} = Astro.props;
         --primary: #0066ff;
         --accent: #00b5e2;
         --success: #06ffa5;
+        --tertiary: #8b5cf6;
     }
 
     /* Flujos de automatización */
     .automation-flows {
         position: absolute;
-        top: 4em;
+        top: 6em;
         right: 0;
-        width: 50%;
+        width: 60%;
         height: 80%;
         pointer-events: none;
         z-index: 5;
@@ -505,34 +792,36 @@ const {} = Astro.props;
         position: absolute;
         display: flex;
         align-items: center;
-        gap: 2rem;
+        gap: 2.5rem;
     }
 
     .main-flow {
-        top: 50%;
-        left: 5%;
+        top: 45%;
+        right: 25%;
         transform: translateY(-50%);
+        transform: translateX(10%);
         flex-direction: row;
-        gap: 3rem; /* Aumentar gap para mejor separación */
+        gap: 3.5rem;
     }
 
     .top-flow {
-        top: 25%;
-        left: 60%;
+        top: 20%;
+        left: 65%;
         transform: translateY(-50%);
         flex-direction: row;
-        gap: 2rem;
+        gap: 3rem;
     }
 
     .bottom-flow {
         top: 75%;
         left: 50%;
         transform: translateY(-50%);
+        transform: translateX(-20%);
         flex-direction: row;
-        gap: 2rem;
+        gap: 3rem;
     }
 
-    /* NUEVO: SVG dinámico para conexiones */
+    /* SVG dinámico para conexiones */
     .dynamic-connections-overlay {
         position: absolute;
         top: 0;
@@ -544,327 +833,156 @@ const {} = Astro.props;
         overflow: visible;
     }
 
-    /* MEJORADO: Estilos para conexiones dinámicas con mejor sensación de flujo */
+    /* Estilos refinados para las conexiones */
     .dynamic-connection-path {
-        stroke: var(--accent);
-        stroke-width: 1.8;
-        opacity: 0.7;
         stroke-linecap: round;
-        stroke-dasharray: 15 8;
         fill: none;
-        animation:
-            dataFlow 3s linear infinite,
-            pulseFlow 2s ease-in-out infinite alternate;
-
-        filter: drop-shadow(0 0 6px rgba(0, 181, 226, 0.4));
-        transition: all 0.4s ease;
+        filter: drop-shadow(0 0 1px rgba(0, 181, 226, 0.1));
+        transition: all 0.8s ease;
+        opacity: 0.8;
     }
 
-    @keyframes dataFlow {
-        0% {
-            stroke-dashoffset: 0;
-        }
-        100% {
-            stroke-dashoffset: -46;
-        }
-    }
-
-    @keyframes pulseFlow {
-        0% {
-            stroke-width: 1.8;
-            opacity: 0.7;
-            filter: drop-shadow(0 0 6px rgba(0, 181, 226, 0.4));
-        }
-        100% {
-            stroke-width: 2.4;
-            opacity: 1;
-            filter: drop-shadow(0 0 12px rgba(0, 181, 226, 0.8));
-        }
-    }
-
-    /* NUEVO: Efecto de partículas en las líneas */
-    .dynamic-connection-path::before {
-        content: "";
-        position: absolute;
-        width: 4px;
-        height: 4px;
-        background: var(--success);
-        border-radius: 50%;
-        animation:
-            particleFlow 4s linear infinite,
-            particleGlow 1.5s ease-in-out infinite alternate;
-        box-shadow: 0 0 8px var(--success);
-    }
-
-    @keyframes particleFlow {
-        0% {
-            offset-distance: 0%;
-            opacity: 0;
-        }
-        10% {
-            opacity: 1;
-        }
-        90% {
-            opacity: 1;
-        }
-        100% {
-            offset-distance: 100%;
-            opacity: 0;
-        }
-    }
-
-    @keyframes particleGlow {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 8px var(--success);
-        }
-        100% {
-            transform: scale(1.5);
-            box-shadow: 0 0 16px var(--success);
-        }
-    }
-
-    .connection-line {
-        width: 100px;
-        height: 4px;
-        overflow: visible;
-    }
-
-    .connection-curve {
-        width: 120px;
-        height: 30px;
-        overflow: visible;
-    }
-
-    .animated-line,
-    .curved-line {
-        stroke: var(--primary);
-        stroke-width: 3;
-        opacity: 0.6;
-        stroke-linecap: round;
+    /* Estilos según importancia */
+    .primary-path {
         stroke-dasharray: 8 4;
-        animation:
-            lineFlow 3s linear infinite,
-            lineGlow 2s ease-in-out infinite alternate;
-        filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.4));
-        transition: all 0.3s ease;
+        animation: flowPrimary 30s linear infinite;
     }
 
-    /* Animación principal del flujo de datos */
-    @keyframes lineFlow {
-        0% {
-            stroke-dashoffset: 0;
+    .secondary-path {
+        stroke-dasharray: 6 4;
+        opacity: 0.6;
+        animation: flowSecondary 40s linear infinite;
+    }
+
+    .tertiary-path {
+        stroke-dasharray: 2 4;
+        opacity: 0.4;
+        animation: flowTertiary 60s linear infinite;
+    }
+
+    @keyframes flowPrimary {
+        to {
+            stroke-dashoffset: -48;
         }
-        100% {
+    }
+
+    @keyframes flowSecondary {
+        to {
+            stroke-dashoffset: -40;
+        }
+    }
+
+    @keyframes flowTertiary {
+        to {
             stroke-dashoffset: -24;
         }
     }
 
-    /* Animación de resplandor */
-    @keyframes lineGlow {
-        0% {
-            stroke-width: 3;
-            opacity: 0.6;
-            filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.4));
-        }
-        100% {
-            stroke-width: 4;
-            opacity: 0.9;
-            filter: drop-shadow(0 0 16px rgba(0, 102, 255, 0.8));
-        }
+    /* Partículas de datos mejoradas */
+    .data-particle {
+        filter: drop-shadow(0 0 2px currentColor);
+        opacity: 0.7;
     }
 
-    /* Efecto hover en las líneas */
-    .connection-line:hover .animated-line,
-    .connection-curve:hover .curved-line {
-        stroke: var(--accent);
-        stroke-width: 5;
-        opacity: 1;
-        animation-duration: 1.5s, 1s;
-        filter: drop-shadow(0 0 20px rgba(0, 181, 226, 1));
-    }
-
-    /* Variación para líneas curvas */
-    .curved-line {
-        stroke-width: 2.5;
-        animation:
-            curveFlow 3.5s linear infinite,
-            curveGlow 2.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes curveFlow {
-        0% {
-            stroke-dashoffset: 0;
-        }
-        100% {
-            stroke-dashoffset: -20;
-        }
-    }
-
-    @keyframes curveGlow {
-        0% {
-            stroke-width: 2.5;
-            opacity: 0.5;
-        }
-        100% {
-            stroke-width: 3.5;
-            opacity: 0.8;
-        }
-    }
-
-    /* Efecto de pulso en intersecciones */
-    .connection-line::before,
-    .connection-curve::before {
-        content: "";
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        background: var(--success);
-        border-radius: 50%;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        animation: pulse 2s ease-in-out infinite;
-        box-shadow: 0 0 10px var(--success);
-    }
-
-    @keyframes pulse {
-        0%,
-        100% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 1;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1.5);
-            opacity: 0.7;
-        }
-    }
-
-    /* Línea de movimiento mejorada */
+    /* Línea de movimiento más elegante */
     .movement-trail {
         position: absolute;
-        height: 4px;
+        height: 2px;
         background: linear-gradient(
             90deg,
             transparent 0%,
-            var(--accent) 20%,
-            var(--primary) 50%,
-            var(--accent) 80%,
+            rgba(6, 255, 165, 0.2) 20%,
+            rgba(6, 255, 165, 0.6) 50%,
+            rgba(6, 255, 165, 0.2) 80%,
             transparent 100%
         );
-        border-radius: 3px;
+        border-radius: 4px;
         opacity: 0;
         z-index: 6;
         pointer-events: none;
-        box-shadow:
-            0 0 12px rgba(0, 181, 226, 0.8),
-            0 0 20px rgba(0, 102, 255, 0.4);
-        transition: opacity 0.3s ease;
+        transition: opacity 0.4s ease;
     }
 
     .movement-trail.active {
-        opacity: 1;
-        animation:
-            trailPulse 1.2s ease-in-out,
-            trailMove 0.8s ease-out;
+        opacity: 0.7;
     }
 
-    @keyframes trailPulse {
-        0%,
-        100% {
-            transform: scaleY(1);
-            box-shadow:
-                0 0 12px rgba(0, 181, 226, 0.8),
-                0 0 20px rgba(0, 102, 255, 0.4);
-        }
-        50% {
-            transform: scaleY(2);
-            box-shadow:
-                0 0 20px rgba(0, 181, 226, 1),
-                0 0 30px rgba(0, 102, 255, 0.6);
-        }
-    }
-
-    @keyframes trailMove {
-        0% {
-            background: linear-gradient(
-                90deg,
-                var(--accent) 0%,
-                transparent 20%,
-                transparent 80%,
-                transparent 100%
-            );
-        }
-        50% {
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                transparent 20%,
-                var(--primary) 50%,
-                transparent 80%,
-                transparent 100%
-            );
-        }
-        100% {
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                transparent 20%,
-                transparent 80%,
-                var(--accent) 100%
-            );
-        }
-    }
-
-    /* Responsive mejorado con mejor flujo */
-    @media (min-width: 1024px) {
+    /* Responsive refinado */
+    @media (min-width: 1440px) {
         .automation-flows {
             width: 55%;
         }
 
         .main-flow {
-            left: 2%;
-            gap: 4rem;
+            left: 8%;
+            gap: 5rem;
         }
 
         .top-flow {
-            left: 55%;
-            top: 20%;
+            left: 60%;
         }
 
         .bottom-flow {
             left: 45%;
-            top: 80%;
         }
 
-        /* Conexiones más visibles en desktop */
-        .dynamic-connection-path {
-            stroke-width: 2.2;
-            stroke-dasharray: 18 10;
+        .dynamic-connection-path.primary-path {
+            stroke-width: 1.4 !important;
+        }
+
+        .dynamic-connection-path.secondary-path {
+            stroke-width: 1 !important;
+        }
+
+        .dynamic-connection-path.tertiary-path {
+            stroke-width: 0.7 !important;
         }
     }
 
-    @media (max-width: 1024px) {
+    @media (min-width: 1024px) and (max-width: 1439px) {
         .automation-flows {
             width: 60%;
         }
 
         .main-flow {
             left: 5%;
+            gap: 3.5rem;
+        }
+
+        .top-flow {
+            left: 60%;
+        }
+
+        .bottom-flow {
+            left: 45%;
+        }
+    }
+
+    @media (max-width: 1024px) {
+        .automation-flows {
+            width: 65%;
+        }
+
+        .main-flow {
+            left: 2%;
+            gap: 2.5rem;
+        }
+
+        .top-flow {
+            left: 50%;
             gap: 2rem;
         }
 
-        .dynamic-connection-path {
-            stroke-width: 1.5;
-            stroke-dasharray: 12 6;
-            animation-duration: 4s, 2.5s;
+        .bottom-flow {
+            left: 40%;
+            gap: 2rem;
         }
     }
 
     @media (max-width: 768px) {
         .automation-flows {
             width: 100%;
-            opacity: 0.3;
+            opacity: 0.8;
         }
 
         .floating-node {
@@ -872,39 +990,31 @@ const {} = Astro.props;
         }
 
         .main-flow {
-            left: 2%;
-            gap: 1rem;
+            left: 3%;
+            gap: 1.8rem;
         }
 
         .top-flow {
-            left: 35%;
-            top: 15%;
+            left: 45%;
+            top: 18%;
+            gap: 1.5rem;
         }
 
         .bottom-flow {
-            left: 25%;
-            top: 85%;
-        }
-
-        /* Conexiones más sutiles en móvil */
-        .dynamic-connection-path {
-            stroke-width: 1.2;
-            stroke-dasharray: 10 5;
-            animation-duration: 5s, 3s;
-            opacity: 0.5;
+            left: 35%;
+            top: 78%;
+            gap: 1.5rem;
         }
     }
 
     /* Mejoras para accesibilidad */
     @media (prefers-reduced-motion: reduce) {
-        .animated-line,
-        .curved-line {
+        .dynamic-connection-path {
             animation: none;
         }
 
-        .connection-line::before,
-        .connection-curve::before {
-            animation: none;
+        .data-particle animateMotion {
+            animation-play-state: paused;
         }
 
         .movement-trail {
