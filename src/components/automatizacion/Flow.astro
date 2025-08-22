@@ -19,15 +19,6 @@ const {} = Astro.props;
             animateDelay="0.3s"
         />
 
-        <svg
-            class="connection-line"
-            data-animate="fade"
-            data-animate-delay="0.6s"
-        >
-            <line x1="0" y1="50%" x2="100%" y2="50%" class="animated-line"
-            ></line>
-        </svg>
-
         <FlowNode
             id="node-ai"
             icon="🤖"
@@ -37,15 +28,6 @@ const {} = Astro.props;
             animateDelay="0.9s"
         />
 
-        <svg
-            class="connection-line"
-            data-animate="fade"
-            data-animate-delay="1.2s"
-        >
-            <line x1="0" y1="50%" x2="100%" y2="50%" class="animated-line"
-            ></line>
-        </svg>
-
         <FlowNode
             id="node-action"
             icon="⚙️"
@@ -53,6 +35,15 @@ const {} = Astro.props;
             className="action-node"
             animateType="scale"
             animateDelay="1.5s"
+        />
+
+        <FlowNode
+            id="node-notify"
+            icon="🔔"
+            label="Notify"
+            className="notify-node"
+            animateType="scale"
+            animateDelay="2.1s"
         />
     </div>
 
@@ -66,10 +57,6 @@ const {} = Astro.props;
             animateType="fade-up"
             animateDelay="0.5s"
         />
-
-        <svg class="connection-curve">
-            <path d="M 10 20 Q 60 5 110 20" class="curved-line"></path>
-        </svg>
 
         <FlowNode
             id="node-chat"
@@ -92,14 +79,10 @@ const {} = Astro.props;
             animateDelay="0.7s"
         />
 
-        <svg class="connection-curve">
-            <path d="M 10 10 Q 60 25 110 10" class="curved-line"></path>
-        </svg>
-
         <FlowNode
-            id="node-notify"
+            id="node-api"
             icon="🔔"
-            label="Notify"
+            label="API"
             size="small"
             animateType="fade-up"
             animateDelay="1s"
@@ -109,9 +92,9 @@ const {} = Astro.props;
     <!-- Nodos flotantes -->
     <div class="floating-nodes">
         <FlowNode
-            id="node-api"
+            id="node-pipeline"
             icon="🌐"
-            label="API"
+            label="Pipeline"
             className="floating-node node-1"
             animateType="scale"
             animateDelay="1.8s"
@@ -144,6 +127,16 @@ const {} = Astro.props;
             animateDelay="2.4s"
         />
     </div>
+
+    <!-- SVG dinámico para conexiones automáticas -->
+    <svg
+        id="dynamic-connections-svg"
+        class="dynamic-connections-overlay"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+    >
+        <!-- Las conexiones se generarán dinámicamente aquí -->
+    </svg>
 </div>
 
 <RunnerBot />
@@ -154,20 +147,27 @@ const {} = Astro.props;
         const heroContainer = document.querySelector(".automation-hero");
         const dynamicContainer = document.getElementById("dynamic-container");
         const runner = document.getElementById("runner");
+        const dynamicSvg = document.getElementById("dynamic-connections-svg");
 
-        if (!heroContainer || !dynamicContainer || !runner) return;
+        if (!heroContainer || !dynamicContainer || !runner || !dynamicSvg)
+            return;
 
         const flow = [
             "node-trigger",
             "node-ai",
             "node-action",
+            "node-pipeline",
             "node-email",
+            "node-pipeline",
             "node-chat",
+            "node-action",
+            "node-whatsapp",
             "node-crm",
             "node-api",
-            "node-whatsapp",
+            "node-action",
             "node-targeting",
             "node-forms",
+            "node-action",
             "node-notify",
             "node-trigger",
         ];
@@ -324,6 +324,104 @@ const {} = Astro.props;
             node.classList.remove("pressed");
         };
 
+        // NUEVO: Sistema de conexiones dinámicas
+        const connections = [
+            { from: "node-trigger", to: "node-ai", type: "line" },
+            { from: "node-ai", to: "node-action", type: "line" },
+            { from: "node-action", to: "node-pipeline", type: "line" },
+            { from: "node-action", to: "node-notify", type: "line" },
+            { from: "node-pipeline", to: "node-email", type: "curve" },
+            { from: "node-pipeline", to: "node-chat", type: "curve" },
+            { from: "node-crm", to: "node-api", type: "line" },
+            { from: "node-action", to: "node-whatsapp", type: "line" },
+            { from: "node-action", to: "node-targeting", type: "curve" },
+            { from: "node-whatsapp", to: "node-crm", type: "curve" },
+            { from: "node-targeting", to: "node-forms", type: "curve" },
+        ];
+
+        // NUEVO: Función para crear conexiones dinámicas
+        const createDynamicConnections = () => {
+            // Limpiar conexiones existentes
+            dynamicSvg.innerHTML = "";
+
+            const containerRect = getContainerRect();
+
+            connections.forEach(({ from, to, type }) => {
+                const fromNode = document.getElementById(from);
+                const toNode = document.getElementById(to);
+
+                if (!fromNode || !toNode) return;
+
+                const fromRect = fromNode.getBoundingClientRect();
+                const toRect = toNode.getBoundingClientRect();
+
+                // Calcular posiciones relativas al contenedor automation-flows
+                const flowsContainer =
+                    document.querySelector(".automation-flows");
+                const flowsRect = flowsContainer?.getBoundingClientRect();
+
+                if (!flowsRect) return;
+
+                const fromX =
+                    ((fromRect.left - flowsRect.left + fromRect.width / 2) /
+                        flowsRect.width) *
+                    100;
+                const fromY =
+                    ((fromRect.top - flowsRect.top + fromRect.height / 2) /
+                        flowsRect.height) *
+                    100;
+                const toX =
+                    ((toRect.left - flowsRect.left + toRect.width / 2) /
+                        flowsRect.width) *
+                    100;
+                const toY =
+                    ((toRect.top - flowsRect.top + toRect.height / 2) /
+                        flowsRect.height) *
+                    100;
+
+                // Crear el path SVG
+                const path = document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "path",
+                );
+
+                if (type === "curve") {
+                    // Mejorar cálculo de curva
+                    const controlX = (fromX + toX) / 2;
+                    const controlY =
+                        fromY < toY
+                            ? Math.min(fromY, toY) - 20
+                            : Math.max(fromY, toY) + 20;
+
+                    const pathData = `M ${fromX} ${fromY} Q ${controlX} ${controlY} ${toX} ${toY}`;
+                    path.setAttribute("d", pathData);
+                } else {
+                    // Línea recta
+                    const pathData = `M ${fromX} ${fromY} L ${toX} ${toY}`;
+                    path.setAttribute("d", pathData);
+                }
+
+                // Aplicar estilos mejorados
+                path.setAttribute("class", "dynamic-connection-path");
+                path.setAttribute("stroke", "var(--accent)");
+                path.setAttribute("stroke-width", ".3");
+                path.setAttribute("z-index", "-40");
+                path.setAttribute("fill", "none");
+                path.setAttribute("opacity", "0.2");
+                path.setAttribute("stroke-linecap", "round");
+                path.setAttribute("stroke-dasharray", "1 1");
+
+                dynamicSvg.appendChild(path);
+            });
+        };
+
+        // NUEVO: Actualizar conexiones dinámicas
+        const updateDynamicConnections = () => {
+            requestAnimationFrame(() => {
+                createDynamicConnections();
+            });
+        };
+
         // CORREGIR: Loop principal simplificado
         const runFlowLoop = async () => {
             const firstNode = nodes[flow[0]];
@@ -331,9 +429,11 @@ const {} = Astro.props;
                 const pos = center(firstNode);
                 setRunnerPosition(pos.x, pos.y);
 
-                // NUEVO: Asegurar que el runner sea visible desde el inicio
                 runner.style.opacity = "1";
                 runner.style.visibility = "visible";
+
+                // NUEVO: Crear conexiones dinámicas iniciales
+                createDynamicConnections();
 
                 await pressNode(flow[0]);
             }
@@ -350,10 +450,10 @@ const {} = Astro.props;
             }
         };
 
-        // Inicializar sin conexiones complejas
+        // Inicializar
         runFlowLoop();
 
-        // Actualizar en resize
+        // NUEVO: Actualizar conexiones en resize
         let resizeTimeout: string | number | NodeJS.Timeout | undefined;
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimeout);
@@ -363,7 +463,22 @@ const {} = Astro.props;
                     const pos = center(firstNode);
                     setRunnerPosition(pos.x, pos.y);
                 }
+                // Actualizar conexiones dinámicas
+                updateDynamicConnections();
             }, 100);
+        });
+
+        // NUEVO: Observer para cambios en el layout
+        const resizeObserver = new ResizeObserver(() => {
+            updateDynamicConnections();
+        });
+
+        // Observar cambios en los nodos principales
+        ["node-action", "node-email", "node-crm"].forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) {
+                resizeObserver.observe(element);
+            }
         });
     });
 </script>
@@ -395,21 +510,118 @@ const {} = Astro.props;
 
     .main-flow {
         top: 50%;
-        left: 10%;
+        left: 5%;
         transform: translateY(-50%);
         flex-direction: row;
+        gap: 3rem; /* Aumentar gap para mejor separación */
     }
 
     .top-flow {
-        top: 20%;
-        left: 40%;
+        top: 25%;
+        left: 60%;
         transform: translateY(-50%);
+        flex-direction: row;
+        gap: 2rem;
     }
 
     .bottom-flow {
-        top: 80%;
-        left: 30%;
+        top: 75%;
+        left: 50%;
         transform: translateY(-50%);
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    /* NUEVO: SVG dinámico para conexiones */
+    .dynamic-connections-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 4;
+        overflow: visible;
+    }
+
+    /* MEJORADO: Estilos para conexiones dinámicas con mejor sensación de flujo */
+    .dynamic-connection-path {
+        stroke: var(--accent);
+        stroke-width: 1.8;
+        opacity: 0.7;
+        stroke-linecap: round;
+        stroke-dasharray: 15 8;
+        fill: none;
+        animation:
+            dataFlow 3s linear infinite,
+            pulseFlow 2s ease-in-out infinite alternate;
+
+        filter: drop-shadow(0 0 6px rgba(0, 181, 226, 0.4));
+        transition: all 0.4s ease;
+    }
+
+    @keyframes dataFlow {
+        0% {
+            stroke-dashoffset: 0;
+        }
+        100% {
+            stroke-dashoffset: -46;
+        }
+    }
+
+    @keyframes pulseFlow {
+        0% {
+            stroke-width: 1.8;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 6px rgba(0, 181, 226, 0.4));
+        }
+        100% {
+            stroke-width: 2.4;
+            opacity: 1;
+            filter: drop-shadow(0 0 12px rgba(0, 181, 226, 0.8));
+        }
+    }
+
+    /* NUEVO: Efecto de partículas en las líneas */
+    .dynamic-connection-path::before {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--success);
+        border-radius: 50%;
+        animation:
+            particleFlow 4s linear infinite,
+            particleGlow 1.5s ease-in-out infinite alternate;
+        box-shadow: 0 0 8px var(--success);
+    }
+
+    @keyframes particleFlow {
+        0% {
+            offset-distance: 0%;
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            offset-distance: 100%;
+            opacity: 0;
+        }
+    }
+
+    @keyframes particleGlow {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 8px var(--success);
+        }
+        100% {
+            transform: scale(1.5);
+            box-shadow: 0 0 16px var(--success);
+        }
     }
 
     .connection-line {
@@ -604,23 +816,48 @@ const {} = Astro.props;
         }
     }
 
-    /* Responsive */
+    /* Responsive mejorado con mejor flujo */
+    @media (min-width: 1024px) {
+        .automation-flows {
+            width: 55%;
+        }
+
+        .main-flow {
+            left: 2%;
+            gap: 4rem;
+        }
+
+        .top-flow {
+            left: 55%;
+            top: 20%;
+        }
+
+        .bottom-flow {
+            left: 45%;
+            top: 80%;
+        }
+
+        /* Conexiones más visibles en desktop */
+        .dynamic-connection-path {
+            stroke-width: 2.2;
+            stroke-dasharray: 18 10;
+        }
+    }
+
     @media (max-width: 1024px) {
         .automation-flows {
             width: 60%;
         }
 
         .main-flow {
-            right: 5%;
-            gap: 1rem;
+            left: 5%;
+            gap: 2rem;
         }
 
-        .connection-line {
-            width: 60px;
-        }
-
-        .connection-curve {
-            width: 80px;
+        .dynamic-connection-path {
+            stroke-width: 1.5;
+            stroke-dasharray: 12 6;
+            animation-duration: 4s, 2.5s;
         }
     }
 
@@ -634,15 +871,27 @@ const {} = Astro.props;
             display: none;
         }
 
-        /* Reducir animaciones en móvil */
-        .animated-line,
-        .curved-line {
-            animation-duration: 4s, 3s;
+        .main-flow {
+            left: 2%;
+            gap: 1rem;
         }
 
-        .connection-line::before,
-        .connection-curve::before {
-            display: none;
+        .top-flow {
+            left: 35%;
+            top: 15%;
+        }
+
+        .bottom-flow {
+            left: 25%;
+            top: 85%;
+        }
+
+        /* Conexiones más sutiles en móvil */
+        .dynamic-connection-path {
+            stroke-width: 1.2;
+            stroke-dasharray: 10 5;
+            animation-duration: 5s, 3s;
+            opacity: 0.5;
         }
     }
 
