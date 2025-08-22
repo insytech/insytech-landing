@@ -268,7 +268,6 @@ const {} = Astro.props;
         transition:
             opacity 0.3s ease,
             visibility 0.3s ease;
-        /* NUEVO: Asegurar que el runner esté contenido dentro del área visual */
         will-change: transform, left, top;
     }
 
@@ -277,9 +276,16 @@ const {} = Astro.props;
         height: 100%;
         transform-origin: center;
         transform: rotate(var(--rotation, 0));
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        /* NUEVO: Mejorar renderizado */
+        /* MEJORADO: Transición más suave para la rotación */
+        transition: none; /* Removemos la transición CSS para usar JS */
         backface-visibility: hidden;
+        /* NUEVO: Mejorar el renderizado de la rotación */
+        will-change: transform;
+    }
+
+    /* NUEVO: Clase para cuando está rotando con JavaScript */
+    .runner.rotating .bot-svg {
+        transition: none; /* Asegurar que no hay conflicto con animaciones JS */
     }
 
     .runner.moving .thruster {
@@ -288,6 +294,25 @@ const {} = Astro.props;
 
     .runner.moving .signal-waves {
         opacity: 1 !important;
+    }
+
+    /* NUEVO: Mejorar las animaciones internas cuando está en movimiento */
+    .runner.moving .eyes circle {
+        animation-duration: 1s !important; /* Ojos más activos durante movimiento */
+    }
+
+    .runner.moving .bot-svg {
+        /* NUEVO: Efecto sutil de vibración durante movimiento */
+        animation: subtle-vibration 0.1s infinite alternate;
+    }
+
+    @keyframes subtle-vibration {
+        0% {
+            transform: rotate(var(--rotation, 0)) scale(1);
+        }
+        100% {
+            transform: rotate(var(--rotation, 0)) scale(1.02);
+        }
     }
 
     .bot-status {
@@ -332,9 +357,14 @@ const {} = Astro.props;
     /* Mejoras para dispositivos móviles */
     @media (max-width: 768px) {
         .runner {
-            width: 50px; /* Reducir tamaño base */
+            width: 50px;
             height: 50px;
             filter: drop-shadow(0 4px 15px rgba(0, 102, 255, 0.3));
+        }
+
+        /* NUEVO: Reducir efectos en móvil para mejor performance */
+        .runner.moving .bot-svg {
+            animation: none; /* Remover vibración en móvil */
         }
 
         .bot-status {
@@ -351,7 +381,7 @@ const {} = Astro.props;
 
     @media (max-width: 480px) {
         .runner {
-            width: 45px; /* Tamaño aún más pequeño */
+            width: 45px;
             height: 45px;
         }
 
@@ -363,11 +393,6 @@ const {} = Astro.props;
         /* Simplificar animaciones para dispositivos de gama baja */
         .signal-waves circle {
             animation-duration: 3s !important;
-        }
-
-        /* NUEVO: Optimizar transform para móviles */
-        .bot-svg {
-            transition: transform 0.2s ease;
         }
     }
 </style>

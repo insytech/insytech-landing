@@ -190,13 +190,10 @@ const {} = Astro.props;
         const getRect = (el: { getBoundingClientRect: () => any }) =>
             el.getBoundingClientRect();
 
-        // CORREGIR: Usar el área visual como contenedor de referencia en lugar del hero completo
         const getContainerRect = () => {
-            // Usar el área visual como referencia para coordenadas más precisas
             return visualArea.getBoundingClientRect();
         };
 
-        // CORREGIR: Función center mejorada con mejor precisión
         const center = (el: any) => {
             const containerRect = getContainerRect();
             const elRect = getRect(el);
@@ -206,11 +203,27 @@ const {} = Astro.props;
             };
         };
 
+        // NUEVO: Variables para controlar la rotación
+        let currentRotation = 0; // Rotación actual en radianes
+        const INITIAL_ROTATION = 0; // Posición inicial (mirando hacia arriba)
+
+        // NUEVO: Función para normalizar ángulos entre -π y π
+        const normalizeAngle = (angle: number) => {
+            while (angle > Math.PI) angle -= 2 * Math.PI;
+            while (angle < -Math.PI) angle += 2 * Math.PI;
+            return angle;
+        };
+
+        // NUEVO: Función para calcular la diferencia de ángulo más corta
+        const getShortestAngleDifference = (from: number, to: number) => {
+            const diff = normalizeAngle(to - from);
+            return diff;
+        };
+
         // CORREGIR: Función mejorada para línea de movimiento
         let currentTrail: HTMLDivElement | null = null;
 
         const createMovementTrail = (fromNode: any, toNode: any) => {
-            // Limpiar línea anterior
             if (currentTrail) {
                 currentTrail.remove();
                 currentTrail = null;
@@ -219,48 +232,98 @@ const {} = Astro.props;
             const fromPos = center(fromNode);
             const toPos = center(toNode);
 
-            // Crear una línea simple con CSS
             const trail = document.createElement("div");
             trail.className = "movement-trail";
 
-            // Calcular ángulo y distancia
             const dx = toPos.x - fromPos.x;
             const dy = toPos.y - fromPos.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
 
-            // CORREGIR: Posicionar la línea relativa al área visual
             trail.style.left = `${fromPos.x}px`;
             trail.style.top = `${fromPos.y}px`;
             trail.style.width = `${distance}px`;
             trail.style.transform = `rotate(${angle}deg)`;
             trail.style.transformOrigin = "0 50%";
 
-            // Usar el contenedor dedicado
             dynamicContainer.appendChild(trail);
             currentTrail = trail;
 
-            // Animar la línea
             setTimeout(() => trail.classList.add("active"), 10);
 
             return trail;
         };
 
-        // CORREGIR: Funciones del runner con coordenadas relativas al área visual
+        // CORREGIR: Funciones del runner con rotación mejorada
         const setRunnerPosition = (x: number, y: number) => {
-            // IMPORTANTE: Las coordenadas ya son relativas al área visual
             runner.style.left = `${x}px`;
             runner.style.top = `${y}px`;
             runner.style.transform = `translate(-50%, -50%)`;
         };
 
+        // NUEVO: Función para establecer rotación con transiciones suaves
+        const setRunnerRotation = (
+            targetRotation: number,
+            duration: number = 300,
+        ) => {
+            return new Promise<void>((resolve) => {
+                const startRotation = currentRotation;
+                const angleDiff = getShortestAngleDifference(
+                    startRotation,
+                    targetRotation,
+                );
+                const endRotation = startRotation + angleDiff;
+
+                const startTime = performance.now();
+
+                const animateRotation = (currentTime: number) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Easing suave para la rotación
+                    const easedProgress =
+                        progress < 0.5
+                            ? 2 * progress * progress
+                            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+                    const currentAngle =
+                        startRotation + angleDiff * easedProgress;
+                    currentRotation = currentAngle;
+
+                    runner.style.setProperty(
+                        "--rotation",
+                        `${currentAngle}rad`,
+                    );
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateRotation);
+                    } else {
+                        currentRotation = normalizeAngle(endRotation);
+                        runner.style.setProperty(
+                            "--rotation",
+                            `${currentRotation}rad`,
+                        );
+                        resolve();
+                    }
+                };
+
+                requestAnimationFrame(animateRotation);
+            });
+        };
+
+        // NUEVO: Función para rotar hacia la dirección de movimiento
         const setRunnerDirection = (dx: number, dy: number) => {
-            const angle = Math.atan2(dy, dx);
-            runner.style.setProperty("--rotation", `${angle}rad`);
+            const targetAngle = Math.atan2(dy, dx);
+            return setRunnerRotation(targetAngle, 200); // Rotación rápida hacia la dirección
+        };
+
+        // NUEVO: Función para volver a la posición inicial
+        const returnToInitialRotation = () => {
+            return setRunnerRotation(INITIAL_ROTATION, 400); // Rotación más lenta de vuelta
         };
 
         const moveRunner = (fromId: string, toId: string, speed = 600) => {
-            return new Promise<void>((resolve) => {
+            return new Promise<void>(async (resolve) => {
                 const fromNode = nodes[fromId];
                 const toNode = nodes[toId];
                 if (!fromNode || !toNode) return resolve();
@@ -274,7 +337,8 @@ const {} = Astro.props;
                 const dy = toPos.y - fromPos.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                setRunnerDirection(dx, dy);
+                // NUEVO: Rotar hacia la dirección antes de empezar el movimiento
+                await setRunnerDirection(dx, dy);
 
                 const duration = Math.max(400, (distance / speed) * 1000);
                 const startTime = performance.now();
@@ -299,18 +363,22 @@ const {} = Astro.props;
                         requestAnimationFrame(animate);
                     } else {
                         runner.classList.remove("moving");
-                        // Ocultar línea después del movimiento
-                        setTimeout(() => {
-                            if (trail && trail.parentNode) {
-                                trail.classList.remove("active");
-                                setTimeout(() => {
-                                    if (trail.parentNode) {
-                                        trail.parentNode.removeChild(trail);
-                                    }
-                                }, 300);
-                            }
-                        }, 200);
-                        resolve();
+
+                        // NUEVO: Volver a la posición inicial al llegar al nodo
+                        returnToInitialRotation().then(() => {
+                            // Ocultar línea después del movimiento y rotación
+                            setTimeout(() => {
+                                if (trail && trail.parentNode) {
+                                    trail.classList.remove("active");
+                                    setTimeout(() => {
+                                        if (trail.parentNode) {
+                                            trail.parentNode.removeChild(trail);
+                                        }
+                                    }, 300);
+                                }
+                            }, 100);
+                            resolve();
+                        });
                     }
                 };
 
@@ -896,6 +964,10 @@ const {} = Astro.props;
                 const pos = center(firstNode);
                 setRunnerPosition(pos.x, pos.y);
 
+                // NUEVO: Establecer rotación inicial
+                currentRotation = INITIAL_ROTATION;
+                runner.style.setProperty("--rotation", `${currentRotation}rad`);
+
                 runner.style.opacity = "1";
                 runner.style.visibility = "visible";
 
@@ -912,7 +984,8 @@ const {} = Astro.props;
 
                     await moveRunner(fromId, toId);
                     await pressNode(toId);
-                    await new Promise((resolve) => setTimeout(resolve, 300));
+                    // NUEVO: Pausa adicional para mostrar la posición inicial en el nodo
+                    await new Promise((resolve) => setTimeout(resolve, 500));
                 }
             }
         };
