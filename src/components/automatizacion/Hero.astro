@@ -91,12 +91,12 @@ import Flow from "./Flow.astro";
 
         <!-- Geometric beam overlays -->
         <div
-            class="absolute -z-50 top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-500/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl"
+            class="absolute -z-50 top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-300/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl"
             style="animation: slow-pulse 8s ease-in-out infinite;"
         >
         </div>
         <div
-            class="absolute -z-50 bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-tl from-emerald-400/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
+            class="absolute -z-50 bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-tl from-emerald-300/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
             style="animation: slow-pulse 12s ease-in-out infinite 3s;"
         >
         </div>
@@ -164,12 +164,27 @@ import Flow from "./Flow.astro";
     <div class="dynamic-animations-container" id="dynamic-container"></div>
 
     <!-- Partículas de fondo -->
-    <div class="background-particles">
-        <div class="particle particle-1"></div>
-        <div class="particle particle-2"></div>
-        <div class="particle particle-3"></div>
-        <div class="particle particle-4"></div>
-        <div class="particle particle-5"></div>
+    <div class="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+        <div
+            class="absolute top-[20%] left-[15%] w-2.5 h-2.5 bg-blue-400/20 dark:bg-purple-300/40 rounded-full animate-[float_6s_ease-in-out_infinite]"
+        >
+        </div>
+        <div
+            class="absolute top-[50%] left-[30%] w-2.5 h-2.5 bg-indigo-500/30 dark:bg-blue-300/40 rounded-full animate-[float_8s_ease-in-out_infinite_1s]"
+        >
+        </div>
+        <div
+            class="absolute top-[70%] left-[70%] w-2.5 h-2.5 bg-purple-500/20 dark:bg-cyan-300/40 rounded-full animate-[float_7s_ease-in-out_infinite_2s]"
+        >
+        </div>
+        <div
+            class="absolute top-[40%] left-[80%] w-2.5 h-2.5 bg-emerald-400/30 dark:bg-indigo-300/40 rounded-full animate-[float_5s_ease-in-out_infinite_3s]"
+        >
+        </div>
+        <div
+            class="absolute top-[10%] left-[60%] w-2.5 h-2.5 bg-blue-500/20 dark:bg-purple-400/40 rounded-full animate-[float_9s_ease-in-out_infinite_4s]"
+        >
+        </div>
     </div>
 </section>
 
@@ -302,65 +317,6 @@ import Flow from "./Flow.astro";
         z-index: 1;
         pointer-events: none;
         contain: layout style paint;
-    }
-
-    .particle {
-        position: absolute;
-        width: 10px;
-        height: 10px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 50%;
-        animation: float 5s infinite ease-in-out;
-    }
-
-    .particle-1 {
-        top: 20%;
-        left: 15%;
-        animation-delay: 0s;
-        animation-duration: 6s;
-    }
-
-    .particle-2 {
-        top: 50%;
-        left: 30%;
-        animation-delay: 1s;
-        animation-duration: 8s;
-    }
-
-    .particle-3 {
-        top: 70%;
-        left: 70%;
-        animation-delay: 2s;
-        animation-duration: 7s;
-    }
-
-    .particle-4 {
-        top: 40%;
-        left: 80%;
-        animation-delay: 3s;
-        animation-duration: 5s;
-    }
-
-    .particle-5 {
-        top: 10%;
-        left: 60%;
-        animation-delay: 4s;
-        animation-duration: 9s;
-    }
-
-    @keyframes float {
-        0% {
-            transform: translateY(0) translateX(0);
-            opacity: 1;
-        }
-        50% {
-            transform: translateY(-20px) translateX(10px);
-            opacity: 0.7;
-        }
-        100% {
-            transform: translateY(0) translateX(0);
-            opacity: 1;
-        }
     }
 
     /* Responsividad móvil - contenido se apila verticalmente */

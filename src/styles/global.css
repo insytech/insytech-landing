@@ -95,7 +95,7 @@ body {
 }
 
 .floating-node {
-  @apply absolute min-w-[50px] p-2 rounded-xl bg-white/8 dark:bg-white/8 border border-purple-400/20 dark:border-purple-400/20 backdrop-blur-md;
+  @apply absolute min-w-[50px] p-2 rounded-xl bg-white dark:bg-white/8 border border-purple-400/20 dark:border-purple-400/20;
   animation: float 6s ease-in-out infinite;
 }
 

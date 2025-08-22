@@ -1168,11 +1168,11 @@ const {} = Astro.props;
     /* Responsive refinado */
     @media (min-width: 1200px) {
         .automation-flows {
-            height: 600px; /* Aún más altura en pantallas grandes */
+            height: 600px;
         }
 
         .main-flow {
-            gap: 4rem; /* Más espacio entre nodos */
+            gap: 4rem;
             width: 80%;
         }
 
@@ -1184,17 +1184,17 @@ const {} = Astro.props;
 
     @media (min-width: 1440px) {
         .automation-flows {
-            height: 700px; /* Máxima altura para pantallas muy grandes */
+            height: 700px;
         }
 
         .main-flow {
-            gap: 5rem; /* Máximo espacio entre nodos */
+            gap: 5rem;
         }
     }
 
     @media (min-width: 1024px) and (max-width: 1199px) {
         .automation-flows {
-            height: 550px; /* Altura intermedia */
+            height: 550px;
         }
 
         .main-flow {
@@ -1240,68 +1240,66 @@ const {} = Astro.props;
 
     @media (max-width: 768px) {
         .automation-flows {
-            height: 90%; /* Aumentado de 85% a 90% */
+            height: 90%;
             top: 5%;
         }
 
         .flow-container {
-            gap: 1.5rem; /* Aumentado de 1.2rem */
+            gap: 1.5rem;
         }
 
         .main-flow {
-            width: 95%; /* Reducido ligeramente para más margen */
+            width: 95%;
             justify-content: space-around;
             gap: 0;
-            padding: 0 0.5rem; /* Reducido el padding lateral */
-            top: 45%; /* Centrado verticalmente */
+            padding: 0 0.5rem;
+            top: 45%;
         }
 
         .top-flow {
-            right: 3%; /* Más centrado */
-            top: 15%; /* Bajado un poco */
-            gap: 1.5rem; /* Aumentado */
+            right: 3%;
+            top: 15%;
+            gap: 1.5rem;
         }
 
         .bottom-flow {
-            left: 3%; /* Más centrado */
-            bottom: 15%; /* Subido un poco */
-            gap: 1.5rem; /* Aumentado */
+            left: 3%;
+            bottom: 15%;
+            gap: 1.5rem;
         }
 
         .floating-node {
             display: none;
         }
 
-        /* Redimensionar nodos para móviles */
         .flow-node {
-            padding: 0.9rem 0.8rem; /* Aumentado ligeramente */
-            min-width: 70px; /* Aumentado de 65px */
-            transform: scale(0.9); /* Aumentado de 0.85 */
+            padding: 0.9rem 0.8rem;
+            min-width: 70px;
+            transform: scale(0.9);
         }
 
         .small-node {
-            min-width: 60px; /* Aumentado de 55px */
-            padding: 0.8rem 0.7rem; /* Aumentado */
-            transform: scale(0.85); /* Aumentado de 0.8 */
+            min-width: 60px;
+            padding: 0.8rem 0.7rem;
+            transform: scale(0.85);
         }
 
         .node-icon {
-            font-size: 1.5rem; /* Aumentado de 1.4rem */
+            font-size: 1.5rem;
         }
 
         .small-node .node-icon {
-            font-size: 1.2rem; /* Aumentado de 1.1rem */
+            font-size: 1.2rem;
         }
 
         .node-label {
-            font-size: 0.75rem; /* Aumentado de 0.7rem */
-            max-width: 75px; /* Aumentado de 70px */
+            font-size: 0.75rem;
+            max-width: 75px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Ajustes para conexiones en móvil */
         .dynamic-connection-path {
             stroke-width: 1 !important;
             opacity: 0.7;
@@ -1326,7 +1324,6 @@ const {} = Astro.props;
             r: 0.6 !important;
         }
 
-        /* Optimizar performance en móviles */
         @keyframes flowPrimary {
             to {
                 stroke-dashoffset: -36;
@@ -1349,57 +1346,162 @@ const {} = Astro.props;
     /* Ajustes específicos para dispositivos muy pequeños */
     @media (max-width: 480px) {
         .automation-flows {
-            height: 85%; /* Mantener altura considerable */
-            transform: scale(0.95); /* Menos reducción */
+            height: 85%;
+            transform: scale(0.95);
             transform-origin: center center;
         }
 
         .main-flow {
             flex-wrap: wrap;
             justify-content: center;
-            padding-top: 1rem; /* Reducido de 2rem */
+            padding-top: 1rem;
             gap: 1rem;
             width: 100%;
         }
 
         .top-flow {
-            top: 12%; /* Ajustado */
+            top: 12%;
             right: 5%;
         }
 
         .bottom-flow {
             left: 5%;
-            bottom: 12%; /* Ajustado */
+            bottom: 12%;
         }
 
         .flow-node {
-            margin: 0 0.3rem 0.6rem; /* Reducido margen vertical */
-            transform: scale(0.85); /* Ajustado */
+            margin: 0 0.3rem 0.6rem;
+            transform: scale(0.85);
         }
 
-        /* Ocultar algunas conexiones menos importantes */
         .tertiary-path {
             display: none;
         }
 
-        /* Reducir efecto visual de glow */
         [filter*="glow"] {
             filter: none !important;
         }
     }
 
-    /* Nuevas reglas para mejorar spacing en móvil */
-    @media (max-width: 640px) {
+    @media (max-width: 430px) {
         .automation-flows {
-            padding: 0.5rem; /* Añadir padding interno */
+            height: 80%;
+            transform: scale(0.9);
         }
 
-        .flow-container {
-            gap: 1.8rem; /* Más espacio entre contenedores */
+        .flow-node {
+            transform: scale(0.8);
+            min-width: 60px;
+        }
+
+        .small-node {
+            min-width: 50px;
+            transform: scale(0.75);
+        }
+    }
+
+    @media (max-width: 390px) {
+        .automation-flows {
+            height: 75%;
+            transform: scale(0.85);
         }
 
         .main-flow {
-            min-height: 120px; /* Altura mínima para el flujo principal */
+            gap: 0.8rem;
+        }
+
+        .flow-node {
+            transform: scale(0.75);
+            min-width: 55px;
+            padding: 0.7rem 0.6rem;
+        }
+
+        .small-node {
+            min-width: 45px;
+            transform: scale(0.7);
+        }
+
+        .node-label {
+            font-size: 0.65rem;
+            max-width: 60px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .automation-flows {
+            height: 70%;
+            transform: scale(0.8);
+        }
+
+        .main-flow {
+            gap: 0.6rem;
+        }
+
+        .flow-node {
+            transform: scale(0.7);
+            min-width: 50px;
+            padding: 0.6rem 0.5rem;
+        }
+
+        .small-node {
+            min-width: 40px;
+            transform: scale(0.65);
+        }
+
+        .node-label {
+            font-size: 0.6rem;
+            max-width: 50px;
+        }
+
+        .top-flow,
+        .bottom-flow {
+            gap: 1rem;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .automation-flows {
+            height: 65%;
+            transform: scale(0.75);
+        }
+
+        .main-flow {
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            height: 60%;
+        }
+
+        .flow-node {
+            transform: scale(0.65);
+            min-width: 45px;
+            padding: 0.5rem 0.4rem;
+        }
+
+        .small-node {
+            min-width: 35px;
+            transform: scale(0.6);
+        }
+
+        .node-label {
+            font-size: 0.55rem;
+            max-width: 40px;
+        }
+
+        .node-icon {
+            font-size: 1.2rem;
+        }
+
+        .small-node .node-icon {
+            font-size: 1rem;
+        }
+
+        .top-flow,
+        .bottom-flow {
+            gap: 0.8rem;
+        }
+
+        .dynamic-connection-path {
+            stroke-width: 0.5 !important;
         }
     }
 </style>
