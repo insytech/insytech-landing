@@ -481,18 +481,17 @@
                 .filter(([id, el]) => el),
         );
 
-        // Definir todas las conexiones del flujo
+        // CORREGIR: Simplificar las conexiones para que solo se muestren las del flujo principal
         const connections = [
-            ["node-trigger", "node-ai"],
-            ["node-ai", "node-action"],
-            ["node-action", "node-chat"],
-            ["node-action", "node-email"],
-            ["node-action", "node-crm"],
-            ["node-action", "node-api"],
-            ["node-action", "node-whatsapp"],
-            ["node-action", "node-targeting"],
-            ["node-targeting", "node-notify"],
-            ["node-notify", "node-trigger"],
+            // ["node-trigger", "node-ai"],
+            // ["node-ai", "node-action"],
+            // // Eliminar las conexiones múltiples desde action que causan líneas negras
+            // ["node-action", "node-email"],
+            // ["node-action", "node-crm"],
+            // ["node-action", "node-api"],
+            // ["node-action", "node-whatsapp"],
+            // ["node-action", "node-targeting"],
+            // ["node-action", "node-notify"],
         ];
 
         const getRect = (el) => el.getBoundingClientRect();
@@ -526,7 +525,7 @@
             };
         };
 
-        // Crear/obtener path para conexión
+        // CORREGIR: Mejorar la creación de paths
         const getConnectionPath = (fromId, toId) => {
             const key = `${fromId}-${toId}`;
             let path = svg.querySelector(`path[data-connection="${key}"]`);
@@ -537,12 +536,15 @@
                 );
                 path.classList.add("connection-path");
                 path.setAttribute("data-connection", key);
+                path.setAttribute("fill", "none"); // Asegurar que no tenga relleno
+                path.setAttribute("stroke", "#0066ff"); // Color explícito
+                path.setAttribute("stroke-width", "3");
                 svg.appendChild(path);
             }
             return path;
         };
 
-        // Actualizar todas las conexiones
+        // CORREGIR: Mejorar updateConnections para evitar NaN
         const updateConnections = () => {
             connections.forEach(([fromId, toId]) => {
                 const fromNode = nodes[fromId];
@@ -552,31 +554,28 @@
                 const fromPoint = toViewBox(center(fromNode));
                 const toPoint = toViewBox(center(toNode));
 
-                // Crear curva más elaborada
-                const dx = toPoint.x - fromPoint.x;
-                const dy = toPoint.y - fromPoint.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+                // Validar que los puntos sean válidos
+                if (
+                    isNaN(fromPoint.x) ||
+                    isNaN(fromPoint.y) ||
+                    isNaN(toPoint.x) ||
+                    isNaN(toPoint.y)
+                ) {
+                    console.warn(
+                        `Puntos inválidos para conexión ${fromId} -> ${toId}`,
+                    );
+                    return;
+                }
 
-                // Control points para curva suave
-                const curve = Math.min(15, distance * 0.3);
-                const midX = (fromPoint.x + toPoint.x) / 2;
-                const midY = (fromPoint.y + toPoint.y) / 2;
-
-                // Perpendicular para curvatura
-                const perpX = (-dy / distance) * curve;
-                const perpY = (dx / distance) * curve;
-
-                const controlX = midX + perpX;
-                const controlY = midY + perpY;
-
-                const pathData = `M ${fromPoint.x} ${fromPoint.y} Q ${controlX} ${controlY} ${toPoint.x} ${toPoint.y}`;
+                // Crear línea recta simple en lugar de curva para evitar errores
+                const pathData = `M ${fromPoint.x.toFixed(2)} ${fromPoint.y.toFixed(2)} L ${toPoint.x.toFixed(2)} ${toPoint.y.toFixed(2)}`;
 
                 const path = getConnectionPath(fromId, toId);
                 path.setAttribute("d", pathData);
             });
         };
 
-        // Resaltar conexión activa
+        // CORREGIR: Simplificar highlightConnection
         const highlightConnection = (fromId, toId, duration = 1000) => {
             const path = svg.querySelector(
                 `path[data-connection="${fromId}-${toId}"]`,
@@ -669,9 +668,8 @@
             node.classList.remove("pressed");
         };
 
-        // Loop principal del flujo
+        // CORREGIR: Ajustar el flujo para que sea secuencial
         const runFlowLoop = async () => {
-            // Posición inicial
             const firstNode = nodes[flow[0]];
             if (firstNode) {
                 const pos = center(firstNode);
@@ -684,7 +682,17 @@
                     const fromId = flow[i];
                     const toId = flow[i + 1];
 
-                    highlightConnection(fromId, toId);
+                    // Solo resaltar conexiones que existen
+                    const connectionExists = connections.some(
+                        ([from, to]) =>
+                            (from === fromId && to === toId) ||
+                            (from === toId && to === fromId),
+                    );
+
+                    if (connectionExists) {
+                        highlightConnection(fromId, toId);
+                    }
+
                     await moveRunner(fromId, toId);
                     await pressNode(toId);
                     await new Promise((resolve) => setTimeout(resolve, 200));
@@ -990,29 +998,35 @@
     }
 
     .connection-path {
-        stroke: var(--primary);
-        stroke-width: 3;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        fill: none;
-        opacity: 0.7;
-        stroke-dasharray: 8 12;
-        animation: connectionFlow 3s linear infinite;
-        transition: all 0.3s ease;
+        stroke: var(--primary) !important;
+        stroke-width: 3 !important;
+        stroke-linecap: round !important;
+        stroke-linejoin: round !important;
+        fill: none !important;
+        opacity: 0.6 !important;
+        stroke-dasharray: 8 12 !important;
+        animation: connectionFlow 3s linear infinite !important;
+        transition: all 0.3s ease !important;
     }
 
     .connection-path.active {
-        stroke: var(--accent);
-        stroke-width: 4;
-        opacity: 1;
-        filter: drop-shadow(0 0 12px rgba(0, 181, 226, 0.8));
-        animation-duration: 1.5s;
+        stroke: var(--accent) !important;
+        stroke-width: 4 !important;
+        opacity: 1 !important;
+        filter: drop-shadow(0 0 12px rgba(0, 181, 226, 0.8)) !important;
+        animation-duration: 1.5s !important;
     }
 
-    @keyframes connectionFlow {
-        to {
-            stroke-dashoffset: -40;
-        }
+    /* CORREGIR: Asegurar que las líneas dinámicas no interfieran con las estáticas */
+    .animated-line,
+    .curved-line {
+        stroke: var(--primary);
+        stroke-width: 2;
+        opacity: 0.4;
+        stroke-linecap: round;
+        stroke-dasharray: 6 8;
+        animation: lineFlow 2.5s linear infinite;
+        filter: drop-shadow(0 0 6px rgba(0, 102, 255, 0.2));
     }
 
     /* Runner bot mejorado */
@@ -1094,12 +1108,6 @@
         stroke-dasharray: 6 8;
         animation: lineFlow 2.5s linear infinite;
         filter: drop-shadow(0 0 6px rgba(0, 102, 255, 0.4));
-    }
-
-    @keyframes lineFlow {
-        to {
-            stroke-dashoffset: -28;
-        }
     }
 
     /* Efecto de nodo presionado mejorado */
