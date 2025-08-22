@@ -151,10 +151,11 @@ const {} = Astro.props;
 <script>
     // Animación mejorada con conexiones dinámicas y runner bot
     document.addEventListener("DOMContentLoaded", () => {
-        const container = document.querySelector(".automation-hero");
+        const heroContainer = document.querySelector(".automation-hero");
+        const dynamicContainer = document.getElementById("dynamic-container");
         const runner = document.getElementById("runner");
 
-        if (!container || !runner) return;
+        if (!heroContainer || !dynamicContainer || !runner) return;
 
         const flow = [
             "node-trigger",
@@ -177,11 +178,12 @@ const {} = Astro.props;
                 .filter(([id, el]) => el),
         );
 
-        const getRect = (el) => el.getBoundingClientRect();
-        const getContainerRect = () => container.getBoundingClientRect();
+        const getRect = (el: { getBoundingClientRect: () => any }) =>
+            el.getBoundingClientRect();
+        const getContainerRect = () => heroContainer.getBoundingClientRect();
 
         // CORREGIR: Función center mejorada
-        const center = (el) => {
+        const center = (el: any) => {
             const containerRect = getContainerRect();
             const elRect = getRect(el);
             return {
@@ -190,10 +192,10 @@ const {} = Astro.props;
             };
         };
 
-        // CORREGIR: Función simple para mostrar línea de movimiento
-        let currentTrail = null;
+        // CORREGIR: Función mejorada para línea de movimiento
+        let currentTrail: HTMLDivElement | null = null;
 
-        const createMovementTrail = (fromNode, toNode) => {
+        const createMovementTrail = (fromNode: any, toNode: any) => {
             // Limpiar línea anterior
             if (currentTrail) {
                 currentTrail.remove();
@@ -220,7 +222,8 @@ const {} = Astro.props;
             trail.style.transform = `rotate(${angle}deg)`;
             trail.style.transformOrigin = "0 50%";
 
-            container.appendChild(trail);
+            // CAMBIO CRÍTICO: Usar el contenedor dedicado
+            dynamicContainer.appendChild(trail);
             currentTrail = trail;
 
             // Animar la línea
@@ -229,25 +232,36 @@ const {} = Astro.props;
             return trail;
         };
 
+        // ALTERNATIVA: Si el problema persiste, usar requestAnimationFrame para evitar reflows
+        const safeAppendTrail = (trail: HTMLElement) => {
+            requestAnimationFrame(() => {
+                dynamicContainer.appendChild(trail);
+                requestAnimationFrame(() => {
+                    trail.classList.add("active");
+                });
+            });
+        };
+
         // CORREGIR: Funciones del runner con mejor precisión
-        const setRunnerPosition = (x, y) => {
+        const setRunnerPosition = (x: number, y: number) => {
+            // CAMBIO: Usar left/top en lugar de transform3d para posicionamiento inicial
             runner.style.left = `${x}px`;
             runner.style.top = `${y}px`;
             runner.style.transform = `translate(-50%, -50%)`;
         };
 
-        const setRunnerDirection = (dx, dy) => {
+        const setRunnerDirection = (dx: number, dy: number) => {
             const angle = Math.atan2(dy, dx);
             runner.style.setProperty("--rotation", `${angle}rad`);
         };
 
-        const moveRunner = (fromId, toId, speed = 600) => {
-            return new Promise((resolve) => {
+        const moveRunner = (fromId: string, toId: string, speed = 600) => {
+            return new Promise<void>((resolve) => {
                 const fromNode = nodes[fromId];
                 const toNode = nodes[toId];
                 if (!fromNode || !toNode) return resolve();
 
-                // Crear línea de movimiento
+                // Crear línea de movimiento usando el método seguro
                 const trail = createMovementTrail(fromNode, toNode);
 
                 const fromPos = center(fromNode);
@@ -263,7 +277,7 @@ const {} = Astro.props;
 
                 runner.classList.add("moving");
 
-                const animate = (currentTime) => {
+                const animate = (currentTime: number) => {
                     const elapsed = currentTime - startTime;
                     const progress = Math.min(elapsed / duration, 1);
 
@@ -283,7 +297,15 @@ const {} = Astro.props;
                         runner.classList.remove("moving");
                         // Ocultar línea después del movimiento
                         setTimeout(() => {
-                            if (trail) trail.classList.remove("active");
+                            if (trail && trail.parentNode) {
+                                trail.classList.remove("active");
+                                // Remover después de la animación
+                                setTimeout(() => {
+                                    if (trail.parentNode) {
+                                        trail.parentNode.removeChild(trail);
+                                    }
+                                }, 300);
+                            }
                         }, 200);
                         resolve();
                     }
@@ -293,7 +315,7 @@ const {} = Astro.props;
             });
         };
 
-        const pressNode = async (nodeId) => {
+        const pressNode = async (nodeId: string) => {
             const node = nodes[nodeId];
             if (!node) return;
 
@@ -308,6 +330,11 @@ const {} = Astro.props;
             if (firstNode) {
                 const pos = center(firstNode);
                 setRunnerPosition(pos.x, pos.y);
+
+                // NUEVO: Asegurar que el runner sea visible desde el inicio
+                runner.style.opacity = "1";
+                runner.style.visibility = "visible";
+
                 await pressNode(flow[0]);
             }
 
@@ -327,7 +354,7 @@ const {} = Astro.props;
         runFlowLoop();
 
         // Actualizar en resize
-        let resizeTimeout;
+        let resizeTimeout: string | number | NodeJS.Timeout | undefined;
         window.addEventListener("resize", () => {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
@@ -388,22 +415,117 @@ const {} = Astro.props;
     .connection-line {
         width: 100px;
         height: 4px;
+        overflow: visible;
     }
 
     .connection-curve {
         width: 120px;
         height: 30px;
+        overflow: visible;
     }
 
     .animated-line,
     .curved-line {
         stroke: var(--primary);
-        stroke-width: 2;
-        opacity: 0.4;
+        stroke-width: 3;
+        opacity: 0.6;
         stroke-linecap: round;
-        stroke-dasharray: 6 8;
-        animation: lineFlow 2.5s linear infinite;
-        filter: drop-shadow(0 0 6px rgba(0, 102, 255, 0.2));
+        stroke-dasharray: 8 4;
+        animation:
+            lineFlow 3s linear infinite,
+            lineGlow 2s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.4));
+        transition: all 0.3s ease;
+    }
+
+    /* Animación principal del flujo de datos */
+    @keyframes lineFlow {
+        0% {
+            stroke-dashoffset: 0;
+        }
+        100% {
+            stroke-dashoffset: -24;
+        }
+    }
+
+    /* Animación de resplandor */
+    @keyframes lineGlow {
+        0% {
+            stroke-width: 3;
+            opacity: 0.6;
+            filter: drop-shadow(0 0 8px rgba(0, 102, 255, 0.4));
+        }
+        100% {
+            stroke-width: 4;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 16px rgba(0, 102, 255, 0.8));
+        }
+    }
+
+    /* Efecto hover en las líneas */
+    .connection-line:hover .animated-line,
+    .connection-curve:hover .curved-line {
+        stroke: var(--accent);
+        stroke-width: 5;
+        opacity: 1;
+        animation-duration: 1.5s, 1s;
+        filter: drop-shadow(0 0 20px rgba(0, 181, 226, 1));
+    }
+
+    /* Variación para líneas curvas */
+    .curved-line {
+        stroke-width: 2.5;
+        animation:
+            curveFlow 3.5s linear infinite,
+            curveGlow 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes curveFlow {
+        0% {
+            stroke-dashoffset: 0;
+        }
+        100% {
+            stroke-dashoffset: -20;
+        }
+    }
+
+    @keyframes curveGlow {
+        0% {
+            stroke-width: 2.5;
+            opacity: 0.5;
+        }
+        100% {
+            stroke-width: 3.5;
+            opacity: 0.8;
+        }
+    }
+
+    /* Efecto de pulso en intersecciones */
+    .connection-line::before,
+    .connection-curve::before {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: var(--success);
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        animation: pulse 2s ease-in-out infinite;
+        box-shadow: 0 0 10px var(--success);
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0.7;
+        }
     }
 
     /* Efecto de nodo presionado */
@@ -438,38 +560,79 @@ const {} = Astro.props;
         }
     }
 
-    /* Línea de movimiento */
+    /* Línea de movimiento mejorada */
     .movement-trail {
         position: absolute;
-        height: 3px;
+        height: 4px;
         background: linear-gradient(
             90deg,
-            var(--accent) 0%,
+            transparent 0%,
+            var(--accent) 20%,
             var(--primary) 50%,
-            var(--accent) 100%
+            var(--accent) 80%,
+            transparent 100%
         );
-        border-radius: 2px;
+        border-radius: 3px;
         opacity: 0;
         z-index: 6;
         pointer-events: none;
-        box-shadow: 0 0 8px rgba(0, 181, 226, 0.6);
+        box-shadow:
+            0 0 12px rgba(0, 181, 226, 0.8),
+            0 0 20px rgba(0, 102, 255, 0.4);
         transition: opacity 0.3s ease;
     }
 
     .movement-trail.active {
         opacity: 1;
-        animation: trailPulse 1s ease-in-out;
+        animation:
+            trailPulse 1.2s ease-in-out,
+            trailMove 0.8s ease-out;
     }
 
     @keyframes trailPulse {
         0%,
         100% {
             transform: scaleY(1);
-            box-shadow: 0 0 8px rgba(0, 181, 226, 0.6);
+            box-shadow:
+                0 0 12px rgba(0, 181, 226, 0.8),
+                0 0 20px rgba(0, 102, 255, 0.4);
         }
         50% {
-            transform: scaleY(1.5);
-            box-shadow: 0 0 16px rgba(0, 181, 226, 0.8);
+            transform: scaleY(2);
+            box-shadow:
+                0 0 20px rgba(0, 181, 226, 1),
+                0 0 30px rgba(0, 102, 255, 0.6);
+        }
+    }
+
+    @keyframes trailMove {
+        0% {
+            background: linear-gradient(
+                90deg,
+                var(--accent) 0%,
+                transparent 20%,
+                transparent 80%,
+                transparent 100%
+            );
+        }
+        50% {
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                transparent 20%,
+                var(--primary) 50%,
+                transparent 80%,
+                transparent 100%
+            );
+        }
+        100% {
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                transparent 20%,
+                transparent 80%,
+                var(--accent) 100%
+            );
         }
     }
 
@@ -487,6 +650,10 @@ const {} = Astro.props;
         .connection-line {
             width: 60px;
         }
+
+        .connection-curve {
+            width: 80px;
+        }
     }
 
     @media (max-width: 768px) {
@@ -497,6 +664,34 @@ const {} = Astro.props;
 
         .floating-node {
             display: none;
+        }
+
+        /* Reducir animaciones en móvil */
+        .animated-line,
+        .curved-line {
+            animation-duration: 4s, 3s;
+        }
+
+        .connection-line::before,
+        .connection-curve::before {
+            display: none;
+        }
+    }
+
+    /* Mejoras para accesibilidad */
+    @media (prefers-reduced-motion: reduce) {
+        .animated-line,
+        .curved-line {
+            animation: none;
+        }
+
+        .connection-line::before,
+        .connection-curve::before {
+            animation: none;
+        }
+
+        .movement-trail {
+            animation: none;
         }
     }
 </style>

@@ -259,10 +259,15 @@ const {} = Astro.props;
         height: 60px;
         z-index: 10;
         pointer-events: none;
-        left: -9999px;
-        top: -9999px;
+        left: 0; /* CAMBIO: Inicializar en 0 en lugar de -9999px */
+        top: 0; /* CAMBIO: Inicializar en 0 en lugar de -9999px */
+        opacity: 0; /* NUEVO: Inicialmente invisible hasta que se posicione */
+        visibility: hidden; /* NUEVO: Inicialmente oculto */
         filter: drop-shadow(0 8px 25px rgba(0, 102, 255, 0.4));
         transform-origin: 50% 50%;
+        transition:
+            opacity 0.3s ease,
+            visibility 0.3s ease; /* NUEVO: Transición suave */
     }
 
     .bot-svg {

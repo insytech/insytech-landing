@@ -18,6 +18,9 @@ import Flow from "./Flow.astro";
         </div>
     </div>
 
+    <!-- Contenedor dedicado para animaciones dinámicas -->
+    <div class="dynamic-animations-container" id="dynamic-container"></div>
+
     <Flow />
 
     <!-- Partículas de fondo -->
@@ -44,6 +47,7 @@ import Flow from "./Flow.astro";
         display: flex;
         align-items: center;
         color: white;
+        contain: layout style; /* NUEVO: Contener cambios de layout */
     }
 
     .hero-content {
@@ -53,10 +57,28 @@ import Flow from "./Flow.astro";
         max-width: 1200px;
         margin: 0 auto;
         padding: 2rem;
+        contain: layout style; /* NUEVO: Aislar completamente el contenido */
+        transform: none !important;
+        will-change: auto;
     }
 
     .content-wrapper {
         max-width: 600px;
+        position: static; /* CAMBIO: Usar static en lugar de relative */
+        contain: layout; /* NUEVO: Contener cambios de layout */
+    }
+
+    /* NUEVO: Contenedor dedicado para animaciones dinámicas */
+    .dynamic-animations-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 8;
+        overflow: hidden;
+        contain: layout style paint; /* NUEVO: Contener todos los cambios */
     }
 
     .hero-content h1 {
@@ -127,6 +149,7 @@ import Flow from "./Flow.astro";
         overflow: hidden;
         z-index: 1;
         pointer-events: none;
+        contain: layout style paint; /* NUEVO: Contener cambios */
     }
 
     .particle {

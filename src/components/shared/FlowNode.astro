@@ -46,12 +46,54 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
         backdrop-filter: blur(20px);
         min-width: 80px;
         transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .flow-node::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(
+            45deg,
+            var(--primary),
+            var(--accent),
+            var(--success),
+            var(--primary)
+        );
+        border-radius: 16px;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.3s ease;
+        animation: borderGlow 3s linear infinite;
+    }
+
+    @keyframes borderGlow {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
     }
 
     .flow-node:hover {
         transform: scale(1.05);
         background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(139, 92, 246, 0.5);
+        border-color: rgba(139, 92, 246, 0.7);
+        box-shadow:
+            0 0 20px rgba(139, 92, 246, 0.4),
+            0 0 40px rgba(139, 92, 246, 0.2);
+    }
+
+    .flow-node:hover::before {
+        opacity: 0.3;
     }
 
     .small-node {
@@ -62,6 +104,13 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
     .node-icon {
         font-size: 1.5rem;
         margin-bottom: 0.25rem;
+        filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.3));
+        transition: all 0.3s ease;
+    }
+
+    .flow-node:hover .node-icon {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
     }
 
     .small-node .node-icon {
@@ -73,6 +122,13 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
         font-weight: 600;
         text-align: center;
         color: #e2e8f0;
+        text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        transition: color 0.3s ease;
+    }
+
+    .flow-node:hover .node-label {
+        color: #ffffff;
+        text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
     }
 
     /* Nodos flotantes */
@@ -84,14 +140,33 @@ const classes = `flow-node ${sizeClass} ${className}`.trim();
 
     .floating-node {
         position: absolute;
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(139, 92, 246, 0.2);
-        border-radius: 12px;
-        backdrop-filter: blur(15px);
-        min-width: 50px;
+
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(139, 92, 246, 0.2) !important;
+        min-width: 50px !important;
+        padding: 0.5rem !important;
         animation: float 6s ease-in-out infinite;
     }
 
+    .floating-node .node-icon {
+        font-size: 1rem !important;
+    }
+
+    .floating-node .node-label {
+        font-size: 0.6rem !important;
+    }
+
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    /* Posicionamiento de nodos flotantes */
     .node-1 {
         top: 15%;
         left: 20%;
