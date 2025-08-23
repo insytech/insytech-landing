@@ -1,5 +1,6 @@
 ---
 import Flow from "./Flow.astro";
+import MobileFlow from "./MobileFlow.astro";
 ---
 
 <section class="automation-hero bg-slate-200/40 dark:bg-gray-950">
@@ -156,7 +157,14 @@ import Flow from "./Flow.astro";
 
         <!-- Columna derecha: Área visual/animaciones -->
         <div class="hero-visual-area">
-            <Flow />
+            <!-- Flow para desktop -->
+            <div class="desktop-flow">
+                <Flow />
+            </div>
+            <!-- MobileFlow para móviles -->
+            <div class="mobile-flow-container">
+                <MobileFlow />
+            </div>
         </div>
     </div>
 
@@ -307,100 +315,120 @@ import Flow from "./Flow.astro";
         transform: translateY(-2px);
     }
 
-    .background-particles {
-        position: absolute;
-        top: 0;
-        left: 0;
+    /* Mostrar/ocultar componentes según dispositivo */
+    .desktop-flow {
+        display: block;
         width: 100%;
         height: 100%;
-        overflow: hidden;
-        z-index: 1;
-        pointer-events: none;
-        contain: layout style paint;
     }
 
-    /* Responsividad móvil - contenido se apila verticalmente */
+    .mobile-flow-container {
+        display: none;
+        width: 100%;
+    }
+
+    /* Responsividad para pantallas grandes */
     @media (min-width: 1200px) {
         .hero-main-container {
-            max-width: 1600px; /* Aún más espacio en pantallas grandes */
+            max-width: 1600px;
             gap: 4rem;
         }
 
         .hero-content {
-            flex: 0 0 35%; /* Aún menos espacio para el texto en pantallas grandes */
+            flex: 0 0 35%;
         }
 
         .hero-visual-area {
-            min-height: 700px; /* Más altura en pantallas grandes */
+            min-height: 700px;
             padding: 3rem;
         }
     }
 
     @media (min-width: 1440px) {
         .hero-visual-area {
-            min-height: 800px; /* Máxima altura para pantallas muy grandes */
+            min-height: 800px;
         }
     }
 
+    /* Responsividad para tablets */
     @media (max-width: 1024px) {
+        .desktop-flow {
+            display: none;
+        }
+
+        .mobile-flow-container {
+            display: block;
+        }
+
         .hero-main-container {
             flex-direction: column;
+            min-height: 500px;
             text-align: center;
+            padding: 1rem;
             gap: 3rem;
         }
 
         .hero-content {
             flex: none;
-            max-width: 100%;
+        }
+
+        .automation-hero {
+            min-height: 100vh;
         }
 
         .hero-visual-area {
             order: 2;
-            width: 100%;
-            min-height: 500px; /* Aumentado de 400px a 500px */
-            padding: 1rem;
+            min-height: 450px;
         }
     }
 
+    /* Responsividad para móviles */
     @media (max-width: 768px) {
         .automation-hero {
-            min-height: 100vh; /* Aumentado de 80vh a 100vh */
+            min-height: 100vh;
             padding: 1rem;
         }
 
         .hero-main-container {
             gap: 2rem;
-            min-height: 90vh; /* Aumentado para dar más altura total */
-        }
-
-        .hero-visual-area {
-            min-height: 450px; /* Aumentado significativamente de 350px */
-            padding: 1rem; /* Aumentado el padding */
-        }
-
-        .cta-buttons {
-            justify-content: center;
+            min-height: 500px;
+            padding: 1rem;
         }
 
         .hero-content h1 {
             font-size: clamp(2rem, 6vw, 3rem);
         }
 
-        .hero-content p {
-            font-size: 1.1rem;
+        .hero-visual-area {
+            min-height: 400px;
+            padding: 1rem;
+        }
+
+        .cta-buttons {
+            justify-content: center;
         }
     }
 
-    /* Nuevas reglas específicas para móviles pequeños */
-    @media (max-width: 480px) {
-        .automation-hero {
-            min-height: 155vh; /* Aún más altura en móviles muy pequeños */
+    /* Flotar animaciones */
+    @keyframes float {
+        0%,
+        100% {
+            transform: translateY(0px);
         }
+        50% {
+            transform: translateY(-20px);
+        }
+    }
 
-        .hero-visual-area {
-            min-height: 750px; /* Mantener altura considerable */
-            padding-top: 0px;
-            padding-bottom: 0;
+    @keyframes slow-pulse {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.1);
         }
     }
 </style>
