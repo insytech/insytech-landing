@@ -2,38 +2,310 @@
 
 ---
 
-<section class="chatbots-services">
-    <div class="container">
-        <h2>Servicios de Chatbots</h2>
-        <ul>
-            <li>
-                <strong>Chatbots para atención al cliente</strong>
-                <p>
-                    Responde consultas frecuentes y mejora la satisfacción de
-                    tus usuarios.
+<section
+    class="automation-services relative py-20 bg-slate-200/40 dark:bg-gray-900/50 overflow-hidden"
+>
+    <!-- Background pattern similar to hero -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <svg
+            class="absolute inset-0 w-full h-full opacity-20 dark:opacity-10"
+            viewBox="0 0 1440 800"
+            preserveAspectRatio="xMidYMid slice"
+        >
+            <defs>
+                <linearGradient
+                    id="serviceBeam1"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                >
+                    <stop
+                        offset="0%"
+                        class="text-blue-400/40"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="100%"
+                        class="text-purple-500/20"
+                        stop-color="currentColor"></stop>
+                </linearGradient>
+            </defs>
+            <path
+                d="M0,300 Q360,200 720,400 T1440,350"
+                stroke="url(#serviceBeam1)"
+                stroke-width="2"
+                fill="none"
+                opacity="0.3"
+            >
+                <animate
+                    attributeName="opacity"
+                    values="0.2;0.6;0.2"
+                    dur="8s"
+                    repeatCount="indefinite"></animate>
+            </path>
+        </svg>
+
+        <!-- Floating elements -->
+        <div
+            class="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-300/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl animate-pulse"
+        >
+        </div>
+        <div
+            class="absolute bottom-1/4 left-1/4 w-48 h-48 bg-gradient-to-tl from-emerald-300/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
+        >
+        </div>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <!-- Header section -->
+        <div class="text-center mb-16">
+            <h2
+                class="text-4xl md:text-5xl font-extrabold mb-6 bg-gradient-to-r from-[#001489]/90 via-blue-500 to-indigo-600 dark:from-blue-400 dark:via-purple-400 dark:to-indigo-300 bg-clip-text text-transparent"
+            >
+                Servicios de Automatización
+            </h2>
+            <p
+                class="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+            >
+                Transforma tu negocio con nuestras soluciones de automatización
+                inteligente diseñadas para maximizar la eficiencia y reducir
+                costos operativos.
+            </p>
+        </div>
+
+        <!-- Services grid -->
+        <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto"
+        >
+            <!-- Service 1 -->
+            <div
+                class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
+            >
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                >
+                    <svg
+                        class="w-6 h-6 md:w-8 md:h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                        ></path>
+                    </svg>
+                </div>
+                <h3
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                >
+                    Chatbots para Atención al Cliente
+                </h3>
+                <p
+                    class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-4 md:mb-6"
+                >
+                    Responde consultas frecuentes 24/7 y mejora la satisfacción
+                    de tus usuarios con respuestas instantáneas y precisas.
                 </p>
-            </li>
-            <li>
-                <strong>Automatización de ventas</strong>
-                <p>
-                    Genera leads y acompaña a tus clientes durante el proceso de
-                    compra.
+                <div class="flex flex-wrap gap-2">
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        IA Conversacional
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Multiidioma
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        24/7
+                    </span>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div
+                class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
+            >
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                >
+                    <svg
+                        class="w-6 h-6 md:w-8 md:h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h3
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                >
+                    Automatización de Ventas
+                </h3>
+                <p
+                    class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-4 md:mb-6"
+                >
+                    Genera leads calificados y acompaña a tus clientes durante
+                    todo el proceso de compra con flujos automatizados.
                 </p>
-            </li>
-            <li>
-                <strong>Integración multicanal</strong>
-                <p>
+                <div class="flex flex-wrap gap-2">
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Lead Scoring
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        CRM Integration
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Analytics
+                    </span>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div
+                class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
+            >
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                >
+                    <svg
+                        class="w-6 h-6 md:w-8 md:h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                        ></path>
+                    </svg>
+                </div>
+                <h3
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                >
+                    Integración Multicanal
+                </h3>
+                <p
+                    class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-4 md:mb-6"
+                >
                     Implementa chatbots en WhatsApp, Facebook Messenger, web y
-                    más.
+                    más plataformas desde una sola interfaz.
                 </p>
-            </li>
-            <li>
-                <strong>Soporte técnico automatizado</strong>
-                <p>
-                    Resuelve incidencias y guía a tus usuarios sin intervención
-                    humana.
+                <div class="flex flex-wrap gap-2">
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        WhatsApp API
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Facebook
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Web Widget
+                    </span>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div
+                class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
+            >
+                <div
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                >
+                    <svg
+                        class="w-6 h-6 md:w-8 md:h-8"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        ></path>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h3
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                >
+                    Soporte Técnico Automatizado
+                </h3>
+                <p
+                    class="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-4 md:mb-6"
+                >
+                    Resuelve incidencias y guía a tus usuarios paso a paso sin
+                    intervención humana, escalando solo cuando es necesario.
                 </p>
-            </li>
-        </ul>
+                <div class="flex flex-wrap gap-2">
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Auto-resolución
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Escalamiento IA
+                    </span>
+                    <span
+                        class="px-3 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-full border border-blue-200/50 dark:border-blue-700/50 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 group-hover:text-blue-800 dark:group-hover:text-blue-200 transition-all duration-200"
+                    >
+                        Knowledge Base
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to action -->
+        <div class="text-center mt-16">
+            <a
+                href="#cta"
+                class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-500 dark:to-purple-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 hover:from-blue-600 hover:to-indigo-700 dark:hover:from-blue-400 dark:hover:to-purple-400 transition-all duration-300 ease-in-out"
+            >
+                Explora todas nuestras soluciones
+                <svg
+                    class="ml-2 w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </a>
+        </div>
     </div>
 </section>

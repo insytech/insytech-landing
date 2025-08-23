@@ -1,0 +1,286 @@
+<svg
+    class="bot-svg w-64 h-64 lg:w-80 lg:h-80"
+    viewBox="0 0 70 70"
+    xmlns="http://www.w3.org/2000/svg"
+>
+    <!-- Glow de fondo expandido -->
+    <circle cx="35" cy="35" r="35" fill="url(#botGlow)" opacity="0.6"></circle>
+
+    <!-- Antena superior -->
+    <rect x="33" y="8" width="4" height="8" rx="2" fill="url(#antennaGrad)"
+    ></rect>
+
+    <!-- Señales de comunicación con más espacio -->
+    <g class="signal-waves" opacity="0.7">
+        <circle
+            cx="35"
+            cy="6"
+            r="5"
+            fill="none"
+            stroke="#00b5e2"
+            stroke-width="1"
+            opacity="0.8"
+        >
+            <animate
+                attributeName="r"
+                values="3;12;3"
+                dur="2s"
+                repeatCount="indefinite"></animate>
+            <animate
+                attributeName="opacity"
+                values="0.8;0;0.8"
+                dur="2s"
+                repeatCount="indefinite"></animate>
+        </circle>
+
+        <circle
+            cx="35"
+            cy="6"
+            r="5"
+            fill="none"
+            stroke="#06ffa5"
+            stroke-width="1"
+            opacity="0.6"
+        >
+            <animate
+                attributeName="r"
+                values="3;15;3"
+                dur="2.5s"
+                repeatCount="indefinite"></animate>
+            <animate
+                attributeName="opacity"
+                values="0.6;0;0.6"
+                dur="2.5s"
+                repeatCount="indefinite"></animate>
+        </circle>
+    </g>
+
+    <!-- Cuerpo principal centrado -->
+    <rect
+        x="21"
+        y="21"
+        width="28"
+        height="24"
+        rx="10"
+        fill="url(#bodyGrad)"
+        stroke="url(#strokeGrad)"
+        stroke-width="2.5"></rect>
+
+    <!-- Pantalla/visor -->
+    <rect
+        x="25"
+        y="25"
+        width="20"
+        height="16"
+        rx="6"
+        fill="#0A1931"
+        stroke="url(#screenGrad)"
+        stroke-width="1"></rect>
+
+    <!-- Ojos con animación -->
+    <g class="eyes">
+        <circle cx="30" cy="33" r="3.5" fill="#0A1931"></circle>
+        <circle cx="40" cy="33" r="3.5" fill="#0A1931"></circle>
+        <circle class="eyeL" cx="30" cy="33" r="2" fill="#06ffa5">
+            <animate
+                attributeName="opacity"
+                values="1;1;0.2;1"
+                keyTimes="0;0.8;0.85;1"
+                dur="3s"
+                repeatCount="indefinite"></animate>
+        </circle>
+        <circle class="eyeR" cx="40" cy="33" r="2" fill="#06ffa5">
+            <animate
+                attributeName="opacity"
+                values="1;1;0.2;1"
+                keyTimes="0;0.75;0.8;1"
+                dur="3s"
+                repeatCount="indefinite"></animate>
+        </circle>
+        <!-- Puntos de brillo en los ojos -->
+        <circle cx="31" cy="32" r="0.8" fill="#ffffff" opacity="0.9"></circle>
+        <circle cx="41" cy="32" r="0.8" fill="#ffffff" opacity="0.9"></circle>
+    </g>
+
+    <!-- Indicador de actividad -->
+    <rect x="27" y="37" width="16" height="2" rx="1" fill="url(#activityGrad)">
+        <animate
+            attributeName="width"
+            values="2;16;2"
+            dur="1.8s"
+            repeatCount="indefinite"></animate>
+        <animate
+            attributeName="x"
+            values="34;27;34"
+            dur="1.8s"
+            repeatCount="indefinite"></animate>
+    </rect>
+
+    <!-- Brazos/extensiones laterales -->
+    <rect
+        x="17"
+        y="29"
+        width="4"
+        height="8"
+        rx="2"
+        fill="url(#armGrad)"
+        opacity="0.8"></rect>
+    <rect
+        x="49"
+        y="29"
+        width="4"
+        height="8"
+        rx="2"
+        fill="url(#armGrad)"
+        opacity="0.8"></rect>
+
+    <!-- Propulsores rediseñados con más espacio -->
+    <g class="thruster" opacity="0">
+        <!-- Tobera principal del propulsor -->
+        <path
+            d="M 29 49 Q 29 45 35 45 Q 41 45 41 49 L 39 53 Q 35 55 35 55 Q 35 55 31 53 Z"
+            fill="url(#thrusterNozzle)"
+            stroke="#0052cc"
+            stroke-width="0.5"></path>
+
+        <!-- Llama principal -->
+        <ellipse
+            cx="35"
+            cy="53"
+            rx="4"
+            ry="8"
+            fill="url(#thrustFlame1)"
+            opacity="0.9"
+        >
+            <animate
+                attributeName="ry"
+                values="8;12;8"
+                dur="0.15s"
+                repeatCount="indefinite"></animate>
+            <animate
+                attributeName="opacity"
+                values="0.9;1;0.9"
+                dur="0.15s"
+                repeatCount="indefinite"></animate>
+        </ellipse>
+
+        <!-- Llama interior más intensa -->
+        <ellipse
+            cx="35"
+            cy="52"
+            rx="2.5"
+            ry="6"
+            fill="url(#thrustFlame2)"
+            opacity="0.8"
+        >
+            <animate
+                attributeName="ry"
+                values="6;9;6"
+                dur="0.12s"
+                repeatCount="indefinite"></animate>
+        </ellipse>
+
+        <!-- Núcleo brillante -->
+        <ellipse cx="35" cy="51" rx="1" ry="3" fill="#ffffff" opacity="0.9">
+            <animate
+                attributeName="ry"
+                values="3;5;3"
+                dur="0.1s"
+                repeatCount="indefinite"></animate>
+            <animate
+                attributeName="opacity"
+                values="0.9;1;0.9"
+                dur="0.1s"
+                repeatCount="indefinite"></animate>
+        </ellipse>
+
+        <!-- Partículas laterales -->
+        <g class="side-particles">
+            <circle cx="31" cy="54" r="0.8" fill="#06ffa5" opacity="0.7">
+                <animate
+                    attributeName="cy"
+                    values="54;58;54"
+                    dur="0.2s"
+                    repeatCount="indefinite"></animate>
+                <animate
+                    attributeName="opacity"
+                    values="0.7;0;0.7"
+                    dur="0.2s"
+                    repeatCount="indefinite"></animate>
+            </circle>
+            <circle cx="39" cy="54" r="0.8" fill="#00b5e2" opacity="0.7">
+                <animate
+                    attributeName="cy"
+                    values="54;58;54"
+                    dur="0.25s"
+                    repeatCount="indefinite"></animate>
+                <animate
+                    attributeName="opacity"
+                    values="0.7;0;0.7"
+                    dur="0.25s"
+                    repeatCount="indefinite"></animate>
+            </circle>
+        </g>
+    </g>
+
+    <!-- Definiciones de gradientes actualizadas -->
+    <defs>
+        <radialGradient id="botGlow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stop-color="#0066ff" stop-opacity="0.8"></stop>
+            <stop offset="70%" stop-color="#00b5e2" stop-opacity="0.3"></stop>
+            <stop offset="100%" stop-color="#06ffa5" stop-opacity="0"></stop>
+        </radialGradient>
+
+        <linearGradient id="bodyGrad" x1="21" y1="21" x2="49" y2="45">
+            <stop offset="0%" stop-color="#0066ff"></stop>
+            <stop offset="50%" stop-color="#0052cc"></stop>
+            <stop offset="100%" stop-color="#00b5e2"></stop>
+        </linearGradient>
+
+        <linearGradient id="strokeGrad" x1="21" y1="21" x2="49" y2="45">
+            <stop offset="0%" stop-color="#4da6ff"></stop>
+            <stop offset="100%" stop-color="#00d4ff"></stop>
+        </linearGradient>
+
+        <linearGradient id="screenGrad" x1="25" y1="25" x2="45" y2="41">
+            <stop offset="0%" stop-color="#00b5e2" stop-opacity="0.3"></stop>
+            <stop offset="100%" stop-color="#06ffa5" stop-opacity="0.1"></stop>
+        </linearGradient>
+
+        <linearGradient id="antennaGrad" x1="35" y1="8" x2="35" y2="16">
+            <stop offset="0%" stop-color="#06ffa5"></stop>
+            <stop offset="100%" stop-color="#00b5e2"></stop>
+        </linearGradient>
+
+        <linearGradient id="thrusterNozzle" x1="35" y1="45" x2="35" y2="53">
+            <stop offset="0%" stop-color="#0066ff"></stop>
+            <stop offset="50%" stop-color="#0052cc"></stop>
+            <stop offset="100%" stop-color="#003d99"></stop>
+        </linearGradient>
+
+        <radialGradient id="thrustFlame1" cx="0.5" cy="0.3" r="0.8">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"></stop>
+            <stop offset="30%" stop-color="#06ffa5" stop-opacity="0.8"></stop>
+            <stop offset="60%" stop-color="#00b5e2" stop-opacity="0.7"></stop>
+            <stop offset="100%" stop-color="#0066ff" stop-opacity="0.3"></stop>
+        </radialGradient>
+
+        <radialGradient id="thrustFlame2" cx="0.5" cy="0.2" r="0.6">
+            <stop offset="0%" stop-color="#ffffff"></stop>
+            <stop offset="40%" stop-color="#06ffa5"></stop>
+            <stop offset="80%" stop-color="#00b5e2"></stop>
+            <stop offset="100%" stop-color="#0066ff" stop-opacity="0.5"></stop>
+        </radialGradient>
+
+        <linearGradient id="activityGrad" x1="27" y1="37" x2="43" y2="39">
+            <stop offset="0%" stop-color="#06ffa5"></stop>
+            <stop offset="50%" stop-color="#00b5e2"></stop>
+            <stop offset="100%" stop-color="#0066ff"></stop>
+        </linearGradient>
+
+        <linearGradient id="armGrad" x1="17" y1="29" x2="53" y2="37">
+            <stop offset="0%" stop-color="#0052cc"></stop>
+            <stop offset="100%" stop-color="#00b5e2"></stop>
+        </linearGradient>
+    </defs>
+</svg>

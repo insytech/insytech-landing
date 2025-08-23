@@ -1,9 +1,10 @@
 ---
+import Bot from "./Bot.astro";
 import RunnerBot from "./RunnerBot.astro";
 ---
 
 <section
-    class="chatbots-about relative min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 overflow-hidden"
+    class="chatbots-about relative min-h-screen bg-gradient-to-br from-slate-200/40 via-slate-200/40 to-slate-200/40 dark:from-slate-900 dark:via-blue-900 dark:to-slate-800 overflow-hidden"
 >
     <!-- Background decorative elements -->
     <div
@@ -17,11 +18,11 @@ import RunnerBot from "./RunnerBot.astro";
             <div class="space-y-8">
                 <div class="space-y-6">
                     <h2
-                        class="text-4xl lg:text-5xl font-bold text-white leading-tight"
+                        class="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
                     >
                         ¿Por qué elegir
                         <span
-                            class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent"
+                            class="bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-500 bg-clip-text text-transparent"
                         >
                             nuestros chatbots?
                         </span>
@@ -33,13 +34,16 @@ import RunnerBot from "./RunnerBot.astro";
                     </div>
                 </div>
 
-                <p class="text-lg lg:text-xl text-slate-300 leading-relaxed">
+                <p
+                    class="text-lg lg:text-xl text-slate-600 dark:text-slate-300 leading-relaxed"
+                >
                     Nuestros chatbots utilizan
-                    <span class="text-blue-400 font-semibold"
+                    <span class="text-blue-600 dark:text-blue-400 font-semibold"
                         >inteligencia artificial</span
                     >
                     para interactuar con tus clientes de manera eficiente y personalizada,
-                    <span class="text-purple-400 font-semibold"
+                    <span
+                        class="text-purple-600 dark:text-purple-400 font-semibold"
                         >disponibles 24/7</span
                     >. Integramos soluciones a medida para ventas, soporte y
                     automatización de procesos, adaptándonos a las necesidades
@@ -48,44 +52,46 @@ import RunnerBot from "./RunnerBot.astro";
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-8">
                     <div
-                        class="flex items-center space-x-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+                        class="flex items-center space-x-3 p-4 bg-white/60 dark:bg-white/10 backdrop-blur-sm rounded-lg border border-slate-200 dark:border-white/20 shadow-sm"
                     >
                         <div
                             class="w-3 h-3 bg-green-400 rounded-full animate-pulse"
                         >
                         </div>
-                        <span class="text-white font-medium"
+                        <span class="text-slate-800 dark:text-white font-medium"
                             >24/7 Disponible</span
                         >
                     </div>
                     <div
-                        class="flex items-center space-x-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+                        class="flex items-center space-x-3 p-4 bg-white/60 dark:bg-white/10 backdrop-blur-sm rounded-lg border border-slate-200 dark:border-white/20 shadow-sm"
                     >
                         <div
                             class="w-3 h-3 bg-blue-400 rounded-full animate-pulse"
                         >
                         </div>
-                        <span class="text-white font-medium">IA Avanzada</span>
+                        <span class="text-slate-800 dark:text-white font-medium"
+                            >IA Avanzada</span
+                        >
                     </div>
                     <div
-                        class="flex items-center space-x-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+                        class="flex items-center space-x-3 p-4 bg-white/60 dark:bg-white/10 backdrop-blur-sm rounded-lg border border-slate-200 dark:border-white/20 shadow-sm"
                     >
                         <div
                             class="w-3 h-3 bg-purple-400 rounded-full animate-pulse"
                         >
                         </div>
-                        <span class="text-white font-medium"
+                        <span class="text-slate-800 dark:text-white font-medium"
                             >Personalizable</span
                         >
                     </div>
                     <div
-                        class="flex items-center space-x-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20"
+                        class="flex items-center space-x-3 p-4 bg-white/60 dark:bg-white/10 backdrop-blur-sm rounded-lg border border-slate-200 dark:border-white/20 shadow-sm"
                     >
                         <div
                             class="w-3 h-3 bg-yellow-400 rounded-full animate-pulse"
                         >
                         </div>
-                        <span class="text-white font-medium"
+                        <span class="text-slate-800 dark:text-white font-medium"
                             >Integración Fácil</span
                         >
                     </div>
@@ -95,513 +101,70 @@ import RunnerBot from "./RunnerBot.astro";
             <!-- RunnerBot Column -->
             <div class="relative flex justify-center items-center">
                 <div class="runner-bot-container relative">
-                    <!-- Glow effect -->
+                    <!-- Enhanced glow effect with multiple layers -->
                     <div
-                        class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-3xl opacity-30 animate-pulse"
+                        class="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-600 rounded-full blur-3xl opacity-25 dark:opacity-35 animate-pulse"
+                    >
+                    </div>
+                    <div
+                        class="absolute inset-2 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-2xl opacity-15 dark:opacity-25 animate-pulse"
+                        style="animation-delay: 0.5s;"
                     >
                     </div>
 
-                    <!-- Main bot circle -->
+                    <!-- Main bot circle with enhanced gradient -->
                     <div
                         id="runnerBot"
-                        class="relative w-80 h-80 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-700 rounded-full flex items-center justify-center shadow-2xl transform transition-all duration-300 ease-out hover:scale-105"
+                        class="relative w-[20rem] h-[20rem] lg:w-[32rem] lg:h-[32rem] bg-gradient-to-br from-slate-100 via-blue-100 to-violet-200 dark:from-slate-800 dark:via-blue-900 dark:to-violet-900 rounded-full flex items-center justify-center shadow-2xl transform transition-all duration-500 ease-out hover:scale-105 border-4 border-white/30 dark:border-white/10"
                     >
-                        <!-- Inner circle -->
+                        <!-- Enhanced inner circle with glassmorphism effect -->
                         <div
-                            class="w-64 h-64 bg-gradient-to-br from-blue-400 to-purple-600 rounded-full flex items-center justify-center relative overflow-hidden"
+                            class="w-80 h-80 lg:w-[28rem] lg:h-[28rem] bg-gradient-to-br from-white/80 via-blue-50/90 to-violet-100/80 dark:from-slate-700/80 dark:via-blue-800/90 dark:to-violet-800/80 rounded-full flex items-center justify-center relative overflow-hidden backdrop-blur-sm border border-white/40 dark:border-white/20 shadow-inner"
                         >
-                            <svg
-                                class="bot-svg"
-                                viewBox="0 0 52 52"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <!-- Glow de fondo -->
-                                <circle
-                                    cx="26"
-                                    cy="26"
-                                    r="30"
-                                    fill="url(#botGlow)"
-                                    opacity="0.6"></circle>
+                            <Bot />
 
-                                <!-- Antena superior -->
-                                <rect
-                                    x="24"
-                                    y="4"
-                                    width="4"
-                                    height="8"
-                                    rx="2"
-                                    fill="url(#antennaGrad)"></rect>
-
-                                <!-- Señales de comunicación -->
-                                <g class="signal-waves" opacity="0.7">
-                                    <circle
-                                        cx="26"
-                                        cy="3"
-                                        r="5"
-                                        fill="none"
-                                        stroke="#00b5e2"
-                                        stroke-width="1"
-                                        opacity="0.8"
-                                    >
-                                        <animate
-                                            attributeName="r"
-                                            values="3;8;3"
-                                            dur="2s"
-                                            repeatCount="indefinite"></animate>
-                                        <animate
-                                            attributeName="opacity"
-                                            values="0.8;0;0.8"
-                                            dur="2s"
-                                            repeatCount="indefinite"></animate>
-                                    </circle>
-
-                                    <circle
-                                        cx="26"
-                                        cy="3"
-                                        r="5"
-                                        fill="none"
-                                        stroke="#06ffa5"
-                                        stroke-width="1"
-                                        opacity="0.6"
-                                    >
-                                        <animate
-                                            attributeName="r"
-                                            values="3;10;3"
-                                            dur="2.5s"
-                                            repeatCount="indefinite"></animate>
-                                        <animate
-                                            attributeName="opacity"
-                                            values="0.6;0;0.6"
-                                            dur="2.5s"
-                                            repeatCount="indefinite"></animate>
-                                    </circle>
-                                </g>
-
-                                <!-- Cuerpo principal -->
-                                <rect
-                                    x="12"
-                                    y="12"
-                                    width="28"
-                                    height="24"
-                                    rx="10"
-                                    fill="url(#bodyGrad)"
-                                    stroke="url(#strokeGrad)"
-                                    stroke-width="2.5"></rect>
-
-                                <!-- Pantalla/visor -->
-                                <rect
-                                    x="16"
-                                    y="16"
-                                    width="20"
-                                    height="16"
-                                    rx="6"
-                                    fill="#0A1931"
-                                    stroke="url(#screenGrad)"
-                                    stroke-width="1"></rect>
-
-                                <!-- Ojos con animación -->
-                                <g class="eyes">
-                                    <circle
-                                        cx="21"
-                                        cy="24"
-                                        r="3.5"
-                                        fill="#0A1931"></circle>
-                                    <circle
-                                        cx="31"
-                                        cy="24"
-                                        r="3.5"
-                                        fill="#0A1931"></circle>
-                                    <circle
-                                        class="eyeL"
-                                        cx="21"
-                                        cy="24"
-                                        r="2"
-                                        fill="#06ffa5"
-                                    >
-                                        <animate
-                                            attributeName="opacity"
-                                            values="1;1;0.2;1"
-                                            keyTimes="0;0.8;0.85;1"
-                                            dur="3s"
-                                            repeatCount="indefinite"></animate>
-                                    </circle>
-                                    <circle
-                                        class="eyeR"
-                                        cx="31"
-                                        cy="24"
-                                        r="2"
-                                        fill="#06ffa5"
-                                    >
-                                        <animate
-                                            attributeName="opacity"
-                                            values="1;1;0.2;1"
-                                            keyTimes="0;0.75;0.8;1"
-                                            dur="3s"
-                                            repeatCount="indefinite"></animate>
-                                    </circle>
-                                    <!-- Puntos de brillo en los ojos -->
-                                    <circle
-                                        cx="22"
-                                        cy="23"
-                                        r="0.8"
-                                        fill="#ffffff"
-                                        opacity="0.9"></circle>
-                                    <circle
-                                        cx="32"
-                                        cy="23"
-                                        r="0.8"
-                                        fill="#ffffff"
-                                        opacity="0.9"></circle>
-                                </g>
-
-                                <!-- Indicador de actividad -->
-                                <rect
-                                    x="18"
-                                    y="28"
-                                    width="16"
-                                    height="2"
-                                    rx="1"
-                                    fill="url(#activityGrad)"
-                                >
-                                    <animate
-                                        attributeName="width"
-                                        values="2;16;2"
-                                        dur="1.8s"
-                                        repeatCount="indefinite"></animate>
-                                    <animate
-                                        attributeName="x"
-                                        values="25;18;25"
-                                        dur="1.8s"
-                                        repeatCount="indefinite"></animate>
-                                </rect>
-
-                                <!-- Brazos/extensiones laterales -->
-                                <rect
-                                    x="8"
-                                    y="20"
-                                    width="4"
-                                    height="8"
-                                    rx="2"
-                                    fill="url(#armGrad)"
-                                    opacity="0.8"></rect>
-                                <rect
-                                    x="40"
-                                    y="20"
-                                    width="4"
-                                    height="8"
-                                    rx="2"
-                                    fill="url(#armGrad)"
-                                    opacity="0.8"></rect>
-
-                                <!-- Propulsores rediseñados (solo visibles cuando se mueve) -->
-                                <g class="thruster" opacity="0">
-                                    <!-- Tobera principal del propulsor -->
-                                    <path
-                                        d="M 20 40 Q 20 36 26 36 Q 32 36 32 40 L 30 44 Q 26 46 26 46 Q 26 46 22 44 Z"
-                                        fill="url(#thrusterNozzle)"
-                                        stroke="#0052cc"
-                                        stroke-width="0.5"></path>
-
-                                    <!-- Llama principal -->
-                                    <ellipse
-                                        cx="26"
-                                        cy="44"
-                                        rx="4"
-                                        ry="6"
-                                        fill="url(#thrustFlame1)"
-                                        opacity="0.9"
-                                    >
-                                        <animate
-                                            attributeName="ry"
-                                            values="6;9;6"
-                                            dur="0.15s"
-                                            repeatCount="indefinite"></animate>
-                                        <animate
-                                            attributeName="opacity"
-                                            values="0.9;1;0.9"
-                                            dur="0.15s"
-                                            repeatCount="indefinite"></animate>
-                                    </ellipse>
-
-                                    <!-- Llama interior más intensa -->
-                                    <ellipse
-                                        cx="26"
-                                        cy="43"
-                                        rx="2.5"
-                                        ry="4"
-                                        fill="url(#thrustFlame2)"
-                                        opacity="0.8"
-                                    >
-                                        <animate
-                                            attributeName="ry"
-                                            values="4;6;4"
-                                            dur="0.12s"
-                                            repeatCount="indefinite"></animate>
-                                    </ellipse>
-
-                                    <!-- Núcleo brillante -->
-                                    <ellipse
-                                        cx="26"
-                                        cy="42"
-                                        rx="1"
-                                        ry="2"
-                                        fill="#ffffff"
-                                        opacity="0.9"
-                                    >
-                                        <animate
-                                            attributeName="ry"
-                                            values="2;3;2"
-                                            dur="0.1s"
-                                            repeatCount="indefinite"></animate>
-                                        <animate
-                                            attributeName="opacity"
-                                            values="0.9;1;0.9"
-                                            dur="0.1s"
-                                            repeatCount="indefinite"></animate>
-                                    </ellipse>
-
-                                    <!-- Partículas laterales -->
-                                    <g class="side-particles">
-                                        <circle
-                                            cx="22"
-                                            cy="45"
-                                            r="0.8"
-                                            fill="#06ffa5"
-                                            opacity="0.7"
-                                        >
-                                            <animate
-                                                attributeName="cy"
-                                                values="45;48;45"
-                                                dur="0.2s"
-                                                repeatCount="indefinite"
-                                            ></animate>
-                                            <animate
-                                                attributeName="opacity"
-                                                values="0.7;0;0.7"
-                                                dur="0.2s"
-                                                repeatCount="indefinite"
-                                            ></animate>
-                                        </circle>
-                                        <circle
-                                            cx="30"
-                                            cy="45"
-                                            r="0.8"
-                                            fill="#00b5e2"
-                                            opacity="0.7"
-                                        >
-                                            <animate
-                                                attributeName="cy"
-                                                values="45;48;45"
-                                                dur="0.25s"
-                                                repeatCount="indefinite"
-                                            ></animate>
-                                            <animate
-                                                attributeName="opacity"
-                                                values="0.7;0;0.7"
-                                                dur="0.25s"
-                                                repeatCount="indefinite"
-                                            ></animate>
-                                        </circle>
-                                    </g>
-                                </g>
-
-                                <!-- Definiciones de gradientes -->
-                                <defs>
-                                    <radialGradient
-                                        id="botGlow"
-                                        cx="0.5"
-                                        cy="0.5"
-                                        r="0.5"
-                                    >
-                                        <stop
-                                            offset="0%"
-                                            stop-color="#0066ff"
-                                            stop-opacity="0.8"></stop>
-                                        <stop
-                                            offset="70%"
-                                            stop-color="#00b5e2"
-                                            stop-opacity="0.3"></stop>
-                                        <stop
-                                            offset="100%"
-                                            stop-color="#06ffa5"
-                                            stop-opacity="0"></stop>
-                                    </radialGradient>
-
-                                    <linearGradient
-                                        id="bodyGrad"
-                                        x1="12"
-                                        y1="12"
-                                        x2="40"
-                                        y2="36"
-                                    >
-                                        <stop offset="0%" stop-color="#0066ff"
-                                        ></stop>
-                                        <stop offset="50%" stop-color="#0052cc"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#00b5e2"
-                                        ></stop>
-                                    </linearGradient>
-
-                                    <linearGradient
-                                        id="strokeGrad"
-                                        x1="12"
-                                        y1="12"
-                                        x2="40"
-                                        y2="36"
-                                    >
-                                        <stop offset="0%" stop-color="#4da6ff"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#00d4ff"
-                                        ></stop>
-                                    </linearGradient>
-
-                                    <linearGradient
-                                        id="screenGrad"
-                                        x1="16"
-                                        y1="16"
-                                        x2="36"
-                                        y2="32"
-                                    >
-                                        <stop
-                                            offset="0%"
-                                            stop-color="#00b5e2"
-                                            stop-opacity="0.3"></stop>
-                                        <stop
-                                            offset="100%"
-                                            stop-color="#06ffa5"
-                                            stop-opacity="0.1"></stop>
-                                    </linearGradient>
-
-                                    <linearGradient
-                                        id="antennaGrad"
-                                        x1="26"
-                                        y1="4"
-                                        x2="26"
-                                        y2="8"
-                                    >
-                                        <stop offset="0%" stop-color="#06ffa5"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#00b5e2"
-                                        ></stop>
-                                    </linearGradient>
-
-                                    <linearGradient
-                                        id="thrusterNozzle"
-                                        x1="26"
-                                        y1="36"
-                                        x2="26"
-                                        y2="44"
-                                    >
-                                        <stop offset="0%" stop-color="#0066ff"
-                                        ></stop>
-                                        <stop offset="50%" stop-color="#0052cc"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#003d99"
-                                        ></stop>
-                                    </linearGradient>
-
-                                    <radialGradient
-                                        id="thrustFlame1"
-                                        cx="0.5"
-                                        cy="0.3"
-                                        r="0.8"
-                                    >
-                                        <stop
-                                            offset="0%"
-                                            stop-color="#ffffff"
-                                            stop-opacity="0.9"></stop>
-                                        <stop
-                                            offset="30%"
-                                            stop-color="#06ffa5"
-                                            stop-opacity="0.8"></stop>
-                                        <stop
-                                            offset="60%"
-                                            stop-color="#00b5e2"
-                                            stop-opacity="0.7"></stop>
-                                        <stop
-                                            offset="100%"
-                                            stop-color="#0066ff"
-                                            stop-opacity="0.3"></stop>
-                                    </radialGradient>
-
-                                    <radialGradient
-                                        id="thrustFlame2"
-                                        cx="0.5"
-                                        cy="0.2"
-                                        r="0.6"
-                                    >
-                                        <stop offset="0%" stop-color="#ffffff"
-                                        ></stop>
-                                        <stop offset="40%" stop-color="#06ffa5"
-                                        ></stop>
-                                        <stop offset="80%" stop-color="#00b5e2"
-                                        ></stop>
-                                        <stop
-                                            offset="100%"
-                                            stop-color="#0066ff"
-                                            stop-opacity="0.5"></stop>
-                                    </radialGradient>
-
-                                    <linearGradient
-                                        id="activityGrad"
-                                        x1="18"
-                                        y1="28"
-                                        x2="34"
-                                        y2="30"
-                                    >
-                                        <stop offset="0%" stop-color="#06ffa5"
-                                        ></stop>
-                                        <stop offset="50%" stop-color="#00b5e2"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#0066ff"
-                                        ></stop>
-                                    </linearGradient>
-
-                                    <linearGradient
-                                        id="armGrad"
-                                        x1="8"
-                                        y1="20"
-                                        x2="44"
-                                        y2="28"
-                                    >
-                                        <stop offset="0%" stop-color="#0052cc"
-                                        ></stop>
-                                        <stop offset="100%" stop-color="#00b5e2"
-                                        ></stop>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
-
-                            <!-- Animated particles -->
+                            <!-- Enhanced animated particles with varied colors -->
                             <div class="absolute inset-0">
                                 <div
-                                    class="particle absolute w-2 h-2 bg-white rounded-full opacity-60 animate-bounce"
-                                    style="top: 20%; left: 30%; animation-delay: 0s;"
+                                    class="particle absolute w-3 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full opacity-70 animate-bounce shadow-lg"
+                                    style="top: 15%; left: 25%; animation-delay: 0s;"
                                 >
                                 </div>
                                 <div
-                                    class="particle absolute w-1 h-1 bg-blue-200 rounded-full opacity-40 animate-bounce"
-                                    style="top: 70%; right: 25%; animation-delay: 1s;"
+                                    class="particle absolute w-2 h-2 bg-gradient-to-r from-violet-400 to-purple-500 rounded-full opacity-60 animate-bounce shadow-md"
+                                    style="top: 75%; right: 30%; animation-delay: 1.2s;"
                                 >
                                 </div>
                                 <div
-                                    class="particle absolute w-1.5 h-1.5 bg-purple-200 rounded-full opacity-50 animate-bounce"
-                                    style="top: 40%; right: 20%; animation-delay: 0.5s;"
+                                    class="particle absolute w-2.5 h-2.5 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full opacity-65 animate-bounce shadow-md"
+                                    style="top: 35%; right: 15%; animation-delay: 0.7s;"
+                                >
+                                </div>
+                                <div
+                                    class="particle absolute w-1.5 h-1.5 bg-gradient-to-r from-emerald-400 to-cyan-500 rounded-full opacity-50 animate-bounce shadow-sm"
+                                    style="top: 60%; left: 20%; animation-delay: 2s;"
+                                >
+                                </div>
+                                <div
+                                    class="particle absolute w-2 h-2 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full opacity-55 animate-bounce shadow-md"
+                                    style="top: 25%; right: 40%; animation-delay: 1.5s;"
                                 >
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Orbital rings -->
-                        <div
-                            class="absolute inset-0 border-2 border-white/20 rounded-full animate-spin"
-                            style="animation-duration: 8s;"
-                        >
-                        </div>
-                        <div
-                            class="absolute inset-4 border border-white/10 rounded-full animate-spin"
-                            style="animation-duration: 6s; animation-direction: reverse;"
-                        >
+                            <!-- Floating light spots -->
+                            <div class="absolute inset-0 opacity-40">
+                                <div
+                                    class="absolute w-8 h-8 bg-white/30 dark:bg-white/20 rounded-full blur-sm animate-pulse"
+                                    style="top: 30%; left: 40%; animation-delay: 0.3s;"
+                                >
+                                </div>
+                                <div
+                                    class="absolute w-6 h-6 bg-blue-200/40 dark:bg-blue-300/20 rounded-full blur-sm animate-pulse"
+                                    style="top: 65%; left: 60%; animation-delay: 1.8s;"
+                                >
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -610,43 +173,6 @@ import RunnerBot from "./RunnerBot.astro";
     </div>
 </section>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const runnerBot = document.getElementById("runnerBot");
-        const section = document.querySelector(".chatbots-about");
-
-        if (runnerBot && section) {
-            section.addEventListener("mousemove", function (e) {
-                const rect = section.getBoundingClientRect();
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-
-                const deltaX = mouseX - centerX;
-                const deltaY = mouseY - centerY;
-
-                const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-                const distance = Math.min(
-                    Math.sqrt(deltaX * deltaX + deltaY * deltaY),
-                    50,
-                );
-
-                const moveX = (deltaX / rect.width) * 20;
-                const moveY = (deltaY / rect.height) * 20;
-
-                runnerBot.style.transform = `translate(${moveX}px, ${moveY}px) rotate(${angle * 0.1}deg) scale(${1 + distance * 0.0005})`;
-            });
-
-            section.addEventListener("mouseleave", function () {
-                runnerBot.style.transform =
-                    "translate(0px, 0px) rotate(0deg) scale(1)";
-            });
-        }
-    });
-</script>
-
 <style>
     .chatbots-about {
         position: relative;
@@ -654,24 +180,207 @@ import RunnerBot from "./RunnerBot.astro";
 
     .particle {
         animation: float 3s ease-in-out infinite;
+        transition: all 0.3s ease-out;
     }
 
-    @keyframes float {
-        0%,
-        100% {
-            transform: translateY(0px);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
+    .particle:hover {
+        transform: scale(1.5) translateY(-5px);
+        opacity: 1 !important;
     }
 
     .runner-bot-container {
         perspective: 1000px;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .runner-bot-container:hover {
+        perspective: 1200px;
+        transform: scale(1.02);
     }
 
     #runnerBot {
         transform-style: preserve-3d;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        will-change: transform;
+    }
+
+    #runnerBot:hover {
+        transform: scale(1.08) rotateX(5deg) rotateY(5deg);
+        filter: brightness(1.1) saturate(1.2);
+    }
+
+    /* Animaciones mejoradas para las partículas */
+    .particle:nth-child(1) {
+        animation: floatComplex1 4s ease-in-out infinite;
+    }
+
+    .particle:nth-child(2) {
+        animation: floatComplex2 3.5s ease-in-out infinite;
+    }
+
+    .particle:nth-child(3) {
+        animation: floatComplex3 4.5s ease-in-out infinite;
+    }
+
+    .particle:nth-child(4) {
+        animation: floatComplex4 3.8s ease-in-out infinite;
+    }
+
+    .particle:nth-child(5) {
+        animation: floatComplex5 4.2s ease-in-out infinite;
+    }
+
+    @keyframes floatComplex1 {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        }
+        25% {
+            transform: translateY(-12px) translateX(5px) rotate(90deg)
+                scale(1.1);
+        }
+        50% {
+            transform: translateY(-20px) translateX(0px) rotate(180deg)
+                scale(1.2);
+        }
+        75% {
+            transform: translateY(-12px) translateX(-5px) rotate(270deg)
+                scale(1.1);
+        }
+    }
+
+    @keyframes floatComplex2 {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        }
+        30% {
+            transform: translateY(-8px) translateX(-8px) rotate(120deg)
+                scale(0.9);
+        }
+        60% {
+            transform: translateY(-15px) translateX(8px) rotate(240deg)
+                scale(1.3);
+        }
+        80% {
+            transform: translateY(-5px) translateX(-3px) rotate(300deg)
+                scale(1.1);
+        }
+    }
+
+    @keyframes floatComplex3 {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        }
+        20% {
+            transform: translateY(-10px) translateX(10px) rotate(72deg)
+                scale(1.2);
+        }
+        40% {
+            transform: translateY(-18px) translateX(-5px) rotate(144deg)
+                scale(0.8);
+        }
+        60% {
+            transform: translateY(-22px) translateX(3px) rotate(216deg)
+                scale(1.4);
+        }
+        80% {
+            transform: translateY(-8px) translateX(-8px) rotate(288deg)
+                scale(1.1);
+        }
+    }
+
+    @keyframes floatComplex4 {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        }
+        33% {
+            transform: translateY(-6px) translateX(-6px) rotate(110deg)
+                scale(1.3);
+        }
+        66% {
+            transform: translateY(-14px) translateX(12px) rotate(220deg)
+                scale(0.7);
+        }
+    }
+
+    @keyframes floatComplex5 {
+        0%,
+        100% {
+            transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        }
+        40% {
+            transform: translateY(-16px) translateX(8px) rotate(160deg)
+                scale(1.1);
+        }
+        70% {
+            transform: translateY(-12px) translateX(-10px) rotate(280deg)
+                scale(1.2);
+        }
+    }
+
+    /* Efectos de brillo mejorados */
+    .runner-bot-container:hover .absolute.inset-0.bg-gradient-to-r {
+        animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+        0%,
+        100% {
+            opacity: 0.25;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.4;
+            transform: scale(1.05);
+        }
+    }
+
+    /* Mejoras para modo light */
+    @media (prefers-color-scheme: light) {
+        .chatbots-about {
+            --bot-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --bot-shadow-hover: 0 35px 70px -12px rgba(0, 0, 0, 0.35);
+        }
+    }
+
+    /* Mejoras para modo dark */
+    @media (prefers-color-scheme: dark) {
+        .chatbots-about {
+            --bot-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --bot-shadow-hover: 0 35px 70px -12px rgba(0, 0, 0, 0.7);
+        }
+    }
+
+    #runnerBot {
+        box-shadow: var(--bot-shadow, 0 25px 50px -12px rgba(0, 0, 0, 0.25));
+        transition: box-shadow 0.4s ease-out;
+    }
+
+    #runnerBot:hover {
+        box-shadow: var(
+            --bot-shadow-hover,
+            0 35px 70px -12px rgba(0, 0, 0, 0.35)
+        );
+    }
+
+    /* Animación suave para los puntos de luz */
+    .runner-bot-container:hover .absolute.inset-0.opacity-40 > div {
+        animation: lightPulse 2.5s ease-in-out infinite;
+        transform: scale(1.2);
+    }
+
+    @keyframes lightPulse {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(1.2);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.5);
+        }
     }
 </style>
