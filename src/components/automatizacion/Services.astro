@@ -3,15 +3,18 @@
 ---
 
 <section
-    class="automation-services relative py-20 bg-slate-200/40 dark:bg-gray-900/50 overflow-hidden"
+    id="services"
+    class="automation-services relative py-20 bg-slate-200/40 dark:bg-gray-950 overflow-hidden"
 >
-    <!-- Background pattern similar to hero -->
+    <!-- Background pattern with curved lines and beams similar to Hero -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <!-- Curved beam patterns -->
         <svg
-            class="absolute inset-0 w-full h-full opacity-20 dark:opacity-10"
+            class="absolute inset-0 w-full h-full opacity-30 dark:opacity-20"
             viewBox="0 0 1440 800"
             preserveAspectRatio="xMidYMid slice"
         >
+            <!-- Animated curved beams -->
             <defs>
                 <linearGradient
                     id="serviceBeam1"
@@ -22,36 +25,103 @@
                 >
                     <stop
                         offset="0%"
-                        class="text-blue-400/40"
+                        class="text-blue-400/60 dark:text-purple-400/40"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="50%"
+                        class="text-indigo-500/80 dark:text-blue-500/60"
                         stop-color="currentColor"></stop>
                     <stop
                         offset="100%"
-                        class="text-purple-500/20"
+                        class="text-purple-500/40 dark:text-indigo-400/30"
+                        stop-color="currentColor"></stop>
+                </linearGradient>
+                <linearGradient
+                    id="serviceBeam2"
+                    x1="100%"
+                    y1="0%"
+                    x2="0%"
+                    y2="100%"
+                >
+                    <stop
+                        offset="0%"
+                        class="text-emerald-400/50 dark:text-cyan-400/30"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="50%"
+                        class="text-blue-500/70 dark:text-indigo-500/50"
+                        stop-color="currentColor"></stop>
+                    <stop
+                        offset="100%"
+                        class="text-indigo-500/30 dark:text-purple-400/20"
                         stop-color="currentColor"></stop>
                 </linearGradient>
             </defs>
+
+            <!-- Curved path 1 - Different from Hero -->
             <path
-                d="M0,300 Q360,200 720,400 T1440,350"
+                d="M0,200 Q480,100 960,300 T1440,250"
                 stroke="url(#serviceBeam1)"
                 stroke-width="2"
                 fill="none"
-                opacity="0.3"
+                opacity="0.4"
             >
                 <animate
                     attributeName="opacity"
-                    values="0.2;0.6;0.2"
-                    dur="8s"
+                    values="0.3;0.7;0.3"
+                    dur="10s"
                     repeatCount="indefinite"></animate>
             </path>
+
+            <!-- Curved path 2 - Different positioning -->
+            <path
+                d="M1440,600 Q1080,500 720,650 T0,600"
+                stroke="url(#serviceBeam2)"
+                stroke-width="3"
+                fill="none"
+                opacity="0.5"
+            >
+                <animate
+                    attributeName="stroke-width"
+                    values="2;4;2"
+                    dur="14s"
+                    repeatCount="indefinite"></animate>
+            </path>
+
+            <!-- Curved path 3 - Unique wave pattern -->
+            <path
+                d="M0,450 Q360,350 720,500 Q1080,650 1440,550"
+                stroke="url(#serviceBeam1)"
+                stroke-width="2"
+                fill="none"
+                opacity="0.6"
+            >
+                <animate
+                    attributeName="stroke-width"
+                    values="1;3;1"
+                    dur="16s"
+                    repeatCount="indefinite"></animate>
+            </path>
+
+            <!-- Additional curved path for more depth -->
         </svg>
 
-        <!-- Floating elements -->
+        <!-- Geometric beam overlays - repositioned for Services -->
         <div
-            class="absolute top-1/4 right-1/4 w-64 h-64 bg-gradient-to-br from-blue-400/10 to-purple-300/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl animate-pulse"
+            class="absolute -z-50 top-1/6 right-1/3 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-300/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl"
+            style="animation: slow-pulse 10s ease-in-out infinite;"
         >
         </div>
         <div
-            class="absolute bottom-1/4 left-1/4 w-48 h-48 bg-gradient-to-tl from-emerald-300/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
+            class="absolute -z-50 bottom-1/6 left-1/3 w-80 h-80 bg-gradient-to-tl from-emerald-300/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
+            style="animation: slow-pulse 14s ease-in-out infinite 2s;"
+        >
+        </div>
+
+        <!-- Grid pattern overlay -->
+        <div
+            class="absolute inset-0 opacity-15 dark:opacity-8"
+            style="background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.3) 1px, transparent 0); background-size: 60px 60px;"
         >
         </div>
     </div>
@@ -286,7 +356,7 @@
             </div>
         </div>
 
-        <!-- Call to action -->
+        <!-- Call to action
         <div class="text-center mt-16">
             <a
                 href="#cta"
@@ -306,6 +376,21 @@
                         d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                 </svg>
             </a>
-        </div>
+        </div> -->
     </div>
 </section>
+
+<style>
+    /* Animations from Hero.astro */
+    @keyframes slow-pulse {
+        0%,
+        100% {
+            opacity: 0.4;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.8;
+            transform: scale(1.1);
+        }
+    }
+</style>
