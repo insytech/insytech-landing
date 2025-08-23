@@ -206,6 +206,8 @@ import MobileFlow from "./MobileFlow.astro";
         color: white;
         contain: layout style;
         padding: 2rem;
+        /* Añadir padding superior para evitar overlap con navbar */
+        padding-top: 6rem;
     }
 
     /* Contenedor principal de dos columnas con nuevas proporciones */
@@ -362,23 +364,34 @@ import MobileFlow from "./MobileFlow.astro";
 
         .hero-main-container {
             flex-direction: column;
-            min-height: 500px;
+            min-height: calc(
+                100vh - 8rem
+            ); /* Ajustar altura considerando padding superior */
             text-align: center;
             padding: 1rem;
             gap: 3rem;
+            justify-content: center;
+            padding-top: 3rem; /* Añadir más espacio superior */
         }
 
         .hero-content {
             flex: none;
+            max-width: 100%;
         }
 
         .automation-hero {
             min-height: 100vh;
+            padding-top: 6rem; /* Aumentado de 5rem a 6rem */
         }
 
         .hero-visual-area {
             order: 2;
-            min-height: 450px;
+            min-height: 350px;
+        }
+
+        /* Centrar botones específicamente */
+        .hero-content .flex {
+            justify-content: center;
         }
     }
 
@@ -387,25 +400,88 @@ import MobileFlow from "./MobileFlow.astro";
         .automation-hero {
             min-height: 100vh;
             padding: 1rem;
+            padding-top: 6rem; /* Aumentado de 5rem a 6rem */
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
         }
 
         .hero-main-container {
             gap: 2rem;
-            min-height: 500px;
+            min-height: calc(100vh - 7rem); /* Ajustado para el nuevo padding */
             padding: 1rem;
+            justify-content: center;
+            align-items: center;
+            padding-top: 3rem; /* Añadir más espacio superior */
+        }
+
+        .hero-content {
+            text-align: center;
+            width: 100%;
         }
 
         .hero-content h1 {
             font-size: clamp(2rem, 6vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
         }
 
         .hero-visual-area {
-            min-height: 400px;
+            min-height: 300px;
             padding: 1rem;
         }
 
-        .cta-buttons {
+        /* Asegurar que los botones estén centrados */
+        .hero-content .flex {
             justify-content: center;
+            gap: 1rem;
+        }
+
+        .hero-content .flex a {
+            flex: 1;
+            max-width: 200px;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+
+    /* Para pantallas muy pequeñas */
+    @media (max-width: 480px) {
+        .automation-hero {
+            padding-top: 5rem; /* Aumentado de 4rem a 5rem */
+        }
+
+        .hero-main-container {
+            min-height: calc(100vh - 6rem); /* Ajustado para el nuevo padding */
+            gap: 1.5rem;
+            padding-top: 2.5rem; /* Añadir espacio superior */
+        }
+
+        .hero-content h1 {
+            font-size: clamp(1.8rem, 7vw, 2.5rem);
+        }
+
+        .hero-content p {
+            font-size: 1rem;
+        }
+
+        .hero-content .flex {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .hero-content .flex a {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .hero-visual-area {
+            min-height: 250px;
         }
     }
 
