@@ -1,0 +1,363 @@
+---
+import "../styles/global.css"; // NUEVO: garantiza estilos globales en todas las rutas
+import Footer from "../components/elements/Footer.astro";
+import Navbar from "../components/elements/Navbar.astro";
+import CookieConsent from "../components/elements/CookieConsent.astro";
+import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
+
+export interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    noindex?: boolean;
+    // NUEVO
+    siteName?: string; // Aparece arriba del título en la tarjeta
+    twitterHandle?: string; // Ej: @insytech
+    imageAlt?: string; // Texto alternativo para la imagen OG/Twitter
+    imageWidth?: number; // Ancho de la imagen OG (px)
+    imageHeight?: number; // Alto de la imagen OG (px)
+}
+
+const {
+    title = "Insytech Vision: Innovación en IA y Machine Learning para la Industria",
+    description = "Insytech Vision lidera la transformación industrial con soluciones avanzadas de inteligencia artificial y machine learning.",
+    ogImage = "/images/futuro_digital.webp",
+    noindex = false,
+    // NUEVO: defaults
+    siteName = "Insytech Vision",
+    twitterHandle = "@insytech",
+    imageAlt = "Insytech Vision: Innovación en IA y Machine Learning",
+    imageWidth = 1200,
+    imageHeight = 630,
+} = Astro.props;
+
+// NUEVO: asegurar URL absoluta para la imagen OG/Twitter
+const toAbsolute = (src: string) =>
+    src?.startsWith("http")
+        ? src
+        : Astro.url
+          ? new URL(src, Astro.url).href
+          : src;
+const ogImageAbs = toAbsolute(ogImage);
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Acelera el handshake/TLS -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+        <!-- Carga no bloqueante del CSS de Google Fonts -->
+        <link
+            rel="preload"
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            as="style"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            media="print"
+            onload="this.media='all'"
+        />
+        <noscript
+            ><link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap"
+            /></noscript
+        >
+
+        <title>{title}</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta
+            name="keywords"
+            lang="es_MX"
+            content="automatización, software, ingeniería, IA, Insytech"
+        />
+        <meta
+            name="keywords"
+            lang="en_US"
+            content="automation, software, engineering, AI, Insytech"
+        />
+
+        <!-- Descripción SEO -->
+        <meta name="description" content={description} />
+        {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+        <!-- Canonical -->
+        {Astro.url && <link rel="canonical" href={Astro.url.href} />}
+
+        <!-- Open Graph -->
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="es_MX" />
+        {Astro.url && <meta property="og:url" content={Astro.url.href} />}
+        <meta property="og:image" content={ogImageAbs} />
+        <meta property="og:image:secure_url" content={ogImageAbs} />
+        <meta property="og:image:alt" content={imageAlt} />
+        <meta property="og:image:width" content={String(imageWidth)} />
+        <meta property="og:image:height" content={String(imageHeight)} />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={twitterHandle} />
+        <meta name="twitter:creator" content={twitterHandle} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageAbs} />
+        <meta name="twitter:image:alt" content={imageAlt} />
+
+        <!-- Opcional: nombre de la app (algunos UAs lo muestran) -->
+        <meta name="application-name" content={siteName} />
+
+        <link
+            rel="icon"
+            type="image/webp"
+            href="/Favicon_16x16px_Mesa-de-trabajo-1.webp"
+        />
+        <meta name="generator" content={Astro.generator} />
+    </head>
+    <body class="overflow-hidden overflow-y-auto bg-body">
+        <Navbar />
+        <slot />
+        <Footer />
+        <CookieConsent />
+        {
+            /*
+      Widget de WhatsApp (configurable). Edita props si deseas cambiar textos.
+      phone espera solo dígitos con lada.
+    */
+        }
+        <WhatsappWidget />
+        <script>
+            // Reveal on scroll para [data-animate]
+            (() => {
+                const els = Array.from(
+                    document.querySelectorAll("[data-animate]"),
+                );
+                if (!els.length) return;
+                if (!("IntersectionObserver" in window)) {
+                    els.forEach((el) => el.classList.add("in"));
+                    return;
+                }
+                const io = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                                const el = entry.target;
+                                if (el instanceof HTMLElement) {
+                                    const d =
+                                        el.getAttribute("data-animate-delay");
+                                    if (d) el.style.setProperty("--delay", d);
+                                    el.classList.add("in");
+                                }
+                                io.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
+                );
+                els.forEach((el) => io.observe(el));
+            })();
+        </script>
+    </body>
+</html>
+
+<style is:global>
+    :root {
+        --color-bg: 255 255 255;
+        --color-border: 255 255 255;
+        --color-box: 255 255 255;
+        --box-border: 229 231 235;
+        --box-sd: 226 232 240 / 0.5;
+        --heading-1: 23 37 84;
+        --heading-2: 31 41 55;
+        --heading-3: 55 65 81;
+    }
+
+    .dark {
+        --color-bg: 3 7 18;
+        --color-box: 17 24 39;
+        --box-border: 243 244 246/0.1;
+        --box-sd: transparent;
+
+        --heading-1: 255 255 255;
+        --heading-2: 243 244 246;
+        --heading-3: 209 213 219;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+    body {
+        font-family: "Raleway", sans-serif;
+    }
+
+    [data-toggle-nav][data-open-nav="true"] #line1 {
+        transform: translateY(0.375rem) rotate(45deg);
+    }
+    [data-toggle-nav][data-open-nav="true"] #line2 {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+    [data-toggle-nav][data-open-nav="true"] #line3 {
+        transform: translateY(-0.375rem) rotate(-45deg);
+    }
+
+    [data-nav-overlay][data-is-visible="true"] {
+        visibility: visible;
+        display: flex;
+    }
+
+    /* Tipografía uniforme por sección (aplicar con class="content-typography") */
+    .content-typography {
+        font-size: clamp(15px, 0.3vw + 14px, 18px);
+        line-height: 1.75;
+        letter-spacing: 0.01em;
+    }
+    .content-typography h2 {
+        font-size: clamp(20px, 0.6vw + 18px, 24px);
+        font-weight: 700;
+        color: rgb(var(--heading-2));
+        margin-top: 1.25rem;
+        margin-bottom: 0.5rem;
+        text-wrap: balance;
+    }
+    .content-typography h3 {
+        font-size: clamp(18px, 0.5vw + 16px, 20px);
+        font-weight: 600;
+        color: rgb(var(--heading-2));
+        margin-top: 1rem;
+        margin-bottom: 0.25rem;
+        text-wrap: balance;
+    }
+    .content-typography p {
+        margin: 0.75rem 0;
+        color: rgb(var(--heading-3));
+    }
+    .content-typography ul {
+        margin: 0.5rem 0 1rem;
+        padding-left: 1.25rem;
+    }
+    .content-typography li {
+        margin: 0.25rem 0;
+        color: rgb(var(--heading-3));
+    }
+    .content-typography a {
+        text-decoration: underline;
+        color: #005eb8;
+    }
+    .dark .content-typography a {
+        color: #00b5e2;
+    }
+
+    /* Animations: utilidades discretas para landing industrial */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(16px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    @keyframes floatSoft {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+
+    [data-animate] {
+        opacity: 0;
+        will-change: opacity, transform;
+    }
+    [data-animate].in {
+        animation-duration: var(--dur, 0.7s);
+        animation-timing-function: var(
+            --easing,
+            cubic-bezier(0.2, 0.6, 0.2, 1)
+        );
+        animation-fill-mode: both;
+        animation-delay: var(--delay, 0s);
+    }
+    [data-animate="fade"].in {
+        animation-name: fadeIn;
+    }
+    [data-animate="fade-up"].in {
+        animation-name: fadeInUp;
+    }
+    [data-animate="slide-left"].in {
+        animation-name: slideInLeft;
+    }
+    [data-animate="slide-right"].in {
+        animation-name: slideInRight;
+    }
+    [data-animate="scale"].in {
+        animation-name: scaleIn;
+    }
+
+    .float-slow {
+        animation: floatSoft 6s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        [data-animate],
+        [data-animate].in {
+            opacity: 1;
+            animation: none !important;
+            transform: none !important;
+        }
+        .float-slow {
+            animation: none !important;
+        }
+        html {
+            scroll-behavior: auto;
+        }
+    }
+</style>

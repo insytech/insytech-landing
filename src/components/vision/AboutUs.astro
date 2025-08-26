@@ -1,0 +1,213 @@
+---
+import Badge from "@components/shared/Badge.astro";
+import Container from "../shared/Container.astro";
+import Paragraph from "../shared/Paragraph.astro";
+import Title from "../shared/Title.astro";
+import BadgeImage from "@components/shared/BadgeImage.astro";
+---
+
+<section id="about-us" class="relative pt-10 overflow-hidden">
+    <!-- Elementos decorativos de fondo -->
+    <div class="absolute inset-0 z-0">
+        <div
+            class="absolute top-0 right-0 w-1/2 h-1/3 bg-gradient-to-bl from-[#00B5E2]/5 to-transparent rounded-bl-full"
+        >
+        </div>
+        <div
+            class="hidden lg:block absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#001489]/10 to-transparent rounded-tr-full opacity-60"
+        >
+        </div>
+        <div
+            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
+        >
+        </div>
+    </div>
+
+    <Container
+        className="relative z-10 flex flex-col midmd:flex-row gap-10 lg:gap-12"
+    >
+        <!-- Columna de imagen con efectos visuales -->
+        <div class="w-full lg:w-1/2 relative mt-16" data-animate="slide-left">
+            <div
+                class="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-xl"
+            >
+                <!-- Bordes con gradiente -->
+                <div
+                    class="absolute inset-0 rounded-2xl border-2 border-[#005EB8]/30"
+                >
+                </div>
+
+                <!-- Imagen con overlay -->
+                <div class="absolute inset-0">
+                    <img
+                        src="/images/futuro_digital.webp"
+                        alt="Insytech - Soluciones de automatización"
+                        class="w-full h-full object-cover"
+                        width="596"
+                        height="447"
+                        loading="lazy"
+                    />
+                    <!-- Overlay para mejorar contraste -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
+                    >
+                    </div>
+                </div>
+
+                <!-- Elemento flotante decorativo -->
+                <div
+                    class="absolute top-4 right-4 rounded-lg flex items-center gap-2"
+                    data-animate="scale"
+                    data-animate-delay=".18s"
+                >
+                    <BadgeImage
+                        title="8+ años de experiencia"
+                        subtitle="Especialistas certificados"
+                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75'/></svg>"
+                    />
+                </div>
+            </div>
+
+            <!-- Elementos decorativos de fondo -->
+            <div
+                class="absolute -left-6 top-1/2 w-32 h-32 bg-[#00B5E2]/20 rounded-full filter blur-2xl"
+            >
+            </div>
+            <div
+                class="absolute -top-0 -right-6 w-32 h-32 bg-[#001489]/10 rounded-full filter blur-2xl"
+            >
+            </div>
+        </div>
+
+        <!-- Columna de contenido -->
+        <div
+            class="flex flex-col w-full lg:w-1/2 space-y-8"
+            data-animate="fade-up"
+            data-animate-delay=".08s"
+        >
+            <!-- Badge de navegación -->
+            <div class="flex justify-center lg:justify-start">
+                <Badge text="Acerca de Nosotros" />
+            </div>
+
+            <!-- Título y descripción -->
+            <div>
+                <Title data-animate="fade-up"
+                    >Impulsamos tu negocio hacia el futuro digital</Title
+                >
+                <Paragraph
+                    className="mt-8"
+                    data-animate="fade"
+                    data-animate-delay=".12s"
+                >
+                    En Insytech, nos especializamos en ofrecer soluciones
+                    tecnológicas innovadoras que transforman la manera en que
+                    las empresas operan. Nuestro equipo está comprometido con la
+                    excelencia y la satisfacción del cliente, ayudándote a
+                    alcanzar tus objetivos con rapidez y eficiencia.
+                </Paragraph>
+            </div>
+
+            <!-- H2 accesible para no saltar niveles antes de los H3 -->
+            <h2 class="sr-only">Misión y Visión</h2>
+
+            <!-- Tarjetas de misión y visión -->
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                data-animate="fade-up"
+                data-animate-delay=".16s"
+            >
+                <!-- Tarjeta de Misión -->
+                <div
+                    class="light:bg-box-bg dark:bg-gray-900/20 backdrop-blur-sm p-6 rounded-2xl border border-box-border shadow-md"
+                >
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="flex-shrink-0 w-12 h-12 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-6 h-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-heading-2">Misión</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        Proveer soluciones tecnológicas de alta calidad para
+                        nuestros clientes, optimizando sus procesos y
+                        maximizando su productividad.
+                    </p>
+                </div>
+
+                <!-- Tarjeta de Visión -->
+                <div
+                    class="light:bg-box-bg dark:bg-gray-900/20 backdrop-blur-sm p-6 rounded-2xl border border-box-border shadow-md"
+                >
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="flex-shrink-0 w-12 h-12 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-6 h-6"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                                ></path>
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-heading-2">Visión</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300">
+                        Ser líderes en innovación tecnológica, marcando la
+                        diferencia en cada proyecto y contribuyendo al éxito
+                        sostenible de nuestros clientes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botón de acción -->
+            <div class="pt-4" data-animate="fade-up" data-animate-delay=".2s">
+                <a
+                    href="#contact"
+                    class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#005EB8] text-white hover:bg-[#004a92] transition-colors"
+                >
+                    <span>Conoce más sobre nosotros</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>

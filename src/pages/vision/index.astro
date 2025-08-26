@@ -1,0 +1,40 @@
+---
+import VisionLayout from "@layouts/VisionLayout.astro";
+import Hero from "@components/vision/Hero.astro";
+import Services from "@components/vision/Services.astro";
+import AboutUs from "@components/vision/AboutUs.astro";
+import Features from "@components/vision/Features.astro";
+import CTA from "@components/vision/CTA.astro";
+import ContactForm from "@components/sections/ContactForm.astro";
+---
+
+<VisionLayout
+	title="Insytech Vision: Innovación en IA y Machine Learning para la Industria"
+>
+	<main class="flex flex-col overflow-hidden">
+		<Hero />
+		<Services />
+		<AboutUs />
+		<Features />
+		<CTA />
+		<div class="relative">
+			<div class="absolute inset-0 z-0">
+				<div class="absolute inset-0 bg-gray-100 dark:bg-gray-900/20">
+				</div>
+				<div
+					class="absolute top-0 left-0 w-full h-1/3 bg-white dark:bg-gray-950 clip-path-diagonal"
+				>
+				</div>
+			</div>
+			<div class="relative z-10 py-20">
+				<ContactForm />
+			</div>
+		</div>
+	</main>
+</VisionLayout>
+
+<style>
+	.clip-path-diagonal {
+		clip-path: polygon(0 0, 100% 0, 100% 10%, 0 100%);
+	}
+</style>
