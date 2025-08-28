@@ -3,6 +3,7 @@ import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Badge from "../shared/Badge.astro";
 import BadgeImage from "@components/shared/BadgeImage.astro";
+import ThreeHero from "@utils/threejs";
 ---
 
 <section
@@ -107,6 +108,7 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
                     id="three-hero"
                     class="w-full h-[350px] lg:h-[350px] rounded-2xl overflow-hidden shadow-xl bg-transparent"
                 >
+                    <ThreeHero client:load />
                 </div>
 
                 <!-- Badge de estado mejorado - posicionamiento y diseño optimizado -->
@@ -183,8 +185,6 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
         </div>
     </Container>
 </section>
-
-<script type="module" src="/src/utils/threejs.ts"></script>
 
 <style>
     @keyframes scanline {
