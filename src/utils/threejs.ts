@@ -23,7 +23,7 @@ container.appendChild(renderer.domElement);
 const scene = new THREE.Scene();
 
 // Iluminación profesional desde arriba (como cámara industrial)
-const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // Luz ambiental suave
 scene.add(ambientLight);
 
 const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
@@ -71,7 +71,7 @@ const inspectionCameraGroup = new THREE.Group();
 const cameraBody = new THREE.Mesh(
     new THREE.BoxGeometry(0.8, 0.6, 1.2),
     new THREE.MeshStandardMaterial({
-        color: 0x2a2a2a,
+        color: 0xedf0f7,
         roughness: 0.3,
         metalness: 0.7
     })
@@ -84,7 +84,7 @@ inspectionCameraGroup.add(cameraBody);
 const cameraLens = new THREE.Mesh(
     new THREE.CylinderGeometry(0.25, 0.3, 0.4, 16),
     new THREE.MeshStandardMaterial({
-        color: 0x1a1a1a,
+        color: 0xedf0f7,
         roughness: 0.1,
         metalness: 0.9
     })
@@ -99,7 +99,7 @@ inspectionCameraGroup.add(cameraLens);
 const lensGlass = new THREE.Mesh(
     new THREE.CylinderGeometry(0.22, 0.22, 0.07, 32),
     new THREE.MeshPhysicalMaterial({
-        color: 0x66aaff,
+        color: 0xedf0f7,
         transparent: true,
         opacity: 0.6,
         roughness: 0.05,
@@ -123,7 +123,6 @@ const statusLED = new THREE.Mesh(
     new THREE.SphereGeometry(0.05, 8, 6),
     new THREE.MeshBasicMaterial({
         color: 0x00ff00,
-        emissive: 0x004400
     })
 );
 statusLED.position.set(0.3, 0.25, 0.5);
@@ -135,7 +134,7 @@ inspectionCameraGroup.add(statusLED);
 const cameraMount = new THREE.Mesh(
     new THREE.CylinderGeometry(0.1, 0.15, 1.5, 8),
     new THREE.MeshStandardMaterial({
-        color: 0x333333,
+        color: 0xedf0f7,
         roughness: 0.6,
         metalness: 0.4
     })
@@ -161,7 +160,7 @@ mountBase.receiveShadow = false;
 inspectionCameraGroup.add(mountBase);
 
 // Posicionar la cámara al lado de la banda
-inspectionCameraGroup.position.set(3, 4.8, 0); // Movida a la derecha y más arriba
+inspectionCameraGroup.position.set(3, 4.9, 0); // Movida a la derecha y más arriba
 inspectionCameraGroup.rotation.y = -Math.PI / 6; // Rotación hacia la banda desde la derecha
 scene.add(inspectionCameraGroup);
 
