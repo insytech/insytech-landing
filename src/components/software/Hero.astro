@@ -1,6 +1,7 @@
 ---
 import Container from "../shared/Container.astro";
 import BtnLink from "../shared/BtnLink.astro";
+import Badge from "../shared/Badge.astro";
 ---
 
 <section
@@ -51,19 +52,7 @@ import BtnLink from "../shared/BtnLink.astro";
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <!-- Left Side: Content -->
             <div class="max-w-2xl">
-                <div
-                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#005EB8]/10 dark:bg-blue-500/10 border border-[#005EB8]/20 dark:border-blue-500/20 mb-6"
-                    data-animate="slide-left"
-                >
-                    <span
-                        class="w-2 h-2 rounded-full bg-[#005EB8] dark:bg-blue-400 animate-pulse"
-                    ></span>
-                    <span
-                        class="text-xs font-semibold text-[#005EB8] dark:text-blue-300 uppercase tracking-widest font-mono"
-                    >
-                        Deploying Enterprise Solutions
-                    </span>
-                </div>
+                <Badge text="Deploying Enterprise Solutions" />
 
                 <h1
                     class="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#211915] dark:text-white leading-[1.1] mb-8"

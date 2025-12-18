@@ -5,8 +5,7 @@ import MesPlanner from "../../components/tracking/MesPlanner.astro";
 import MesManagement from "../../components/tracking/MesManagement.astro";
 import MesHmi from "../../components/tracking/MesHmi.astro";
 import MesAndon from "../../components/tracking/MesAndon.astro";
-import Container from "../../components/shared/Container.astro";
-import ContactForm from "../../components/sections/ContactForm.astro";
+import ContactSection from "../../components/sections/ContactSection.astro";
 ---
 
 <Layout
@@ -20,15 +19,6 @@ import ContactForm from "../../components/sections/ContactForm.astro";
         <MesManagement />
         <MesHmi />
         <MesAndon />
-        <!-- Contact Section -->
-        <div class="relative" id="contact">
-            <div class="absolute inset-0 z-0">
-                <div class="absolute inset-0 bg-gray-100 dark:bg-gray-900/20">
-                </div>
-            </div>
-            <div class="relative z-10 py-10">
-                <ContactForm />
-            </div>
-        </div>
+        <ContactSection />
     </main>
 </Layout>

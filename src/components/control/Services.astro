@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import Badge from "../shared/Badge.astro";
 
 const services = [
     {
@@ -27,10 +28,8 @@ const services = [
     <Container>
         <!-- Header -->
         <div class="text-center mb-16" data-animate="fade-up">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#005EB8]/10 border-l-4 border-[#005EB8] mb-6">
-                <span class="text-sm font-medium text-[#005EB8] dark:text-[#4da6ff] uppercase tracking-wider">
-                    Nuestros servicios
-                </span>
+            <div class="flex justify-center mb-6">
+                <Badge text="Nuestros servicios" />
             </div>
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight">
                 Soluciones de

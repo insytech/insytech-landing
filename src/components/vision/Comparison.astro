@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import Badge from "../shared/Badge.astro";
 ---
 
 <section
@@ -9,16 +10,8 @@ import Container from "../shared/Container.astro";
     <Container className="relative z-10">
         <!-- Encabezado -->
         <div class="max-w-3xl mx-auto text-center mb-12" data-animate="fade-up">
-            <div
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#005EB8]/30 bg-[#005EB8]/5 dark:bg-[#005EB8]/10 mb-6"
-            >
-                <div class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse">
-                </div>
-                <span
-                    class="text-sm font-medium text-[#005EB8] dark:text-[#4da6ff] uppercase tracking-wider"
-                >
-                    Comparativa
-                </span>
+            <div class="flex justify-center mb-6">
+                <Badge text="Comparativa" />
             </div>
 
             <h2

@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import Badge from "../shared/Badge.astro";
 ---
 
 <section
@@ -78,24 +79,7 @@ import Container from "../shared/Container.astro";
             <!-- Content -->
             <div class="py-20 lg:py-32">
                 <!-- Badge -->
-                <div
-                    class="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-[#005EB8]/10 dark:bg-[#00B5E2]/10 border border-[#005EB8]/20 dark:border-[#00B5E2]/20 mb-8"
-                    data-animate="fade-up"
-                >
-                    <span class="relative flex h-2 w-2">
-                        <span
-                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00B5E2] opacity-75"
-                        ></span>
-                        <span
-                            class="relative inline-flex rounded-full h-2 w-2 bg-[#00B5E2]"
-                        ></span>
-                    </span>
-                    <span
-                        class="text-sm font-medium text-[#005EB8] dark:text-[#00B5E2] uppercase tracking-wider"
-                    >
-                        Automatización Industrial
-                    </span>
-                </div>
+                <Badge text="Automatización Industrial" />
 
                 <!-- Title -->
                 <h1
