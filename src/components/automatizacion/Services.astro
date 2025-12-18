@@ -11,15 +11,14 @@ import {
     id="services"
     class="automation-services relative py-20 bg-slate-200/40 dark:bg-gray-950 overflow-hidden"
 >
-    <!-- Background pattern with curved lines and beams similar to Hero -->
+    <!-- Background pattern with curved lines (optimizado) -->
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <!-- Curved beam patterns -->
+        <!-- Curved beam patterns (colores corporativos) -->
         <svg
-            class="absolute inset-0 w-full h-full opacity-30 dark:opacity-20"
+            class="absolute inset-0 w-full h-full opacity-10 dark:opacity-10"
             viewBox="0 0 1440 800"
             preserveAspectRatio="xMidYMid slice"
         >
-            <!-- Animated curved beams -->
             <defs>
                 <linearGradient
                     id="serviceBeam1"
@@ -28,18 +27,12 @@ import {
                     x2="100%"
                     y2="100%"
                 >
-                    <stop
-                        offset="0%"
-                        class="text-blue-400/60 dark:text-purple-400/40"
-                        stop-color="currentColor"></stop>
-                    <stop
-                        offset="50%"
-                        class="text-indigo-500/80 dark:text-blue-500/60"
-                        stop-color="currentColor"></stop>
-                    <stop
-                        offset="100%"
-                        class="text-purple-500/40 dark:text-indigo-400/30"
-                        stop-color="currentColor"></stop>
+                    <stop offset="0%" stop-color="#00B5E2" stop-opacity="0.6"
+                    ></stop>
+                    <stop offset="50%" stop-color="#005EB8" stop-opacity="0.8"
+                    ></stop>
+                    <stop offset="100%" stop-color="#001489" stop-opacity="0.5"
+                    ></stop>
                 </linearGradient>
                 <linearGradient
                     id="serviceBeam2"
@@ -48,84 +41,40 @@ import {
                     x2="0%"
                     y2="100%"
                 >
-                    <stop
-                        offset="0%"
-                        class="text-emerald-400/50 dark:text-cyan-400/30"
-                        stop-color="currentColor"></stop>
-                    <stop
-                        offset="50%"
-                        class="text-blue-500/70 dark:text-indigo-500/50"
-                        stop-color="currentColor"></stop>
-                    <stop
-                        offset="100%"
-                        class="text-indigo-500/30 dark:text-purple-400/20"
-                        stop-color="currentColor"></stop>
+                    <stop offset="0%" stop-color="#001489" stop-opacity="0.5"
+                    ></stop>
+                    <stop offset="50%" stop-color="#005EB8" stop-opacity="0.7"
+                    ></stop>
+                    <stop offset="100%" stop-color="#00B5E2" stop-opacity="0.5"
+                    ></stop>
                 </linearGradient>
             </defs>
 
-            <!-- Curved path 1 - Different from Hero -->
+            <!-- Solo 2 paths estáticos -->
             <path
                 d="M0,200 Q480,100 960,300 T1440,250"
                 stroke="url(#serviceBeam1)"
                 stroke-width="2"
                 fill="none"
-                opacity="0.4"
-            >
-                <animate
-                    attributeName="opacity"
-                    values="0.3;0.7;0.3"
-                    dur="10s"
-                    repeatCount="indefinite"></animate>
-            </path>
-
-            <!-- Curved path 2 - Different positioning -->
+                opacity="1"></path>
             <path
                 d="M1440,600 Q1080,500 720,650 T0,600"
                 stroke="url(#serviceBeam2)"
-                stroke-width="3"
-                fill="none"
-                opacity="0.5"
-            >
-                <animate
-                    attributeName="stroke-width"
-                    values="2;4;2"
-                    dur="14s"
-                    repeatCount="indefinite"></animate>
-            </path>
-
-            <!-- Curved path 3 - Unique wave pattern -->
-            <path
-                d="M0,450 Q360,350 720,500 Q1080,650 1440,550"
-                stroke="url(#serviceBeam1)"
                 stroke-width="2"
                 fill="none"
-                opacity="0.6"
-            >
-                <animate
-                    attributeName="stroke-width"
-                    values="1;3;1"
-                    dur="16s"
-                    repeatCount="indefinite"></animate>
-            </path>
-
-            <!-- Additional curved path for more depth -->
+                opacity="1"></path>
         </svg>
 
-        <!-- Geometric beam overlays - repositioned for Services -->
+        <!-- Glow unificado (colores corporativos) -->
         <div
-            class="absolute -z-50 top-1/6 right-1/3 w-96 h-96 bg-gradient-to-br from-blue-400/10 to-purple-300/10 dark:from-purple-400/10 dark:to-blue-500/10 rounded-full blur-3xl"
-            style="animation: slow-pulse 10s ease-in-out infinite;"
-        >
-        </div>
-        <div
-            class="absolute -z-50 bottom-1/6 left-1/3 w-80 h-80 bg-gradient-to-tl from-emerald-300/10 to-indigo-500/10 dark:from-cyan-400/8 dark:to-indigo-500/8 rounded-full blur-3xl"
-            style="animation: slow-pulse 14s ease-in-out infinite 2s;"
+            class="absolute -z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-[#00B5E2]/8 via-[#005EB8]/6 to-[#001489]/8 dark:from-[#00B5E2]/10 dark:via-[#005EB8]/8 dark:to-[#001489]/10 rounded-full blur-3xl"
+            style="animation: slow-pulse 12s ease-in-out infinite;"
         >
         </div>
 
         <!-- Grid pattern overlay -->
         <div
-            class="absolute inset-0 opacity-15 dark:opacity-8"
+            class="absolute inset-0 opacity-10 dark:opacity-5"
             style="background-image: radial-gradient(circle at 1px 1px, rgba(99, 102, 241, 0.3) 1px, transparent 0); background-size: 60px 60px;"
         >
         </div>
@@ -157,12 +106,12 @@ import {
                 class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-950/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
             >
                 <div
-                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-[#005EB8]/10 to-[#001489]/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-[#005EB8]/30 dark:border-purple-300/30 text-[#005EB8] group-hover:bg-gradient-to-br group-hover:from-[#005EB8] group-hover:to-[#001489] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
                 >
                     <BotMessageSquare class="w-6 h-6 md:w-8 md:h-8" />
                 </div>
                 <h3
-                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[#001489] to-[#005EB8] dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
                 >
                     Chatbots para Atención al Cliente
                 </h3>
@@ -196,12 +145,12 @@ import {
                 class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-950/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
             >
                 <div
-                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-[#005EB8]/10 to-[#001489]/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-[#005EB8]/30 dark:border-purple-300/30 text-[#005EB8] group-hover:bg-gradient-to-br group-hover:from-[#005EB8] group-hover:to-[#001489] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
                 >
                     <ChartNoAxesCombined class="w-6 h-6 md:w-8 md:h-8" />
                 </div>
                 <h3
-                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[#001489] to-[#005EB8] dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
                 >
                     Automatización de Ventas
                 </h3>
@@ -235,12 +184,12 @@ import {
                 class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-950/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
             >
                 <div
-                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-[#005EB8]/10 to-[#001489]/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-[#005EB8]/30 dark:border-purple-300/30 text-[#005EB8] group-hover:bg-gradient-to-br group-hover:from-[#005EB8] group-hover:to-[#001489] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
                 >
                     <MessagesSquare class="w-6 h-6 md:w-8 md:h-8" />
                 </div>
                 <h3
-                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[#001489] to-[#005EB8] dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
                 >
                     Integración Multicanal
                 </h3>
@@ -274,12 +223,12 @@ import {
                 class="group relative p-6 md:p-8 bg-white/80 dark:bg-gray-950/30 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg hover:shadow-2xl hover:-translate-y-2 hover:scale-105 transition-all duration-500 ease-out"
             >
                 <div
-                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-blue-200/30 dark:border-purple-300/30 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-500 group-hover:to-purple-500 group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
+                    class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 mb-4 md:mb-6 bg-gradient-to-br from-[#005EB8]/10 to-[#001489]/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-2xl border border-[#005EB8]/30 dark:border-purple-300/30 text-[#005EB8] group-hover:bg-gradient-to-br group-hover:from-[#005EB8] group-hover:to-[#001489] group-hover:text-white group-hover:scale-110 group-hover:shadow-lg transition-all duration-300"
                 >
                     <MessageCircleQuestionMark class="w-6 h-6 md:w-8 md:h-8" />
                 </div>
                 <h3
-                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-blue-700 to-indigo-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
+                    class="text-lg md:text-xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-[#001489] to-[#005EB8] dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
                 >
                     Soporte Técnico Automatizado
                 </h3>
