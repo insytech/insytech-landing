@@ -2,6 +2,18 @@
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 
+// Detectar ruta actual para logo dinámico
+const pathname = Astro.url.pathname;
+const segment = pathname.split("/").filter(Boolean)[0] || "";
+const routeMap: Record<string, string> = {
+    vision: "VISION",
+    control: "CONTROL",
+    software: "SOFTWARE",
+    tracking: "MES",
+    ai: "AI",
+};
+const subProduct = routeMap[segment];
+
 // Estructura mejorada de navegación con submenús
 const navItems = [
     {
@@ -13,17 +25,11 @@ const navItems = [
         text: "Soluciones",
         hasDropdown: true,
         dropdownItems: [
-            { href: "/automatizacion", text: "Automatización" },
-            {
-                href: "/software",
-                text: "Desarrollo de Software",
-            },
-            {
-                href: "/tracking",
-                text: "Trazabilidad y Monitoreo de Producción",
-            },
             { href: "/control", text: "Automatización y Control" },
-            { href: "/vision", text: "Visión con Inteligencia Artificial" },
+            { href: "/tracking", text: "Trazabilidad y Monitoreo" },
+            { href: "/vision", text: "Visión con IA" },
+            { href: "/ai", text: "Inteligencia Artificial" },
+            { href: "/software", text: "Desarrollo de Software" },
         ],
     },
     {
@@ -57,6 +63,13 @@ const navItems = [
                             class="h-12 hidden dark:block"
                             loading="lazy"
                         />
+                        {
+                            subProduct && (
+                                <span class="ml-1 font-['FieldworkGeo'] font-light text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff] text-xl tracking-[0.15em] uppercase">
+                                    {subProduct}
+                                </span>
+                            )
+                        }
                     </a>
                 </div>
 
@@ -106,7 +119,7 @@ const navItems = [
                                                                         href={
                                                                             dropdownItem.href
                                                                         }
-                                                                        class="block px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-heading-2 hover:text-primary transition-colors duration-200"
+                                                                        class="block px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-[#005EB8]/20 text-gray-700 dark:text-gray-200 hover:text-[#005EB8] dark:hover:text-[#4da6ff] transition-colors duration-200"
                                                                     >
                                                                         {
                                                                             dropdownItem.text
@@ -247,7 +260,7 @@ const navItems = [
                                                 <li>
                                                     <a
                                                         href={dropdownItem.href}
-                                                        class="block py-2 hover:text-primary"
+                                                        class="block py-2 text-gray-600 dark:text-gray-300 hover:text-[#005EB8] dark:hover:text-[#4da6ff]"
                                                     >
                                                         {dropdownItem.text}
                                                     </a>
