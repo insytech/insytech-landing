@@ -1,0 +1,84 @@
+---
+/**
+ * InsytechVisionLogo - Componente de logo replicado en código
+ * 
+ * Props:
+ * - size: 'sm' | 'md' | 'lg' (default: 'md')
+ * - showIcon: boolean (default: true)
+ */
+
+interface Props {
+    size?: 'sm' | 'md' | 'lg';
+    showIcon?: boolean;
+}
+
+const { size = 'md', showIcon = true } = Astro.props;
+
+// Configuración de tamaños
+const sizeConfig = {
+    sm: {
+        text: 'text-xl sm:text-2xl',
+        icon: 'h-6 w-6 sm:h-7 sm:w-7',
+        gap: 'gap-2'
+    },
+    md: {
+        text: 'text-2xl sm:text-3xl',
+        icon: 'h-8 w-8 sm:h-9 sm:w-9',
+        gap: 'gap-2'
+    },
+    lg: {
+        text: 'text-3xl sm:text-4xl lg:text-5xl',
+        icon: 'h-10 w-10 sm:h-12 sm:w-12',
+        gap: 'gap-3'
+    }
+};
+
+const config = sizeConfig[size];
+---
+
+<div class={`flex items-center ${config.gap}`}>
+    {showIcon && (
+        <!-- Icono Isométrico Insytech -->
+        <svg 
+            class={config.icon} 
+            viewBox="0 0 100 100" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <!-- Sombra/fondo sutil -->
+            <path 
+                d="M50 15L85 35V75L50 95L15 75V35L50 15Z" 
+                class="fill-gray-200 dark:fill-gray-800 opacity-20"
+            />
+            <!-- Plano superior - Cyan claro -->
+            <path 
+                d="M50 15L85 35L50 55L15 35L50 15Z" 
+                fill="#00B5E2"
+            />
+            <!-- Plano derecho - Azul medio -->
+            <path 
+                d="M50 55L85 35V75L50 95V55Z" 
+                fill="#005EB8"
+            />
+            <!-- Plano izquierdo - Azul oscuro -->
+            <path 
+                d="M15 35L50 55V95L15 75V35Z" 
+                fill="#001489"
+            />
+        </svg>
+    )}
+    
+    <!-- Texto del logo -->
+    <div class={`flex items-baseline font-['FieldworkGeo'] tracking-[0.25em]`}>
+        <!-- INSYTECH - Negro/Gris oscuro, peso SemiBold (600) -->
+        <span class={`${config.text} font-semibold text-[#211915] dark:text-white uppercase leading-none`}>
+            INSYTECH
+        </span>
+        <!-- VISION - Gradiente con colores corporativos Insytech -->
+        <!-- Light mode: REFLEX BLUE → BLUE → LIGHT BLUE (original) -->
+        <!-- Dark mode: Versiones más claras para mayor contraste -->
+        <span class={`${config.text} font-light text-transparent bg-clip-text uppercase leading-none bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]`}>
+            VISION
+        </span>
+    </div>
+</div>

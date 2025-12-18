@@ -2,6 +2,47 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Fieldwork Geometric Fonts */
+@font-face {
+  font-family: 'FieldworkGeo';
+  src: url('/fonts/Fieldwork7GeoLight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FieldworkGeo';
+  src: url('/fonts/Fieldwork10GeoRegular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FieldworkGeo';
+  src: url('/fonts/Fieldwork13SemiBoldGeo.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FieldworkGeo';
+  src: url('/fonts/Fieldwork16GeoBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FieldworkGeo';
+  src: url('/fonts/Fieldwork19GeoBlack.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-primary: #1d4ed8;
   --color-box-bg: rgb(var(--color-box));

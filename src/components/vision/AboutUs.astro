@@ -1,45 +1,101 @@
 ---
-import Badge from "@components/shared/Badge.astro";
 import Container from "../shared/Container.astro";
-import Paragraph from "../shared/Paragraph.astro";
-import Title from "../shared/Title.astro";
-import BadgeImage from "@components/shared/BadgeImage.astro";
 import { visionMetrics } from "@utils/vision-data.ts";
 ---
 
-<section id="about-us" class="relative pt-10 overflow-hidden">
-    <!-- Elementos decorativos de fondo -->
+<section
+    id="about-us"
+    class="relative py-20 overflow-hidden bg-white dark:bg-gray-950"
+>
+    <!-- Patrón de fondo minimalista -->
     <div class="absolute inset-0 z-0">
         <div
-            class="absolute top-0 right-0 w-1/2 h-1/3 bg-gradient-to-bl from-[#00B5E2]/5 to-transparent rounded-bl-full"
-        >
-        </div>
-        <div
-            class="hidden lg:block absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#001489]/10 to-transparent rounded-tr-full opacity-60"
-        >
-        </div>
-        <div
-            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
+            class="absolute w-full h-full bg-[linear-gradient(90deg,transparent_24px,rgba(0,94,184,0.03)_25px)] bg-[length:25px_25px] dark:opacity-30"
         >
         </div>
     </div>
 
-    <Container
-        className="relative z-10 flex flex-col midmd:flex-row gap-10 lg:gap-12"
-    >
-        <!-- Columna de imagen con efectos visuales -->
-        <div class="w-full lg:w-1/2 relative mt-16" data-animate="slide-left">
-            <div
-                class="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-xl"
-            >
-                <!-- Bordes con gradiente -->
+    <Container className="relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Columna de contenido -->
+            <div class="order-2 lg:order-1 space-y-8" data-animate="fade-up">
+                <!-- Badge minimalista -->
                 <div
-                    class="absolute inset-0 rounded-2xl border-2 border-[#005EB8]/30"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#005EB8]/30 bg-[#005EB8]/5 dark:bg-[#005EB8]/10"
                 >
+                    <div
+                        class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
+                    >
+                    </div>
+                    <span
+                        class="text-sm font-medium text-[#005EB8] dark:text-[#4da6ff] uppercase tracking-wider"
+                    >
+                        Sobre Insytech Vision
+                    </span>
                 </div>
 
-                <!-- Imagen con overlay -->
-                <div class="absolute inset-0">
+                <!-- Título con tipografía Fieldwork -->
+                <h2
+                    class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight"
+                >
+                    Inteligencia Artificial aplicada a la
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >
+                        inspección industrial
+                    </span>
+                </h2>
+
+                <!-- Descripción -->
+                <div
+                    class="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed"
+                >
+                    <p>
+                        Insytech Vision es nuestra solución de visión
+                        computacional diseñada para ambientes industriales
+                        exigentes. Utilizamos modelos de machine learning de
+                        última generación para detectar defectos, clasificar
+                        productos y leer códigos con precisión superior al ojo
+                        humano.
+                    </p>
+                    <p>
+                        Nuestra plataforma se integra directamente con PLCs y
+                        sistemas SCADA, permitiendo tomar acciones automáticas
+                        en tiempo real.
+                    </p>
+                </div>
+
+                <!-- Botón CTA minimalista -->
+                <div class="pt-4">
+                    <a
+                        href="#contact"
+                        class="inline-flex items-center gap-3 px-6 py-3 bg-[#211915] dark:bg-white text-white dark:text-[#211915] font-semibold rounded-full hover:opacity-90 transition-opacity group"
+                    >
+                        <span>Solicita una demostración</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                            ></path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Columna visual -->
+            <div class="order-1 lg:order-2 relative" data-animate="slide-left">
+                <!-- Imagen principal -->
+                <div
+                    class="relative rounded-2xl overflow-hidden aspect-[4/3] border border-gray-200/50 dark:border-gray-700/30"
+                >
                     <img
                         src="/images/vision1.webp"
                         alt="Insytech Vision - Sistema de visión industrial con inteligencia artificial"
@@ -48,118 +104,32 @@ import { visionMetrics } from "@utils/vision-data.ts";
                         height="447"
                         loading="lazy"
                     />
-                    <!-- Overlay para mejorar contraste -->
+                    <!-- Overlay sutil -->
                     <div
-                        class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
+                        class="absolute inset-0 bg-gradient-to-t from-[#001489]/30 via-transparent to-transparent"
                     >
                     </div>
                 </div>
 
-                <!-- Elemento flotante decorativo -->
+                <!-- Métricas flotantes -->
                 <div
-                    class="absolute top-4 right-4 rounded-lg flex items-center gap-2"
-                    data-animate="scale"
-                    data-animate-delay=".18s"
+                    class="absolute -bottom-6 -left-6 right-6 grid grid-cols-2 gap-3 sm:grid-cols-4"
+                    data-animate="fade-up"
+                    data-animate-delay=".2s"
                 >
-                    <BadgeImage
-                        title="Precisión 99.7%"
-                        subtitle="Detección en tiempo real"
-                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z'/><path stroke-linecap='round' stroke-linejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/></svg>"
-                    />
+                    {
+                        visionMetrics.map((metric) => (
+                            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 text-center">
+                                <div class="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#001489] to-[#00B5E2] dark:from-[#4da6ff] dark:to-[#6de0ff]">
+                                    {metric.value}
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">
+                                    {metric.label}
+                                </div>
+                            </div>
+                        ))
+                    }
                 </div>
-            </div>
-
-            <!-- Elementos decorativos de fondo -->
-            <div
-                class="absolute -left-6 top-1/2 w-32 h-32 bg-[#00B5E2]/20 rounded-full filter blur-2xl"
-            >
-            </div>
-            <div
-                class="absolute -top-0 -right-6 w-32 h-32 bg-[#001489]/10 rounded-full filter blur-2xl"
-            >
-            </div>
-        </div>
-
-        <!-- Columna de contenido -->
-        <div
-            class="flex flex-col w-full lg:w-1/2 space-y-8"
-            data-animate="fade-up"
-            data-animate-delay=".08s"
-        >
-            <!-- Badge de navegación -->
-            <div class="flex justify-center lg:justify-start">
-                <Badge text="Sobre Insytech Vision" />
-            </div>
-
-            <!-- Título y descripción -->
-            <div>
-                <Title data-animate="fade-up"
-                    >Inteligencia Artificial aplicada a la inspección industrial</Title
-                >
-                <Paragraph
-                    className="mt-8"
-                    data-animate="fade"
-                    data-animate-delay=".12s"
-                >
-                    Insytech Vision es nuestra solución de visión computacional
-                    diseñada para ambientes industriales exigentes. Utilizamos
-                    modelos de machine learning de última generación para
-                    detectar defectos, clasificar productos y leer códigos con
-                    precisión superior al ojo humano.
-                </Paragraph>
-                <Paragraph
-                    className="mt-4"
-                    data-animate="fade"
-                    data-animate-delay=".16s"
-                >
-                    Nuestra plataforma se integra directamente con PLCs y
-                    sistemas SCADA, permitiendo tomar acciones automáticas en
-                    tiempo real: desde rechazar piezas defectuosas hasta generar
-                    alertas y registros de trazabilidad visual.
-                </Paragraph>
-            </div>
-
-            <!-- Métricas clave -->
-            <div
-                class="grid grid-cols-2 md:grid-cols-4 gap-4"
-                data-animate="fade-up"
-                data-animate-delay=".2s"
-            >
-                {
-                    visionMetrics.map((metric) => (
-                        <div class="text-center p-4 rounded-xl bg-gradient-to-br from-[#005EB8]/10 to-transparent border border-[#005EB8]/20">
-                            <div class="text-2xl md:text-3xl font-bold text-[#005EB8] dark:text-[#71b5f5]">
-                                {metric.value}
-                            </div>
-                            <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                {metric.label}
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
-
-            <!-- Botón de acción -->
-            <div class="pt-4" data-animate="fade-up" data-animate-delay=".24s">
-                <a
-                    href="#contact"
-                    class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#005EB8] text-white hover:bg-[#004a92] transition-colors"
-                >
-                    <span>Solicita una demostración</span>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="w-4 h-4"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                </a>
             </div>
         </div>
     </Container>

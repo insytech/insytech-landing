@@ -1,213 +1,363 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
-import Badge from "../shared/Badge.astro";
-import BadgeImage from "@components/shared/BadgeImage.astro";
+import InsytechVisionLogo from "../shared/InsytechVisionLogo.astro";
 import ThreeHero from "@utils/threejs";
 ---
 
 <section
-    class="relative overflow-hidden rounded-b-[length:60px] pt-28 lg:pt-32 pb-16 bg-gradient-to-br from-gray-100 via-[#eaf3fc] to-[#dce7f5] dark:from-gray-900 dark:via-[#1a1f29] dark:to-[#12151c]"
+    class="relative overflow-hidden pt-28 lg:pt-32 pb-16 bg-gradient-to-br from-gray-50 via-white to-orange-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900"
 >
-    <!-- Efecto de grid tecnológico en el fondo -->
-    <div class="absolute inset-0 z-10 opacity-10">
-        <div
-            class="absolute inset-0 bg-[url('/images/grid-pattern.svg')] bg-center"
-        >
-        </div>
-    </div>
-
-    <!-- Gradientes de fondo mejorados -->
-    <div class="absolute inset-0 z-0">
-        <div
-            class="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-[#005EB8]/30 to-transparent rounded-full blur-3xl"
-        >
-        </div>
-        <div
-            class="absolute top-1/4 right-1/4 w-1/4 h-1/4 bg-gradient-to-br from-[#00B5E2]/20 to-transparent rounded-full blur-3xl"
-        >
-        </div>
-        <div
-            class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#001489]/20 to-transparent rounded-full blur-3xl"
-        >
-        </div>
-    </div>
-
-    <!-- Overlay de imagen técnica con baja opacidad -->
-    <div class="absolute inset-0 opacity-30 z-0">
-        <video
-            src="/images/VisionBg1.mp4"
-            autoplay
-            loop
-            muted
-            playsinline
-            class="w-full h-full object-cover"></video>
-        <div
-            class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
-        >
-        </div>
-    </div>
-
     <Container className="relative z-10">
-        <!-- Layout mejorado -->
-        <div class="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center">
-            <!-- Contenido - ocupa 3 columnas -->
-            <div class="lg:col-span-3">
-                <!-- Badge y Encabezado -->
-                <div class="text-center lg:text-left mb-8">
-                    <div class="flex justify-left mb-4">
-                        <Badge text="Tecnología avanzada para la industria" />
-                    </div>
-                    <img
-                        src="/images/InsytechVisionLogo-light.webp"
-                        alt="Insytech Vision Logo"
-                        class="inline-block h-10 sm:h-12 lg:h-12 w-auto dark:hidden"
-                        loading="lazy"
-                    />
-                    <img
-                        src="/images/InsytechVisionLogo-dark.webp"
-                        alt="Insytech Vision Logo"
-                        class="h-10 sm:h-12 lg:h-12 w-auto hidden dark:inline-block"
-                        loading="lazy"
-                    />
-                    <h1
-                        class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-800 dark:text-white leading-tight"
-                    >
-                        <span class="block mt-2">
-                            Detección precisa con Machine Learning
-                        </span>
-                    </h1>
-                    <p
-                        class="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto lg:mx-0"
-                    >
-                        Transformamos procesos industriales con soluciones de
-                        visión computacional y aprendizaje automático,
-                        optimizando la producción y garantizando precisión.
-                    </p>
+        <!-- Header Row: Title left + CTA right -->
+        <div
+            class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-10"
+        >
+            <!-- Left: Small Logo + Title -->
+            <div class="lg:max-w-xl">
+                <!-- Logo Insytech Vision -->
+                <div class="mb-6">
+                    <InsytechVisionLogo size="lg" showIcon={true} />
+                </div>
 
-                    <!-- CTA más visible -->
-                    <div
-                        class="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start"
+                <!-- Title - Enfocado en valor -->
+                <h1
+                    class="text-3xl sm:text-2xl lg:text-2xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight tracking-tight"
+                >
+                    Detección precisa con
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
                     >
-                        <BtnLink
-                            text="Solicita una demostración"
-                            href="#contact"
-                            className="py-4 px-8 text-white font-medium flex items-center gap-3"
-                            variant="primary"
-                        />
-                    </div>
+                        Machine Learning
+                    </span>
+                </h1>
+            </div>
+
+            <!-- Right: CTA + Description -->
+            <div class="lg:max-w-sm lg:text-right">
+                <div class="flex items-center gap-3 mb-4 lg:justify-end">
+                    <a
+                        href="#contact"
+                        class="inline-flex items-center gap-2 px-6 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium rounded-full hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+                    >
+                        Solicita una demo
+                    </a>
+                    <a
+                        href="#services"
+                        class="w-12 h-12 flex items-center justify-center rounded-full border-2 border-gray-200 dark:border-gray-700 hover:border-orange-400 dark:hover:border-orange-400 transition-colors group"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            class="w-5 h-5 text-gray-700 dark:text-gray-300 group-hover:text-orange-500 transition-colors"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                            ></path>
+                        </svg>
+                    </a>
+                </div>
+                <p
+                    class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed"
+                >
+                    Transformamos procesos industriales con visión
+                    computacional, automatizando inspección de calidad y
+                    clasificación en tiempo real.
+                </p>
+            </div>
+        </div>
+
+        <!-- Visual Area: Animation with floating cards -->
+        <div class="relative rounded-3xl overflow-hidden mb-16">
+            <!-- Gradient blobs background -->
+            <div class="absolute inset-0 z-0">
+                <div
+                    class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-orange-300/60 to-yellow-200/40 dark:from-orange-500/30 dark:to-yellow-400/20 rounded-full blur-3xl"
+                >
+                </div>
+                <div
+                    class="absolute bottom-0 right-1/4 w-80 h-80 bg-gradient-to-tr from-[#00B5E2]/40 to-[#005EB8]/20 dark:from-[#00B5E2]/20 dark:to-[#005EB8]/10 rounded-full blur-3xl"
+                >
                 </div>
             </div>
 
-            <!-- Imagen destacada - ocupa 2 columnas con efecto flotante -->
-            <div class="lg:col-span-2 relative">
-                <!-- Badge de profesionales capacitados - reposicionado y estilizado -->
-                <div class="absolute -top-5 -left-3 z-20">
-                    <BadgeImage
-                        title="Equipo optimizado"
-                        subtitle="Visión computacional y aprendizaje automático"
-                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z'></path></svg>"
-                    />
-                </div>
+            <!-- Decorative lines -->
+            <svg
+                class="absolute inset-0 w-full h-full z-10 opacity-40 dark:opacity-20"
+                viewBox="0 0 800 400"
+                fill="none"
+            >
+                <path
+                    d="M50,200 Q200,100 350,200 T650,200"
+                    stroke="url(#lineGradient)"
+                    stroke-width="3"
+                    fill="none"
+                    stroke-linecap="round"></path>
+                <path
+                    d="M100,250 Q250,350 400,250 T700,250"
+                    stroke="url(#lineGradient)"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"></path>
+                <path
+                    d="M150,150 Q300,50 450,150 T750,150"
+                    stroke="url(#lineGradient)"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linecap="round"></path>
+                <defs>
+                    <linearGradient
+                        id="lineGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                    >
+                        <stop offset="0%" stop-color="#f97316"></stop>
+                        <stop offset="100%" stop-color="#ea580c"></stop>
+                    </linearGradient>
+                </defs>
+            </svg>
 
-                <div
-                    id="three-hero"
-                    class="w-full h-[350px] lg:h-[350px] rounded-2xl overflow-hidden shadow-xl bg-transparent"
-                >
+            <!-- Three.js Animation Container -->
+            <div
+                class="relative z-20 bg-gradient-to-b from-gray-100/80 to-gray-200/80 dark:from-gray-900/90 dark:to-gray-950/90 backdrop-blur-sm rounded-3xl border border-gray-200/50 dark:border-gray-700/30"
+            >
+                <div id="three-hero" class="w-full h-[350px] lg:h-[400px]">
                     <ThreeHero client:load />
                 </div>
+            </div>
 
-                <!-- Badge de estado mejorado - posicionamiento y diseño optimizado -->
+            <!-- Floating Stats Cards -->
+            <div class="absolute top-8 right-4 lg:right-8 z-30 hidden sm:block">
                 <div
-                    class="absolute z-50 -bottom-10 right-2 max-w-[220px] bg-white/90 dark:bg-gray-800/90 backdrop-blur-md p-3 rounded-lg shadow-lg border border-gray-200/50 dark:border-gray-700/50 transform hover:-translate-y-1 transition-all duration-300"
+                    class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700 min-w-[200px]"
                 >
-                    <div class="flex items-center gap-3 mb-1.5">
-                        <!-- Indicador pulsante más sofisticado -->
-                        <div class="relative h-3 w-3">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div
+                            class="w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/50 flex items-center justify-center"
+                        >
                             <div
-                                class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"
-                            >
-                            </div>
-                            <div
-                                class="relative rounded-full h-2.5 w-2.5 bg-green-500"
+                                class="w-4 h-4 rounded-full border-2 border-orange-500"
                             >
                             </div>
                         </div>
-                        <p
-                            class="font-medium text-sm text-gray-800 dark:text-gray-200"
-                        >
-                            Solución en tiempo real
-                        </p>
+                        <div>
+                            <span
+                                class="text-lg font-bold text-gray-900 dark:text-white"
+                                >99.7%</span
+                            >
+                            <span
+                                class="text-gray-500 dark:text-gray-400 text-sm"
+                            >
+                                de precisión</span
+                            >
+                        </div>
                     </div>
-                    <p class="text-xs text-gray-600 dark:text-gray-400 pl-6">
-                        Configuración y monitoreo desde la web
-                    </p>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                        Detección de defectos activada
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-gray-400">Status</span>
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="w-8 h-4 bg-green-500 rounded-full relative"
+                            >
+                                <div
+                                    class="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="absolute bottom-8 left-4 lg:left-8 z-30 hidden md:block"
+            >
+                <div
+                    class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-gray-100 dark:border-gray-700 min-w-[220px]"
+                >
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-[#005EB8]/10 dark:bg-[#005EB8]/30 flex items-center justify-center"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                class="w-4 h-4 text-[#005EB8] dark:text-[#71b5f5]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div
+                                class="font-semibold text-gray-900 dark:text-white text-sm"
+                            >
+                                Procesamiento en tiempo real
+                            </div>
+                            <div
+                                class="text-xs text-gray-500 dark:text-gray-400"
+                            >
+                                Latencia &lt;50ms
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <span class="text-xs font-medium text-orange-500"
+                            >Activar OCR</span
+                        >
+                        <a
+                            href="#contact"
+                            class="text-xs text-[#005EB8] dark:text-[#71b5f5] font-medium flex items-center gap-1 hover:underline"
+                        >
+                            Más info
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-3 h-3"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                                ></path>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Características destacadas - en formato de tarjetas -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div
-                class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-                <h3
-                    class="text-xl font-semibold text-gray-800 dark:text-white mb-2"
+        <!-- Feature Cards Row -->
+        <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
+        >
+            <div class="flex items-start gap-4">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 dark:from-orange-900/40 dark:to-orange-800/20 flex items-center justify-center flex-shrink-0 border border-orange-200/50 dark:border-orange-700/30"
                 >
-                    Detección en tiempo real
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300">
-                    Identifica objetos con precisión milimétrica en entornos
-                    industriales.
-                </p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6 text-orange-600 dark:text-orange-400"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                        ></path>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                    >
+                        Inspección de calidad
+                    </h3>
+                    <p
+                        class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
+                    >
+                        Detecta defectos microscópicos con precisión superior al
+                        ojo humano, en velocidades de línea.
+                    </p>
+                </div>
             </div>
 
-            <div
-                class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-                <h3
-                    class="text-xl font-semibold text-gray-800 dark:text-white mb-2"
+            <div class="flex items-start gap-4">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#005EB8]/10 to-[#00B5E2]/10 dark:from-[#005EB8]/30 dark:to-[#00B5E2]/20 flex items-center justify-center flex-shrink-0 border border-[#005EB8]/20 dark:border-[#005EB8]/30"
                 >
-                    Optimización de procesos
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300">
-                    Mejora la eficiencia y reduce errores en la producción.
-                </p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6 text-[#005EB8] dark:text-[#71b5f5]"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
+                        ></path>
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                    >
+                        Integración PLC & SCADA
+                    </h3>
+                    <p
+                        class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
+                    >
+                        Conectamos nativamente con tu automatización existente
+                        para acciones en tiempo real.
+                    </p>
+                </div>
             </div>
 
-            <div
-                class="bg-white/60 dark:bg-gray-800/60 backdrop-blur-md p-6 rounded-xl border border-gray-200/50 dark:border-gray-700/50 shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-                <h3
-                    class="text-xl font-semibold text-gray-800 dark:text-white mb-2"
+            <div class="flex items-start gap-4 md:col-span-2 lg:col-span-1">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#00B5E2]/10 to-[#001489]/10 dark:from-[#00B5E2]/30 dark:to-[#001489]/20 flex items-center justify-center flex-shrink-0 border border-[#00B5E2]/20 dark:border-[#00B5E2]/30"
                 >
-                    Escalabilidad
-                </h3>
-                <p class="text-gray-700 dark:text-gray-300">
-                    Soluciones personalizadas para cualquier tamaño de
-                    operación.
-                </p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6 text-[#00B5E2]"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
+                        ></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3
+                        class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                    >
+                        Trazabilidad visual
+                    </h3>
+                    <p
+                        class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed"
+                    >
+                        Registro fotográfico de cada pieza inspeccionada para
+                        auditorías y análisis de calidad.
+                    </p>
+                </div>
             </div>
         </div>
     </Container>
 </section>
-
-<style>
-    @keyframes scanline {
-        0% {
-            transform: translateY(-100%);
-            opacity: 0;
-        }
-        50% {
-            opacity: 0.5;
-        }
-        100% {
-            transform: translateY(100%);
-            opacity: 0;
-        }
-    }
-
-    .animate-scanline {
-        animation: scanline 4s linear infinite;
-    }
-</style>
