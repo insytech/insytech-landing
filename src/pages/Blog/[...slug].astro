@@ -4,6 +4,12 @@ import Container from "../../components/shared/Container.astro";
 import Title from "../../components/shared/Title.astro";
 import Paragraph from "../../components/shared/Paragraph.astro";
 import BtnLink from "../../components/shared/BtnLink.astro";
+
+// Para modo static, definimos las rutas disponibles (vacío = catch-all muestra página de construcción)
+export function getStaticPaths() {
+    // Cuando tengas posts de blog, actualiza esto con las rutas reales
+    return [{ params: { slug: undefined } }];
+}
 ---
 
 <Layout title="Blog en construcción | Insytech" noindex={true}>
