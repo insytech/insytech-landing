@@ -1,91 +1,23 @@
 ---
 import Layout from "@layouts/VisionLayout.astro";
-import Container from "@components/shared/Container.astro";
-import ContactForm from "@components/sections/ContactForm.astro";
+import Hero from "@components/software/Hero.astro";
+import SoftwareServices from "@components/software/SoftwareServices.astro";
+import SoftwareProcess from "@components/software/SoftwareProcess.astro";
+import ContactSection from "@components/sections/ContactSection.astro";
 ---
 
 <Layout
     title="Insytech Software: Desarrollo de Software Industrial"
-    description="Desarrollo de aplicaciones, sistemas MES, HMI y soluciones personalizadas de software para la industria manufacturera."
+    description="Ecosistemas digitales robustos: interfaces HMI, sistemas MES e integraciones críticas para la industria 4.0."
     siteName="Insytech Software"
 >
-    <main class="flex flex-col overflow-hidden">
-        <!-- Hero Section -->
-        <section
-            class="relative min-h-[60vh] flex items-center justify-center bg-gradient-to-br from-gray-900 via-[#001489] to-[#005EB8] overflow-hidden"
-        >
-            <div
-                class="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-10"
-            >
-            </div>
-            <Container className="relative z-10 text-center py-24">
-                <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm mb-6"
-                >
-                    <div
-                        class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
-                    >
-                    </div>
-                    <span
-                        class="text-sm font-medium text-white/80 uppercase tracking-wider"
-                    >
-                        Desarrollo a la medida
-                    </span>
-                </div>
+    <main class="flex flex-col">
+        <Hero />
 
-                <h1
-                    class="text-4xl sm:text-5xl lg:text-6xl font-semibold font-['FieldworkGeo'] text-white leading-tight mb-6"
-                >
-                    INSYTECH
-                    <span
-                        class="font-light text-transparent bg-clip-text bg-gradient-to-r from-[#4da6ff] via-[#00B5E2] to-[#6de0ff]"
-                    >
-                        SOFTWARE
-                    </span>
-                </h1>
+        <SoftwareServices />
 
-                <p class="text-xl text-white/70 max-w-2xl mx-auto mb-8">
-                    Aplicaciones industriales, sistemas MES, HMI y soluciones a
-                    la medida para tu operación.
-                </p>
+        <SoftwareProcess />
 
-                <a
-                    href="#contact"
-                    class="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#001489] font-semibold rounded-full hover:bg-gray-100 transition-colors"
-                >
-                    Solicitar información
-                </a>
-            </Container>
-        </section>
-
-        <!-- Coming Soon Section -->
-        <section class="py-20 bg-gray-50 dark:bg-gray-900">
-            <Container>
-                <div class="text-center max-w-2xl mx-auto">
-                    <h2
-                        class="text-3xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white mb-4"
-                    >
-                        Contenido en desarrollo
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8">
-                        Estamos preparando información detallada sobre nuestras
-                        soluciones de desarrollo de software industrial.
-                        Mientras tanto, contáctanos para conocer cómo podemos
-                        ayudarte.
-                    </p>
-                </div>
-            </Container>
-        </section>
-
-        <!-- Contact Section -->
-        <div class="relative">
-            <div class="absolute inset-0 z-0">
-                <div class="absolute inset-0 bg-gray-100 dark:bg-gray-900/20">
-                </div>
-            </div>
-            <div class="relative z-10 py-10">
-                <ContactForm />
-            </div>
-        </div>
+        <ContactSection />
     </main>
 </Layout>
