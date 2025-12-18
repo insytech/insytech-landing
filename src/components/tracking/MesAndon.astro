@@ -1,0 +1,315 @@
+---
+import Container from "../shared/Container.astro";
+---
+
+<section
+    id="andon"
+    class="py-20 lg:py-32 bg-white dark:bg-gray-950 overflow-hidden"
+>
+    <Container className="relative">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Visual: Andon Dashboard + Mobile Alert -->
+            <!-- Visual: Andon Dashboard + Mobile Alert -->
+            <div
+                class="relative perspective-1000 order-2 lg:order-1"
+                data-animate="slide-right"
+            >
+                <div class="relative">
+                    <!-- Large TV Screen Mockup -->
+                    <div
+                        class="relative bg-black rounded-xl p-3 shadow-2xl border-b-4 border-gray-800 transform rotate-y-6 transition-transform duration-700 hover:rotate-y-0"
+                    >
+                        <!-- Screen Content -->
+                        <div
+                            class="bg-gray-900 aspect-video rounded-lg overflow-hidden flex flex-col relative group"
+                        >
+                            <!-- Glitch effect overlay (optional) -->
+                            <div
+                                class="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
+                            >
+                            </div>
+
+                            <div
+                                class="bg-red-600 p-5 flex items-center justify-between z-20 shadow-md"
+                            >
+                                <h3
+                                    class="text-white text-3xl font-bold uppercase tracking-widest flex items-center gap-2"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-8 w-8 animate-pulse"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                        ></path>
+                                    </svg>
+                                    ALERTA DE LÍNEA
+                                </h3>
+                                <div
+                                    class="text-white text-xl font-mono bg-red-700/50 px-3 py-1 rounded"
+                                >
+                                    LÍNEA 02
+                                </div>
+                            </div>
+                            <div
+                                class="flex-1 flex items-center justify-center flex-col p-8 relative z-0"
+                            >
+                                <div
+                                    class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"
+                                >
+                                </div>
+                                <div
+                                    class="text-red-500 font-bold text-7xl mb-4 tracking-tighter drop-shadow-sm"
+                                >
+                                    PARO TOTAL
+                                </div>
+                                <div
+                                    class="text-white text-2xl mb-10 font-light"
+                                >
+                                    Falla en <span class="font-semibold"
+                                        >Estación de Soldadura</span>
+                                </div>
+                                <div
+                                    class="grid grid-cols-2 gap-8 w-full max-w-2xl"
+                                >
+                                    <div
+                                        class="bg-gray-800/80 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50 text-center"
+                                    >
+                                        <div
+                                            class="text-gray-400 text-sm uppercase tracking-wide mb-1"
+                                        >
+                                            Tiempo Transcurrido
+                                        </div>
+                                        <div
+                                            class="text-white text-4xl font-mono animate-pulse"
+                                        >
+                                            00:04:12
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="bg-gray-800/80 backdrop-blur-sm p-4 rounded-xl border border-gray-700/50 text-center"
+                                    >
+                                        <div
+                                            class="text-gray-400 text-sm uppercase tracking-wide mb-1"
+                                        >
+                                            Personal Notificado
+                                        </div>
+                                        <div
+                                            class="text-white text-xl font-medium"
+                                        >
+                                            Mantenimiento, Calidad
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Mobile Phone Notification -->
+                    <div
+                        class="absolute -bottom-10 -right-4 w-64 bg-white dark:bg-gray-900 rounded-[2.5rem] border-[6px] border-gray-900 shadow-xl p-4 transform rotate-[-5deg] hover:rotate-0 transition-all duration-500 z-30"
+                    >
+                        <div
+                            class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-5 bg-gray-900 rounded-b-xl z-20"
+                        >
+                        </div>
+                        <div class="mt-4 mb-2 flex justify-center">
+                            <div
+                                class="w-10 h-1 bg-gray-200 dark:bg-gray-700 rounded-full"
+                            >
+                            </div>
+                        </div>
+
+                        <!-- Notification Card -->
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-lg mb-3 border-l-4 border-red-500 transform transition-transform hover:scale-105 cursor-pointer"
+                        >
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-1.5">
+                                    <div
+                                        class="w-4 h-4 rounded bg-blue-500 flex items-center justify-center text-[8px] text-white font-bold"
+                                    >
+                                        A
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-gray-900 dark:text-white"
+                                        >AndonBot</span
+                                    >
+                                </div>
+                                <span class="text-[9px] text-gray-400"
+                                    >Ahora</span
+                                >
+                            </div>
+                            <div
+                                class="text-[11px] font-medium text-gray-800 dark:text-gray-200 mb-1"
+                            >
+                                🛑 Paro en Línea 2
+                            </div>
+                            <p
+                                class="text-[10px] text-gray-500 dark:text-gray-400 leading-tight"
+                            >
+                                Falla crítica detectada. Técnico asignado
+                                automáticamente.
+                            </p>
+                        </div>
+
+                        <!-- Fake Skeleton List -->
+                        <div class="space-y-2 opacity-30 blur-[1px]">
+                            <div
+                                class="bg-gray-100 dark:bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                            <div
+                                class="bg-gray-100 dark:bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                            <div
+                                class="bg-gray-100 dark:bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glow/Pulse behind -->
+                <div
+                    class="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-red-500/10 rounded-full blur-3xl animate-pulse"
+                >
+                </div>
+            </div>
+
+            <!-- Text Content -->
+            <div class="order-1 lg:order-2" data-animate="slide-left">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 dark:bg-red-500/10 text-red-600 dark:text-red-400 text-sm font-semibold mb-6 border border-red-200 dark:border-red-500/20"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                        ></path>
+                    </svg>
+                    Sistema Andon
+                </div>
+
+                <h2
+                    class="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight"
+                >
+                    Respuesta inmediata ante <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500 dark:from-red-400 dark:to-orange-400"
+                        >incidencias críticas</span
+                    >
+                </h2>
+
+                <p
+                    class="text-lg text-gray-600 dark:text-gray-400 mb-8 leading-relaxed"
+                >
+                    Minimiza el tiempo de inactividad con nuestro sistema Andon
+                    digital. Notifica automáticamente a los equipos de soporte
+                    (Mantenimiento, Calidad, Materiales) y escala problemas no
+                    resueltos.
+                </p>
+
+                <div class="space-y-6 mb-10">
+                    <div class="flex gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6 text-orange-500 dark:text-orange-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4
+                                class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                            >
+                                Notificaciones Multicanal
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Alertas vía pantallas en piso, SMS, Email,
+                                WhatsApp o Microsoft Teams.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6 text-red-500 dark:text-red-400"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z"
+                                ></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4
+                                class="text-lg font-bold text-gray-900 dark:text-white mb-1"
+                            >
+                                Análisis de Causas Raíz
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Registra motivos de paro y genera pareto de
+                                fallas para mejora continua.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <a
+                    href="#demo"
+                    class="text-red-600 dark:text-red-400 font-semibold hover:text-red-700 dark:hover:text-red-300 inline-flex items-center gap-2 group"
+                >
+                    Descubrir funcionalidades Andon
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4 transform group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>

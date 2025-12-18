@@ -1,8 +1,12 @@
 ---
-import Layout from "@layouts/VisionLayout.astro";
-import Hero from "@components/tracking/Hero.astro";
-import Container from "@components/shared/Container.astro";
-import ContactForm from "@components/sections/ContactForm.astro";
+import Layout from "../../layouts/VisionLayout.astro";
+import Hero from "../../components/tracking/Hero.astro";
+import MesPlanner from "../../components/tracking/MesPlanner.astro";
+import MesManagement from "../../components/tracking/MesManagement.astro";
+import MesHmi from "../../components/tracking/MesHmi.astro";
+import MesAndon from "../../components/tracking/MesAndon.astro";
+import Container from "../../components/shared/Container.astro";
+import ContactForm from "../../components/sections/ContactForm.astro";
 ---
 
 <Layout
@@ -12,26 +16,10 @@ import ContactForm from "@components/sections/ContactForm.astro";
 >
     <main class="flex flex-col overflow-hidden">
         <Hero />
-
-        <!-- Coming Soon Section -->
-        <section class="py-20 bg-gray-50 dark:bg-gray-900">
-            <Container>
-                <div class="text-center max-w-2xl mx-auto">
-                    <h2
-                        class="text-3xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white mb-4"
-                    >
-                        Contenido en desarrollo
-                    </h2>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8">
-                        Estamos preparando información detallada sobre nuestras
-                        soluciones de trazabilidad y monitoreo de producción.
-                        Mientras tanto, contáctanos para conocer cómo podemos
-                        ayudarte.
-                    </p>
-                </div>
-            </Container>
-        </section>
-
+        <MesPlanner />
+        <MesManagement />
+        <MesHmi />
+        <MesAndon />
         <!-- Contact Section -->
         <div class="relative" id="contact">
             <div class="absolute inset-0 z-0">
