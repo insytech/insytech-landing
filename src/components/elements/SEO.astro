@@ -1,0 +1,117 @@
+---
+export interface Props {
+    title: string;
+    description: string;
+    ogImage?: string;
+    canonicalURL?: URL | string;
+    type?: string;
+}
+
+const {
+    title,
+    description,
+    ogImage = "/images/futuro_digital.webp",
+    canonicalURL = Astro.url,
+    type = "website",
+} = Astro.props;
+
+const siteName = "Insytech";
+// Usar el título tal cual si ya tiene el nombre de la marca, o añadirlo si no.
+const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
+
+// Datos Estructurados (JSONLD)
+const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Insytech",
+    url: "https://insytech.mx",
+    logo: "https://insytech.mx/logo.png",
+    sameAs: [
+        "https://www.linkedin.com/company/insytech/posts/?feedView=all",
+        "https://www.facebook.com/insytech",
+    ],
+    contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+52-81-2892-7509",
+        contactType: "sales",
+        email: "info@insytech.mx",
+        areaServed: "MX",
+        availableLanguage: ["Spanish", "English"],
+    },
+};
+
+const localBusinessSchema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: "Insytech",
+    image: "https://insytech.mx/logo.png",
+    "@id": "https://insytech.mx",
+    url: "https://insytech.mx",
+    telephone: "+52-81-2892-7509",
+    address: {
+        "@type": "PostalAddress",
+        streetAddress: "Parque España 249B, Buenos Aires",
+        addressLocality: "Monterrey",
+        addressRegion: "NL",
+        postalCode: "64800",
+        addressCountry: "MX",
+    },
+    geo: {
+        "@type": "GeoCoordinates",
+        latitude: 25.6701,
+        longitude: -100.2833,
+    },
+    openingHoursSpecification: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        opens: "08:00",
+        closes: "18:00",
+    },
+};
+
+const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Insytech",
+    url: "https://insytech.mx",
+};
+---
+
+<!-- Canonical -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta name="title" content={fullTitle} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(ogImage, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={fullTitle} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(ogImage, Astro.url)} />
+
+<!-- JSON-LD -->
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(organizationSchema)}
+/>
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(localBusinessSchema)}
+/>
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(websiteSchema)}
+/>
