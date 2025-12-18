@@ -3,7 +3,17 @@ import Badge from "@components/shared/Badge.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Title from "../shared/Title.astro";
-import BadgeImage from "@components/shared/BadgeImage.astro";
+import { visionApplications } from "@utils/vision-data.ts";
+
+// Iconos para las aplicaciones
+const iconMap: Record<string, string> = {
+    weld: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z"/></svg>`,
+    assembly: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z"/></svg>`,
+    package: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>`,
+    measure: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/></svg>`,
+    contamination: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>`,
+    traceability: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>`
+};
 ---
 
 <section id="features" class="relative py-20 overflow-hidden">
@@ -19,201 +29,76 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
         </div>
     </div>
 
-    <Container
-        className="relative z-10 flex flex-col midmd:flex-row gap-10 lg:gap-12"
-    >
-        <!-- Columna de contenido -->
+    <Container className="relative z-10">
+        <!-- Encabezado de la sección -->
         <div
-            class="flex flex-col w-full lg:w-1/2 space-y-8"
+            class="text-center max-w-3xl mx-auto space-y-4 mb-16"
             data-animate="fade-up"
         >
-            <!-- Badge de navegación -->
-            <div class="flex justify-center lg:justify-start">
-                <Badge text="Sectores Industriales" />
+            <div class="flex justify-center mb-4">
+                <Badge text="Aplicaciones" />
             </div>
 
-            <!-- Título y descripción -->
-            <div>
-                <Title data-animate="fade-up"
-                    >Experiencia Probada en Distintos Sectores</Title
-                >
-                <Paragraph
-                    className="mt-8"
-                    data-animate="fade"
-                    data-animate-delay=".08s"
-                >
-                    Implementaciones exitosas en diversos sectores industriales,
-                    adaptándonos a las necesidades específicas de cada cliente.
-                </Paragraph>
-            </div>
+            <Title data-animate="fade-up">
+                Soluciones para cada reto de inspección
+            </Title>
 
-            <!-- Lista de sectores -->
-            <ul
-                class="mt-8 space-y-4 text-heading-3 font-medium"
-                data-animate="fade-up"
-                data-animate-delay=".12s"
-            >
-                <li class="flex items-center gap-3">
-                    <span
-                        class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-5 h-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 12.75l6 6 9-13.5"></path>
-                        </svg>
-                    </span>
-                    Automotriz
-                </li>
-                <li class="flex items-center gap-3">
-                    <span
-                        class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-5 h-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 12.75l6 6 9-13.5"></path>
-                        </svg>
-                    </span>
-                    Electrónica
-                </li>
-                <li class="flex items-center gap-3">
-                    <span
-                        class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-5 h-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 12.75l6 6 9-13.5"></path>
-                        </svg>
-                    </span>
-                    Empaque y Logística
-                </li>
-                <li class="flex items-center gap-3">
-                    <span
-                        class="flex-shrink-0 w-8 h-8 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-5 h-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 12.75l6 6 9-13.5"></path>
-                        </svg>
-                    </span>
-                    Metal-mecánica
-                </li>
-            </ul>
-
-            <!-- Botón de acción -->
-            <div class="pt-4" data-animate="fade-up" data-animate-delay=".16s">
-                <a
-                    href="#contact"
-                    class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#005EB8] text-white hover:bg-[#004a92] transition-colors"
-                >
-                    <span>Contáctanos</span>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="w-4 h-4"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                </a>
-            </div>
+            <Paragraph data-animate="fade" data-animate-delay=".08s">
+                Nuestra tecnología de visión se adapta a diversos escenarios industriales,
+                desde la inspección de soldaduras hasta el control de empaque y trazabilidad.
+            </Paragraph>
         </div>
 
-        <!-- Columna de imagen con efectos visuales -->
-        <div
-            class="w-full lg:w-1/2 relative mt-16"
-            data-animate="slide-right"
-            data-animate-delay=".1s"
-        >
-            <div
-                class="relative rounded-2xl overflow-hidden aspect-[4/3] shadow-xl"
-            >
-                <!-- Bordes con gradiente -->
+        <!-- Grid de aplicaciones -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {visionApplications.map((app, i) => (
                 <div
-                    class="absolute inset-0 rounded-2xl border-2 border-[#005EB8]/30"
+                    class="group p-6 rounded-2xl bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-md hover:shadow-xl hover:border-[#005EB8]/30 transition-all duration-300"
+                    data-animate="fade-up"
+                    data-animate-delay={`${0.06 * i}s`}
                 >
-                </div>
-
-                <!-- Imagen con overlay -->
-                <div class="absolute inset-0">
-                    <img
-                        src="/images/sector_automotriz.webp"
-                        alt="Sectores industriales"
-                        class="w-full h-full object-cover"
-                        width="596"
-                        height="447"
-                        loading="lazy"
-                    />
-                    <!-- Overlay para mejorar contraste -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
-                    >
+                    <!-- Icono -->
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#005EB8]/10 to-[#00B5E2]/10 dark:from-[#005EB8]/20 dark:to-[#00B5E2]/20 flex items-center justify-center text-[#005EB8] dark:text-[#71b5f5] mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Fragment set:html={iconMap[app.icon] || iconMap.assembly} />
                     </div>
+                    
+                    <!-- Título -->
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white mb-2">
+                        {app.title}
+                    </h3>
+                    
+                    <!-- Descripción -->
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        {app.description}
+                    </p>
                 </div>
+            ))}
+        </div>
 
-                <!-- Elemento flotante decorativo -->
-                <div
-                    class="absolute top-4 right-4 rounded-lg flex items-center gap-2"
-                    data-animate="scale"
-                    data-animate-delay=".22s"
+        <!-- CTA adicional -->
+        <div class="text-center mt-12" data-animate="fade-up" data-animate-delay=".3s">
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+                ¿Tu aplicación no está en la lista? Desarrollamos soluciones a medida.
+            </p>
+            <a
+                href="#contact"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-transparent border-2 border-[#005EB8] text-[#005EB8] dark:text-[#71b5f5] hover:bg-[#005EB8] hover:text-white transition-colors"
+            >
+                <span>Cuéntanos tu reto</span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    class="w-4 h-4"
                 >
-                    <BadgeImage
-                        title="Sectores clave"
-                        subtitle="Automotriz, Electrónica y más"
-                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75'/></svg>"
-                    />
-                </div>
-            </div>
-
-            <!-- Elementos decorativos de fondo -->
-            <div
-                class="absolute -bottom-6 -left-6 w-32 h-32 bg-[#00B5E2]/20 rounded-full filter blur-2xl"
-            >
-            </div>
-            <div
-                class="absolute -top-6 -right-6 w-32 h-32 bg-[#001489]/10 rounded-full filter blur-2xl"
-            >
-            </div>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+                </svg>
+            </a>
         </div>
     </Container>
 </section>

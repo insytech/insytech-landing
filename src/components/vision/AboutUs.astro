@@ -4,6 +4,7 @@ import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Title from "../shared/Title.astro";
 import BadgeImage from "@components/shared/BadgeImage.astro";
+import { visionMetrics } from "@utils/vision-data.ts";
 ---
 
 <section id="about-us" class="relative pt-10 overflow-hidden">
@@ -40,8 +41,8 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
                 <!-- Imagen con overlay -->
                 <div class="absolute inset-0">
                     <img
-                        src="/images/futuro_digital.webp"
-                        alt="Insytech - Soluciones de automatización"
+                        src="/images/vision1.webp"
+                        alt="Insytech Vision - Sistema de visión industrial con inteligencia artificial"
                         class="w-full h-full object-cover"
                         width="596"
                         height="447"
@@ -61,9 +62,9 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
                     data-animate-delay=".18s"
                 >
                     <BadgeImage
-                        title="8+ años de experiencia"
-                        subtitle="Especialistas certificados"
-                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0118 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3l1.5 1.5 3-3.75'/></svg>"
+                        title="Precisión 99.7%"
+                        subtitle="Detección en tiempo real"
+                        svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z'/><path stroke-linecap='round' stroke-linejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/></svg>"
                     />
                 </div>
             </div>
@@ -87,112 +88,64 @@ import BadgeImage from "@components/shared/BadgeImage.astro";
         >
             <!-- Badge de navegación -->
             <div class="flex justify-center lg:justify-start">
-                <Badge text="Acerca de Nosotros" />
+                <Badge text="Sobre Insytech Vision" />
             </div>
 
             <!-- Título y descripción -->
             <div>
                 <Title data-animate="fade-up"
-                    >Impulsamos tu negocio hacia el futuro digital</Title
+                    >Inteligencia Artificial aplicada a la inspección industrial</Title
                 >
                 <Paragraph
                     className="mt-8"
                     data-animate="fade"
                     data-animate-delay=".12s"
                 >
-                    En Insytech, nos especializamos en ofrecer soluciones
-                    tecnológicas innovadoras que transforman la manera en que
-                    las empresas operan. Nuestro equipo está comprometido con la
-                    excelencia y la satisfacción del cliente, ayudándote a
-                    alcanzar tus objetivos con rapidez y eficiencia.
+                    Insytech Vision es nuestra solución de visión computacional
+                    diseñada para ambientes industriales exigentes. Utilizamos
+                    modelos de machine learning de última generación para
+                    detectar defectos, clasificar productos y leer códigos con
+                    precisión superior al ojo humano.
+                </Paragraph>
+                <Paragraph
+                    className="mt-4"
+                    data-animate="fade"
+                    data-animate-delay=".16s"
+                >
+                    Nuestra plataforma se integra directamente con PLCs y
+                    sistemas SCADA, permitiendo tomar acciones automáticas en
+                    tiempo real: desde rechazar piezas defectuosas hasta generar
+                    alertas y registros de trazabilidad visual.
                 </Paragraph>
             </div>
 
-            <!-- H2 accesible para no saltar niveles antes de los H3 -->
-            <h2 class="sr-only">Misión y Visión</h2>
-
-            <!-- Tarjetas de misión y visión -->
+            <!-- Métricas clave -->
             <div
-                class="grid grid-cols-1 md:grid-cols-2 gap-6"
+                class="grid grid-cols-2 md:grid-cols-4 gap-4"
                 data-animate="fade-up"
-                data-animate-delay=".16s"
+                data-animate-delay=".2s"
             >
-                <!-- Tarjeta de Misión -->
-                <div
-                    class="light:bg-box-bg dark:bg-gray-900/20 backdrop-blur-sm p-6 rounded-2xl border border-box-border shadow-md"
-                >
-                    <div class="flex items-center gap-4 mb-4">
-                        <div
-                            class="flex-shrink-0 w-12 h-12 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-6 h-6"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                                ></path>
-                            </svg>
+                {
+                    visionMetrics.map((metric) => (
+                        <div class="text-center p-4 rounded-xl bg-gradient-to-br from-[#005EB8]/10 to-transparent border border-[#005EB8]/20">
+                            <div class="text-2xl md:text-3xl font-bold text-[#005EB8] dark:text-[#71b5f5]">
+                                {metric.value}
+                            </div>
+                            <div class="text-xs md:text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                {metric.label}
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-heading-2">Misión</h3>
-                    </div>
-                    <p class="text-gray-700 dark:text-gray-300">
-                        Proveer soluciones tecnológicas de alta calidad para
-                        nuestros clientes, optimizando sus procesos y
-                        maximizando su productividad.
-                    </p>
-                </div>
-
-                <!-- Tarjeta de Visión -->
-                <div
-                    class="light:bg-box-bg dark:bg-gray-900/20 backdrop-blur-sm p-6 rounded-2xl border border-box-border shadow-md"
-                >
-                    <div class="flex items-center gap-4 mb-4">
-                        <div
-                            class="flex-shrink-0 w-12 h-12 rounded-full bg-[#00B5E2]/10 dark:bg-[#2a5ecc]/10 text-[#005EB8] dark:text-[#71b5f5] flex items-center justify-center"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-6 h-6"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                                ></path>
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-xl font-bold text-heading-2">Visión</h3>
-                    </div>
-                    <p class="text-gray-700 dark:text-gray-300">
-                        Ser líderes en innovación tecnológica, marcando la
-                        diferencia en cada proyecto y contribuyendo al éxito
-                        sostenible de nuestros clientes.
-                    </p>
-                </div>
+                    ))
+                }
             </div>
 
             <!-- Botón de acción -->
-            <div class="pt-4" data-animate="fade-up" data-animate-delay=".2s">
+            <div class="pt-4" data-animate="fade-up" data-animate-delay=".24s">
                 <a
                     href="#contact"
                     class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#005EB8] text-white hover:bg-[#004a92] transition-colors"
                 >
-                    <span>Conoce más sobre nosotros</span>
+                    <span>Solicita una demostración</span>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
