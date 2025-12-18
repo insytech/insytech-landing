@@ -1,27 +1,53 @@
 ---
 import Container from "../shared/Container.astro";
-import { visionMetrics } from "@utils/vision-data.ts";
 ---
 
 <section
     id="about-us"
-    class="relative py-20 overflow-hidden bg-white dark:bg-gray-950"
+    class="relative py-14 overflow-hidden bg-gray-50 dark:bg-gray-900"
 >
-    <!-- Patrón de fondo minimalista -->
-    <div class="absolute inset-0 z-0">
-        <div
-            class="absolute w-full h-full bg-[linear-gradient(90deg,transparent_24px,rgba(0,94,184,0.03)_25px)] bg-[length:25px_25px] dark:opacity-30"
-        >
-        </div>
-    </div>
-
     <Container className="relative z-10">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <!-- Columna de imagen -->
+            <div class="relative order-2 lg:order-1" data-animate="slide-left">
+                <!-- Marco con efecto -->
+                <div class="relative">
+                    <!-- Imagen principal -->
+                    <div
+                        class="relative rounded-2xl overflow-hidden aspect-[4/3]"
+                    >
+                        <img
+                            src="/images/vision1.webp"
+                            alt="Insytech Vision - Sistema de visión industrial con inteligencia artificial"
+                            class="w-full h-full object-cover"
+                            width="596"
+                            height="447"
+                            loading="lazy"
+                        />
+                        <!-- Overlay sutil -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
+                        >
+                        </div>
+                    </div>
+
+                    <!-- Elemento decorativo -->
+                    <div
+                        class="absolute -bottom-4 -right-4 w-32 h-32 border-2 border-[#005EB8]/30 rounded-2xl -z-10"
+                    >
+                    </div>
+                    <div
+                        class="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-[#00B5E2]/20 to-transparent rounded-2xl -z-10"
+                    >
+                    </div>
+                </div>
+            </div>
+
             <!-- Columna de contenido -->
-            <div class="order-2 lg:order-1 space-y-8" data-animate="fade-up">
-                <!-- Badge minimalista -->
+            <div class="order-1 lg:order-2 space-y-6" data-animate="fade-up">
+                <!-- Badge -->
                 <div
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#005EB8]/30 bg-[#005EB8]/5 dark:bg-[#005EB8]/10"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#005EB8]/30 bg-white dark:bg-gray-800"
                 >
                     <div
                         class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"
@@ -34,102 +60,97 @@ import { visionMetrics } from "@utils/vision-data.ts";
                     </span>
                 </div>
 
-                <!-- Título con tipografía Fieldwork -->
+                <!-- Título -->
                 <h2
                     class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight"
                 >
-                    Inteligencia Artificial aplicada a la
+                    IA que ve lo que el
                     <span
                         class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
                     >
-                        inspección industrial
+                        ojo humano no alcanza
                     </span>
                 </h2>
 
                 <!-- Descripción -->
-                <div
-                    class="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed"
+                <p
+                    class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"
                 >
-                    <p>
-                        Insytech Vision es nuestra solución de visión
-                        computacional diseñada para ambientes industriales
-                        exigentes. Utilizamos modelos de machine learning de
-                        última generación para detectar defectos, clasificar
-                        productos y leer códigos con precisión superior al ojo
-                        humano.
-                    </p>
-                    <p>
-                        Nuestra plataforma se integra directamente con PLCs y
-                        sistemas SCADA, permitiendo tomar acciones automáticas
-                        en tiempo real.
-                    </p>
-                </div>
+                    Nuestra plataforma de visión computacional está diseñada
+                    para ambientes industriales exigentes. Modelos de machine
+                    learning entrenados específicamente para tu proceso, con
+                    integración nativa a sistemas de control.
+                </p>
 
-                <!-- Botón CTA minimalista -->
-                <div class="pt-4">
-                    <a
-                        href="#contact"
-                        class="inline-flex items-center gap-3 px-6 py-3 bg-[#211915] dark:bg-white text-white dark:text-[#211915] font-semibold rounded-full hover:opacity-90 transition-opacity group"
+                <!-- Lista de beneficios -->
+                <ul class="space-y-3 pt-2">
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
                     >
-                        <span>Solicita una demostración</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                        <div
+                            class="w-6 h-6 rounded-full bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                            ></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Columna visual -->
-            <div class="order-1 lg:order-2 relative" data-animate="slide-left">
-                <!-- Imagen principal -->
-                <div
-                    class="relative rounded-2xl overflow-hidden aspect-[4/3] border border-gray-200/50 dark:border-gray-700/30"
-                >
-                    <img
-                        src="/images/vision1.webp"
-                        alt="Insytech Vision - Sistema de visión industrial con inteligencia artificial"
-                        class="w-full h-full object-cover"
-                        width="596"
-                        height="447"
-                        loading="lazy"
-                    />
-                    <!-- Overlay sutil -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-[#001489]/30 via-transparent to-transparent"
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-3.5 h-3.5 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Precisión superior al 99.7%</span>
+                    </li>
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
                     >
-                    </div>
-                </div>
-
-                <!-- Métricas flotantes -->
-                <div
-                    class="absolute -bottom-6 -left-6 right-6 grid grid-cols-2 gap-3 sm:grid-cols-4"
-                    data-animate="fade-up"
-                    data-animate-delay=".2s"
-                >
-                    {
-                        visionMetrics.map((metric) => (
-                            <div class="bg-white dark:bg-gray-900 p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 text-center">
-                                <div class="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#001489] to-[#00B5E2] dark:from-[#4da6ff] dark:to-[#6de0ff]">
-                                    {metric.value}
-                                </div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">
-                                    {metric.label}
-                                </div>
-                            </div>
-                        ))
-                    }
-                </div>
+                        <div
+                            class="w-6 h-6 rounded-full bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-3.5 h-3.5 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Latencia menor a 50ms</span>
+                    </li>
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
+                    >
+                        <div
+                            class="w-6 h-6 rounded-full bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-3.5 h-3.5 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Operación 24/7 sin fatiga</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </Container>

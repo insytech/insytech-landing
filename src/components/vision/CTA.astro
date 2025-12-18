@@ -1,80 +1,85 @@
 ---
 import Container from "../shared/Container.astro";
-import { visionProcess } from "@utils/vision-data.ts";
+
+const steps = [
+    {
+        number: "1",
+        title: "Análisis",
+        description: "Evaluamos tu proceso y definimos los puntos críticos de inspección."
+    },
+    {
+        number: "2", 
+        title: "Implementación",
+        description: "Instalamos hardware y entrenamos modelos con tus productos reales."
+    },
+    {
+        number: "3",
+        title: "Producción",
+        description: "Sistema en línea, integrado con tu PLC y generando valor desde el día uno."
+    }
+];
 ---
 
-<section id="cta" class="relative py-20 overflow-hidden bg-gray-50 dark:bg-gray-900">
-    <Container>
-        <div class="relative rounded-3xl overflow-hidden bg-[#211915] dark:bg-gray-800 p-8 md:p-12 lg:p-16">
-            <!-- Patrón de fondo industrial -->
-            <div class="absolute inset-0 z-0">
-                <div class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_48%,rgba(0,181,226,0.03)_49%,rgba(0,181,226,0.03)_51%,transparent_52%)] bg-[length:40px_40px]"></div>
-                <!-- Gradiente de esquina -->
-                <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#005EB8]/20 to-transparent"></div>
-                <div class="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-[#00B5E2]/10 to-transparent"></div>
+<section id="cta" class="relative py-24 overflow-hidden bg-[#211915] dark:bg-gray-800">
+    <!-- Patrón de fondo sutil -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute w-full h-full bg-[linear-gradient(60deg,transparent_25%,rgba(0,181,226,0.03)_25%,rgba(0,181,226,0.03)_50%,transparent_50%)] bg-[length:60px_60px]"></div>
+        <div class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#005EB8]/10 to-transparent"></div>
+    </div>
+
+    <Container className="relative z-10">
+        <div class="max-w-5xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-16" data-animate="fade-up">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-white leading-tight mb-4">
+                    De la idea a producción en
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#4da6ff] via-[#00B5E2] to-[#6de0ff]">
+                        semanas
+                    </span>
+                </h2>
+                <p class="text-white/60 text-lg max-w-2xl mx-auto">
+                    Nuestro proceso probado garantiza una implementación rápida y sin fricciones.
+                </p>
             </div>
 
-            <div class="relative z-10 max-w-4xl mx-auto">
-                <!-- Encabezado -->
-                <div class="text-center mb-12" data-animate="fade-up">
-                    <!-- Badge invertido -->
-                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/20 bg-white/5 mb-6">
-                        <div class="w-2 h-2 rounded-full bg-[#00B5E2] animate-pulse"></div>
-                        <span class="text-sm font-medium text-white/80 uppercase tracking-wider">
-                            Proceso
-                        </span>
-                    </div>
-
-                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-white leading-tight mb-4">
-                        Nuestro proceso de
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#4da6ff] via-[#00B5E2] to-[#6de0ff]">
-                            implementación
-                        </span>
-                    </h2>
-
-                    <p class="text-white/60 text-lg">
-                        De la idea a la producción en semanas, no meses
-                    </p>
-                </div>
-
-                <!-- Pasos del proceso -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-                    {visionProcess.map((step, i) => (
-                        <div
-                            class="relative p-6 rounded-xl bg-white/5 border border-white/10 hover:border-[#00B5E2]/30 transition-colors duration-300"
-                            data-animate="fade-up"
-                            data-animate-delay={`${0.08 * (i + 1)}s`}
-                        >
-                            <!-- Número del paso -->
-                            <div class="absolute -top-3 left-6 px-3 py-1 rounded-full bg-gradient-to-r from-[#005EB8] to-[#00B5E2] text-white text-sm font-bold">
-                                {step.step}
+            <!-- Steps como timeline horizontal -->
+            <div class="relative" data-animate="fade-up" data-animate-delay=".1s">
+                <!-- Línea conectora -->
+                <div class="hidden md:block absolute top-12 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#005EB8]/50 to-transparent"></div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    {steps.map((step, index) => (
+                        <div class="relative text-center">
+                            <!-- Número circular -->
+                            <div class="relative inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-[#005EB8] to-[#00B5E2] mb-6 shadow-lg shadow-[#005EB8]/30">
+                                <span class="text-3xl font-bold text-white font-['FieldworkGeo']">
+                                    {step.number}
+                                </span>
                             </div>
                             
                             <!-- Contenido -->
-                            <div class="pt-4">
-                                <h3 class="font-semibold text-white mb-2">
-                                    {step.title}
-                                </h3>
-                                <p class="text-sm text-white/50 leading-relaxed">
-                                    {step.description}
-                                </p>
-                            </div>
+                            <h3 class="text-xl font-semibold text-white mb-2">
+                                {step.title}
+                            </h3>
+                            <p class="text-white/50 leading-relaxed">
+                                {step.description}
+                            </p>
                         </div>
                     ))}
                 </div>
+            </div>
 
-                <!-- CTA principal -->
-                <div class="text-center" data-animate="fade" data-animate-delay=".4s">
-                    <a
-                        href="#contact"
-                        class="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#211915] font-semibold rounded-full hover:bg-gray-100 transition-colors group"
-                    >
-                        <span>Agenda una consulta técnica</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                        </svg>
-                    </a>
-                </div>
+            <!-- CTA Button -->
+            <div class="text-center mt-16" data-animate="fade" data-animate-delay=".2s">
+                <a
+                    href="#contact"
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-white text-[#211915] font-semibold rounded-full hover:bg-gray-100 transition-colors group shadow-xl"
+                >
+                    <span>Agenda una consulta</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                    </svg>
+                </a>
             </div>
         </div>
     </Container>
