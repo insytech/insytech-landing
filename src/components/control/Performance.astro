@@ -1,0 +1,197 @@
+---
+import Container from "../shared/Container.astro";
+
+const metrics = [
+    { value: "40%", label: "Reducción de tiempos muertos" },
+    { value: "25%", label: "Ahorro en costos operativos" },
+];
+---
+
+<section class="relative py-24 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+    <Container>
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Image Side -->
+            <div class="relative" data-animate="slide-left">
+                <div class="relative rounded-sm overflow-hidden">
+                    <!-- Main image -->
+                    <div
+                        class="aspect-[4/3] bg-gradient-to-br from-[#001489] to-[#005EB8]"
+                    >
+                        <img
+                            src="/images/control/performance.webp"
+                            alt="Panel de control industrial"
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                    </div>
+
+                    <!-- Overlay accent -->
+                    <div
+                        class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2]"
+                    >
+                    </div>
+                </div>
+
+                <!-- Decorative elements -->
+                <div
+                    class="absolute -bottom-6 -right-6 w-32 h-32 border-4 border-[#005EB8]/20 rounded-sm -z-10"
+                >
+                </div>
+                <div
+                    class="absolute -top-6 -left-6 w-24 h-24 bg-[#00B5E2]/10 rounded-sm -z-10"
+                >
+                </div>
+
+                <!-- Floating badge -->
+                <div
+                    class="absolute -right-4 top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 shadow-xl rounded-sm p-4 hidden lg:block"
+                >
+                    <div class="text-3xl font-bold text-[#00B5E2]">150+</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        Proyectos completados
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Side -->
+            <div data-animate="fade-up">
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#005EB8]/10 border-l-4 border-[#005EB8] mb-6"
+                >
+                    <span
+                        class="text-sm font-medium text-[#005EB8] dark:text-[#4da6ff] uppercase tracking-wider"
+                    >
+                        Rendimiento comprobado
+                    </span>
+                </div>
+
+                <h2
+                    class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight mb-6"
+                >
+                    Resultados que
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >
+                        transforman
+                    </span>
+                </h2>
+
+                <p
+                    class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8"
+                >
+                    Nuestras soluciones de automatización no solo modernizan tu
+                    planta, sino que generan mejoras medibles en productividad,
+                    calidad y costos. Cada proyecto incluye métricas claras de
+                    ROI.
+                </p>
+
+                <!-- Metrics -->
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    {
+                        metrics.map((metric) => (
+                            <div class="p-4 bg-white dark:bg-gray-800 rounded-sm border border-gray-100 dark:border-gray-700">
+                                <div class="text-3xl font-bold text-[#00B5E2] mb-1">
+                                    {metric.value}
+                                </div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">
+                                    {metric.label}
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <!-- Features list -->
+                <ul class="space-y-3 mb-8">
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
+                    >
+                        <div
+                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-4 h-4 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Diagnóstico remoto 24/7</span>
+                    </li>
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
+                    >
+                        <div
+                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-4 h-4 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Integración con sistemas existentes</span>
+                    </li>
+                    <li
+                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
+                    >
+                        <div
+                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-4 h-4 text-[#00B5E2]"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"></path>
+                            </svg>
+                        </div>
+                        <span>Capacitación completa de operadores</span>
+                    </li>
+                </ul>
+
+                <a
+                    href="#contact"
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-[#005EB8] text-white font-semibold rounded-sm hover:bg-[#001489] transition-colors group"
+                >
+                    <span>Conocer más</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>

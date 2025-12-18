@@ -1,0 +1,102 @@
+---
+import Container from "../shared/Container.astro";
+---
+
+<section class="relative py-24 bg-[#211915] dark:bg-gray-800 overflow-hidden">
+    <!-- Background pattern -->
+    <div class="absolute inset-0">
+        <div
+            class="absolute inset-0 bg-[linear-gradient(60deg,transparent_25%,rgba(0,181,226,0.05)_25%,rgba(0,181,226,0.05)_50%,transparent_50%)] bg-[length:60px_60px]"
+        >
+        </div>
+        <div
+            class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#005EB8]/20 to-transparent"
+        >
+        </div>
+    </div>
+
+    <Container className="relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Badge -->
+            <div
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-white/10 border-l-4 border-[#00B5E2] mb-8"
+                data-animate="fade-up"
+            >
+                <span
+                    class="text-sm font-medium text-[#00B5E2] uppercase tracking-wider"
+                >
+                    ¿Listo para comenzar?
+                </span>
+            </div>
+
+            <h2
+                class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6"
+                data-animate="fade-up"
+                data-animate-delay=".1s"
+            >
+                Automatiza tu planta con
+                <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#4da6ff] via-[#00B5E2] to-[#6de0ff]"
+                >
+                    tecnología probada
+                </span>
+            </h2>
+
+            <p
+                class="text-xl text-white/60 mb-10 max-w-2xl mx-auto"
+                data-animate="fade-up"
+                data-animate-delay=".2s"
+            >
+                Agenda una consulta sin costo y descubre cómo podemos optimizar
+                tu operación con soluciones de automatización a tu medida.
+            </p>
+
+            <!-- CTAs -->
+            <div
+                class="flex flex-wrap justify-center gap-4"
+                data-animate="fade-up"
+                data-animate-delay=".3s"
+            >
+                <a
+                    href="#contact"
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-[#00B5E2] text-white font-semibold rounded-sm hover:bg-[#005EB8] transition-colors group"
+                >
+                    <span>Solicitar cotización</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
+                    </svg>
+                </a>
+                <a
+                    href="tel:+528112345678"
+                    class="inline-flex items-center gap-3 px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-sm hover:bg-white/10 transition-colors"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
+                        ></path>
+                    </svg>
+                    <span>Llamar ahora</span>
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>

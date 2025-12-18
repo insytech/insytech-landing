@@ -1,0 +1,103 @@
+---
+import Container from "../shared/Container.astro";
+
+const projects = [
+    {
+        title: "Línea de Ensamble Automotriz",
+        category: "Automotriz",
+        image: "/images/project-automotriz.webp"
+    },
+    {
+        title: "Planta de Alimentos y Bebidas",
+        category: "Alimentos",
+        image: "/images/project-alimentos.webp"
+    },
+    {
+        title: "Centro de Distribución Logístico",
+        category: "Logística",
+        image: "/images/project-logistica.webp"
+    },
+    {
+        title: "Línea de Producción Farmacéutica",
+        category: "Farmacéutica",
+        image: "/images/project-farma.webp"
+    }
+];
+---
+
+<section class="relative py-24 bg-white dark:bg-gray-950">
+    <Container>
+        <!-- Header -->
+        <div class="text-center mb-16" data-animate="fade-up">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#005EB8]/10 border-l-4 border-[#005EB8] mb-6">
+                <span class="text-sm font-medium text-[#005EB8] dark:text-[#4da6ff] uppercase tracking-wider">
+                    Casos de éxito
+                </span>
+            </div>
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight mb-4">
+                Proyectos que
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]">
+                    hablan por nosotros
+                </span>
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                Hemos implementado soluciones de automatización en diversas industrias, siempre con resultados excepcionales.
+            </p>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {projects.map((project, index) => (
+                <div 
+                    class="group relative aspect-[4/5] rounded-sm overflow-hidden cursor-pointer"
+                    data-animate="fade-up"
+                    data-animate-delay={`${0.1 * (index + 1)}s`}
+                >
+                    <!-- Background -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-[#001489] to-[#005EB8]">
+                        <img 
+                            src={project.image}
+                            alt={project.title}
+                            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                            loading="lazy"
+                            onerror="this.style.display='none'"
+                        />
+                    </div>
+
+                    <!-- Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#211915]/90 via-[#211915]/20 to-transparent group-hover:from-[#001489]/90 transition-colors duration-500"></div>
+
+                    <!-- Content -->
+                    <div class="absolute inset-0 flex flex-col justify-end p-6">
+                        <span class="text-[#00B5E2] text-sm font-medium uppercase tracking-wider mb-2">
+                            {project.category}
+                        </span>
+                        <h3 class="text-xl font-bold text-white leading-tight group-hover:text-[#00B5E2] transition-colors">
+                            {project.title}
+                        </h3>
+                        
+                        <!-- View icon -->
+                        <div class="absolute top-4 right-4 w-10 h-10 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-white">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <!-- CTA -->
+        <div class="text-center mt-12" data-animate="fade-up">
+            <a
+                href="#contact"
+                class="inline-flex items-center gap-2 text-[#005EB8] dark:text-[#00B5E2] font-semibold hover:gap-3 transition-all"
+            >
+                <span>Ver todos los proyectos</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+            </a>
+        </div>
+    </Container>
+</section>
