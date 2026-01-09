@@ -31,19 +31,19 @@ const capabilities = [
         <div class="grid lg:grid-cols-3 gap-8 lg:gap-12">
             {capabilities.map((cap, index) => (
                 <div 
-                    class="group relative"
+                    class="group relative h-full"
                     data-animate="fade-up"
                     data-animate-delay={`${0.1 * index}s`}
                 >
                     <!-- Card con efecto hover -->
-                    <div class="relative p-8 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-all duration-500 group-hover:-translate-y-2">
+                    <div class="relative p-8 rounded-2xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-all duration-500 group-hover:-translate-y-2 h-full flex flex-col">
                         <!-- Número grande de fondo -->
-                        <div class="absolute top-4 right-4 text-6xl font-bold text-gray-100 dark:text-gray-800/50 font-['FieldworkGeo'] select-none">
+                        <div class="absolute top-4 right-4 text-6xl font-bold text-gray-200 dark:text-gray-800/50 font-['FieldworkGeo'] select-none">
                             {cap.number}
                         </div>
                         
                         <!-- Icono -->
-                        <div class="relative w-14 h-14 rounded-xl bg-gradient-to-br from-[#001489] to-[#005EB8] flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <div class="relative w-14 h-14 rounded-xl bg-gradient-to-br from-[#001489] to-[#005EB8] flex items-center justify-center text-white mb-6 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
                             <Fragment set:html={cap.icon} />
                         </div>
                         
@@ -52,7 +52,7 @@ const capabilities = [
                             {cap.title}
                         </h3>
                         
-                        <p class="relative text-gray-600 dark:text-gray-400 leading-relaxed">
+                        <p class="relative text-gray-700 dark:text-gray-300 leading-relaxed flex-grow">
                             {cap.description}
                         </p>
 

@@ -4,6 +4,8 @@ import Container from "../shared/Container.astro";
 import Brands from "./Brands.astro";
 import Badge from "../shared/Badge.astro";
 import BadgeImage from "../shared/BadgeImage.astro";
+import { Image } from "astro:assets";
+import heroImage from "/public/images/hero-insytech.webp";
 // SVG como string para pasarlo al componente
 ---
 
@@ -155,12 +157,10 @@ import BadgeImage from "../shared/BadgeImage.astro";
 
                     <!-- Imagen con overlay -->
                     <div class="absolute inset-0">
-                        <img
-                            src="/images/hero-insytech.webp"
+                        <Image
+                            src={heroImage}
                             alt="Soluciones tecnológicas Insytech"
                             class="w-full h-full object-cover"
-                            width="588"
-                            height="441"
                             loading="eager"
                             fetchpriority="high"
                         />
