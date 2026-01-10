@@ -12,6 +12,7 @@ export interface Props {
     description?: string;
     ogImage?: string;
     noindex?: boolean;
+    siteName?: string;
 }
 
 const {
@@ -19,6 +20,7 @@ const {
     description = "Insytech Vision lidera la transformación industrial con soluciones avanzadas de inteligencia artificial y machine learning.",
     ogImage = "/images/futuro_digital.webp",
     noindex = false,
+    siteName,
 } = Astro.props;
 ---
 
@@ -27,7 +29,12 @@ const {
     <head>
         <meta charset="UTF-8" />
         <GoogleAnalytics />
-        <SEO title={title} description={description} ogImage={ogImage} />
+        <SEO
+            title={title}
+            description={description}
+            ogImage={ogImage}
+            siteName={siteName}
+        />
 
         {noindex && <meta name="robots" content="noindex,nofollow" />}
 

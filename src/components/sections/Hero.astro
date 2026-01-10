@@ -3,215 +3,223 @@ import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Brands from "./Brands.astro";
 import Badge from "../shared/Badge.astro";
-import BadgeImage from "../shared/BadgeImage.astro";
-import { Image } from "astro:assets";
-import heroImage from "/public/images/hero-insytech.webp";
-// SVG como string para pasarlo al componente
+import WaveBackground from "../hero/WaveBackground";
+import DashboardShowcase from "../hero/DashboardShowcase";
 ---
 
-<section class="relative overflow-hidden pt-28 lg:pt-32 pb-10">
-    <!-- Manchas -->
-    <div class="absolute w-full lg:w-1/2 inset-y-0 lg:right-0">
-        <span
-            class="absolute -left-6 md:left-4 top-24 lg:top-28 w-24 h-24 rotate-90 skew-x-12 rounded-3xl bg-[#00B5E2] blur-xl opacity-60 lg:opacity-95 lg:block hidden"
-        ></span>
-        <span
-            class="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-[#005EB8] blur-xl opacity-80"
-        ></span>
-    </div>
-    <span
-        class="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-[#005EB8] to-[#00B5E2] absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"
-    ></span>
-    <!-- Fondo decorativo moderno -->
-    <div class="absolute inset-0 z-0">
+<section class="relative overflow-hidden pt-32 lg:pt-40 pb-0">
+    <!-- Background exactly like Process.astro -->
+    <div
+        class="absolute -left-20 -top-20 h-full w-full flex justify-start items-start opacity-30 dark:opacity-50 pointer-events-none z-0"
+    >
         <div
-            class="absolute top-0 right-0 w-2/3 h-1/2 bg-gradient-to-bl from-[#001489]/10 to-transparent rounded-bl-full opacity-70"
+            class="hero-mancha w-96 h-96 overflow-auto flex rounded-xl relative blur-3xl scale-125"
         >
-        </div>
-        <div
-            class="hidden lg:block absolute bottom-0 left-0 w-1/3 h-1/3 bg-gradient-to-tr from-[#001489]/10 to-transparent rounded-tr-full opacity-60"
-        >
-        </div>
-        <div
-            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
-        >
+            <span
+                class="absolute w-64 h-64 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
+            ></span>
+            <span
+                class="absolute w-64 h-64 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
+            ></span>
+            <span
+                class="absolute w-64 h-64 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
+            ></span>
         </div>
     </div>
 
+    <div
+        class="absolute -right-20 top-20 h-full w-full flex justify-end items-start opacity-20 dark:opacity-40 pointer-events-none z-0"
+    >
+        <div
+            class="hero-mancha w-80 h-80 overflow-auto flex rounded-xl relative blur-3xl"
+        >
+            <span
+                class="absolute w-56 h-56 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
+            ></span>
+            <span
+                class="absolute w-56 h-56 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
+            ></span>
+            <span
+                class="absolute w-56 h-56 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
+            ></span>
+        </div>
+    </div>
+
+    <!-- Orange Contrast Glow -->
+    <div
+        class="absolute right-0 top-1/3 h-full w-full flex justify-end items-start opacity-15 dark:opacity-25 pointer-events-none z-0"
+    >
+        <div
+            class="hero-mancha w-96 h-96 overflow-auto flex rounded-full relative blur-[120px]"
+        >
+            <span
+                class="absolute w-80 h-80 -top-10 -right-10 bg-orange-500 rounded-full"
+            ></span>
+            <span
+                class="absolute w-64 h-64 bottom-0 left-0 bg-amber-400 rounded-full"
+            ></span>
+        </div>
+    </div>
+
+    <!-- Text Content -->
     <Container className="relative z-10">
-        <!-- Navegación de etiquetas del tipo badge -->
-        <div class="flex justify-center lg:justify-start mb-6">
-            <Badge text="Tecnología industrial de alta precisión" />
-        </div>
-
-        <!-- Contenido principal en dos columnas -->
-        <div class="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
-            <!-- Columna izquierda: Texto y formulario -->
-            <div class="w-full lg:w-1/2 space-y-8">
-                <!-- Título con diseño impactante -->
-                <div class="space-y-3">
-                    <h1
-                        class="text-4xl/tight sm:text-5xl/tight md:text-5xl/tight xl:text-5xl/tight font-bold text-heading-1"
-                    >
-                        <span
-                            class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-40% via-[#001489] to-[#00B5E2] to-95% dark:from-[#0056f5] dark:via-[#2a5ecc] dark:to-[#71b5f5] block"
-                        >
-                            <span class="inline-flex items-center gap-2">
-                                Soluciones integradas en ingeniería, software,
-                                IA y automatización
-                            </span>
-                        </span>
-
-                        <!-- <span> </span> -->
-                    </h1>
-                </div>
-
-                <!-- Descripción con mayor impacto -->
-                <div class="max-w-xl">
-                    <span class="text-xl text-gray-600 dark:text-gray-400">
-                        Insytech transforma procesos industriales con soluciones
-                        inteligentes y tecnología que se adapta a ti.
-                    </span>
-                </div>
-
-                <!-- Estadísticas clave -->
-                <div
-                    class="flex justify-between items-center py-4 px-5 bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-100 dark:border-gray-800 rounded-2xl"
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+            <!-- Hero Title -->
+            <div class="space-y-6">
+                <h1
+                    class="hero-title opacity-0 text-5xl md:text-7xl font-bold tracking-tight text-heading-1 leading-[1.1]"
                 >
-                    <div class="text-center px-4">
-                        <div class="text-3xl font-bold text-[#005EB8]">
-                            100+
-                        </div>
-                        <div class="text-sm text-gray-600 dark:text-gray-300">
-                            Proyectos exitosos
-                        </div>
-                    </div>
-                    <div class="h-12 w-px bg-gray-200 dark:bg-gray-700"></div>
-                    <div class="text-center px-4">
-                        <div class="text-3xl font-bold text-[#005EB8]">8+</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-300">
-                            Años
-                        </div>
-                    </div>
-                    <div class="h-12 w-px bg-gray-200 dark:bg-gray-700"></div>
-                    <div class="text-center px-4">
-                        <div class="text-3xl font-bold text-[#005EB8]">97%</div>
-                        <div class="text-sm text-gray-600 dark:text-gray-300">
-                            Satisfacción
-                        </div>
-                    </div>
-                </div>
+                    Soluciones integradas en <span
+                        class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] via-[#0089D7] to-[#00B5E2] dark:from-[#00D4FF] dark:via-[#0076FF] dark:to-[#5E17EB]"
+                        >ingeniería, software, IA y automatización</span
+                    >
+                </h1>
 
-                <!-- Formulario de contacto con diseño mejorado -->
-                <form action="#" class="relative mt-6">
-                    <div class="flex sm:flex-row flex-col gap-4">
-                        <div class="relative flex-1">
-                            <div
-                                class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="w-5 h-5 text-gray-500"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <input
-                                type="email"
-                                class="w-full pl-12 pr-4 py-4 placeholder-gray-400 dark:placeholder-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:border-[#005EB8] focus:ring-2 focus:ring-[#005EB8]/20 outline-none transition-all"
-                                placeholder="Tu correo electrónico"
-                            />
-                        </div>
-                        <BtnLink
-                            text="Cotiza tu proyecto"
-                            href="#contact"
-                            className="py-4 px-8 text-white font-medium flex items-center gap-3"
-                            variant="primary"
-                        />
-                    </div>
-                    <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
-                        Respuesta garantizada en menos de 24 horas
-                    </p>
-                </form>
+                <p
+                    class="hero-description opacity-0 text-lg md:text-xl text-heading-3 max-w-2xl mx-auto leading-relaxed"
+                >
+                    Insytech transforma procesos industriales con soluciones
+                    inteligentes y tecnología que se adapta a ti.
+                </p>
             </div>
 
-            <!-- Columna derecha: Imagen destacada -->
-            <div class="w-full lg:w-1/2 relative">
-                <!-- Contenedor de la imagen con efectos -->
-                <div
-                    class="relative z-10 rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl"
-                >
-                    <!-- Bordes con gradiente -->
+            <!-- CTAs -->
+            <div
+                class="hero-cta opacity-0 flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+                <BtnLink
+                    text="Cotizar Proyecto"
+                    href="#contact"
+                    className="w-full sm:w-auto py-4 px-10 text-white font-semibold transition-transform hover:scale-105"
+                    variant="primary"
+                />
+                <BtnLink
+                    text="Ver Servicios"
+                    href="#services"
+                    className="w-full sm:w-auto py-4 px-10 font-semibold border-2 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-white/5 transition-all rounded-full"
+                    variant="secondary"
+                />
+            </div>
+        </div>
+    </Container>
+
+    <!-- FULL-WIDTH Showcase Container - Hidden on Mobile, Premium AR on Desktop -->
+    <div
+        class="relative mt-0 lg:mt-16 mx-4 sm:mx-4 lg:mx-8 hidden lg:block"
+        data-animate="fade-up"
+        data-animate-delay="300ms"
+    >
+        <!-- Wave Background - Full width, rounded container -->
+        <div
+            class="relative w-full min-h-[600px] lg:h-[600px] rounded-[1rem] overflow-hidden bg-transparent lg:bg-white lg:dark:bg-gray-950"
+        >
+            <!-- Main Three.js Wave Animation - Hidden on Mobile/Tablet -->
+            <WaveBackground
+                client:load
+                className="absolute inset-0 z-0 hidden lg:block"
+                colors={{
+                    accent: "#f97316",
+                }}
+            />
+
+            <!-- Centered Image Card on top of shapes -->
+            <div
+                class="absolute inset-0 z-10 flex items-center justify-center p-0 lg:px-28 lg:py-32"
+            >
+                <div class="relative group w-full max-w-3xl lg:max-w-4xl">
+                    <!-- Subtle glow on hover -->
                     <div
-                        class="absolute inset-0 rounded-2xl border-2 border-[#005EB8]/30"
+                        class="absolute -inset-2 bg-white/20 rounded-2xl blur-xl opacity-0 lg:group-hover:opacity-50 transition duration-700 hidden lg:block"
                     >
                     </div>
 
-                    <!-- Imagen con overlay -->
-                    <div class="absolute inset-0">
-                        <Image
-                            src={heroImage}
-                            alt="Soluciones tecnológicas Insytech"
-                            class="w-full h-full object-cover"
-                            loading="eager"
-                            fetchpriority="high"
-                        />
-                        <!-- Overlay para mejorar contraste -->
+                    <div class="relative w-full mx-auto z-10">
+                        <!-- Main AR Card Container -->
                         <div
-                            class="absolute inset-0 bg-gradient-to-tr from-[#001489]/40 via-transparent to-transparent"
+                            class="hero-showcase-card relative rounded-xl lg:rounded-2xl shadow-2xl bg-gray-900 aspect-video flex items-center justify-center p-0 overflow-hidden group"
                         >
+                            <!-- Dynamic Isometric Dashboard Component -->
+                            <DashboardShowcase client:load />
                         </div>
                     </div>
-                    <!-- Elementos flotantes decorativos -->
-                    <div
-                        class="absolute top-4 right-4 rounded-lg flex items-center gap-2"
-                    >
-                        <BadgeImage
-                            title="Profesionales Capacitados"
-                            subtitle="Más de 50 expertos en automatización"
-                            svg="<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-5 h-5'><path stroke-linecap='round' stroke-linejoin='round' d='M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z'/></svg>"
-                        />
-                    </div>
-
-                    <div
-                        class="absolute bottom-4 left-4 max-w-[220px] bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-gray-100 dark:border-gray-800"
-                    >
-                        <div class="flex items-center gap-2 mb-1">
-                            <div class="h-2 w-2 rounded-full bg-green-500">
-                            </div>
-                            <p
-                                class="font-medium text-sm *:text-gray-800 dark:text-gray-200"
-                            >
-                                Solución en tiempo real
-                            </p>
-                        </div>
-                        <p class="text-xs text-gray-600 dark:text-gray-400">
-                            Monitoreo continuo con precisión milimétrica para
-                            tus procesos críticos
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Elementos decorativos de fondo -->
-                <div
-                    class="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-600 rounded-full filter blur-3xl -z-40"
-                >
-                </div>
-                <div
-                    class="absolute -top-10 -left-10 w-40 h-40 bg-orange-600 rounded-full filter blur-3xl -z-40"
-                >
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Brands section - Always visible -->
+    <Container className="relative z-10 mt-16 sm:mt-24">
         <Brands />
     </Container>
+
+    <script>
+        import { gsap } from "gsap";
+
+        const initHero = () => {
+            const title = document.querySelector(".hero-title");
+            if (!title) return; // Seguridad: Si no hay Hero en esta página, no ejecutar GSAP
+
+            const tl = gsap.timeline({
+                defaults: { ease: "power4.out", duration: 1.2 },
+            });
+
+            // Set initial state to avoid flicker
+            gsap.set([".hero-title", ".hero-description", ".hero-cta"], {
+                autoAlpha: 0,
+                y: 30,
+            });
+
+            // 1. Text Entrance
+            tl.to(".hero-title", {
+                autoAlpha: 1,
+                y: 0,
+                duration: 1.5,
+                delay: 0.2,
+            })
+                .to(
+                    ".hero-description",
+                    { autoAlpha: 1, y: 0, duration: 1.2 },
+                    "-=1.1",
+                )
+                .to(".hero-cta", { autoAlpha: 1, y: 0, duration: 1 }, "-=0.9");
+
+            // 2. Floating "manchas" effect
+            gsap.to(".hero-mancha", {
+                x: "random(-40, 40)",
+                y: "random(-40, 40)",
+                scale: "random(0.9, 1.15)",
+                duration: "random(6, 10)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                stagger: {
+                    amount: 2,
+                    from: "random",
+                },
+            });
+        };
+
+        // Run on load
+        document.addEventListener("DOMContentLoaded", initHero);
+    </script>
+
+    <style>
+        .hero-bg-circle {
+            transform: scale(0.85);
+            will-change: transform, opacity;
+        }
+
+        .hero-showcase-card {
+            background-image: none;
+            background-size: cover;
+            background-position: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-showcase-card {
+                background-image: url("/images/hero-insytech.webp");
+                background-color: #020617; /* Fallback dark color */
+            }
+        }
+    </style>
 </section>
