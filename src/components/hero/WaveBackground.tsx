@@ -133,42 +133,61 @@ export default function WaveBackground({
                     return v;
                 }
 
+                // --- Glyph Drawing ---
+                float drawGlyph(vec2 uv, float brightness) {
+                    vec2 gUv = fract(uv);
+                    if (brightness < 0.1) return 0.0;
+                    
+                    if (brightness < 0.3) {
+                        return 1.0 - smoothstep(0.05, 0.12, length(gUv - 0.5));
+                    } else if (brightness < 0.5) {
+                        float l1 = step(0.45, gUv.x) * step(gUv.x, 0.55) * step(0.2, gUv.y) * step(gUv.y, 0.8);
+                        float l2 = step(0.45, gUv.y) * step(gUv.y, 0.55) * step(0.2, gUv.x) * step(gUv.x, 0.8);
+                        return max(l1, l2);
+                    } else if (brightness < 0.75) {
+                        float o = step(0.15, gUv.x) * step(gUv.x, 0.85) * step(0.15, gUv.y) * step(gUv.y, 0.85);
+                        float i = step(0.3, gUv.x) * step(gUv.x, 0.7) * step(0.3, gUv.y) * step(gUv.y, 0.7);
+                        return o - i;
+                    } else {
+                        float d1 = step(abs((gUv.x - 0.5) - (gUv.y - 0.5)), 0.1);
+                        float d2 = step(abs((gUv.x - 0.5) + (gUv.y - 0.5)), 0.1);
+                        return max(d1, d2) * step(length(gUv - 0.5), 0.45);
+                    }
+                }
+
                 void main() {
-                    vec2 uv = vUv;
+                    float gridSize = 16.0;
+                    vec2 gridUv = vUv * uResolution / gridSize;
+                    vec2 cellId = floor(gridUv);
+                    vec2 cellCenter = (cellId + 0.5) * gridSize / uResolution;
+
+                    vec2 uv = cellCenter;
                     float aspectRatio = uResolution.x / uResolution.y;
-                    // EXTRA MASSIVE SCALE: 0.05 multiplier (zoom in 2x more than V10)
                     vec2 p = vec2((uv.x - 0.5) * aspectRatio, uv.y - 0.5) * 0.05;
                     
                     float t = uTime;
                     
-                    // --- Spatial Partitioning ---
                     float sectionMask = snoise(p * 0.4 + t * 0.2);
                     sectionMask = smoothstep(-0.2, 0.2, sectionMask);
                     
-                    // --- Layer 1: The "Deep" Flow ---
                     vec2 p1 = p;
                     float d1 = fbm(p1 * 1.2 + vec2(t, t * 0.5));
                     vec2 q1 = vec2(fbm(p1 + d1 + t * 0.3), fbm(p1 + d1 - t * 0.1));
                     float noise1 = fbm(p1 + 1.5 * q1);
                     
-                    // --- Layer 2: The "Surface" Flow ---
                     vec2 p2 = p + vec2(10.0); 
                     float d2 = fbm(p2 * 0.8 - vec2(t * 0.4, t * 0.2));
                     vec2 q2 = vec2(fbm(p2 + d2 + t * 0.5), fbm(p2 + d2 + t * 0.4));
                     float noise2 = fbm(p2 + 2.0 * q2);
                     
-                    // --- Combining Sections ---
                     float combinedNoise = mix(noise1, noise2, sectionMask);
                     
-                    // --- Topographic Curves (Bigger Bands) ---
                     float pattern = sin(combinedNoise * 10.0 + t);
                     float ribbon = smoothstep(-0.3, 0.3, pattern);
                     
-                    // Add a secondary internal detail
                     float detail = sin(combinedNoise * 20.0 - t * 2.0);
                     ribbon = mix(ribbon, ribbon * (0.8 + 0.2 * detail), 0.3);
                     
-                    // --- 3D Relief Lighting ---
                     vec2 e = vec2(0.01, 0.0);
                     vec3 normal = normalize(vec3(
                         mix(fbm(p1 + e.xy), fbm(p2 + e.xy), sectionMask) - combinedNoise,
@@ -178,30 +197,28 @@ export default function WaveBackground({
                     vec3 lightDir = normalize(vec3(0.5, 0.5, 1.0));
                     float spec = pow(max(dot(normal, lightDir), 0.0), 24.0);
                     
-                    // Base color driven by the multi-section noise
                     vec3 baseColor = mix(uColorDark, uColorBrand, smoothstep(-0.6, 0.1, combinedNoise));
                     baseColor = mix(baseColor, uColorCyan, smoothstep(0.1, 0.7, combinedNoise));
                     
-                    // --- Accent Highlights (The Orange Flow) ---
                     float accentPattern = sin(combinedNoise * 15.0 - t * 0.5);
                     float accentMask = smoothstep(0.8, 0.95, accentPattern) * smoothstep(0.2, 0.8, combinedNoise);
                     baseColor = mix(baseColor, uColorAccent, accentMask * 0.4);
                     
-                    // Final color mix using the ribbon pattern
                     vec3 color = mix(baseColor * 0.6, baseColor * 1.4, ribbon);
-                    
-                    // Add lighting effects
                     color += uColorBright * spec * 0.65;
-                    color += uColorAccent * spec * 0.15; // Subtle warm glint in specular
+                    color += uColorAccent * spec * 0.15;
                     
-                    // Add unique light "edges" to the sections
                     float edge = fwidth(sectionMask) * 5.0;
                     color += uColorCyan * edge * 0.2;
 
-                    gl_FragColor = vec4(color, 1.0);
+                    float brightness = (color.r + color.g + color.b) / 3.0;
+                    float glyph = drawGlyph(gridUv, brightness);
+
+                    gl_FragColor = vec4(color, glyph * (0.4 + brightness * 0.5));
                 }
             `,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            transparent: true
         });
 
         const mesh = new THREE.Mesh(geometry, material);

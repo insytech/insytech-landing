@@ -6,6 +6,7 @@ import CookieConsent from "../components/elements/CookieConsent.astro";
 import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
 import GoogleAnalytics from "../components/elements/GoogleAnalytics.astro";
 import SEO from "../components/elements/SEO.astro";
+import DitheredBlobs from "../components/hero/DitheredBlobs";
 
 export interface Props {
   title?: string;
@@ -60,7 +61,12 @@ const {
       href="/Favicon_16x16px_Mesa-de-trabajo-1.webp"
     />
     <meta name="generator" content={Astro.generator} />
-  </head><body class="overflow-hidden overflow-y-auto bg-body">
+  </head><body class="overflow-hidden overflow-y-auto bg-body relative">
+    <div
+      class="fixed inset-0 z-[-1] pointer-events-none transform-gpu backface-hidden"
+    >
+      <DitheredBlobs client:load />
+    </div>
     <Navbar />
     <slot />
     <Footer />

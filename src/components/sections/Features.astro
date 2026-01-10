@@ -34,7 +34,7 @@ const sectors = [
 ];
 ---
 
-<section id="features" class="relative pt-12 pb-20 bg-white dark:bg-[#020308]">
+<section id="features" class="relative pt-12 pb-20 bg-transparent">
     <!-- Background exactly like Process.astro but with different pattern -->
     <div class="absolute -left-10 top-0 h-full w-full flex justify-start opacity-30 dark:opacity-40 pointer-events-none">
         <div class="feature-mancha w-64 h-64 overflow-auto flex rounded-xl relative blur-3xl">
@@ -70,7 +70,7 @@ const sectors = [
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-px bg-gray-200 dark:bg-white/10 border-x border-gray-200 dark:border-white/10">
             {sectors.map((sector) => (
                 <div 
-                    class="group relative flex flex-col bg-white dark:bg-[#020617] p-7 lg:p-14 min-h-[600px] lg:min-h-[650px] transition-colors duration-700 sector-card opacity-0 overflow-hidden"
+                    class="group relative flex flex-col bg-white/5 dark:bg-[#020617]/40 backdrop-blur-2xl p-7 lg:p-14 min-h-[600px] lg:min-h-[650px] transition-colors duration-700 sector-card opacity-0 overflow-hidden"
                 >
                     <!-- Background Grainy Noise -->
                     <div class="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
