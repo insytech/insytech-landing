@@ -47,7 +47,7 @@ import DashboardShowcase from "../hero/DashboardShowcase";
 
     <!-- Orange Contrast Glow -->
     <div
-        class="absolute right-0 top-1/3 h-full w-full flex justify-end items-start opacity-15 dark:opacity-25 pointer-events-none z-0"
+        class="absolute right-0 top-1/3 h-full w-full hidden dark:flex justify-end items-start opacity-15 dark:opacity-25 pointer-events-none z-0"
     >
         <div
             class="hero-mancha w-96 h-96 overflow-auto flex rounded-full relative blur-[120px]"
@@ -105,14 +105,19 @@ import DashboardShowcase from "../hero/DashboardShowcase";
 
     <!-- FULL-WIDTH Showcase Container - Hidden on Mobile, Premium AR on Desktop -->
     <div
-        class="relative mt-0 lg:mt-16 mx-4 sm:mx-4 lg:mx-8 hidden lg:block"
+        class="relative mt-0 lg:mt-16 hidden lg:block"
         data-animate="fade-up"
         data-animate-delay="300ms"
     >
         <!-- Wave Background - Full width, rounded container -->
         <div
-            class="relative w-full min-h-[600px] lg:h-[600px] rounded-[1rem] overflow-hidden bg-transparent lg:bg-white lg:dark:bg-gray-950"
+            class="relative w-full min-h-[700px] lg:h-[700px] rounded-[1rem] overflow-hidden bg-transparent lg:bg-white lg:dark:bg-gray-950 showcase-container-mask"
         >
+            <!-- Top Merge Gradient Overlay -->
+            <div
+                class="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white dark:from-gray-950 to-transparent z-20 pointer-events-none"
+            >
+            </div>
             <!-- Main Three.js Wave Animation - Hidden on Mobile/Tablet -->
             <WaveBackground
                 client:load
@@ -220,6 +225,15 @@ import DashboardShowcase from "../hero/DashboardShowcase";
                 background-image: url("/images/hero-insytech.webp");
                 background-color: #020617; /* Fallback dark color */
             }
+        }
+
+        .showcase-container-mask {
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                transparent,
+                black 150px
+            );
+            mask-image: linear-gradient(to bottom, transparent, black 150px);
         }
     </style>
 </section>

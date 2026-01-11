@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 interface WaveBackgroundProps {
@@ -22,7 +22,9 @@ export default function WaveBackground({
 }: WaveBackgroundProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+    const materialRef = useRef<THREE.ShaderMaterial | null>(null);
     const animationRef = useRef<number>(0);
+    const [isDark, setIsDark] = useState(true);
 
     // Default Brand Colors
     const defaultColors = {
@@ -34,6 +36,53 @@ export default function WaveBackground({
     };
 
     const finalColors = { ...defaultColors, ...colors };
+
+    // Theme Detection
+    useEffect(() => {
+        const checkTheme = () => {
+            const dark = document.documentElement.classList.contains('dark');
+            setIsDark(dark);
+        };
+
+        checkTheme();
+
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    checkTheme();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        return () => observer.disconnect();
+    }, []);
+
+    // Color Update when theme changes
+    useEffect(() => {
+        if (materialRef.current) {
+            if (isDark) {
+                materialRef.current.uniforms.uColorDark.value.set(finalColors.dark);
+                materialRef.current.uniforms.uColorBrand.value.set(finalColors.brand);
+                materialRef.current.uniforms.uColorCyan.value.set(finalColors.cyan);
+                materialRef.current.uniforms.uColorBright.value.set(finalColors.bright);
+                materialRef.current.uniforms.uColorAccent.value.set(finalColors.accent);
+                materialRef.current.uniforms.uContrast.value = 0.45; // High contrast for dark mode
+            } else {
+                // "Ice Tech" Light Mode Palette
+                materialRef.current.uniforms.uColorDark.value.set('#ffffff');
+                materialRef.current.uniforms.uColorBrand.value.set('#f0f9ff'); // Very soft cyan/blue
+                materialRef.current.uniforms.uColorCyan.value.set('#e0f2fe');  // Sky 100
+                materialRef.current.uniforms.uColorBright.value.set('#ffffff');
+                materialRef.current.uniforms.uColorAccent.value.set('#ffffff');
+                materialRef.current.uniforms.uContrast.value = 0.08; // Very low contrast to avoid grey look
+            }
+        }
+    }, [isDark, finalColors.dark, finalColors.brand, finalColors.cyan, finalColors.bright, finalColors.accent]);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -64,16 +113,35 @@ export default function WaveBackground({
         // Helper to convert hex to THREE.Color normalized vec3
         const parseColor = (hex: string) => new THREE.Color(hex);
 
+        // Current theme colors
+        const initialIsDark = document.documentElement.classList.contains('dark');
+        const colors_config = initialIsDark ? {
+            dark: finalColors.dark,
+            brand: finalColors.brand,
+            cyan: finalColors.cyan,
+            bright: finalColors.bright,
+            accent: finalColors.accent,
+            contrast: 0.45
+        } : {
+            dark: '#ffffff',
+            brand: '#f0f9ff',
+            cyan: '#e0f2fe',
+            bright: '#ffffff',
+            accent: '#ffffff',
+            contrast: 0.08
+        };
+
         // Flowing silk/marble stripes shader
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 uTime: { value: timeOffset },
                 uResolution: { value: new THREE.Vector2(width, height) },
-                uColorDark: { value: parseColor(finalColors.dark) },
-                uColorBrand: { value: parseColor(finalColors.brand) },
-                uColorCyan: { value: parseColor(finalColors.cyan) },
-                uColorBright: { value: parseColor(finalColors.bright) },
-                uColorAccent: { value: parseColor(finalColors.accent) }
+                uColorDark: { value: parseColor(colors_config.dark) },
+                uColorBrand: { value: parseColor(colors_config.brand) },
+                uColorCyan: { value: parseColor(colors_config.cyan) },
+                uColorBright: { value: parseColor(colors_config.bright) },
+                uColorAccent: { value: parseColor(colors_config.accent) },
+                uContrast: { value: colors_config.contrast }
             },
             vertexShader: `
                 varying vec2 vUv;
@@ -84,6 +152,7 @@ export default function WaveBackground({
             `,
             fragmentShader: `
                 uniform float uTime;
+                uniform float uContrast;
                 uniform vec2 uResolution;
                 uniform vec3 uColorDark;
                 uniform vec3 uColorBrand;
@@ -113,7 +182,7 @@ export default function WaveBackground({
                     m = m*m;
                     vec3 x = 2.0 * fract(p * C.www) - 1.0;
                     vec3 h = abs(x) - 0.5;
-                    vec3 ox = floor(x + 0.5);
+                    vec3 ox = floor(x + 1.2);
                     vec3 a0 = x - ox;
                     m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
                     vec3 g;
@@ -188,14 +257,15 @@ export default function WaveBackground({
                     baseColor = mix(baseColor, uColorAccent, accentMask * 0.4);
                     
                     // Final color mix using the ribbon pattern
-                    vec3 color = mix(baseColor * 0.6, baseColor * 1.4, ribbon);
+                    // LIGHT MODE OPTIMIZATION: Use uContrast variable to prevent grey shadows
+                    vec3 color = mix(baseColor * (1.0 - uContrast), baseColor * (1.1 + uContrast), ribbon);
                     
                     // Add lighting effects
                     color += uColorBright * spec * 0.65;
                     color += uColorAccent * spec * 0.15; // Subtle warm glint in specular
                     
                     // Add unique light "edges" to the sections
-                    float edge = fwidth(sectionMask) * 5.0;
+                    float edge = fwidth(sectionMask) * (5.0 * (1.0 - uContrast));
                     color += uColorCyan * edge * 0.2;
 
                     gl_FragColor = vec4(color, 1.0);
@@ -206,6 +276,7 @@ export default function WaveBackground({
 
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
+        materialRef.current = material;
 
         // Animation
         let time = timeOffset;
@@ -240,6 +311,7 @@ export default function WaveBackground({
             }
             geometry.dispose();
             material.dispose();
+            materialRef.current = null;
         };
     }, [colors, timeOffset, speed]);
 
