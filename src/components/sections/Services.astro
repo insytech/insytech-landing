@@ -1,6 +1,5 @@
 ---
 import Badge from "@components/shared/Badge.astro";
-import Service from "../cards/Service.astro";
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 import Title from "../shared/Title.astro";
@@ -16,61 +15,721 @@ type ServicesProps = {
 };
 ---
 
-<section id="services" class="relative py-20 overflow-hidden">
-    <!-- Elementos decorativos de fondo similares al Hero -->
-    <div class="absolute inset-0 z-0">
+<section
+    id="services"
+    class="relative pt-20 pb-16 overflow-hidden bg-white dark:bg-[#020308]"
+>
+    <!-- Architectural Grid - The Infrastructure -->
+    <div
+        class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.03] dark:opacity-[0.07]"
+    >
         <div
-            class="absolute top-0 left-0 w-1/3 h-1/3 bg-gradient-to-br from-[#001489]/5 to-transparent rounded-br-full"
-        >
-        </div>
-        <div
-            class="absolute bottom-0 right-0 w-1/2 h-1/2 bg-gradient-to-tl from-[#00B5E2]/5 to-transparent rounded-tl-full"
-        >
-        </div>
-        <div
-            class="absolute w-full h-full bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,.02)_25%,rgba(68,68,68,.02)_50%,transparent_50%,transparent_75%,rgba(68,68,68,.02)_75%)] bg-[length:20px_20px] opacity-20"
+            class="absolute inset-0"
+            style="background-image: radial-gradient(#005EB8 2px, transparent 2px); background-size: 60px 60px;"
         >
         </div>
     </div>
 
     <Container className="relative z-10">
-        <!-- Encabezado de la sección -->
-        <div
-            class="text-center max-w-3xl mx-auto space-y-4 mb-16"
-            data-animate="fade-up"
-        >
-            <!-- Badge similar al del Hero -->
-            <div class="flex justify-center mb-4">
-                <Badge text="Servicios Especializados" />
+        <!-- Header: Refined Editorial -->
+        <div class="mb-24 relative">
+            <div class="flex items-center gap-4 mb-8 services-reveal opacity-0">
+                <div class="h-[2px] w-12 bg-[#005EB8]"></div>
+                <span
+                    class="text-[12px] font-black text-[#005EB8] dark:text-[#00B5E2] tracking-[0.4em] uppercase"
+                    >Core Solutions</span
+                >
             </div>
 
-            <Title> Servicios Especializados en Ingeniería </Title>
+            <div class="overflow-hidden mb-8">
+                <h2
+                    class="services-reveal-title opacity-0 text-5xl md:text-7xl font-black text-[#002B49] dark:text-white leading-[1.05] tracking-tight"
+                >
+                    Ingeniería que <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#005EB8] to-[#00B5E2]"
+                        >Redefine</span
+                    >
+                    <br />
+                    el Ecosistema Industrial
+                </h2>
+            </div>
 
-            <Paragraph data-animate="fade" data-animate-delay=".08s">
-                Descubre nuestras soluciones avanzadas para optimizar procesos
-                industriales y mejorar la eficiencia en tu operación.
+            <Paragraph
+                className="services-reveal opacity-0 text-xl font-medium leading-relaxed text-heading-3 max-w-2xl"
+            >
+                Diseñamos el tejido tecnológico que permite a las industrias
+                operar con una precisión desatendida y una eficiencia sin
+                precedentes.
             </Paragraph>
         </div>
 
-        <!-- Grid de 3 tarjetas en una sola fila -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-8">
-            {
-                services.map((service: ServicesProps, i) => (
+        <!-- Ultra-Modern Bento Grid -->
+        <div
+            class="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-auto md:auto-rows-[minmax(400px,_auto)]"
+        >
+            {/* CARD 1: SOFTWARE - THE BRAIN (Large 8/12) */}
+            <div
+                class="md:col-span-8 group relative rounded-[2rem] sm:rounded-[2.5rem] bg-gray-50/50 dark:bg-[#0A0F1E]/80 backdrop-blur-3xl border border-gray-200/50 dark:border-white/5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 service-bento opacity-0 translate-y-8"
+            >
+                <div
+                    class="relative h-full flex flex-col lg:flex-row items-center"
+                >
                     <div
-                        data-animate="fade-up"
-                        data-animate-delay={`${0.06 * i}s`}
+                        class="p-7 sm:p-12 lg:p-14 lg:w-1/2 flex flex-col justify-center space-y-6 relative z-20"
                     >
-                        <Service
-                            title={service.title}
-                            description={service.description}
-                            icon={service.icon}
-                            image={service.image}
-                            imageSecondary={service.imageSecondary}
-                            features={service.features}
-                        />
+                        <div
+                            class="flex items-center gap-2 mb-2 p-1.5 pr-4 rounded-full bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 shadow-sm w-fit"
+                        >
+                            <div
+                                class="w-6 h-6 rounded-full bg-[#005EB8] flex items-center justify-center text-white"
+                            >
+                                <svg
+                                    class="w-3.5 h-3.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    ><path
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                                        stroke-width="3"></path></svg
+                                >
+                            </div>
+                            <span
+                                class="text-[10px] sm:text-[11px] font-black uppercase tracking-widest dark:text-gray-400"
+                                >Stack Architecture</span
+                            >
+                        </div>
+                        <h3
+                            class="text-3xl lg:text-4xl font-black text-[#002B49] dark:text-white leading-tight tracking-tight"
+                        >
+                            {services[0].title}
+                        </h3>
+                        <p
+                            class="text-heading-3 text-lg sm:text-xl leading-relaxed font-medium"
+                        >
+                            {services[0].description}
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            {
+                                services[0].features
+                                    .slice(0, 3)
+                                    .map((f) => (
+                                        <div class="px-3 py-1.5 rounded-lg bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[9px] sm:text-[10px] font-bold text-heading-2 uppercase tracking-tighter">
+                                            {f}
+                                        </div>
+                                    ))
+                            }
+                        </div>
                     </div>
-                ))
+
+                    {/* Animated Code Visualization */}
+                    <div
+                        class="lg:w-1/2 w-full h-full min-h-[300px] lg:min-h-[400px] relative bg-[#000510] flex items-center justify-center overflow-hidden"
+                    >
+                        <div
+                            class="absolute inset-0 opacity-20 pointer-events-none"
+                        >
+                            <div
+                                class="absolute inset-0 bg-gradient-to-br from-[#005EB8]/20 to-transparent"
+                            >
+                            </div>
+                            <div
+                                class="h-full w-full"
+                                style="background-image: radial-gradient(#ffffff10 1px, transparent 1px); background-size: 20px 20px;"
+                            >
+                            </div>
+                        </div>
+
+                        <div
+                            class="relative z-10 w-[80%] space-y-3 font-mono text-[11px]"
+                        >
+                            <p
+                                class="text-blue-400 group-hover:translate-x-2 transition-transform duration-500"
+                            >
+                                >> LOAD_MODULE(insytech_core)
+                            </p>
+                            <div class="h-[1px] w-full bg-white/10"></div>
+                            <div class="space-y-1">
+                                <p class="text-emerald-400">
+                                    STATUS: <span class="text-white"
+                                        >OPTIMIZING...</span
+                                    >
+                                </p>
+                                <div
+                                    class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden"
+                                >
+                                    <div
+                                        class="h-full bg-[#005EB8] group-hover:w-full transition-all duration-[3000ms] w-1/3"
+                                    >
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-amber-400">
+                                >> SYNCING_(EDGE_NODES)
+                            </p>
+                            <pre
+                                class="text-white/30 text-[9px] leading-tight">
+                                {`{
+    "latency": "0.2ms",
+    "throughput": "1.2Gb/s",
+    "nodes": [84, 12, 09]
+}`}
+                             </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {
+                /* CARD 2: MONITORING - THE PULSE (Square 4/12) - RESTAURADO SEGÚN PREFERENCIA */
             }
+            <div
+                class="md:col-span-4 group relative rounded-[2.5rem] bg-[#00172B] overflow-hidden service-bento opacity-0 translate-y-16 perspective-1000"
+            >
+                <div
+                    class="absolute inset-0 pointer-events-none opacity-[0.2] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+                >
+                </div>
+                <div
+                    class="absolute inset-x-0 bottom-0 h-full bg-gradient-to-t from-[#005EB8]/60 via-[#005EB8]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000"
+                >
+                </div>
+
+                <div
+                    class="h-full p-7 sm:p-12 lg:p-14 flex flex-col relative z-10"
+                >
+                    <div class="space-y-6 py-2">
+                        <div
+                            class="flex justify-between items-center text-[#00B5E2]"
+                        >
+                            <div
+                                class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#00B5E2] group-hover:text-white transition-all duration-700"
+                            >
+                                <svg
+                                    class="w-6 h-6 animate-pulse"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    ><path
+                                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                                        stroke-width="2.5"></path></svg
+                                >
+                            </div>
+                            <div
+                                class="text-[12px] font-black border-2 border-[#00B5E2]/30 px-4 py-1.5 rounded-full bg-black/40 backdrop-blur-md tracking-tighter transition-all group-hover:border-[#00B5E2] group-hover:scale-110"
+                            >
+                                SYS_OS :: LIVE_TRACE
+                            </div>
+                        </div>
+                        <h3
+                            class="text-3xl lg:text-3xl font-black text-white leading-tight tracking-tight"
+                        >
+                            {services[1].title}
+                        </h3>
+                        <p
+                            class="text-lg sm:text-xl text-white/50 leading-relaxed font-medium"
+                        >
+                            {services[1].description}
+                        </p>
+                    </div>
+
+                    <div
+                        class="mt-auto relative bg-black/40 rounded-3xl border border-white/10 p-6 overflow-hidden backdrop-blur-2xl group-hover:shadow-[0_0_50px_rgba(0,181,226,0.3)] transition-all duration-700"
+                    >
+                        <div
+                            class="flex justify-between items-end h-20 gap-2 mb-6"
+                        >
+                            {
+                                [...Array(16)].map((_, i) => (
+                                    <div
+                                        class="flex-1 bg-white rounded-full group-hover:bg-[#00B5E2] transition-all duration-500 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
+                                        style={{
+                                            height: `${20 + Math.random() * 80}%`,
+                                            transition: `height 0.4s ${i * 0.03}s cubic-bezier(0.175, 0.885, 0.32, 1.275)`,
+                                        }}
+                                    />
+                                ))
+                            }
+                        </div>
+                        <div
+                            class="flex justify-between items-center border-t border-white/10 pt-4 px-2"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_15px_#10b981]"
+                                >
+                                </div>
+                                <span
+                                    class="text-[12px] font-mono text-white/50 tracking-[0.2em] font-black uppercase"
+                                    >Sync Integrity</span
+                                >
+                            </div>
+                            <span
+                                class="text-2xl font-black text-white stats-counter font-mono"
+                                data-target="86.4">00.0%</span
+                            >
+                        </div>
+
+                        {/* Dynamic Scan Line */}
+                        <div
+                            class="absolute inset-y-0 left-0 w-[2px] bg-white/20 group-hover:bg-[#00B5E2] shadow-[0_0_20px_#00B5E2] group-hover:translate-x-[400px] transition-transform duration-[3000ms] pointer-events-none"
+                        >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* CARD 3: CONTROL - THE SINEW (Square 5/12) */}
+            <div
+                class="md:col-span-5 group relative rounded-[2.5rem] bg-white dark:bg-[#000D1A] border border-gray-100 dark:border-white/5 overflow-hidden service-bento opacity-0 translate-y-8 shadow-sm"
+            >
+                <div
+                    class="absolute inset-0 opacity-[0.05] pointer-events-none dark:block hidden"
+                    style="background-image: radial-gradient(#00B5E2 1px, transparent 1px); background-size: 30px 30px;"
+                >
+                </div>
+
+                <div
+                    class="p-7 sm:p-12 lg:p-14 flex flex-col h-full relative z-10"
+                >
+                    <div
+                        class="relative flex-1 mb-10 overflow-hidden rounded-[2rem] bg-gray-50 dark:bg-black/40 flex items-center justify-center border border-gray-200 dark:border-white/10 group-hover:border-[#005EB8] dark:group-hover:border-[#00B5E2]/30 transition-colors duration-700 order-last sm:order-first mt-6 sm:mt-0"
+                    >
+                        {/* Digital PLC Rack Simulation 2.0 */}
+                        <div
+                            class="w-full h-full p-8 flex gap-4 relative overflow-hidden"
+                        >
+                            {/* Device Identifier Label */}
+                            <div
+                                class="absolute top-4 left-6 z-20 flex items-center gap-2"
+                            >
+                                <div
+                                    class="w-1 h-1 rounded-full bg-[#005EB8] dark:bg-[#00B5E2] animate-ping"
+                                >
+                                </div>
+                                <span
+                                    class="text-[7px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em]"
+                                    >IEC_61131_3 :: LOGIC_RUNTIME_V4.2</span
+                                >
+                            </div>
+
+                            <div
+                                class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-16 bg-gradient-to-b from-gray-200 to-gray-300 dark:from-zinc-800 dark:to-zinc-900 border-y border-gray-300 dark:border-white/5 opacity-50 z-0"
+                            >
+                            </div>
+
+                            {
+                                [1, 2, 3].map((module) => (
+                                    <div class="flex-1 bg-gray-100 dark:bg-zinc-900 rounded-lg border-x border-t border-gray-200 dark:border-white/10 p-3 flex flex-col gap-4 shadow-lg relative z-10 before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-transparent before:via-[#005EB8] dark:before:via-[#00B5E2] before:to-transparent">
+                                        <div class="flex justify-between items-center bg-white/50 dark:bg-white/5 p-2 rounded border border-gray-200/50 dark:border-white/5">
+                                            <div class="flex flex-col">
+                                                <span class="text-[7px] font-black text-[#005EB8] dark:text-[#00B5E2] uppercase tracking-tighter leading-none">
+                                                    {module === 1
+                                                        ? "CPU_M7_CORE"
+                                                        : module === 2
+                                                          ? "DIO_16x24V"
+                                                          : "ANA_8x_UNIV"}
+                                                </span>
+                                                <span class="text-[9px] font-mono font-black text-gray-400 dark:text-gray-500 border-l border-gray-300 dark:border-white/20 pl-2 ml-2">
+                                                    ADDR: 0x{module}0F
+                                                </span>
+                                            </div>
+                                            <div
+                                                class={`w-2 h-2 rounded-full ${module === 1 ? "bg-emerald-500 shadow-[0_0_8px_#10b981]" : "bg-emerald-500/30"}`}
+                                            />
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-x-3 gap-y-2 px-1">
+                                            {[...Array(12)].map((_, i) => (
+                                                <div class="flex items-center justify-between group/led">
+                                                    <span class="text-[6px] font-mono text-gray-400 dark:text-white/10 uppercase">
+                                                        {module === 1
+                                                            ? i < 6
+                                                                ? `L${i}`
+                                                                : `ST${i - 6}`
+                                                            : module === 2
+                                                              ? i < 6
+                                                                  ? `DI_${i}`
+                                                                  : `DO_${i - 6}`
+                                                              : i < 6
+                                                                ? `AI_${i}`
+                                                                : `AQ_${i - 6}`}
+                                                        :
+                                                    </span>
+                                                    <div
+                                                        class="plc-led relative w-1.5 h-1.5 rounded-sm bg-gray-300 dark:bg-zinc-800 transition-colors duration-200"
+                                                        data-module={module}
+                                                        data-index={i}
+                                                    >
+                                                        <div class="plc-led-glow absolute inset-0 rounded-sm opacity-0 blur-[4px] bg-emerald-400" />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div class="mt-auto pt-2 border-t border-gray-200 dark:border-white/5 flex justify-center">
+                                            <div class="w-full h-1 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
+                                                <div
+                                                    class="h-full bg-[#005EB8] dark:bg-[#00B5E2] plc-load-bar"
+                                                    style="width: 30%"
+                                                />
+                                            </div>
+                                            <div class="flex justify-between w-full mt-1 px-1">
+                                                <span class="text-[5px] font-mono text-gray-500">
+                                                    SCAN: 0.{module}ms
+                                                </span>
+                                                <span class="text-[5px] font-mono text-gray-500">
+                                                    {module === 1
+                                                        ? "LOAD: 12%"
+                                                        : "BUS: OK"}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        {/* Connection Wires SVG - Tactical Signal Paths */}
+                        <svg
+                            class="absolute inset-0 w-full h-full pointer-events-none opacity-20 dark:opacity-40 z-0"
+                            viewBox="0 0 400 200"
+                        >
+                            <path
+                                d="M50 100 Q100 80 150 100 T250 100 T350 100"
+                                fill="none"
+                                class="stroke-emerald-500"
+                                stroke-width="0.5"
+                                stroke-dasharray="2 4"></path>
+                            <path
+                                d="M50 120 Q100 140 150 120 T250 120 T350 120"
+                                fill="none"
+                                class="stroke-[#00B5E2]"
+                                stroke-width="0.5"
+                                stroke-dasharray="1 3"></path>
+                            <path
+                                d="M50 140 Q100 160 150 140 T250 140 T350 140"
+                                fill="none"
+                                class="stroke-emerald-500"
+                                stroke-width="0.5"
+                                stroke-dasharray="4 2"></path>
+                        </svg>
+                    </div>
+
+                    {/* Live Status Badge */}
+                    <div
+                        class="absolute bottom-6 right-6 flex items-center gap-3 bg-white dark:bg-black/80 backdrop-blur-md border border-gray-100 dark:border-white/10 px-4 py-2 rounded-full shadow-xl"
+                    >
+                        <div class="flex gap-1">
+                            <span
+                                class="w-1 h-3 bg-emerald-500 rounded-full animate-pulse"
+                            ></span>
+                            <span
+                                class="w-1 h-3 bg-emerald-500 rounded-full animate-pulse delay-75"
+                            ></span>
+                            <span
+                                class="w-1 h-3 bg-emerald-500 rounded-full animate-pulse delay-150"
+                            ></span>
+                        </div>
+                        <span
+                            class="text-[10px] font-black text-gray-700 dark:text-white uppercase tracking-[0.2em] leading-none"
+                            >RT_LOGIC_SYNC_OK</span
+                        >
+                    </div>
+                    <div class="space-y-5 mt-auto">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="h-[1px] w-8 bg-[#005EB8] dark:bg-[#00B5E2]"
+                            >
+                            </div>
+                            <span
+                                class="text-[10px] font-black text-[#005EB8] dark:text-[#00B5E2] uppercase tracking-[0.3em]"
+                                >DETERMINISTIC LOGIC CORE</span
+                            >
+                        </div>
+                        <h3
+                            class="text-3xl lg:text-3xl font-black text-[#002B49] dark:text-white leading-tight tracking-tight"
+                        >
+                            {services[2].title}
+                        </h3>
+                        <p
+                            class="text-lg sm:text-xl text-gray-600 dark:text-white/40 leading-relaxed font-medium"
+                        >
+                            {services[2].description}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="md:col-span-7 group relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#000814] overflow-hidden service-bento opacity-0 translate-y-8 p-7 sm:p-14"
+            >
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-[#005EB8]/5 via-transparent to-transparent"
+                >
+                </div>
+
+                <div class="relative h-full flex flex-col z-10 w-full">
+                    {
+                        /* Header: Icon to the right of title (actually user said title to the right of icon, aligned both center) */
+                    }
+                    <div
+                        class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-10 sm:mb-12 text-center sm:text-left"
+                    >
+                        <div
+                            class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#00B5E2] transition-all duration-500 group-hover:border-[#00B5E2]"
+                        >
+                            <svg
+                                class="w-7 h-7 sm:w-8 sm:h-8"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                ><path
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                    stroke-width="2.5"></path><path
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7"
+                                    stroke-width="2"></path></svg
+                            >
+                        </div>
+                        <h3
+                            class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tighter"
+                        >
+                            {services[3].title}
+                        </h3>
+                    </div>
+
+                    {/* Content Columns */}
+                    <div
+                        class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center flex-1"
+                    >
+                        {/* Column 1: Text, Stats, Button */}
+                        <div class="space-y-8 flex flex-col">
+                            <p
+                                class="text-lg sm:text-xl text-white/40 leading-relaxed font-medium"
+                            >
+                                {services[3].description}
+                            </p>
+
+                            <div
+                                class="flex gap-6 sm:gap-10 border-l-2 border-white/10 pl-6 group-hover:border-[#00B5E2] transition-colors"
+                            >
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-3xl sm:text-4xl font-black text-[#00B5E2] stats-counter"
+                                        data-target="99.8">0.0%</span
+                                    >
+                                    <span
+                                        class="text-[9px] sm:text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1"
+                                        >Accuracy</span
+                                    >
+                                </div>
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-3xl sm:text-4xl font-black text-white stats-counter"
+                                        data-target="120">0</span
+                                    >
+                                    <span
+                                        class="text-[9px] sm:text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1"
+                                        >Samples/s</span
+                                    >
+                                </div>
+                            </div>
+
+                            <button
+                                class="w-full sm:w-fit px-8 py-4 sm:px-10 sm:py-5 rounded-full bg-white text-black font-black text-[11px] sm:text-[12px] uppercase tracking-widest hover:bg-[#00B5E2] hover:text-white transition-all duration-300 shadow-xl"
+                            >
+                                Launch AI Core
+                            </button>
+                        </div>
+
+                        {/* Column 2: Sensor Lens Image */}
+                        <div class="flex items-center justify-center">
+                            <div
+                                class="w-56 h-56 sm:w-64 sm:h-64 relative rounded-full overflow-hidden border-4 border-white/10 group-hover:border-[#00B5E2]/50 transition-all duration-700 shadow-2xl bg-black"
+                            >
+                                <img
+                                    src={services[3].image}
+                                    class="w-full h-full object-cover transition-all duration-[2000ms] group-hover:scale-110 opacity-80"
+                                />
+                                <div
+                                    class="absolute inset-0 bg-blue-500/10 group-hover:opacity-0 transition-opacity"
+                                >
+                                </div>
+                                <div
+                                    class="absolute inset-x-0 h-[3px] bg-gradient-to-r from-transparent via-[#00B5E2] to-transparent shadow-[0_0_20px_#00B5E2] animate-[scan_4s_linear_infinite] top-0 pointer-events-none"
+                                >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes scan {
+                    0% {
+                        top: 0%;
+                        opacity: 0;
+                    }
+                    5% {
+                        opacity: 1;
+                    }
+                    95% {
+                        opacity: 1;
+                    }
+                    100% {
+                        top: 100%;
+                        opacity: 0;
+                    }
+                }
+            </style>
+
+            <script>
+                import { gsap } from "gsap";
+                import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+                gsap.registerPlugin(ScrollTrigger);
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    // 1. Reveal Header
+                    gsap.to(".services-reveal-title", {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1,
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: "#services",
+                            start: "top 80%",
+                        },
+                    });
+
+                    gsap.to(".services-reveal", {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.1,
+                        ease: "power2.out",
+                        scrollTrigger: {
+                            trigger: "#services",
+                            start: "top 80%",
+                        },
+                    });
+
+                    // 2. Bento Grid Reveal
+                    gsap.to(".service-bento", {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.1,
+                        ease: "power4.out",
+                        scrollTrigger: {
+                            trigger: ".service-bento",
+                            start: "top 90%",
+                        },
+                        onComplete: () => {
+                            animateCounters();
+                        },
+                    });
+
+                    const animatePLC = () => {
+                        const leds = document.querySelectorAll(".plc-led");
+                        if (!leds.length) return;
+
+                        const loadBars =
+                            document.querySelectorAll(".plc-load-bar");
+
+                        // Continuous logic bursts
+                        const triggerBurst = () => {
+                            const mod = Math.floor(Math.random() * 3) + 1;
+                            const modLeds = document.querySelectorAll(
+                                `.plc-led[data-module="${mod}"]`,
+                            );
+                            const glowEls = document.querySelectorAll(
+                                `.plc-led[data-module="${mod}"] .plc-led-glow`,
+                            );
+
+                            gsap.to(glowEls, {
+                                opacity: 0.8,
+                                duration: 0.1,
+                                stagger: { amount: 0.2, from: "random" },
+                                onStart: () => {
+                                    if (loadBars[mod - 1])
+                                        gsap.to(loadBars[mod - 1], {
+                                            width: `${30 + Math.random() * 50}%`,
+                                            duration: 0.4,
+                                        });
+                                },
+                                onComplete: () => {
+                                    gsap.to(glowEls, {
+                                        opacity: 0,
+                                        duration: 0.6,
+                                        delay: 0.1,
+                                    });
+                                    if (loadBars[mod - 1])
+                                        gsap.to(loadBars[mod - 1], {
+                                            width: "30%",
+                                            duration: 1,
+                                        });
+                                },
+                            });
+
+                            gsap.delayedCall(
+                                Math.random() * 1.5 + 0.5,
+                                triggerBurst,
+                            );
+                        };
+
+                        // Periodic system-wide sync wave
+                        const triggerWave = () => {
+                            const allGlows =
+                                document.querySelectorAll(".plc-led-glow");
+                            gsap.to(allGlows, {
+                                opacity: 0.6,
+                                duration: 0.05,
+                                stagger: 0.015,
+                                onComplete: () => {
+                                    gsap.to(allGlows, {
+                                        opacity: 0,
+                                        duration: 0.3,
+                                        delay: 0.1,
+                                    });
+                                },
+                            });
+                            gsap.delayedCall(6, triggerWave);
+                        };
+
+                        triggerBurst();
+                        triggerWave();
+                    };
+
+                    const animateCounters = () => {
+                        document
+                            .querySelectorAll(".stats-counter")
+                            .forEach((el) => {
+                                const targetValue = parseFloat(
+                                    el.getAttribute("data-target") || "0",
+                                );
+                                const isPercentage =
+                                    el.textContent?.includes("%");
+
+                                gsap.to(el, {
+                                    innerText: targetValue,
+                                    duration: 1.5,
+                                    ease: "power2.out",
+                                    onUpdate: function () {
+                                        const val = parseFloat(
+                                            this.targets()[0].innerText,
+                                        );
+                                        el.textContent =
+                                            val.toFixed(1) +
+                                            (isPercentage ? "%" : "");
+                                    },
+                                });
+                            });
+                    };
+
+                    // Call PLC animation
+                    animatePLC();
+                });
+            </script>
         </div>
     </Container>
 </section>

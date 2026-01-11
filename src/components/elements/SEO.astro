@@ -5,6 +5,7 @@ export interface Props {
     ogImage?: string;
     canonicalURL?: URL | string;
     type?: string;
+    siteName?: string;
 }
 
 const {
@@ -13,9 +14,8 @@ const {
     ogImage = "/images/futuro_digital.webp",
     canonicalURL = Astro.url,
     type = "website",
+    siteName = "Insytech",
 } = Astro.props;
-
-const siteName = "Insytech";
 // Usar el título tal cual si ya tiene el nombre de la marca, o añadirlo si no.
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
@@ -34,7 +34,7 @@ const organizationSchema = {
         "@type": "ContactPoint",
         telephone: "+52-81-2892-7509",
         contactType: "sales",
-        email: "info@insytech.mx",
+        email: "ventas@insytech.mx",
         areaServed: "MX",
         availableLanguage: ["Spanish", "English"],
     },
@@ -79,6 +79,7 @@ const websiteSchema = {
 
 <!-- Canonical -->
 <link rel="canonical" href={canonicalURL} />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <!-- Primary Meta Tags -->
 <title>{fullTitle}</title>
