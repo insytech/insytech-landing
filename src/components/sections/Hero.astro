@@ -105,46 +105,51 @@ import DashboardShowcase from "../hero/DashboardShowcase";
 
     <!-- FULL-WIDTH Showcase Container - Hidden on Mobile, Premium AR on Desktop -->
     <div
-        class="relative mt-0 lg:mt-16 hidden lg:block"
+        class="relative mt-0 lg:mt-16 hidden lg:block overflow-hidden px-20 -mx-20 pb-40 -mb-40"
         data-animate="fade-up"
         data-animate-delay="300ms"
     >
-        <!-- Wave Background - Full width, rounded container -->
+        <!-- Shadow Wrapper: Ensures shadow isn't clipped by mask/overflow -->
         <div
-            class="relative w-full min-h-[700px] lg:h-[700px] rounded-[1rem] overflow-hidden bg-transparent lg:bg-white lg:dark:bg-gray-950 showcase-container-mask"
+            class="rounded-[1rem] shadow-[0_60px_100px_-20px_rgba(0,94,184,0.15)] dark:shadow-none"
         >
-            <!-- Top Merge Gradient Overlay -->
+            <!-- Wave Background - Full width, rounded container -->
             <div
-                class="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white dark:from-gray-950 to-transparent z-20 pointer-events-none"
+                class="relative w-full min-h-[700px] lg:h-[700px] rounded-[1rem] overflow-hidden bg-transparent lg:bg-white lg:dark:bg-gray-950 showcase-container-mask"
             >
-            </div>
-            <!-- Main Three.js Wave Animation - Hidden on Mobile/Tablet -->
-            <WaveBackground
-                client:load
-                className="absolute inset-0 z-0 hidden lg:block"
-                colors={{
-                    accent: "#f97316",
-                }}
-            />
+                <!-- Top Merge Gradient Overlay -->
+                <div
+                    class="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white dark:from-gray-950 to-transparent z-20 pointer-events-none"
+                >
+                </div>
+                <!-- Main Three.js Wave Animation - Hidden on Mobile/Tablet -->
+                <WaveBackground
+                    client:load
+                    className="absolute inset-0 z-0 hidden lg:block"
+                    colors={{
+                        accent: "#f97316",
+                    }}
+                />
 
-            <!-- Centered Image Card on top of shapes -->
-            <div
-                class="absolute inset-0 z-10 flex items-center justify-center p-0 lg:px-28 lg:py-32"
-            >
-                <div class="relative group w-full max-w-3xl lg:max-w-4xl">
-                    <!-- Subtle glow on hover -->
-                    <div
-                        class="absolute -inset-2 bg-white/20 rounded-2xl blur-xl opacity-0 lg:group-hover:opacity-50 transition duration-700 hidden lg:block"
-                    >
-                    </div>
-
-                    <div class="relative w-full mx-auto z-10">
-                        <!-- Main AR Card Container -->
+                <!-- Centered Image Card on top of shapes -->
+                <div
+                    class="absolute inset-0 z-10 flex items-center justify-center p-0 lg:px-28 lg:py-32"
+                >
+                    <div class="relative group w-full max-w-3xl lg:max-w-4xl">
+                        <!-- Subtle glow on hover -->
                         <div
-                            class="hero-showcase-card relative rounded-xl lg:rounded-2xl shadow-2xl bg-gray-900 aspect-video flex items-center justify-center p-0 overflow-hidden group"
+                            class="absolute -inset-2 bg-white/20 rounded-2xl blur-xl opacity-0 lg:group-hover:opacity-50 transition duration-700 hidden lg:block"
                         >
-                            <!-- Dynamic Isometric Dashboard Component -->
-                            <DashboardShowcase client:load />
+                        </div>
+
+                        <div class="relative w-full mx-auto z-10">
+                            <!-- Main AR Card Container -->
+                            <div
+                                class="hero-showcase-card relative rounded-xl lg:rounded-2xl shadow-2xl bg-gray-900 aspect-video flex items-center justify-center p-0 overflow-hidden group"
+                            >
+                                <!-- Dynamic Isometric Dashboard Component -->
+                                <DashboardShowcase client:load />
+                            </div>
                         </div>
                     </div>
                 </div>
