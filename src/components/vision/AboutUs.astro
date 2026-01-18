@@ -1,6 +1,8 @@
 ---
 import Container from "../shared/Container.astro";
 import Badge from "../shared/Badge.astro";
+import CountUp from "../react-bits/CountUp";
+import ShinyText from "../react-bits/ShinyText";
 ---
 
 <section
@@ -54,11 +56,13 @@ import Badge from "../shared/Badge.astro";
                     class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight"
                 >
                     IA que ve lo que el
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
-                    >
-                        ojo humano no alcanza
-                    </span>
+                    <ShinyText
+                        text="ojo humano no alcanza"
+                        disabled={false}
+                        speed={3}
+                        className="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                        client:only="react"
+                    />
                 </h2>
 
                 <!-- Descripción -->
@@ -93,7 +97,15 @@ import Badge from "../shared/Badge.astro";
                                     d="M4.5 12.75l6 6 9-13.5"></path>
                             </svg>
                         </div>
-                        <span>Precisión superior al 99.7%</span>
+                        <span class="flex items-center gap-1">
+                            Precisión superior al
+                            <CountUp
+                                to={99.7}
+                                from={0}
+                                duration={1}
+                                client:only="react"
+                            />%
+                        </span>
                     </li>
                     <li
                         class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
@@ -115,7 +127,15 @@ import Badge from "../shared/Badge.astro";
                                     d="M4.5 12.75l6 6 9-13.5"></path>
                             </svg>
                         </div>
-                        <span>Latencia menor a 50ms</span>
+                        <span class="flex items-center gap-1">
+                            Latencia menor a
+                            <CountUp
+                                to={50}
+                                from={0}
+                                duration={1}
+                                client:only="react"
+                            />ms
+                        </span>
                     </li>
                     <li
                         class="flex items-center gap-3 text-gray-700 dark:text-gray-300"

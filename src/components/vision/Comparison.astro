@@ -1,21 +1,48 @@
 ---
 import Container from "../shared/Container.astro";
 import Badge from "../shared/Badge.astro";
+import ComparisonSlider from "../react-bits/ComparisonSlider";
+
+const beforeMetrics = [
+    { label: "Precisión", number: 85, prefix: "~", suffix: "%" },
+    { label: "Tiempo", number: 5, prefix: "2-", suffix: "s" },
+    { label: "Consistencia", value: "Variable" },
+];
+
+const afterMetrics = [
+    { label: "Precisión", number: 99.7, suffix: "%" },
+    { label: "Latencia", number: 50, prefix: "<", suffix: "ms" },
+    { label: "Consistencia", number: 100, suffix: "%" },
+];
 ---
 
 <section
     id="comparison"
-    class="relative py-20 overflow-hidden bg-gray-50 dark:bg-gray-900"
+    class="relative py-24 overflow-hidden bg-white dark:bg-gray-950"
 >
+    <!-- Background Accents -->
+    <div
+        class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20 dark:opacity-40 overflow-hidden"
+    >
+        <div
+            class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-[#00B5E2]/20 rounded-full blur-[120px]"
+        >
+        </div>
+        <div
+            class="absolute -bottom-[20%] -right-[10%] w-[60%] h-[60%] bg-[#001489]/10 rounded-full blur-[120px]"
+        >
+        </div>
+    </div>
+
     <Container className="relative z-10">
         <!-- Encabezado -->
-        <div class="max-w-3xl mx-auto text-center mb-12" data-animate="fade-up">
+        <div class="max-w-3xl mx-auto text-center mb-16" data-animate="fade-up">
             <div class="flex justify-center mb-6">
-                <Badge text="Comparativa" />
+                <Badge text="Comparativa Industrial" />
             </div>
 
             <h2
-                class="text-3xl sm:text-4xl lg:text-5xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight mb-4"
+                class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4"
             >
                 Inspección manual vs.
                 <span
@@ -25,256 +52,32 @@ import Badge from "../shared/Badge.astro";
                 </span>
             </h2>
 
-            <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
-                Descubre cómo la automatización de inspección visual transforma
-                tu línea de producción.
+            <p
+                class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
+            >
+                Descubre cómo la automatización de inspección visual mediante IA
+                optimiza tus procesos de calidad y reduce costos operativos.
             </p>
         </div>
 
-        <!-- Slider de comparación -->
-        <div
-            class="relative max-w-4xl mx-auto mb-4"
-            data-animate="fade-up"
-            data-animate-delay=".1s"
-        >
-            <div
-                class="comparison-slider relative rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-xl aspect-[16/9]"
-            >
-                <!-- Imagen "Después" (Insytech Vision) - Base -->
-                <div class="absolute inset-0">
-                    <img
-                        src="/images/vision-after.webp"
-                        alt="Inspección con Insytech Vision"
-                        class="w-full h-full object-cover"
-                        onerror="this.style.background='linear-gradient(135deg, #001489 0%, #005EB8 50%, #00B5E2 100%)'; this.alt='';"
-                    />
-                    <!-- Overlay con métricas -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
-                    >
-                    </div>
-                    <!-- Métricas Vision -->
-                    <div
-                        class="absolute bottom-6 right-6 flex flex-col gap-2 items-end"
-                    >
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-[#00B5E2]">
-                                99.7%
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Precisión
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-[#00B5E2]">
-                                &lt;50ms
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Latencia
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-[#00B5E2]">
-                                100%
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Consistencia
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute top-6 right-6">
-                        <div
-                            class="bg-green-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"
-                        >
-                            Insytech Vision
-                        </div>
-                    </div>
-                </div>
+        <div class="max-w-5xl mx-auto">
+            <ComparisonSlider
+                beforeImage="/images/vision-before.webp"
+                afterImage="/images/vision-after.webp"
+                beforeMetrics={beforeMetrics}
+                afterMetrics={afterMetrics}
+                client:visible
+            />
 
-                <!-- Imagen "Antes" (Manual) - Overlay con clip -->
-                <div
-                    class="comparison-overlay absolute inset-0"
-                    style="clip-path: inset(0 50% 0 0);"
-                >
-                    <img
-                        src="/images/vision-before.webp"
-                        alt="Inspección manual tradicional"
-                        class="w-full h-full object-cover"
-                        onerror="this.style.background='linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%)'; this.alt='';"
-                    />
-                    <!-- Overlay oscuro -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
-                    >
-                    </div>
-                    <!-- Métricas Manual -->
-                    <div class="absolute bottom-6 left-6 flex flex-col gap-2">
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-orange-500">
-                                ~85%
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Precisión
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-orange-500">
-                                2-5s
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Por pieza
-                            </div>
-                        </div>
-                        <div
-                            class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl px-4 py-2 shadow-lg"
-                        >
-                            <div class="text-xl font-bold text-orange-500">
-                                Variable
-                            </div>
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400"
-                            >
-                                Consistencia
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute top-6 left-6">
-                        <div
-                            class="bg-gray-700/90 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider"
-                        >
-                            Manual
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slider control -->
-                <div
-                    class="comparison-handle absolute top-0 bottom-0 w-1 bg-white shadow-xl cursor-ew-resize z-10"
-                    style="left: 50%;"
-                >
-                    <div
-                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-6 h-6 text-gray-700"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
-                            ></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Instrucción -->
             <p
-                class="text-center text-sm text-gray-500 dark:text-gray-400 mt-4"
+                class="text-center text-sm text-gray-500 dark:text-gray-400 mt-6 animate-pulse"
             >
-                Arrastra el control para comparar
+                Arrastra el control para comparar la capacidad de detección
             </p>
         </div>
     </Container>
 </section>
 
-<script>
-    // Comparison slider functionality
-    document.addEventListener("DOMContentLoaded", () => {
-        const slider = document.querySelector(".comparison-slider");
-        if (!slider) return;
-
-        const handle = slider.querySelector(
-            ".comparison-handle",
-        ) as HTMLElement;
-        const overlay = slider.querySelector(
-            ".comparison-overlay",
-        ) as HTMLElement;
-
-        if (!handle || !overlay) return;
-
-        let isDragging = false;
-
-        const updateSlider = (x: number) => {
-            const rect = slider.getBoundingClientRect();
-            let percentage = ((x - rect.left) / rect.width) * 100;
-            percentage = Math.max(0, Math.min(100, percentage));
-
-            handle.style.left = `${percentage}%`;
-            overlay.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
-        };
-
-        handle.addEventListener("mousedown", (e) => {
-            e.preventDefault();
-            isDragging = true;
-            document.body.style.userSelect = "none";
-            document.body.style.cursor = "ew-resize";
-        });
-        handle.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            isDragging = true;
-        });
-
-        const stopDragging = () => {
-            isDragging = false;
-            document.body.style.userSelect = "";
-            document.body.style.cursor = "";
-        };
-
-        document.addEventListener("mouseup", stopDragging);
-        document.addEventListener("touchend", stopDragging);
-        document.addEventListener("mouseleave", stopDragging);
-
-        document.addEventListener("mousemove", (e) => {
-            if (isDragging) {
-                e.preventDefault();
-                updateSlider(e.clientX);
-            }
-        });
-
-        document.addEventListener("touchmove", (e) => {
-            if (isDragging && e.touches[0]) {
-                updateSlider(e.touches[0].clientX);
-            }
-        });
-
-        // Click to move
-        slider.addEventListener("click", (e) => {
-            updateSlider((e as MouseEvent).clientX);
-        });
-    });
-</script>
-
 <style>
-    .comparison-handle {
-        will-change: left;
-    }
-    .comparison-overlay {
-        will-change: clip-path;
-    }
+    /* Estilos base si son necesarios */
 </style>

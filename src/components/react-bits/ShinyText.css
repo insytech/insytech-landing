@@ -1,0 +1,14 @@
+.shiny-text {
+    color: #b5b5b5a4;
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.shiny-text.disabled {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: inherit !important;
+}

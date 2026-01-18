@@ -1,0 +1,260 @@
+:root {
+    --hue: 191;
+    --sat: 100%;
+    --white: hsl(0, 0%, 100%);
+    --brand-primary: rgba(0, 181, 226, 1);
+    --brand-glow: rgba(0, 181, 226, 0.1);
+    --brand-border: rgba(0, 181, 226, 0.2);
+
+    /* Light Mode Variables */
+    --bento-bg: rgba(255, 255, 255, 1);
+    --bento-bg-hover: rgba(248, 250, 252, 1);
+    --bento-border: rgba(0, 94, 184, 0.1);
+    --bento-border-hover: rgba(0, 94, 184, 0.2);
+    --bento-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+    --bento-shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+    --bento-title: #211915;
+    --bento-desc: #4b5563;
+    --bento-label: #64748b;
+    --bento-icon-bg: rgba(0, 181, 226, 0.08);
+}
+
+.dark {
+    /* Dark Mode Variables */
+    --bento-bg: rgba(10, 15, 30, 0.4);
+    --bento-bg-hover: rgba(0, 181, 226, 0.05);
+    --bento-border: rgba(0, 181, 226, 0.15);
+    --bento-border-hover: rgba(0, 181, 226, 0.5);
+    --bento-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    --bento-shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 181, 226, 0.1);
+    --bento-title: #ffffff;
+    --bento-desc: rgba(255, 255, 255, 0.6);
+    --bento-label: rgba(255, 255, 255, 0.5);
+    --bento-icon-bg: rgba(0, 181, 226, 0.1);
+}
+
+.card-grid {
+    display: grid;
+    gap: 1.5em;
+    padding: 1.5em;
+    max-width: 84rem;
+    margin: 0 auto;
+}
+
+.magic-bento-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 280px;
+    height: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 2.5em;
+    border-radius: 28px;
+    border: 1px solid var(--bento-border);
+    background: var(--bento-bg);
+    box-shadow: var(--bento-shadow);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+
+    --glow-x: 50%;
+    --glow-y: 50%;
+    --glow-intensity: 0;
+    --glow-radius: 300px;
+}
+
+.magic-bento-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--bento-border-hover);
+    background: var(--bento-bg-hover);
+    box-shadow: var(--bento-shadow-hover);
+}
+
+.magic-bento-card__header,
+.magic-bento-card__content {
+    display: flex;
+    position: relative;
+    z-index: 2;
+}
+
+.magic-bento-card__header {
+    margin-bottom: 2em;
+}
+
+.magic-bento-card__content {
+    flex-direction: column;
+}
+
+.magic-bento-card__label-container {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.magic-bento-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--bento-icon-bg);
+    color: #00B5E2;
+}
+
+.magic-bento-card__label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--bento-label);
+}
+
+.magic-bento-card__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--bento-title);
+    line-height: 1.2;
+}
+
+.magic-bento-card__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--bento-desc);
+}
+
+.magic-bento-card--text-autohide .magic-bento-card__title,
+.magic-bento-card--text-autohide .magic-bento-card__description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.magic-bento-card--text-autohide .magic-bento-card__title {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+}
+
+.magic-bento-card--text-autohide .magic-bento-card__description {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+@media (max-width: 639px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        padding: 1em;
+    }
+
+    .magic-bento-card {
+        aspect-ratio: 1/1;
+        min-height: 250px;
+    }
+}
+
+@media (min-width: 640px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Balanced 3-column spans */
+    .magic-bento-card:nth-child(1) {
+        grid-column: span 2;
+    }
+
+    .magic-bento-card:nth-child(2) {
+        grid-column: span 1;
+    }
+
+    .magic-bento-card:nth-child(3) {
+        grid-column: span 1;
+    }
+
+    .magic-bento-card:nth-child(4) {
+        grid-column: span 2;
+    }
+
+    .magic-bento-card:nth-child(5) {
+        grid-column: span 2;
+    }
+
+    .magic-bento-card:nth-child(6) {
+        grid-column: span 1;
+    }
+}
+
+/* Border glow effect */
+.magic-bento-card--border-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: radial-gradient(var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+            rgba(0, 181, 226, calc(var(--glow-intensity) * 1)) 0%,
+            rgba(0, 181, 226, calc(var(--glow-intensity) * 0.5)) 40%,
+            transparent 80%);
+    border-radius: inherit;
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.magic-bento-card--border-glow:hover::after {
+    opacity: 1;
+}
+
+.magic-bento-card--border-glow:hover {
+    box-shadow:
+        0 10px 40px rgba(0, 181, 226, 0.1),
+        0 0 20px var(--brand-glow);
+}
+
+.particle-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.particle::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: rgba(0, 181, 226, 0.2);
+    border-radius: 50%;
+    z-index: -1;
+}
+
+/* Global spotlight styles */
+.global-spotlight {
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+    z-index: 200 !important;
+    pointer-events: none;
+}
+
+.bento-section {
+    position: relative;
+    user-select: none;
+}

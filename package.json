@@ -18,10 +18,24 @@
     "@tailwindcss/vite": "^4.1.11",
     "@types/three": "^0.179.0",
     "astro": "^5.7.12",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
+    "gsap": "^3.13.0",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.26.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "sharp": "^0.34.5",
+    "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.5",
-    "three": "^0.179.1"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.179.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "shadcn": "^3.7.0"
   }
 }
