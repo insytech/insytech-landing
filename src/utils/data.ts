@@ -24,16 +24,16 @@ const services = [
         ]
     },
     {
-        title: "Automatización y Control",
-        description: "Automatizamos procesos industriales con sistemas de control diseñados para mejorar la eficiencia, confiabilidad y escalabilidad operativa.",
+        title: "Automatización y Control de Procesos",
+        description: "Implementamos sistemas de control determinista bajo estándares internacionales (IEC 61131-3), integrando hardware de vanguardia para garantizar la continuidad operativa y la optimización de activos industriales.",
         icon: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"> <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" /> </svg>`,
         image: "/images/control1.webp",
         imageSecondary: "/images/control2.webp",
         features: [
-            "Programación de PLCs, HMIs y robots industriales",
-            "Fabricación de tableros eléctricos",
-            "Proyectos llave en mano",
-            "Respaldos, migraciones y actualización de sistemas de control"
+            "Arquitecturas de control bajo estándar IEC 61131-3",
+            "Integración de protocolos industriales (Profinet, EtherNet/IP, Modbus TCP)",
+            "Migraciones de sistemas Legacy y actualización de ciclos de vida",
+            "Diseño de tableros de control bajo normativas internacionales"
         ]
     },
     {

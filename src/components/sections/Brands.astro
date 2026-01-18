@@ -5,50 +5,81 @@ import Title from "../shared/Title.astro";
 
 <section>
     <Container>
-        <div class="mt-20 border-gray-100 dark:border-gray-800 pt-4">
+        <div class="mt-8 border-gray-100 dark:border-gray-800 pt-4">
             <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                 Empresas que confían en nosotros
             </p>
             <div
-                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-4 px-2"
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-4 px-2 overflow-hidden"
             >
                 <img
                     src="/logos/navistar.webp"
                     alt="Navistar"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/nasa.webp"
                     alt="NASA Nacional de Acero"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/polaris.webp"
                     alt="Polaris"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/pentair.webp"
                     alt="Pentair"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/franklin-electric.webp"
                     alt="Franklin Electric"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/tempel-group.webp"
                     alt="Tempel Group"
-                    class="h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
             </div>
         </div>
     </Container>
 </section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initBrands = () => {
+        gsap.to(".brand-logo", {
+            opacity: 0.7,
+            y: 0,
+            x: 0,
+            duration: 1,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: ".brand-logo",
+                start: "top 95%",
+            },
+        });
+    };
+
+    document.addEventListener("DOMContentLoaded", initBrands);
+</script>
+
+<style>
+    .brand-logo {
+        transform: translateY(20px);
+        will-change: transform, opacity;
+    }
+</style>
