@@ -2,7 +2,7 @@
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import Brands from "./Brands.astro";
-import WaveBackground from "../hero/WaveBackground";
+import Silk from "../react-bits/Silk";
 import DashboardShowcase from "../hero/DashboardShowcase";
 ---
 
@@ -121,14 +121,17 @@ import DashboardShowcase from "../hero/DashboardShowcase";
                     class="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-white dark:from-gray-950 to-transparent z-20 pointer-events-none"
                 >
                 </div>
-                <!-- Main Three.js Wave Animation - Hidden on Mobile/Tablet -->
-                <WaveBackground
-                    client:load
-                    className="absolute inset-0 z-0 hidden lg:block"
-                    colors={{
-                        accent: "#f97316",
-                    }}
-                />
+                <!-- Main Silk Animation - Hidden on Mobile/Tablet -->
+                <div class="absolute inset-0 z-0 hidden lg:block">
+                    <Silk
+                        client:load
+                        speed={5}
+                        scale={1}
+                        color="#005EB8"
+                        noiseIntensity={1.5}
+                        rotation={0}
+                    />
+                </div>
 
                 <!-- Centered Image Card on top of shapes -->
                 <div
