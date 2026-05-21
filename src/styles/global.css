@@ -149,6 +149,23 @@ body {
   overflow-x: hidden;
 }
 
+/* Accessibility — respect users who request reduced motion (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
 /* Texture & Glow Utilities */
 .noise-bg {
   position: relative;
