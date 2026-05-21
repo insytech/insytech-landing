@@ -128,9 +128,9 @@ export default function DashboardShowcase() {
                     </div>
                     {/* Simplified SVG Chart */}
                     <div className="w-full h-12 flex items-end justify-between gap-1 overflow-hidden">
-                        {[40, 70, 45, 90, 65, 80, 50, 85].map((h, i) => (
+                        {[40, 70, 45, 90, 65, 80, 50, 85].map((h) => (
                             <div
-                                key={i}
+                                key={h}
                                 className="w-full bg-gradient-to-t from-[#005EB8] to-[#4CC9F0] rounded-t-sm transition-all duration-500 hover:scale-y-110"
                                 style={{ height: `${h}%` }}
                             ></div>
@@ -154,8 +154,8 @@ export default function DashboardShowcase() {
                             { label: 'System Load', val: 78, color: 'text-cyan-400' },
                             { label: 'Security', val: 100, color: 'text-green-400' },
                             { label: 'Sync Rate', val: 92, color: 'text-blue-400' }
-                        ].map((item, i) => (
-                            <div key={i} className="space-y-1">
+                        ].map((item) => (
+                            <div key={item.label} className="space-y-1">
                                 <div className="flex justify-between text-[8px] font-bold uppercase tracking-widest text-white/50">
                                     <span>{item.label}</span>
                                     <span className={item.color}>{item.val}%</span>

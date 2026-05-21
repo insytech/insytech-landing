@@ -68,7 +68,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                 <div className="absolute bottom-6 right-6 flex flex-col gap-2 items-end z-20">
                     {afterMetrics.map((metric, i) => (
                         <motion.div
-                            key={i}
+                            key={metric.label}
                             initial={{ opacity: 0, x: 20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 * i }}
@@ -114,7 +114,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                 <div className="absolute bottom-6 left-6 flex flex-col gap-2 z-20">
                     {beforeMetrics.map((metric, i) => (
                         <motion.div
-                            key={i}
+                            key={metric.label}
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 * i }}

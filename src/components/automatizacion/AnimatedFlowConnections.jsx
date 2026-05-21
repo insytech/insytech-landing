@@ -411,10 +411,10 @@ const AnimatedFlowConnections = () => {
           if (performanceLevel === 'medium' && conn.importance === 'tertiary') {
             return null;
           }
-          
+
           return (
             <linearGradient
-              key={`gradient-${index}`}
+              key={`gradient-${conn.id}`}
               id={`lineGradient-${index}`}
               x1="0%"
               y1="0%"
@@ -431,10 +431,10 @@ const AnimatedFlowConnections = () => {
         {/* NUEVO: Gradientes especiales para líneas tipo "line" */}
         {connections.map((conn, index) => {
           if (conn.type !== 'line' || performanceLevel === 'low') return null;
-          
+
           return (
             <linearGradient
-              key={`line-gradient-${index}`}
+              key={`line-gradient-${conn.id}`}
               id={`lineSpecialGradient-${index}`}
               x1="0%"
               y1="0%"

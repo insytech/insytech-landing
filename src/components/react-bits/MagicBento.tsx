@@ -577,7 +577,7 @@ const MagicBento: React.FC<BentoProps> = ({
                     if (enableStars) {
                         return (
                             <ParticleCard
-                                key={index}
+                                key={card.iconId ?? card.title}
                                 {...cardProps}
                                 disableAnimations={shouldDisableAnimations || card.disableAnimations}
                                 particleCount={particleCount}
@@ -594,7 +594,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
                     return (
                         <div
-                            key={index}
+                            key={card.iconId ?? card.title}
                             {...cardProps}
                             ref={el => {
                                 if (!el) return;

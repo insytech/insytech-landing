@@ -220,8 +220,8 @@ export default function DashboardShowcase() {
                         { title: 'MKT_FLOW', icon: 'bg-green-500' },
                         { title: 'LEAD_AI', icon: 'bg-[#005EB8]' },
                         { title: 'BI_INSIGHT', icon: 'bg-purple-500' }
-                    ].map((bot, i) => (
-                        <div key={i} className="w-[100px] aspect-video bg-white/50 dark:bg-white/5 rounded-xl flex flex-col items-center justify-center p-2 shadow-sm border border-[#002B49]/5 dark:border-white/5 group hover:bg-blue-50 dark:hover:bg-white/10 transition-all hover:scale-[1.02]">
+                    ].map((bot) => (
+                        <div key={bot.title} className="w-[100px] aspect-video bg-white/50 dark:bg-white/5 rounded-xl flex flex-col items-center justify-center p-2 shadow-sm border border-[#002B49]/5 dark:border-white/5 group hover:bg-blue-50 dark:hover:bg-white/10 transition-all hover:scale-[1.02]">
                             <div className={`w-1.5 h-1.5 rounded-full ${bot.icon} mb-1.5 animate-pulse shadow-[0_0_8px_currentColor]`}></div>
                             <span className="text-[8px] font-black text-[#002B49]/70 dark:text-white/70 uppercase group-hover:text-[#002B49] dark:group-hover:text-white transition-colors">
                                 {bot.title}
