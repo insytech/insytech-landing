@@ -117,8 +117,8 @@ const AnimatedFlowConnections = () => {
       performance === 'medium' ? 10 :  // Reducido de 14
       Math.min(connectionDefinitions.length, 12); // Máximo absoluto
     
-    const sortedConnections = [...connectionDefinitions]
-      .sort((a, b) => {
+    const sortedConnections = connectionDefinitions
+      .toSorted((a, b) => {
         const importanceOrder = { primary: 3, secondary: 2, tertiary: 1 };
         return importanceOrder[b.importance] - importanceOrder[a.importance];
       })
@@ -196,32 +196,32 @@ const AnimatedFlowConnections = () => {
         }
       });
       
-      const calculatedConnections = connectionsToCalc.map((conn, index) => {
+      const calculatedConnections = connectionsToCalc.flatMap((conn, index) => {
         const fromData = nodeData.get(conn.from);
         const toData = nodeData.get(conn.to);
-        
-        if (!fromData || !toData) return null;
-        
+
+        if (!fromData || !toData) return [];
+
         // OPTIMIZADO: Cálculos simplificados para dispositivos lentos
         if (performanceLevel === 'low') {
           const fromX = ((fromData.rect.left - flowsRect.left + fromData.rect.width/2) / flowsRect.width) * 100;
           const fromY = ((fromData.rect.top - flowsRect.top + fromData.rect.height/2) / flowsRect.height) * 100;
           const toX = ((toData.rect.left - flowsRect.left + toData.rect.width/2) / flowsRect.width) * 100;
           const toY = ((toData.rect.top - flowsRect.top + toData.rect.height/2) / flowsRect.height) * 100;
-          
-          return {
+
+          return [{
             id: `path-${index}`,
             pathData: `M ${fromX.toFixed(1)} ${fromY.toFixed(1)} L ${toX.toFixed(1)} ${toY.toFixed(1)}`,
             importance: conn.importance,
             type: conn.type
-          };
+          }];
         }
-        
+
         // Cálculos completos para dispositivos rápidos
         const fromNode = document.getElementById(conn.from);
         const toNode = document.getElementById(conn.to);
-        
-        if (!fromNode || !toNode) return null;
+
+        if (!fromNode || !toNode) return [];
         
         const fromRect = fromNode.getBoundingClientRect();
         const toRect = toNode.getBoundingClientRect();
@@ -321,13 +321,13 @@ const AnimatedFlowConnections = () => {
           pathData = `M ${fromX.toFixed(2)} ${fromY.toFixed(2)} L ${toX.toFixed(2)} ${toY.toFixed(2)}`;
         }
         
-        return {
+        return [{
           id: `path-${index}`,
           pathData,
           importance: conn.importance,
           type: conn.type
-        };
-      }).filter(Boolean);
+        }];
+      });
       
       setConnections(calculatedConnections);
     };
