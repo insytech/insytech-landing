@@ -325,7 +325,11 @@ const AnimatedFlowConnections = () => {
           id: `path-${index}`,
           pathData,
           importance: conn.importance,
-          type: conn.type
+          type: conn.type,
+          // Pre-computar duraciones aleatorias para evitar re-randomizar en cada render
+          // (también evita hydration mismatch si el componente se ejecuta en SSR)
+          primaryDur: 3 + Math.random() * 2,
+          secondaryDur: 6 + Math.random() * 2
         }];
       });
       
@@ -395,16 +399,6 @@ const AnimatedFlowConnections = () => {
       className={`dynamic-connections-overlay performance-${performanceLevel}`}
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        zIndex: 4,
-        overflow: 'visible'
-      }}
     >
       <defs>
         {performanceLevel !== 'low' && connections.map((conn, index) => {
@@ -556,7 +550,7 @@ const AnimatedFlowConnections = () => {
                 }}
               >
                 <motion.animateMotion
-                  dur={`${performanceLevel === 'high' ? 3 + Math.random() * 2 : 5}s`}
+                  dur={`${performanceLevel === 'high' ? conn.primaryDur : 5}s`}
                   repeatCount="indefinite"
                   begin={`${index * 0.3}s`}
                   calcMode="linear"
@@ -581,7 +575,7 @@ const AnimatedFlowConnections = () => {
                 }}
               >
                 <motion.animateMotion
-                  dur={`${6 + Math.random() * 2}s`}
+                  dur={`${conn.secondaryDur}s`}
                   repeatCount="indefinite"
                   begin={`${index * 0.3 + 3}s`}
                   calcMode="linear"

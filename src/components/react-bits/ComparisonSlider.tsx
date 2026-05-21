@@ -47,13 +47,36 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
         handleMove(clientX);
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            setSliderPos(prev => Math.max(0, prev - 5));
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            setSliderPos(prev => Math.min(100, prev + 5));
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            setSliderPos(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            setSliderPos(100);
+        }
+    };
+
     return (
         <div
             ref={containerRef}
+            role="slider"
+            tabIndex={0}
+            aria-label="Comparación antes y después"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(sliderPos)}
             className={cn("relative w-full aspect-[16/9] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-xl select-none group", className)}
             onMouseMove={(e) => e.buttons === 1 && handleInteract(e)}
             onTouchMove={handleInteract}
             onClick={handleInteract}
+            onKeyDown={handleKeyDown}
             style={{ cursor: 'ew-resize' }}
         >
             {/* After Image (Base) */}
