@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useRef, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, useLayoutEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type { RootState } from '@react-three/fiber';
 import { Color, Mesh, ShaderMaterial } from 'three';
@@ -87,21 +87,22 @@ void main() {
 
 interface SilkPlaneProps {
   uniforms: SilkUniforms;
+  ref?: React.Ref<Mesh>;
 }
 
-const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane({ uniforms }, ref) {
+function SilkPlane({ uniforms, ref }: SilkPlaneProps) {
   const { viewport } = useThree();
 
   useLayoutEffect(() => {
     const mesh = ref as React.RefObject<Mesh | null>;
-    if (mesh.current) {
+    if (mesh?.current) {
       mesh.current.scale.set(viewport.width, viewport.height, 1);
     }
   }, [ref, viewport]);
 
   useFrame((_state: RootState, delta: number) => {
     const mesh = ref as React.RefObject<Mesh | null>;
-    if (mesh.current) {
+    if (mesh?.current) {
       const material = mesh.current.material as ShaderMaterial & {
         uniforms: SilkUniforms;
       };
@@ -115,8 +116,7 @@ const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane({ uniforms
       <shaderMaterial uniforms={uniforms} vertexShader={vertexShader} fragmentShader={fragmentShader} />
     </mesh>
   );
-});
-SilkPlane.displayName = 'SilkPlane';
+}
 
 export interface SilkProps {
   speed?: number;

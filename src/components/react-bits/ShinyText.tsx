@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useAnimationFrame, useTransform } from 'framer-motion';
 import { cn } from '../../utils/cn';
 import './ShinyText.css';
@@ -30,7 +30,7 @@ const ShinyText: React.FC<ShinyTextProps> = ({
     direction = 'left',
     delay = 0
 }) => {
-    const [isPaused, setIsPaused] = useState(false);
+    const isPausedRef = useRef(false);
     const progress = useMotionValue(0);
     const elapsedRef = useRef(0);
     const lastTimeRef = useRef<number | null>(null);
@@ -40,7 +40,7 @@ const ShinyText: React.FC<ShinyTextProps> = ({
     const delayDuration = delay * 1000;
 
     useAnimationFrame(time => {
-        if (disabled || isPaused) {
+        if (disabled || isPausedRef.current) {
             lastTimeRef.current = null;
             return;
         }
@@ -102,11 +102,11 @@ const ShinyText: React.FC<ShinyTextProps> = ({
     const backgroundPosition = useTransform(progress, p => `${150 - p * 2}% center`);
 
     const handleMouseEnter = useCallback(() => {
-        if (pauseOnHover) setIsPaused(true);
+        if (pauseOnHover) isPausedRef.current = true;
     }, [pauseOnHover]);
 
     const handleMouseLeave = useCallback(() => {
-        if (pauseOnHover) setIsPaused(false);
+        if (pauseOnHover) isPausedRef.current = false;
     }, [pauseOnHover]);
 
     const gradientStyle: React.CSSProperties = {
