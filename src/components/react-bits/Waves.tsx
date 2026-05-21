@@ -363,7 +363,7 @@ const Waves: React.FC<WavesProps> = ({
         frameIdRef.current = requestAnimationFrame(tick);
         window.addEventListener('resize', onResize);
         window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: true });
 
         return () => {
             window.removeEventListener('resize', onResize);
@@ -387,8 +387,7 @@ const Waves: React.FC<WavesProps> = ({
             <div
                 className="absolute top-0 left-0 bg-[#00B5E2] rounded-full size-[0.1rem]"
                 style={{
-                    transform: 'translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)',
-                    willChange: 'transform'
+                    transform: 'translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0)'
                 }}
             />
             <canvas ref={canvasRef} className="block w-full h-full" />
