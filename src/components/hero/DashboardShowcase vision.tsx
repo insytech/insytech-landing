@@ -102,7 +102,7 @@ export default function DashboardShowcase() {
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#4CC9F0]/20 to-transparent h-20 animate-scan pointer-events-none"></div>
 
                         {/* Interactive Detection Boxes */}
-                        <div className="absolute top-[20%] left-[30%] w-24 h-24 border-2 border-cyan-400/80 rounded animate-pulse">
+                        <div className="absolute top-[20%] left-[30%] size-24 border-2 border-cyan-400/80 rounded animate-pulse">
                             <span className="absolute -top-6 left-0 text-[10px] font-bold text-cyan-400 bg-cyan-900/50 px-1 rounded uppercase">Turbine_01 : Optimal</span>
                         </div>
                         <div className="absolute bottom-[10%] right-[15%] w-32 h-20 border-2 border-blue-400/80 rounded animate-pulse [animation-delay:0.5s]">
@@ -111,7 +111,7 @@ export default function DashboardShowcase() {
 
                         {/* UI Elements */}
                         <div className="absolute top-2 right-2 flex gap-1">
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></div>
+                            <div className="size-1.5 rounded-full bg-red-500 animate-ping"></div>
                             <span className="text-[8px] font-mono text-white/70">REC // LIVE</span>
                         </div>
                     </div>
@@ -123,7 +123,7 @@ export default function DashboardShowcase() {
                     style={{ transform: 'translateZ(50px)' }}
                 >
                     <div className="flex justify-between items-center mb-2">
-                        <h4 className="text-[10px] font-bold text-[#002B49] uppercase tracking-wider">Market Flow</h4>
+                        <h4 className="text-[10px] font-semibold text-[#002B49] uppercase tracking-wider">Market Flow</h4>
                         <span className="text-[10px] font-mono font-bold text-green-500">+12.4%</span>
                     </div>
                     {/* Simplified SVG Chart */}
@@ -145,7 +145,7 @@ export default function DashboardShowcase() {
                 >
                     {/* Header */}
                     <div className="border-b border-white/10 pb-2">
-                        <h3 className="text-[10px] font-bold text-blue-400 uppercase">Core Status</h3>
+                        <h3 className="text-[10px] font-semibold text-blue-400 uppercase">Core Status</h3>
                     </div>
 
                     {/* Progress Rings simulated */}
@@ -171,9 +171,9 @@ export default function DashboardShowcase() {
                     <div className="mt-auto h-24 bg-white/5 rounded-xl border border-white/10 p-2 overflow-hidden">
                         <div className="relative w-full h-full opacity-30">
                             {/* Dots representing network nodes */}
-                            <div className="absolute top-[20%] left-[20%] w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div>
-                            <div className="absolute top-[60%] left-[50%] w-2 h-2 rounded-full bg-white animate-pulse [animation-delay:0.3s]"></div>
-                            <div className="absolute bottom-[20%] right-[30%] w-1.5 h-1.5 rounded-full bg-white animate-pulse [animation-delay:0.6s]"></div>
+                            <div className="absolute top-[20%] left-[20%] size-1.5 rounded-full bg-white animate-pulse"></div>
+                            <div className="absolute top-[60%] left-[50%] size-2 rounded-full bg-white animate-pulse [animation-delay:0.3s]"></div>
+                            <div className="absolute bottom-[20%] right-[30%] size-1.5 rounded-full bg-white animate-pulse [animation-delay:0.6s]"></div>
                         </div>
                         <p className="text-[7px] font-mono text-blue-300 mt-1 uppercase tracking-tighter">Network Active // OK</p>
                     </div>
@@ -185,7 +185,7 @@ export default function DashboardShowcase() {
                     style={{ transform: 'translateZ(80px)' }}
                 >
                     <div className="p-1 bg-blue-50 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <svg className="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                     <div>
                         <p className="text-[8px] font-bold text-[#002B49] leading-none">AUTO_MODE</p>

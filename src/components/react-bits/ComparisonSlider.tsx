@@ -148,14 +148,14 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                 className="absolute top-0 bottom-0 w-0.5 bg-white/50 z-30 cursor-target group-hover:bg-white transition-colors -translate-x-1/2"
                 style={{ left: `${sliderPos}%` }}
             >
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-2xl flex items-center justify-center border-[6px] border-white/10 group-active:scale-95 transition-transform">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-10 bg-white rounded-full shadow-2xl flex items-center justify-center border-[6px] border-white/10 group-active:scale-95 transition-transform">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="2.5"
                         stroke="currentColor"
-                        className="w-5 h-5 text-gray-800"
+                        className="size-5 text-gray-800"
                     >
                         <path
                             strokeLinecap="round"

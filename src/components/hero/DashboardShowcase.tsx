@@ -122,12 +122,12 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5 relative z-10">
                     <div>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tighter">NEURAL</h4>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tighter">CORE</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">NEURAL</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">CORE</h4>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Predictive Strategy</p>
                     </div>
-                    <div className="flex w-9 h-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
+                        <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
                 </div>
 
@@ -175,12 +175,12 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5">
                     <div>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tight">PROCESS</h4>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tight">ANALYTICS</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">PROCESS</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">ANALYTICS</h4>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Real-Time Optimization</p>
                     </div>
-                    <div className="flex w-9 h-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
+                        <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     </div>
                 </div>
 
@@ -205,12 +205,12 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tighter">AI</h4>
-                        <h4 className="text-[14px] font-black text-[#002B49] dark:text-white leading-none tracking-tighter">AUTOMATION</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AI</h4>
+                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AUTOMATION</h4>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Integrated Scaling</p>
                     </div>
-                    <div className="flex w-8 h-8 rounded-lg bg-[#002B49] items-center justify-center text-white shadow-lg">
-                        <svg className="w-4 h-4 text-[#00B5E2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    <div className="flex size-8 rounded-lg bg-[#002B49] items-center justify-center text-white shadow-lg">
+                        <svg className="size-4 text-[#00B5E2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                     </div>
                 </div>
 
