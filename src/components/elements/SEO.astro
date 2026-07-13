@@ -92,13 +92,17 @@ const websiteSchema = {
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={new URL(ogImage, Astro.url)} />
+<meta property="og:image:alt" content={fullTitle} />
+<meta property="og:locale" content="es_MX" />
+<meta property="og:site_name" content="Insytech" />
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={fullTitle} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(ogImage, Astro.url)} />
+<meta name="twitter:card" content="summary_large_image" />
+<!-- ponytail: add <meta name="twitter:site" content="@handle" /> once a real Twitter/X handle exists (none found in repo) -->
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(ogImage, Astro.url)} />
 
 <!-- JSON-LD -->
 <script
