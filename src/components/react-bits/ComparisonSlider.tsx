@@ -17,6 +17,8 @@ interface ComparisonSliderProps {
     afterImage: string;
     beforeLabel?: string;
     afterLabel?: string;
+    beforeAlt?: string;
+    afterAlt?: string;
     beforeMetrics: Metric[];
     afterMetrics: Metric[];
     className?: string;
@@ -27,6 +29,8 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
     afterImage,
     beforeLabel = 'Manual',
     afterLabel = 'Insytech Vision',
+    beforeAlt,
+    afterAlt,
     beforeMetrics,
     afterMetrics,
     className
@@ -83,7 +87,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
             <div className="absolute inset-0">
                 <img
                     src={afterImage}
-                    alt={afterLabel}
+                    alt={afterAlt ?? afterLabel}
                     className="w-full h-full object-cover pointer-events-none"
                 />
 
@@ -127,7 +131,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
             >
                 <img
                     src={beforeImage}
-                    alt={beforeLabel}
+                    alt={beforeAlt ?? beforeLabel}
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     style={{ width: containerRef.current?.offsetWidth || '100%' }}
                 />
