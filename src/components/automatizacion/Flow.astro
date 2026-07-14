@@ -145,12 +145,12 @@ const {} = Astro.props;
         />
     </div>
 
-    <AnimatedFlowConnections client:load />
+    <AnimatedFlowConnections client:media="(min-width: 1025px)" />
 </div>
 
 <!-- Mantener el RunnerBot original con su diseño bonito -->
 <RunnerBot />
-<AnimatedRunner client:load />
+<AnimatedRunner client:media="(min-width: 1025px)" />
 
 <style>
     /* Estilos base */
