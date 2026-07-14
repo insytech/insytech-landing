@@ -1,7 +1,7 @@
 export const prerender = false;
 
 const jsonHeaders = {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": "https://insytech.mx",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Content-Type": "application/json",
@@ -40,6 +40,14 @@ export async function POST({ request }: { request: Request }) {
         const phone = String(body?.phone || "").trim();
         const company = String(body?.company || "").trim();
         const message = String(body?.message || "").trim();
+
+        // Honeypot: si el campo oculto viene lleno, es un bot. Fingimos éxito sin crear nada.
+        if (String(body?.website || "").trim()) {
+            return new Response(
+                JSON.stringify({ ok: true }),
+                { status: 200, headers: jsonHeaders },
+            );
+        }
 
         if (!name && !email) {
             return new Response(

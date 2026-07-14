@@ -4,6 +4,20 @@ import Paragraph from "../shared/Paragraph.astro";
 ---
 
 <form id="contact-form" class="space-y-6">
+    <!-- Honeypot anti-spam: invisible para humanos; los bots lo llenan y el servidor descarta el envío -->
+    <div
+        style="position:absolute;left:-9999px;top:-9999px;height:0;width:0;overflow:hidden"
+        aria-hidden="true"
+    >
+        <label for="website">No completar este campo</label>
+        <input
+            type="text"
+            id="website"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+        />
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
             <label
@@ -145,6 +159,7 @@ import Paragraph from "../shared/Paragraph.astro";
                 email,
                 phone: (fd.get("phone") || "").toString().trim(),
                 message: (fd.get("message") || "").toString().trim(),
+                website: (fd.get("website") || "").toString(),
             };
 
             if (!name && !email) {
