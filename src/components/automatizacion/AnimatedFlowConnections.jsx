@@ -399,6 +399,24 @@ const AnimatedFlowConnections = () => {
       className={`dynamic-connections-overlay performance-${performanceLevel}`}
       viewBox="0 0 100 100"
       preserveAspectRatio="none"
+      // IMPORTANTE: estos estilos DEBEN ir inline. La clase .dynamic-connections-overlay
+      // se define en el <style> scoped de Flow.astro y se compila a
+      // `.dynamic-connections-overlay[data-astro-cid-…]`. Este SVG se renderiza dentro de
+      // una isla React (client:load), por lo que NO recibe el atributo data-astro-cid-…
+      // y la regla scoped nunca lo alcanza. Sin este dimensionado el SVG cae a su tamaño
+      // intrínseco (~300x150) y, con viewBox 0 0 100 100 + preserveAspectRatio="none",
+      // las coordenadas porcentuales de los paths dejan de mapear 1:1 al contenedor
+      // (curvas desalineadas de los nodos y desfase que varía al redimensionar).
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
+        zIndex: 4,
+        overflow: 'visible'
+      }}
     >
       <defs>
         {performanceLevel !== 'low' && connections.map((conn, index) => {
