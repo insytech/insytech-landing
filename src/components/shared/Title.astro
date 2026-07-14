@@ -1,13 +1,14 @@
 ---
 export interface Props {
     className?: string;
+    as?: "h1" | "h2" | "h3" | "h4";
 }
 
-const { className = "" } = Astro.props;
+const { className = "", as: Tag = "h1" } = Astro.props;
 ---
 
-<h1
+<Tag
     class={`text-heading-1 font-semibold text-2xl sm:text-3xl md:text-4xl ${className}`}
 >
     <slot />
-</h1>
+</Tag>
