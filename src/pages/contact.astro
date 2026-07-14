@@ -4,23 +4,38 @@ import Container from "../components/shared/Container.astro";
 import Title from "../components/shared/Title.astro";
 import Paragraph from "../components/shared/Paragraph.astro";
 import ContactForm from "../components/sections/ContactForm.astro";
-import Badge from "@components/shared/Badge.astro";
+
+const contactPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contacto | Insytech",
+    url: "https://insytech.mx/contact/",
+    mainEntity: { "@id": "https://insytech.mx" },
+};
 ---
 
 <Layout
     title="Contacto y Soporte Técnico Industrial"
-    description="Contáctanos para asesoría en proyectos de automatización, software industrial y visión artificial. Estamos ubicados en Monterrey, NL."
+    description="Contáctanos para asesoría en automatización, software industrial y visión artificial en Monterrey, NL. Solicita tu cotización o llámanos al +52 81 2892 7509."
 >
+    <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(contactPageSchema)}
+    />
+
     <!-- Hero / encabezado -->
     <div class="p-10 m-10">
         <section class="p-10">
             <Container
                 className="flex flex-col items-center text-center max-w-4xl"
             >
-                <div class="mb-4 inline-flex">
-                    <Badge text="Contáctanos" />
-                </div>
-                <Title className="mb-4">¡Implemente una solución hoy!</Title>
+                <Title className="mb-4">Contáctanos</Title>
+                <Paragraph
+                    className="text-lg font-semibold text-heading-2 mb-1"
+                >
+                    ¡Implemente una solución hoy!
+                </Paragraph>
                 <Paragraph className="text-lg">
                     Puedes contactar con nosotros por diferentes medios.
                 </Paragraph>
@@ -53,16 +68,16 @@ import Badge from "@components/shared/Badge.astro";
                             ></path>
                         </svg>
                     </div>
-                    <h3 class="mt-5 font-semibold text-heading-2">
+                    <h2 class="mt-5 font-semibold text-heading-2">
                         Llámanos hoy
-                    </h3>
+                    </h2>
                     <p class="mt-1 text-heading-3 text-sm">
                         +52 (81) 2892 7509
                     </p>
                 </a>
                 <!-- Email -->
                 <a
-                    href="mailto:info@insytech.com"
+                    href="mailto:ventas@insytech.mx"
                     class="group rounded-2xl border border-box-border dark:bg-gray-900/20 bg-box-bg shadow-lg p-6 flex flex-col items-start hover:border-[#2c7df7a6] transition"
                 >
                     <div
@@ -83,9 +98,9 @@ import Badge from "@components/shared/Badge.astro";
                             ></path>
                         </svg>
                     </div>
-                    <h3 class="mt-5 font-semibold text-heading-2">
+                    <h2 class="mt-5 font-semibold text-heading-2">
                         Envíanos un correo
-                    </h3>
+                    </h2>
                     <p class="mt-1 text-heading-3 text-sm break-all">
                         ventas@insytech.mx
                     </p>
@@ -116,9 +131,9 @@ import Badge from "@components/shared/Badge.astro";
                                 d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"></path>
                         </svg>
                     </div>
-                    <h3 class="mt-5 font-semibold text-heading-2">
+                    <h2 class="mt-5 font-semibold text-heading-2">
                         Parque España 249B
-                    </h3>
+                    </h2>
                     <p class="mt-1 text-heading-3 text-sm">
                         Monterrey, NL, México
                     </p>
@@ -131,7 +146,7 @@ import Badge from "@components/shared/Badge.astro";
             <Container className="grid gap-12 lg:grid-cols-2">
                 <div class="flex flex-col gap-6 m-5">
                     <div class="space-y-2">
-                        <h4 class="text-heading-2 font-semibold">Visítanos</h4>
+                        <h2 class="text-heading-2 font-semibold">Visítanos</h2>
                         <p class="text-heading-3 text-sm">
                             Parque España 249B, Buenos Aires, Monterrey, NL,
                             México, C.P. 64800
