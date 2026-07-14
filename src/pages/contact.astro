@@ -143,33 +143,36 @@ const contactPageSchema = {
 
         <!-- Mapa + Formulario -->
         <section>
-            <Container className="grid gap-12 lg:grid-cols-2">
-                <div class="flex flex-col gap-6 m-5">
-                    <div class="space-y-2">
-                        <h2 class="text-heading-2 font-semibold">Visítanos</h2>
-                        <p class="text-heading-3 text-sm">
+            <Container className="grid gap-12 lg:grid-cols-2 lg:items-stretch">
+                <!-- Mapa (espeja la estructura del formulario para alinear ambas columnas) -->
+                <div class="flex flex-col lg:py-20">
+                    <div class="text-center max-w-3xl mx-auto space-y-4 mb-10">
+                        <h2
+                            class="text-heading-1 font-semibold text-2xl sm:text-3xl md:text-4xl"
+                        >
+                            Visítanos
+                        </h2>
+                        <p class="text-heading-3">
                             Parque España 249B, Buenos Aires, Monterrey, NL,
                             México, C.P. 64800
                         </p>
-                        <div
-                            class="rounded-2xl overflow-hidden border border-box-border shadow-lg h-[690px]"
+                    </div>
+                    <div
+                        class="rounded-2xl overflow-hidden border border-box-border shadow-lg flex-1 min-h-[450px]"
+                    >
+                        <iframe
+                            class="w-full h-full"
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d115073.11080427779!2d-100.28330000000001!3d25.670144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8662bfddf277afc5%3A0x888df146e1230fce!2sParque%20Espa%C3%B1a%2C%20Buenos%20Aires%2C%2064800%20Monterrey%2C%20N.L.%2C%20M%C3%A9xico!5e0!3m2!1ses!2sus!4v1701369736837!5m2!1ses!2sus"
+                            style="border:0;"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            allowfullscreen
                         >
-                            <iframe
-                                class="w-full h-full"
-                                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d115073.11080427779!2d-100.28330000000001!3d25.670144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8662bfddf277afc5%3A0x888df146e1230fce!2sParque%20Espa%C3%B1a%2C%20Buenos%20Aires%2C%2064800%20Monterrey%2C%20N.L.%2C%20M%C3%A9xico!5e0!3m2!1ses!2sus!4v1701369736837!5m2!1ses!2sus"
-                                style="border:0;"
-                                loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade"
-                                allowfullscreen
-                            >
-                            </iframe>
-                        </div>
+                        </iframe>
                     </div>
                 </div>
                 <!-- Reuso del formulario existente -->
-                <div>
-                    <ContactForm />
-                </div>
+                <ContactForm />
             </Container>
         </section>
     </div>
