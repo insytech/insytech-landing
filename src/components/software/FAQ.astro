@@ -1,0 +1,196 @@
+---
+import Container from "../shared/Container.astro";
+
+const faqItems = [
+    {
+        question:
+            "¿Qué ventaja tiene el software industrial a la medida frente a un sistema comercial?",
+        answer: "Un desarrollo a la medida se adapta a su proceso, no al revés: paga solo por las funciones que su operación necesita, sin licencias por usuario ni módulos que nunca usará. Se integra con su ERP y su piso de planta desde el diseño, y evoluciona con su empresa. El retorno viene de eliminar capturas manuales, islas de información y retrabajos que un sistema genérico no resuelve.",
+    },
+    {
+        question:
+            "¿Pueden integrar el software con mi ERP y los equipos de planta?",
+        answer: "Sí. Conectamos su ERP (SAP, Oracle, Microsoft Dynamics) con el piso de producción mediante APIs y bases de datos, eliminando islas de información y capturas duplicadas. También desarrollamos interfaces HMI sobre Ignition o .NET para pantallas industriales y tablets, y sincronizamos datos de máquinas y sensores para dashboards e inteligencia de negocios en tiempo real.",
+    },
+    {
+        question: "¿Cuánto tiempo tarda el desarrollo de un sistema a la medida?",
+        answer: "Depende del alcance. Trabajamos por iteraciones: tras una fase de análisis y descubrimiento definimos la arquitectura y entregamos versiones funcionales de forma continua, de modo que su equipo valida avances desde las primeras semanas. Un módulo acotado (control de calidad, etiquetado, gestión de mantenimiento) suele tomar semanas; un ecosistema completo, algunos meses. El despliegue se realiza de forma controlada en sitio.",
+    },
+    {
+        question: "¿Qué soporte ofrecen después de la entrega del software?",
+        answer: "Ofrecemos mantenimiento preventivo y correctivo para aplicaciones críticas, garantizando continuidad operativa 24/7. Las arquitecturas que construimos son escalables, en la nube o en servidores locales de su planta, con seguridad de datos de grado industrial. Además documentamos el sistema para que su equipo interno pueda operarlo y crecer sobre él sin depender de un solo proveedor.",
+    },
+];
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+        },
+    })),
+};
+---
+
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(faqSchema)}
+/>
+
+<section
+    id="faq"
+    class="relative py-20 overflow-hidden bg-white dark:bg-gray-950"
+>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12" data-animate="fade-up">
+                <h2
+                    class="text-3xl sm:text-4xl font-semibold font-['FieldworkGeo'] text-[#211915] dark:text-white leading-tight mb-4"
+                >
+                    Preguntas
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >
+                        frecuentes
+                    </span>
+                    sobre software industrial a la medida
+                </h2>
+            </div>
+
+            <!-- FAQ Acordeón -->
+            <div
+                class="space-y-4"
+                data-animate="fade-up"
+                data-animate-delay=".1s"
+            >
+                {
+                    faqItems.map((item, index) => (
+                        <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors">
+                            <button
+                                class="faq-trigger w-full px-6 py-5 flex items-center justify-between text-left"
+                                aria-expanded="false"
+                                aria-controls={`faq-content-${index}`}
+                            >
+                                <span class="font-semibold text-[#211915] dark:text-white pr-4">
+                                    {item.question}
+                                </span>
+                                <div class="faq-icon flex-shrink-0 w-8 h-8 rounded-full bg-[#005EB8]/10 dark:bg-[#005EB8]/20 flex items-center justify-center transition-transform duration-300">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2"
+                                        stroke="currentColor"
+                                        class="w-4 h-4 text-[#005EB8] dark:text-[#4da6ff]"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M12 4.5v15m7.5-7.5h-15"
+                                        />
+                                    </svg>
+                                </div>
+                            </button>
+                            <div
+                                id={`faq-content-${index}`}
+                                class="faq-content hidden px-6 pb-5"
+                            >
+                                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    {item.answer}
+                                </p>
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <!-- CTA -->
+            <div
+                class="text-center mt-10"
+                data-animate="fade-up"
+                data-animate-delay=".2s"
+            >
+                <p class="text-gray-500 dark:text-gray-400 mb-3">
+                    ¿Más preguntas?
+                </p>
+                <a
+                    href="#contact"
+                    class="inline-flex items-center gap-2 text-[#005EB8] dark:text-[#4da6ff] font-medium hover:underline"
+                >
+                    <span>Contáctanos</span>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="currentColor"
+                        class="w-4 h-4"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </Container>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const faqItems = document.querySelectorAll(".faq-item");
+
+        faqItems.forEach((item) => {
+            const trigger = item.querySelector(".faq-trigger");
+            const content = item.querySelector(".faq-content");
+            const icon = item.querySelector(".faq-icon");
+
+            if (!trigger || !content || !icon) return;
+
+            trigger.addEventListener("click", () => {
+                const isOpen = trigger.getAttribute("aria-expanded") === "true";
+
+                // Close all other items
+                faqItems.forEach((otherItem) => {
+                    const otherTrigger =
+                        otherItem.querySelector(".faq-trigger");
+                    const otherContent =
+                        otherItem.querySelector(".faq-content");
+                    const otherIcon = otherItem.querySelector(".faq-icon");
+
+                    if (
+                        otherItem !== item &&
+                        otherTrigger &&
+                        otherContent &&
+                        otherIcon
+                    ) {
+                        otherTrigger.setAttribute("aria-expanded", "false");
+                        otherContent.classList.add("hidden");
+                        otherIcon.classList.remove("rotate-45");
+                    }
+                });
+
+                // Toggle current item
+                trigger.setAttribute("aria-expanded", (!isOpen).toString());
+                content.classList.toggle("hidden");
+                icon.classList.toggle("rotate-45");
+            });
+        });
+    });
+</script>
+
+<style>
+    .faq-icon {
+        transition: transform 0.3s ease;
+    }
+    .faq-icon.rotate-45 {
+        transform: rotate(45deg);
+    }
+</style>

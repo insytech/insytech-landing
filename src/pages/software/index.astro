@@ -3,12 +3,13 @@ import Layout from "@layouts/VisionLayout.astro";
 import Hero from "@components/software/Hero.astro";
 import SoftwareServices from "@components/software/SoftwareServices.astro";
 import SoftwareProcess from "@components/software/SoftwareProcess.astro";
+import FAQ from "@components/software/FAQ.astro";
 import ContactSection from "@components/sections/ContactSection.astro";
 ---
 
 <Layout
-    title="Desarrollo de Software Industrial y Sistemas MES"
-    description="Desarrollo de software industrial a la medida: sistemas MES, interfaces HMI e integraciones críticas para su planta en Monterrey. Solicite una consultoría."
+    title="Desarrollo de Software Industrial a la Medida"
+    description="Desarrollo de software industrial a la medida: sistemas para manufactura, interfaces HMI e integraciones con su ERP y piso de planta en Monterrey. Solicite una consultoría."
 >
     <main class="flex flex-col">
         <Hero />
@@ -16,6 +17,8 @@ import ContactSection from "@components/sections/ContactSection.astro";
         <SoftwareServices />
 
         <SoftwareProcess />
+
+        <FAQ />
 
         <ContactSection />
     </main>
