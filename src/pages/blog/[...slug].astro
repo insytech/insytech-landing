@@ -1,44 +1,81 @@
 ---
+import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
 import Title from "../../components/shared/Title.astro";
-import Paragraph from "../../components/shared/Paragraph.astro";
-import BtnLink from "../../components/shared/BtnLink.astro";
 
-// Para modo static, definimos las rutas disponibles (vacío = catch-all muestra página de construcción)
-export function getStaticPaths() {
-    // Cuando tengas posts de blog, actualiza esto con las rutas reales
-    return [{ params: { slug: undefined } }];
+export async function getStaticPaths() {
+    const posts = await getCollection("blog");
+    return posts.map((post) => ({
+        params: { slug: post.id },
+        props: { post },
+    }));
 }
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const pubDateISO = post.data.pubDate.toISOString().split("T")[0];
+const formattedDate = post.data.pubDate.toLocaleDateString("es-MX", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+});
+
+const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: pubDateISO,
+    inLanguage: "es-MX",
+    mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": new URL(`/blog/${post.id}/`, Astro.site).href,
+    },
+    author: {
+        "@type": "Organization",
+        name: "Insytech",
+        url: "https://insytech.mx",
+    },
+    publisher: {
+        "@type": "Organization",
+        name: "Insytech",
+        url: "https://insytech.mx",
+        logo: {
+            "@type": "ImageObject",
+            url: "https://insytech.mx/images/Versiones%20de%20logotipo-01.webp",
+        },
+    },
+};
 ---
 
-<Layout title="Blog en construcción | Insytech" noindex={true}>
-    <main class="min-h-[70vh] flex items-center">
-        <Container className="max-w-3xl mx-auto text-center space-y-6">
-            <div
-                class="inline-flex px-3 py-1 rounded-full bg-[#00B5E2]/10 text-[#005EB8] text-sm font-medium"
-            >
-                En construcción
-            </div>
-            <Title>Pronto: Blog de Insytech</Title>
-            <Paragraph>
-                Esta ruta del blog aún no está disponible. Estamos trabajando
-                para habilitarla.
-            </Paragraph>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                <BtnLink
-                    text="Volver al inicio"
-                    href="/"
-                    variant="primary"
-                    className="justify-center"
-                />
-                <BtnLink
-                    text="Contáctanos"
-                    href="/contact"
-                    variant="primary"
-                    className="justify-center"
-                />
-            </div>
+<Layout title={post.data.title} description={post.data.description}>
+    <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(articleSchema)}
+    />
+    <main class="py-16 sm:py-20">
+        <Container className="max-w-3xl mx-auto">
+            <article class="space-y-6">
+                <header class="space-y-4">
+                    <nav class="text-sm">
+                        <a href="/blog" class="text-[#005EB8] hover:underline">
+                            &larr; Volver al blog
+                        </a>
+                    </nav>
+                    <Title>{post.data.title}</Title>
+                    <p class="text-sm text-heading-3">
+                        Por <span class="font-medium">Insytech</span> ·
+                        <time datetime={pubDateISO}>{formattedDate}</time>
+                    </p>
+                </header>
+                <div class="content-typography">
+                    <Content />
+                </div>
+            </article>
         </Container>
     </main>
 </Layout>

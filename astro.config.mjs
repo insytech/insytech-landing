@@ -13,5 +13,5 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
     },
-    integrations: [react(), sitemap({ filter: (page) => !page.includes('/blog') })],
+    integrations: [react(), sitemap()],
 });

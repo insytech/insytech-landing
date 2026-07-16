@@ -1,37 +1,67 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import Container from "../components/shared/Container.astro";
 import Title from "../components/shared/Title.astro";
 import Paragraph from "../components/shared/Paragraph.astro";
-import BtnLink from "../components/shared/BtnLink.astro";
+
+const posts = (await getCollection("blog")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const formatDate = (date: Date) =>
+    date.toLocaleDateString("es-MX", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+    });
 ---
 
-<Layout title="Blog en construcción | Insytech" noindex={true}>
-    <main class="min-h-[70vh] flex items-center">
-        <Container className="max-w-3xl mx-auto text-center space-y-6">
-            <div
-                class="inline-flex px-3 py-1 rounded-full bg-[#00B5E2]/10 text-[#005EB8] text-sm font-medium"
-            >
-                En construcción
-            </div>
-            <Title>Pronto: Blog de Insytech</Title>
-            <Paragraph>
-                Esta sección está bajo construcción por Insytech. Vuelve más
-                tarde o contáctanos si necesitas información.
-            </Paragraph>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                <BtnLink
-                    text="Volver al inicio"
-                    href="/"
-                    variant="primary"
-                    className="justify-center"
-                />
-                <BtnLink
-                    text="Contáctanos"
-                    href="/contact"
-                    variant="primary"
-                    className="justify-center"
-                />
+<Layout
+    title="Blog de automatización industrial y visión artificial | Insytech"
+    description="Artículos sobre visión artificial, automatización inteligente, control PLC/SCADA y trazabilidad MES para la industria en México, escritos por el equipo de Insytech."
+>
+    <main class="py-16 sm:py-20">
+        <Container className="max-w-4xl mx-auto space-y-10">
+            <header class="space-y-4 text-center">
+                <Title>Blog de Insytech</Title>
+                <Paragraph className="max-w-2xl mx-auto">
+                    Automatización industrial, visión artificial y software
+                    para manufactura: guías prácticas escritas desde el piso
+                    de planta.
+                </Paragraph>
+            </header>
+
+            <div class="grid gap-6">
+                {
+                    posts.map((post) => (
+                        <a
+                            href={`/blog/${post.id}/`}
+                            class="block p-5 sm:p-6 lg:p-8 rounded-3xl border border-box-border bg-box-bg shadow-lg shadow-box-shadow hover:border-[#00B5E2] transition-colors duration-300"
+                        >
+                            <article class="space-y-3">
+                                <time
+                                    datetime={post.data.pubDate
+                                        .toISOString()
+                                        .split("T")[0]}
+                                    class="text-sm text-heading-3"
+                                >
+                                    {formatDate(post.data.pubDate)}
+                                </time>
+                                <h2 class="text-heading-1 font-semibold text-xl sm:text-2xl">
+                                    {post.data.title}
+                                </h2>
+                                <p class="text-heading-3">
+                                    {post.data.description}
+                                </p>
+                                <span class="inline-block text-[#005EB8] font-medium">
+                                    Leer artículo &rarr;
+                                </span>
+                            </article>
+                        </a>
+                    ))
+                }
             </div>
         </Container>
     </main>
