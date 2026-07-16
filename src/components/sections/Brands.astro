@@ -15,37 +15,37 @@ import Title from "../shared/Title.astro";
                 <img
                     src="/logos/navistar.webp"
                     alt="Navistar"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/nasa.webp"
                     alt="NASA Nacional de Acero"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/polaris.webp"
                     alt="Polaris"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/pentair.webp"
                     alt="Pentair"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/franklin-electric.webp"
                     alt="Franklin Electric"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
                 <img
                     src="/logos/tempel-group.webp"
                     alt="Tempel Group"
-                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-0 hover:grayscale-0 hover:opacity-100 transition-all"
+                    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
                     loading="lazy"
                 />
             </div>
@@ -60,6 +60,15 @@ import Title from "../shared/Title.astro";
     gsap.registerPlugin(ScrollTrigger);
 
     const initBrands = () => {
+        // Progressive enhancement: logos are visible without JS; under
+        // reduced motion keep them visible and skip the entrance animation
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            return;
+        }
+
+        // Initial hidden state, applied only when animating
+        gsap.set(".brand-logo", { opacity: 0, y: 20 });
+
         gsap.to(".brand-logo", {
             opacity: 0.7,
             y: 0,
@@ -79,7 +88,6 @@ import Title from "../shared/Title.astro";
 
 <style>
     .brand-logo {
-        transform: translateY(20px);
         will-change: transform, opacity;
     }
 </style>
