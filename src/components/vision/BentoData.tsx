@@ -23,11 +23,11 @@ export const bentoData = [
         iconId: "hardware"
     },
     {
-        title: "Análisis Térmico",
-        description: "Integración con cámaras termográficas para monitoreo preventivo de maquinaria crítica.",
-        label: "Predictivo",
+        title: "Mapas de Calor de Anomalías",
+        description: "Modelos de detección de anomalías que resaltan las zonas atípicas en un mapa de calor, sin requerir defectos previamente etiquetados.",
+        label: "Anomalías",
         className: "cursor-target",
-        iconId: "thermal"
+        iconId: "anomaly"
     },
     {
         title: "OCR Industrial",
