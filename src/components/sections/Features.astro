@@ -155,15 +155,28 @@ const sectors = [
         .animate-scan {
             animation: scan 4s linear infinite;
         }
+        /* Static fallback matching the 3D scene's clear color; the opaque
+           WebGL render covers it whenever the 3D effects initialize. */
+        .three-canvas {
+            background:
+                radial-gradient(
+                    circle at 50% 45%,
+                    rgba(0, 181, 226, 0.16),
+                    transparent 65%
+                ),
+                #001133;
+        }
     </style>
 
     <script>
         import { gsap } from "gsap";
         import { ScrollTrigger } from "gsap/ScrollTrigger";
-        import * as THREE from "three";
-        import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-        import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-        import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+        import type {
+            BufferGeometry,
+            LineBasicMaterial,
+            Material,
+            Points,
+        } from "three";
 
         gsap.registerPlugin(ScrollTrigger);
 
@@ -212,12 +225,36 @@ const sectors = [
                   duration: 1.2
               }, "-=0.5");
 
-            initThreeEffects();
+            setupThreeEffects();
         });
 
-        function initThreeEffects() {
+        function setupThreeEffects() {
             const containers = document.querySelectorAll('.feature-visual');
-            
+            if (!containers.length) return;
+            // 3D is decorative: skip on small viewports and for reduced motion
+            if (!window.matchMedia('(min-width: 1024px)').matches) return;
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+            // Lazy-init: only load three.js once the cards approach the viewport
+            let started = false;
+            const startObserver = new IntersectionObserver((entries) => {
+                if (started || !entries.some((e) => e.isIntersecting)) return;
+                started = true;
+                startObserver.disconnect();
+                initThreeEffects(containers).catch(() => {});
+            }, { rootMargin: '200px' });
+            containers.forEach((el) => startObserver.observe(el));
+        }
+
+        async function initThreeEffects(containers: NodeListOf<Element>) {
+            const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }] =
+                await Promise.all([
+                    import('three'),
+                    import('three/examples/jsm/postprocessing/EffectComposer.js'),
+                    import('three/examples/jsm/postprocessing/RenderPass.js'),
+                    import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
+                ]);
+
             containers.forEach(el => {
                 const container = el as HTMLElement;
                 const canvas = container.querySelector('.three-canvas') as HTMLCanvasElement;
@@ -262,7 +299,7 @@ const sectors = [
                 const raycaster = new THREE.Raycaster();
                 const mouse = new THREE.Vector2(-1, -1);
 
-                const createEdges = (geo: THREE.BufferGeometry, mat: THREE.Material) => {
+                const createEdges = (geo: BufferGeometry, mat: Material) => {
                     return new THREE.LineSegments(new THREE.EdgesGeometry(geo), mat);
                 };
 
@@ -321,7 +358,7 @@ const sectors = [
                     
                     // Ultra-subtle Laser Beam
                     const beam = createEdges(new THREE.CylinderGeometry(0.01, 0.05, 10, 8, 1, true), faintMat);
-                    (beam.material as THREE.LineBasicMaterial).opacity = 0.05;
+                    (beam.material as LineBasicMaterial).opacity = 0.05;
                     beam.position.y = 5; 
                     
                     const probe = new THREE.Group();
@@ -357,8 +394,11 @@ const sectors = [
                     mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1; mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
                 });
 
+                let rafId = 0;
+                let playing = false;
+
                 const animate = () => {
-                    requestAnimationFrame(animate);
+                    rafId = requestAnimationFrame(animate);
                     const time = clock.getElapsedTime();
                     if (!root || !composer) return;
 
@@ -377,7 +417,7 @@ const sectors = [
                     // Specific View Animations with safety checks
                     try {
                         if (type === 'mes-hub' && root.children[0]?.children[3]) {
-                            const pts = root.children[0].children[3] as THREE.Points;
+                            const pts = root.children[0].children[3] as Points;
                             const pos = pts.geometry.attributes.position.array as Float32Array;
                             const speeds = (pts as any).speeds;
                             if (speeds) {
@@ -420,7 +460,18 @@ const sectors = [
 
                     composer.render();
                 };
-                animate();
+
+                // Play/pause the render loop as the canvas enters/leaves view
+                const playObserver = new IntersectionObserver(([entry]) => {
+                    if (entry.isIntersecting && !playing) {
+                        playing = true;
+                        rafId = requestAnimationFrame(animate);
+                    } else if (!entry.isIntersecting && playing) {
+                        playing = false;
+                        cancelAnimationFrame(rafId);
+                    }
+                });
+                playObserver.observe(container);
 
                 window.addEventListener('resize', () => {
                     if (!container) return;
