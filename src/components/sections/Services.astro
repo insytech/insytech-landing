@@ -68,7 +68,8 @@ type ServicesProps = {
             class="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-auto md:auto-rows-[minmax(400px,_auto)]"
         >
             {/* CARD 1: SOFTWARE - THE BRAIN (Large 8/12) */}
-            <div
+            <a
+                href="/software"
                 class="md:col-span-8 group relative rounded-[2rem] sm:rounded-[2.5rem] bg-gray-50/50 dark:bg-[#0A0F1E]/80 backdrop-blur-3xl border border-gray-200/50 dark:border-white/5 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-700 service-bento opacity-0 translate-y-8"
             >
                 <div
@@ -177,12 +178,13 @@ type ServicesProps = {
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
             {
                 /* CARD 2: MONITORING - THE PULSE (Square 4/12) - RESTAURADO SEGÚN PREFERENCIA */
             }
-            <div
+            <a
+                href="/tracking"
                 class="md:col-span-4 group relative rounded-[2.5rem] bg-[#00172B] overflow-hidden service-bento opacity-0 translate-y-16 perspective-1000"
             >
                 <div
@@ -276,10 +278,11 @@ type ServicesProps = {
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
             {/* CARD 3: CONTROL - THE SINEW (Square 5/12) */}
-            <div
+            <a
+                href="/control"
                 class="md:col-span-5 group relative rounded-[2.5rem] bg-white dark:bg-[#000D1A] border border-gray-100 dark:border-white/5 overflow-hidden service-bento opacity-0 translate-y-8 shadow-sm"
             >
                 <div
@@ -457,7 +460,7 @@ type ServicesProps = {
                         </p>
                     </div>
                 </div>
-            </div>
+            </a>
 
             <div
                 class="md:col-span-7 group relative rounded-[2rem] sm:rounded-[2.5rem] bg-[#000814] overflow-hidden service-bento opacity-0 translate-y-8 p-7 sm:p-14"
@@ -492,7 +495,11 @@ type ServicesProps = {
                         <h3
                             class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tighter"
                         >
-                            {services[3].title}
+                            <a
+                                href="/vision"
+                                class="hover:text-[#00B5E2] transition-colors duration-300"
+                                >{services[3].title}</a
+                            >
                         </h3>
                     </div>
 
@@ -533,11 +540,12 @@ type ServicesProps = {
                                 </div>
                             </div>
 
-                            <button
-                                class="w-full sm:w-fit px-8 py-4 sm:px-10 sm:py-5 rounded-full bg-white text-black font-black text-[11px] sm:text-[12px] uppercase tracking-widest hover:bg-[#00B5E2] hover:text-white transition-all duration-300 shadow-xl"
+                            <a
+                                href="/ai"
+                                class="inline-block text-center w-full sm:w-fit px-8 py-4 sm:px-10 sm:py-5 rounded-full bg-white text-black font-black text-[11px] sm:text-[12px] uppercase tracking-widest hover:bg-[#00B5E2] hover:text-white transition-all duration-300 shadow-xl"
                             >
                                 Launch AI Core
-                            </button>
+                            </a>
                         </div>
 
                         {/* Column 2: Sensor Lens Image */}
