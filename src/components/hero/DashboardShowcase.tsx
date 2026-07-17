@@ -122,8 +122,8 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5 relative z-10">
                     <div>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">NEURAL</h4>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">CORE</h4>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">NEURAL</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">CORE</p>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Predictive Strategy</p>
                     </div>
                     <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
@@ -175,8 +175,8 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5">
                     <div>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">PROCESS</h4>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">ANALYTICS</h4>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">PROCESS</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">ANALYTICS</p>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Real-Time Optimization</p>
                     </div>
                     <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
@@ -205,8 +205,8 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AI</h4>
-                        <h4 className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AUTOMATION</h4>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AI</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AUTOMATION</p>
                         <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Integrated Scaling</p>
                     </div>
                     <div className="flex size-8 rounded-lg bg-[#002B49] items-center justify-center text-white shadow-lg">
