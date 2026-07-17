@@ -31,6 +31,15 @@ const {
 
     {noindex && <meta name="robots" content="noindex,nofollow" />}
 
+    <!-- Precarga la fuente del H1 (LCP) para acelerar el render -->
+    <link
+      rel="preload"
+      href="/fonts/Fieldwork16GeoBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
     <!-- Acelera el handshake/TLS -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
