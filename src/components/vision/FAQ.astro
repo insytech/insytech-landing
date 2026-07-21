@@ -19,7 +19,26 @@ const faqItems = [
         answer: "El sistema puede ejecutar acciones automáticas en tiempo real: activar rechazadores, enviar señales al PLC, generar alertas, y registrar imágenes para trazabilidad. Todo configurable según tu proceso.",
     },
 ];
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+            "@type": "Answer",
+            text: item.answer,
+        },
+    })),
+};
 ---
+
+<script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(faqSchema)}
+/>
 
 <section
     id="faq"
