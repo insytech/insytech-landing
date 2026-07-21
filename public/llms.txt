@@ -1,0 +1,29 @@
+# Insytech
+
+> Insytech es una empresa de Monterrey, México, especializada en ingeniería, software industrial a la medida, inteligencia artificial y automatización para la manufactura. Optimizamos procesos productivos en Monterrey y todo México.
+
+Contacto: ventas@insytech.mx · +52-81-2892-7509 · Parque España 249B, Buenos Aires, Monterrey, NL, 64800, México. Horario: Lunes a Viernes, 08:00–18:00.
+
+## Servicios
+
+- [Visión artificial (computer vision)](https://insytech.mx/vision): Automatización de inspección de calidad y detección de defectos con IA. Cámaras industriales Basler, FLIR, Cognex, Keyence; integración nativa con PLCs Allen-Bradley, Siemens, Omron, Mitsubishi.
+- [Desarrollo de software industrial a la medida](https://insytech.mx/software): Sistemas para manufactura, interfaces HMI e integraciones con ERP (SAP, Oracle, Dynamics) y piso de planta.
+- [Sistema MES — trazabilidad de producción y OEE](https://insytech.mx/tracking): Trazabilidad, monitoreo en tiempo real, OEE, andon digital y control en piso de planta.
+- [Automatización industrial — PLC, SCADA e IoT](https://insytech.mx/control): Integración de sistemas de control PLC, SCADA e IoT para la manufactura inteligente.
+- [Inteligencia artificial para la industria](https://insytech.mx/ai): Chatbots industriales, agentes de IA a la medida y RPA para optimizar procesos y atención al cliente.
+
+## Blog
+
+- [El mercado de sistemas de visión artificial en México](https://insytech.mx/blog/mercado-vision-artificial-mexico)
+- [Visión artificial en Monterrey: aplicaciones reales en la industria](https://insytech.mx/blog/vision-artificial-monterrey)
+- [Computer vision para empresas: guía práctica](https://insytech.mx/blog/computer-vision-empresas-guia)
+- [Cómo elegir un proveedor de automatización inteligente](https://insytech.mx/blog/como-elegir-proveedor-automatizacion-inteligente)
+- [Desarrollo de software a la medida para la industria](https://insytech.mx/blog/desarrollo-software-industrial-a-la-medida)
+- [Automatización industrial: guía práctica de control de procesos](https://insytech.mx/blog/automatizacion-y-control-industrial-guia)
+- [Inteligencia artificial en la industria: casos reales en manufactura](https://insytech.mx/blog/inteligencia-artificial-industria-manufactura)
+- [Trazabilidad industrial y sistemas MES: guía para tu planta](https://insytech.mx/blog/trazabilidad-sistemas-mes-planta)
+
+## Más
+
+- [Contacto](https://insytech.mx/contact)
+- [Blog](https://insytech.mx/blog)
