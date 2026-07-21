@@ -153,14 +153,21 @@ import Paragraph from "../shared/Paragraph.astro";
             const fd = new FormData(form as HTMLFormElement);
             const name = (fd.get("name") || "").toString().trim();
             const email = (fd.get("email") || "").toString().trim();
+            const source = window.location.pathname;
             const payload = {
-                name,
-                company: (fd.get("company") || "").toString().trim(),
-                email,
-                phone: (fd.get("phone") || "").toString().trim(),
-                message: (fd.get("message") || "").toString().trim(),
-                website: (fd.get("website") || "").toString(),
-                source: window.location.pathname,
+                // Llave PÚBLICA de Web3Forms (segura en cliente, según su doc).
+                access_key: "6e179734-4555-4053-ab94-9b4413672e9c",
+                subject: `Nuevo lead desde ${source} — insytech.mx`,
+                from_name: "Sitio Insytech",
+                replyto: email,
+                // honeypot: si el campo oculto "website" viene lleno, es bot.
+                botcheck: (fd.get("website") || "").toString().trim() !== "",
+                Nombre: name,
+                Empresa: (fd.get("company") || "").toString().trim(),
+                Email: email,
+                Teléfono: (fd.get("phone") || "").toString().trim(),
+                Mensaje: (fd.get("message") || "").toString().trim(),
+                "Página de origen": source,
             };
 
             if (!name && !email) {
@@ -186,13 +193,18 @@ import Paragraph from "../shared/Paragraph.astro";
             }
 
             try {
-                const res = await fetch("/api/sendLead", {
+                const res = await fetch("https://api.web3forms.com/submit", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
                     body: JSON.stringify(payload),
                 });
 
-                if (!res.ok) throw new Error(`Error ${res.status}`);
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || data.success === false)
+                    throw new Error(data.message || `Error ${res.status}`);
 
                 if (statusEl) {
                     statusEl.textContent =
