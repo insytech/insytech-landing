@@ -50,7 +50,14 @@ export async function POST({ request }: { request: Request }) {
         // (regístralo con ventas@insytech.mx). Etiquetas en español = así se ven en el email.
         const res = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
-            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            // Origin/Referer para que la restricción de dominio de Web3Forms acepte
+            // la llamada server-side (aquí no interviene el navegador que los pondría).
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Origin: "https://insytech.mx",
+                Referer: "https://insytech.mx/",
+            },
             body: JSON.stringify({
                 access_key: accessKey,
                 subject: `Nuevo lead desde ${source} — insytech.mx`,
