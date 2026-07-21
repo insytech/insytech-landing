@@ -160,6 +160,7 @@ import Paragraph from "../shared/Paragraph.astro";
                 phone: (fd.get("phone") || "").toString().trim(),
                 message: (fd.get("message") || "").toString().trim(),
                 website: (fd.get("website") || "").toString(),
+                source: window.location.pathname,
             };
 
             if (!name && !email) {
@@ -185,7 +186,7 @@ import Paragraph from "../shared/Paragraph.astro";
             }
 
             try {
-                const res = await fetch("/api/sendToPipedrive", {
+                const res = await fetch("/api/sendLead", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(payload),
