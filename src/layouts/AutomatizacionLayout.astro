@@ -6,6 +6,7 @@ import CookieConsent from "../components/elements/CookieConsent.astro";
 import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
 import GoogleAnalytics from "../components/elements/GoogleAnalytics.astro";
 import SEO from "../components/elements/SEO.astro";
+import ProductSchema from "../components/elements/ProductSchema.astro";
 
 export interface Props {
     title?: string;
@@ -28,6 +29,7 @@ const {
         <meta charset="UTF-8" />
         <GoogleAnalytics />
         <SEO title={title} description={description} ogImage={ogImage} />
+        <ProductSchema title={title} description={description} />
 
         {noindex && <meta name="robots" content="noindex,nofollow" />}
 
