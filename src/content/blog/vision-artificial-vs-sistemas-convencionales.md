@@ -52,9 +52,15 @@ El efecto sobre tu inversión es exactamente el opuesto al de un sistema convenc
 
 En pocas palabras: donde el enfoque convencional te cobra cada cambio, el enfoque con IA convierte cada cambio en una mejora.
 
+## ¿Cuánto cuesta, entonces? Un punto de referencia
+
+Las cifras varían según el alcance —número de puntos de inspección, complejidad del defecto, velocidad de línea e integración—, pero ayuda tener un orden de magnitud. Un sistema de visión convencional importado suele **partir de alrededor de un millón de pesos** (del orden de 50,000 dólares). Frente a esa cifra, una solución basada en inteligencia artificial como la nuestra puede **arrancar desde unos 250,000 pesos**: aproximadamente **una cuarta parte** del costo de entrada de un sistema convencional.
+
+Y aquí vuelve a pesar la diferencia de fondo: gracias a las revisiones del entrenamiento, esa inversión se revaloriza con el tiempo en lugar de depreciarse con cada cambio. Son cifras de referencia, no una cotización —el costo real depende de tu caso—, pero ilustran el punto: lo que encarece la visión artificial no es la tecnología, es el enfoque convencional que la rodea.
+
 ## Entonces, ¿la visión artificial es "barata"?
 
-Seamos honestos: no se trata de que sea "barata", sino de que sea **rentable**. Una implementación seria sigue siendo una inversión, y cualquier proveedor que te prometa lo contrario debería encender una alarma. Pero la pregunta correcta no es *cuánto cuesta*, sino *qué te devuelve*: menos escapes de calidad que llegan al cliente, menos retrabajo y desperdicio, menos horas de inspección totalmente manual, y [trazabilidad completa](/tracking) de cada pieza. Frente a los sistemas convencionales, el enfoque con IA mueve la conversación del precio de compra al valor que genera mes a mes.
+Seamos honestos: no se trata de que sea "barata", sino de que sea **rentable**. Una implementación seria sigue siendo una inversión, y cualquier proveedor que te prometa lo contrario debería encender una alarma. Y más allá del precio de entrada, la pregunta que define la rentabilidad es *qué te devuelve*: menos escapes de calidad que llegan al cliente, menos retrabajo y desperdicio, menos horas de inspección totalmente manual, y [trazabilidad completa](/tracking) de cada pieza. Frente a los sistemas convencionales, el enfoque con IA mueve la conversación del precio de compra al valor que genera mes a mes.
 
 ## Cómo empezar sin sobreinvertir
 
