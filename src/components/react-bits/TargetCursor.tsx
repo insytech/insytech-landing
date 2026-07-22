@@ -8,6 +8,8 @@ export interface TargetCursorProps {
     hideDefaultCursor?: boolean;
     hoverDuration?: number;
     parallaxOn?: boolean;
+    // Si se pasa, el cursor solo se activa dentro de ese contenedor (p.ej. "#services").
+    rootSelector?: string;
 }
 
 const TargetCursor: React.FC<TargetCursorProps> = ({
@@ -15,7 +17,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     spinDuration = 2.1,
     hideDefaultCursor = true,
     hoverDuration = 0.2,
-    parallaxOn = false
+    parallaxOn = false,
+    rootSelector
 }) => {
     const cursorRef = useRef<HTMLDivElement>(null);
     const cornersRef = useRef<NodeListOf<HTMLDivElement> | null>(null);
@@ -47,9 +50,13 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     useEffect(() => {
         if (isMobile || !cursorRef.current) return;
 
-        const originalCursor = document.body.style.cursor;
+        const root = rootSelector ? document.querySelector<HTMLElement>(rootSelector) : null;
+        const evtTarget: EventTarget = root ?? window;
+        const cursorHost = root ?? document.body;
+
+        const originalCursor = cursorHost.style.cursor;
         if (hideDefaultCursor) {
-            document.body.style.cursor = 'none';
+            cursorHost.style.cursor = 'none';
         }
 
         const cursor = cursorRef.current;
@@ -72,6 +79,15 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             x: window.innerWidth / 2,
             y: window.innerHeight / 2
         });
+
+        // Acotado a un contenedor: el anillo solo se ve mientras el puntero está dentro.
+        const showCursor = () => gsap.to(cursor, { autoAlpha: 1, duration: 0.15 });
+        const hideCursor = () => gsap.to(cursor, { autoAlpha: 0, duration: 0.15 });
+        if (root) {
+            gsap.set(cursor, { autoAlpha: 0 });
+            root.addEventListener('mouseenter', showCursor);
+            root.addEventListener('mouseleave', hideCursor);
+        }
 
         const createSpinTimeline = () => {
             if (spinTl.current) {
@@ -114,7 +130,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
         tickerFnRef.current = tickerFn;
 
         const moveHandler = (e: MouseEvent) => moveCursor(e.clientX, e.clientY);
-        window.addEventListener('mousemove', moveHandler);
+        evtTarget.addEventListener('mousemove', moveHandler as EventListener);
 
         const scrollHandler = () => {
             if (!activeTarget || !cursorRef.current) return;
@@ -142,8 +158,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             gsap.to(cursorRef.current, { scale: 1, duration: 0.2 });
         };
 
-        window.addEventListener('mousedown', mouseDownHandler);
-        window.addEventListener('mouseup', mouseUpHandler);
+        evtTarget.addEventListener('mousedown', mouseDownHandler as EventListener);
+        evtTarget.addEventListener('mouseup', mouseUpHandler as EventListener);
 
         const enterHandler = (e: MouseEvent) => {
             const directTarget = e.target as Element;
@@ -245,27 +261,31 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
             target.addEventListener('mouseleave', leaveHandler);
         };
 
-        window.addEventListener('mouseover', enterHandler as EventListener);
+        evtTarget.addEventListener('mouseover', enterHandler as EventListener);
 
         return () => {
             if (tickerFnRef.current) {
                 gsap.ticker.remove(tickerFnRef.current);
             }
-            window.removeEventListener('mousemove', moveHandler);
-            window.removeEventListener('mouseover', enterHandler as EventListener);
+            evtTarget.removeEventListener('mousemove', moveHandler as EventListener);
+            evtTarget.removeEventListener('mouseover', enterHandler as EventListener);
             window.removeEventListener('scroll', scrollHandler);
-            window.removeEventListener('mousedown', mouseDownHandler);
-            window.removeEventListener('mouseup', mouseUpHandler);
+            evtTarget.removeEventListener('mousedown', mouseDownHandler as EventListener);
+            evtTarget.removeEventListener('mouseup', mouseUpHandler as EventListener);
+            if (root) {
+                root.removeEventListener('mouseenter', showCursor);
+                root.removeEventListener('mouseleave', hideCursor);
+            }
             if (activeTarget) {
                 cleanupTarget(activeTarget);
             }
             spinTl.current?.kill();
-            document.body.style.cursor = originalCursor;
+            cursorHost.style.cursor = originalCursor;
             isActiveRef.current = false;
             targetCornerPositionsRef.current = null;
             activeStrengthRef.current.current = 0;
         };
-    }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, isMobile, hoverDuration, parallaxOn]);
+    }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, isMobile, hoverDuration, parallaxOn, rootSelector]);
 
     useEffect(() => {
         if (isMobile || !cursorRef.current || !spinTl.current) return;

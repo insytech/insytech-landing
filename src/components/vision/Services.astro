@@ -1,6 +1,7 @@
 ---
 import Container from "../shared/Container.astro";
 import MagicBento from "../react-bits/MagicBento";
+import TargetCursor from "../react-bits/TargetCursor";
 import { bentoData } from "./BentoData";
 ---
 
@@ -8,6 +9,13 @@ import { bentoData } from "./BentoData";
     id="services"
     class="py-24 relative overflow-hidden bg-white dark:bg-gray-950"
 >
+    <TargetCursor
+        spinDuration={2.1}
+        hideDefaultCursor={true}
+        parallaxOn={false}
+        rootSelector="#services"
+        client:only="react"
+    />
     <!-- Background Accents -->
     <div
         class="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20 dark:opacity-40 overflow-hidden"
