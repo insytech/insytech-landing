@@ -62,7 +62,7 @@
      esta variable. Para revertir TODO el sitio a Raleway, cambia SOLO esta línea a:
        --font-heading: "Raleway", sans-serif;
   */
-  --font-heading: "FieldworkGeo", "Raleway", sans-serif;
+  --font-heading: "Raleway", sans-serif;
 
   --color-bg: 255 255 255;
   --color-box: 255 255 255;
