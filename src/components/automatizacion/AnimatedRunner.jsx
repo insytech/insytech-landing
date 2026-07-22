@@ -45,10 +45,47 @@ const AnimatedRunner = () => {
   useEffect(() => {
     performanceLevelRef.current = detectPerformanceLevel();
 
-    // Esperar a que los nodos estén disponibles
-    const initializeRunner = () => {
-      console.log('🔍 Buscando nodos...');
+    let rafId = 0;
+    let retries = 0;
+    // ~1s de reintentos a 60fps como red de seguridad; en la práctica los nodos
+    // (renderizados por Astro) ya existen en el primer frame tras la hidratación.
+    const MAX_RETRIES = 60;
 
+    const pressHold = () => (performanceLevelRef.current === 'low' ? 200 : 300);
+
+    // Posicionar el runner, presionar el primer nodo y arrancar el recorrido.
+    const positionAndStart = (nodeElements) => {
+      nodesRef.current = nodeElements;
+
+      const firstNodeId = flowPath[0];
+      const firstNode = nodeElements[firstNodeId];
+      if (!firstNode) return;
+
+      const position = getNodePosition(firstNode);
+      const runnerElement = document.getElementById('runner');
+      if (!runnerElement) return;
+
+      // Batch de writes para evitar reflows múltiples
+      Object.assign(runnerElement.style, {
+        background: '',
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        opacity: '1',
+        visibility: 'visible',
+      });
+      runnerElement.style.setProperty('--rotation', '0rad');
+      isInitializedRef.current = true;
+
+      // Presionar primer nodo y empezar el recorrido (arranque rápido).
+      firstNode.classList.add('pressed');
+      setTimeout(() => {
+        firstNode.classList.remove('pressed');
+        setTimeout(() => startRunnerWithNodes(nodeElements, 0), 150);
+      }, pressHold());
+    };
+
+    // Buscar nodos; reintenta en el siguiente frame si aún no están en el DOM.
+    const initializeRunner = () => {
       const nodeElements = {};
       let foundNodes = 0;
 
@@ -57,79 +94,19 @@ const AnimatedRunner = () => {
         if (element) {
           nodeElements[id] = element;
           foundNodes++;
-          console.log(`✅ Encontrado nodo: ${id}`);
-        } else {
-          console.log(`❌ No encontrado nodo: ${id}`);
         }
       });
 
-      console.log(`📊 Encontrados ${foundNodes} nodos de ${flowPath.length} totales`);
-
-      // Verificar que tengamos suficientes nodos para comenzar
       if (foundNodes >= 4) {
-        nodesRef.current = nodeElements;
-        console.log('✅ Nodos establecidos en ref');
-
-        // Posicionar runner inicial
-        const firstNodeId = flowPath[0];
-        const firstNode = nodeElements[firstNodeId];
-        if (firstNode) {
-          const position = getNodePosition(firstNode);
-
-          console.log(`🎯 Posicionando runner en: x=${position.x}, y=${position.y}`);
-
-          // Posicionar runner inicial
-          const runnerElement = document.getElementById('runner');
-          if (runnerElement) {
-            // Batch de writes para evitar reflows múltiples
-            Object.assign(runnerElement.style, {
-              background: '',
-              left: `${position.x}px`,
-              top: `${position.y}px`,
-              opacity: '1',
-              visibility: 'visible',
-            });
-            runnerElement.style.setProperty('--rotation', '0rad');
-
-            console.log('🤖 Runner posicionado y visible');
-
-            isInitializedRef.current = true;
-            console.log('🎯 isInitialized establecido a true');
-
-            // Presionar primer nodo y empezar el recorrido
-            setTimeout(() => {
-              console.log('🎬 Iniciando secuencia de movimiento...');
-
-              const nodeForPress = nodeElements[firstNodeId];
-              if (nodeForPress) {
-                nodeForPress.classList.add("pressed");
-                setTimeout(() => {
-                  nodeForPress.classList.remove("pressed");
-                  console.log('👆 Primer nodo presionado');
-
-                  setTimeout(() => {
-                    console.log('🚀 Iniciando recorrido...');
-                    startRunnerWithNodes(nodeElements, 0);
-                  }, 500);
-                }, performanceLevelRef.current === 'low' ? 200 : 300);
-              }
-            }, 1000);
-          } else {
-            console.log('❌ No se encontró el elemento runner');
-          }
-        }
-      } else {
-        console.log('⏳ Reintentando encontrar nodos...');
-        // Reintentar si no hay suficientes nodos
-        setTimeout(initializeRunner, 500);
+        positionAndStart(nodeElements);
+      } else if (retries < MAX_RETRIES) {
+        retries += 1;
+        rafId = requestAnimationFrame(initializeRunner);
       }
     };
 
-    // Inicializar después de que el componente esté montado
-    setTimeout(() => {
-      console.log('🚀 Iniciando AnimatedRunner...');
-      initializeRunner();
-    }, 2000); // Aumenté el delay para asegurar que todo esté cargado
+    // Arrancar en el siguiente frame para que el DOM del flujo ya esté maquetado.
+    rafId = requestAnimationFrame(initializeRunner);
 
     // Manejar resize con debounce
     const handleResize = debounce(() => {
@@ -150,7 +127,10 @@ const AnimatedRunner = () => {
     }, 250);
 
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   // Rotación usando transform directamente
@@ -284,19 +264,16 @@ const AnimatedRunner = () => {
 
   // Iniciar el runner con nodos específicos
   const startRunnerWithNodes = (localNodes, fromIndex = 0) => {
-    console.log(`🎯 startRunnerWithNodes llamado con índice: ${fromIndex}`);
     moveToNextNodeWithNodes(localNodes, fromIndex);
   };
 
   // Función de movimiento principal
   const moveToNextNodeWithNodes = async (localNodes, fromIndex = currentIndexRef.current) => {
     if (isAnimatingRef.current) {
-      console.log('⏸️ Movimiento bloqueado - isAnimating:', isAnimatingRef.current);
       return;
     }
 
     isAnimatingRef.current = true;
-    console.log('🎬 Iniciando nuevo movimiento...');
 
     const toIndex = (fromIndex + 1) % flowPath.length;
     const fromNodeId = flowPath[fromIndex];
@@ -305,10 +282,7 @@ const AnimatedRunner = () => {
     const fromNode = localNodes[fromNodeId];
     const toNode = localNodes[toNodeId];
 
-    console.log(`🚀 Moviendo de "${fromNodeId}" (índice ${fromIndex}) a "${toNodeId}" (índice ${toIndex})`);
-
     if (!fromNode || !toNode) {
-      console.log('❌ Nodo no encontrado:', { fromNode: !!fromNode, toNode: !!toNode });
       isAnimatingRef.current = false;
       setTimeout(() => startRunnerWithNodes(localNodes, fromIndex), 1000);
       return;
@@ -317,10 +291,7 @@ const AnimatedRunner = () => {
     const fromPos = getNodePosition(fromNode);
     const toPos = getNodePosition(toNode);
 
-    console.log(`📏 Posiciones: desde (${fromPos.x}, ${fromPos.y}) hasta (${toPos.x}, ${toPos.y})`);
-
     if (fromPos.x === 0 && fromPos.y === 0 && toPos.x === 0 && toPos.y === 0) {
-      console.log('❌ Posiciones inválidas, saltando movimiento');
       isAnimatingRef.current = false;
       setTimeout(() => startRunnerWithNodes(localNodes, fromIndex), 1000);
       return;
@@ -332,14 +303,12 @@ const AnimatedRunner = () => {
     let trail = null;
     if (performanceLevelRef.current !== 'low') {
       const angle = calculateAngle(fromNode, toNode);
-      console.log(`🔄 Rotando runner con ángulo: ${angle}`);
       await rotateRunner(angle, performanceLevelRef.current === 'medium' ? 100 : 200);
       trail = createMovementTrail(fromPos, toPos, angle);
     }
 
     if (runnerElement) {
       runnerElement.classList.add('moving');
-      console.log('💨 Estado "moving" activado');
     }
 
     // Duración adaptativa
@@ -348,18 +317,13 @@ const AnimatedRunner = () => {
       performanceLevelRef.current === 'medium' ? Math.min(400, distance * 0.8) :
         Math.min(800, distance * 1.2);
 
-    console.log(`⚡ Movimiento: distancia=${distance.toFixed(2)}px, duración=${duration}ms`);
-
     await moveRunner(fromPos, toPos, duration);
-    console.log('✅ Movimiento completado');
 
     if (runnerElement) {
       runnerElement.classList.remove('moving');
-      console.log('🛑 Estado "moving" desactivado');
     }
 
     if (performanceLevelRef.current !== 'low') {
-      console.log('🔄 Volviendo a rotación original...');
       await rotateRunner(0, 200);
     }
 
@@ -377,18 +341,13 @@ const AnimatedRunner = () => {
       }, 200);
     }
 
-    console.log(`👆 Presionando nodo destino: ${toNodeId}`);
     await pressNodeLocal(toNodeId, localNodes);
 
     currentIndexRef.current = toIndex;
     isAnimatingRef.current = false;
 
-    console.log(`✅ Movimiento completado. Nuevo índice: ${toIndex}`);
-
     const pauseDuration = performanceLevelRef.current === 'low' ? 300 :
       performanceLevelRef.current === 'medium' ? 500 : 800;
-
-    console.log(`⏱️ Pausa de ${pauseDuration}ms antes del siguiente movimiento`);
 
     setTimeout(() => startRunnerWithNodes(localNodes, toIndex), pauseDuration);
   };
@@ -398,7 +357,6 @@ const AnimatedRunner = () => {
     const node = localNodes[nodeId];
     if (!node) return;
 
-    console.log(`👆 Presionando nodo: ${nodeId}`);
     node.classList.add("pressed");
     await new Promise(resolve =>
       setTimeout(resolve, performanceLevelRef.current === 'low' ? 200 : 300)

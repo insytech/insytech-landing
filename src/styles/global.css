@@ -314,7 +314,12 @@ body {
 
 .floating-node {
   @apply absolute min-w-[50px] p-2 rounded-xl bg-white dark:bg-white/8 border border-purple-400/20 dark:border-purple-400/20;
-  animation: float 6s ease-in-out infinite;
+  /* No `float` bob here: it made these nodes a moving target for the runner bot.
+     The bot samples each node's center (getBoundingClientRect, cached ~1s) and
+     parks there, but a bobbing node drifts away — and `.pressed`'s scale transform
+     also drops the float offset — so the pressed glow lit up offset from the bot,
+     reading as a "self-press". Keeping them static guarantees the pressed state
+     only appears where the bot actually arrives. */
 }
 
 .floating-node .node-icon {
