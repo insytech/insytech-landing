@@ -38,7 +38,7 @@ Se puede comprar un sistema de visión a un proveedor remoto o importarlo llave 
 
 **El mismo idioma, el mismo contexto.** Un proveedor que conoce la dinámica de los parques industriales de Nuevo León —los turnos, la rotación, los requisitos de los OEM de la región— diseña soluciones que operadores y técnicos locales pueden adoptar y mantener.
 
-En Insytech trabajamos exactamente en esa intersección: somos un equipo de ingeniería con base en Monterrey que desarrolla sistemas de [visión artificial con inteligencia artificial](/vision) e integra el resultado con el control y la trazabilidad de la planta. Si estás evaluando tu primer proyecto y quieres entender el proceso completo, nuestra [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia) explica cada etapa, del diagnóstico a producción.
+En Insytech trabajamos exactamente en esa intersección: somos un equipo de ingeniería con base en Monterrey que desarrolla sistemas de [visión artificial con inteligencia artificial](/vision) e integra el resultado con el control y la trazabilidad de la planta. Si estás evaluando tu primer proyecto y quieres entender el proceso completo, nuestra [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia) explica cada etapa, del diagnóstico a producción; y si te frena la idea de que es una tecnología cara, comparamos su costo con el de los [sistemas de visión convencionales](/blog/vision-artificial-vs-sistemas-convencionales).
 
 ## Empieza con un diagnóstico en tu propia planta
 
