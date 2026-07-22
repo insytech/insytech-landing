@@ -54,7 +54,7 @@ En pocas palabras: donde el enfoque convencional te cobra cada cambio, el enfoqu
 
 ## ¿Cuánto cuesta, entonces? Un punto de referencia
 
-Las cifras varían según el alcance —número de puntos de inspección, complejidad del defecto, velocidad de línea e integración—, pero ayuda tener un orden de magnitud. Un sistema de visión convencional importado suele **partir de alrededor de un millón de pesos** (del orden de 50,000 dólares). Frente a esa cifra, una solución basada en inteligencia artificial como la nuestra puede **arrancar desde unos 250,000 pesos**: aproximadamente **una cuarta parte** del costo de entrada de un sistema convencional.
+Las cifras varían según el alcance —número de puntos de inspección, complejidad del defecto, velocidad de línea e integración—, pero ayuda tener un orden de magnitud. Un sistema de visión convencional suele **partir de alrededor de un millón de pesos**. Frente a esa cifra, una solución basada en inteligencia artificial como la nuestra puede **arrancar desde unos 250,000 pesos**: aproximadamente **una cuarta parte** del costo de entrada de un sistema convencional.
 
 Y aquí vuelve a pesar la diferencia de fondo: gracias a las revisiones del entrenamiento, esa inversión se revaloriza con el tiempo en lugar de depreciarse con cada cambio. Son cifras de referencia, no una cotización —el costo real depende de tu caso—, pero ilustran el punto: lo que encarece la visión artificial no es la tecnología, es el enfoque convencional que la rodea.
 
