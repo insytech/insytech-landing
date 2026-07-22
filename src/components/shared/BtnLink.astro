@@ -10,7 +10,7 @@ const { href, text, className, variant } = Astro.props;
 
 const getThemeStyle = (variant: "primary" | "secondary") => {
     if (variant === "primary") {
-        return "bg-primary border-transparent relative after:bg-[#172554] hover:border-[#172554]";
+        return "bg-[#005EB8] border-transparent relative after:bg-[#172554] hover:border-[#172554]";
     }
     return "text-primary";
 };
@@ -19,6 +19,7 @@ const getTextColor = (variant: "primary" | "secondary") => {
     if (variant === "primary") {
         return "text-white";
     }
+    // text-primary = var(--primary): oficial Blue #005EB8 (light) / Light Blue #00B5E2 (dark).
     return "text-primary";
 };
 ---
