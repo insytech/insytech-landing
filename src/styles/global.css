@@ -557,3 +557,79 @@ body {
 @utility bg-noise {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
+
+/* ─── Reveal-on-scroll & hero intro animations (single source of truth) ──────
+   Hidden state is gated by `html.js`, set by an inline head script BEFORE first
+   paint, so content is never stuck invisible if JS fails or is disabled, and
+   the GSAP hero never flashes visible → hidden. Previously duplicated across
+   Layout / VisionLayout and missing in AutomatizacionLayout. */
+
+html.js [data-animate] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+[data-animate].in {
+  animation-duration: var(--dur, 0.7s);
+  animation-timing-function: var(--easing, cubic-bezier(0.2, 0.6, 0.2, 1));
+  animation-fill-mode: both;
+  animation-delay: var(--delay, 0s);
+}
+[data-animate="fade"].in { animation-name: fadeIn; }
+[data-animate="fade-up"].in { animation-name: fadeInUp; }
+[data-animate="slide-left"].in { animation-name: slideInLeft; }
+[data-animate="slide-right"].in { animation-name: slideInRight; }
+[data-animate="scale"].in { animation-name: scaleIn; }
+
+.float-slow { animation: floatSoft 6s ease-in-out infinite; }
+
+/* Home hero animates with GSAP (JS). Hide it via render-blocking CSS first so it
+   does not paint visible for a frame before GSAP sets autoAlpha:0. */
+html.js .hero-title,
+html.js .hero-description,
+html.js .hero-cta {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes floatSoft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Reduced motion: force everything visible and static (also covers the case
+   where GSAP would otherwise leave the hero hidden). */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate],
+  [data-animate].in {
+    opacity: 1 !important;
+    animation: none !important;
+    transform: none !important;
+  }
+  .float-slow { animation: none !important; }
+  html.js .hero-title,
+  html.js .hero-description,
+  html.js .hero-cta {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
