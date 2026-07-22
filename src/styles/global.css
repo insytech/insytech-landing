@@ -57,6 +57,13 @@
 }
 
 :root {
+  /* ═══ FUENTE DE TÍTULOS — PUNTO ÚNICO DE CAMBIO ═══
+     Todos los títulos (h1/h2/h3) y elementos con la clase `font-heading` usan
+     esta variable. Para revertir TODO el sitio a Raleway, cambia SOLO esta línea a:
+       --font-heading: "Raleway", sans-serif;
+  */
+  --font-heading: "FieldworkGeo", "Raleway", sans-serif;
+
   --color-bg: 255 255 255;
   --color-box: 255 255 255;
   --box-border: 229 231 235;
@@ -147,6 +154,16 @@ body {
   background-color: rgb(var(--color-bg));
   font-family: "FieldworkGeo", "Raleway", sans-serif;
   overflow-x: hidden;
+}
+
+/* Todos los títulos usan la fuente switchable (ver --font-heading arriba).
+   Los títulos del home no tienen clase explícita, así que esta regla los alinea
+   también. La clase `.font-heading` cubre spans/logos que no son h1/h2/h3. */
+h1,
+h2,
+h3,
+.font-heading {
+  font-family: var(--font-heading);
 }
 
 /* Accessibility — respect users who request reduced motion (WCAG 2.3.3) */
