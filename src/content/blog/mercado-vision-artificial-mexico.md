@@ -1,10 +1,10 @@
 ---
-title: "El mercado de sistemas de visión artificial en México: qué debes saber antes de invertir"
-description: "Qué impulsa el mercado de sistemas de visión artificial en México, qué sectores la están adoptando y con qué criterios evaluar antes de invertir."
-pubDate: 2026-07-16
+title: "Mercado de visión artificial en México 2026: qué saber antes de invertir"
+description: "Panorama 2026 del mercado de visión artificial en México: qué lo impulsa, qué sectores lo adoptan, casos de uso y cómo elegir proveedor antes de invertir."
+pubDate: 2026-07-24
 ---
 
-El mercado de sistemas de visión artificial en México ha pasado de ser una curiosidad tecnológica a convertirse en una inversión estratégica para plantas de manufactura de todos los tamaños. Cada vez más gerentes de calidad, ingeniería y operaciones evalúan proyectos de inspección visual automatizada, y con razón: la combinación de nearshoring, exigencias de calidad más estrictas y escasez de personal capacitado ha creado las condiciones perfectas para su adopción. Antes de firmar una orden de compra, sin embargo, conviene entender cómo está compuesto este mercado, qué tipos de soluciones existen y qué criterios separan una buena inversión de un proyecto abandonado.
+El mercado de visión artificial en México —o de sistemas de visión artificial, como también se le conoce— ha pasado de ser una curiosidad tecnológica a convertirse en una inversión estratégica para plantas de manufactura de todos los tamaños. Cada vez más gerentes de calidad, ingeniería y operaciones evalúan proyectos de inspección visual automatizada, y con razón: la combinación de nearshoring, exigencias de calidad más estrictas y escasez de personal capacitado ha creado las condiciones perfectas para su adopción. Antes de firmar una orden de compra, sin embargo, conviene entender cómo está compuesto este mercado, qué tipos de soluciones existen y qué criterios separan una buena inversión de un proyecto abandonado.
 
 ## ¿Qué está impulsando el mercado de sistemas de visión artificial en México?
 
@@ -36,7 +36,7 @@ No todos los sistemas de visión son iguales, y elegir la categoría equivocada 
 
 **Sistemas de visión tradicionales basados en reglas.** Configurados con herramientas de medición, conteo y comparación de patrones. Funcionan bien cuando la pieza y la iluminación son muy estables, pero se vuelven frágiles ante variaciones naturales del proceso.
 
-**Sistemas de visión con inteligencia artificial.** Modelos de deep learning entrenados con imágenes reales de tu producción, capaces de distinguir defectos reales de variaciones aceptables. Son la opción adecuada para defectos superficiales complejos, productos con apariencia variable o criterios de calidad que hoy dependen del juicio de un inspector experimentado. En Insytech nos especializamos en esta categoría: puedes conocer el enfoque completo en nuestra página de [visión artificial para empresas](/vision).
+**Sistemas de visión con inteligencia artificial.** Modelos de deep learning entrenados con imágenes reales de tu producción, capaces de distinguir defectos reales de variaciones aceptables. Son la opción adecuada para defectos superficiales complejos, productos con apariencia variable o criterios de calidad que hoy dependen del juicio de un inspector experimentado. En Insytech, una empresa de ingeniería con base en Monterrey, nos especializamos en esta categoría, con una plataforma donde tu propio equipo genera revisiones del entrenamiento que mejoran la precisión del modelo en cada iteración: en lugar de recontratar un proyecto cada vez que cambia un producto, alimentas los casos nuevos y el sistema se pone al día. Puedes conocer el enfoque completo en nuestra página de [visión artificial para empresas](/vision).
 
 **Integración con el sistema de control.** Cualquiera de las anteriores vale poco si opera aislada. Un sistema bien implementado se comunica con el PLC de la línea para rechazar piezas automáticamente, genera alertas y registra imágenes para trazabilidad. Si tu planta ya cuenta con arquitectura de [PLC y SCADA](/control), la visión debe integrarse a ella, no vivir en una isla.
 
@@ -53,6 +53,8 @@ Estos criterios te ayudarán a comparar propuestas con una base común:
 ## ¿Cuánto cuesta entrar? Rangos de decisión realistas
 
 Más útil que una cifra —que depende de cámaras, óptica, iluminación, cómputo e integración— es entender los órdenes de decisión. Una aplicación puntual con un sensor inteligente representa una inversión menor y un retorno rápido si el problema es simple. Un sistema de inspección con IA para defectos complejos, integrado al PLC y con registro para trazabilidad, es un proyecto de mayor alcance que típicamente se justifica contra el costo anual de inspectores, retrabajos, scrap y reclamaciones de cliente. La pregunta correcta no es "¿cuánto cuesta el sistema?" sino "¿cuánto me cuesta hoy el defecto que quiero eliminar?". Cuando ese número está claro, la decisión suele ser evidente.
+
+Aquí también pesa el enfoque tecnológico. Un sistema de visión con inteligencia artificial puede partir desde alrededor de una cuarta parte del costo de entrada de un sistema convencional y, a diferencia de este, se revaloriza con el tiempo en lugar de depreciarse con cada cambio de producto, porque el modelo acumula aprendizaje de tu proceso. Desglosamos esa comparación con cifras de referencia en [¿es cara la visión artificial?](/blog/vision-artificial-vs-sistemas-convencionales), donde contrastamos la inversión de un enfoque con IA frente a la de los sistemas convencionales.
 
 Si estás construyendo el caso de negocio de tu primer proyecto, nuestra [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia) detalla el camino de diagnóstico a producción paso a paso.
 
