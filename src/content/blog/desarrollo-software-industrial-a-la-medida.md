@@ -4,7 +4,7 @@ description: "Guía de desarrollo de software a la medida para la industria en M
 pubDate: 2026-07-20
 ---
 
-Muchas plantas en México llegan al mismo punto: el ERP no cubre un proceso crítico, el sistema comercial no habla con las máquinas, y el "sistema" que coordina la operación es una hoja de Excel que solo entiende una persona. Ahí es donde el [desarrollo de software a la medida](/software) deja de ser un lujo y se vuelve la vía más corta para conectar el piso de planta con la administración. Esta guía explica, sin humo, cuándo conviene construir en lugar de comprar, qué software industrial se desarrolla con más frecuencia, cómo se integra con PLCs, MES y ERP y cómo medir el retorno.
+Muchas plantas en México llegan al mismo punto: el ERP no cubre un proceso crítico, el sistema comercial no habla con las máquinas, y el "sistema" que coordina la operación es una hoja de Excel que solo entiende una persona. Ahí es donde el [desarrollo de software a la medida](/software/) deja de ser un lujo y se vuelve la vía más corta para conectar el piso de planta con la administración. Esta guía explica, sin humo, cuándo conviene construir en lugar de comprar, qué software industrial se desarrolla con más frecuencia, cómo se integra con PLCs, MES y ERP y cómo medir el retorno.
 
 ## ¿Cuándo conviene el desarrollo de software a la medida en vez de un producto comercial?
 
@@ -21,7 +21,7 @@ Y es igual de importante saber cuándo **no** conviene: si un ERP o un software 
 
 El software industrial a la medida no es un solo producto, sino una familia de soluciones en torno a la trazabilidad y la captura de datos en piso. Los casos más comunes:
 
-- **Sistemas de trazabilidad y genealogía de producto:** cada pieza, lote o serie con su historia completa, base de cualquier proyecto de [trazabilidad y MES](/tracking).
+- **Sistemas de trazabilidad y genealogía de producto:** cada pieza, lote o serie con su historia completa, base de cualquier proyecto de [trazabilidad y MES](/tracking/).
 - **Captura de datos en piso (paperless):** órdenes de trabajo, checklists y registros de calidad en tablet en vez de papel.
 - **Software para manufactura conectado a máquinas:** conteo, tiempos de ciclo, paros, alarmas y tableros de OEE en tiempo real, leídos directo del equipo.
 - **Portales e integraciones a la medida:** puentes entre tu ERP, clientes o proveedores que hoy no existen como producto.
@@ -30,11 +30,11 @@ El software industrial a la medida no es un solo producto, sino una familia de s
 
 Aquí un proyecto se gana o se pierde. La integración de sistemas MES ERP no es "conectar todo con todo", sino definir quién es la fuente de verdad de cada dato y por dónde fluye. En la práctica trabajamos en tres capas:
 
-- **Piso de planta (PLC y máquinas):** las señales se leen con protocolos como OPC-UA o Modbus, de la mano de la [automatización y control](/control) para no interferir con la lógica de seguridad.
+- **Piso de planta (PLC y máquinas):** las señales se leen con protocolos como OPC-UA o Modbus, de la mano de la [automatización y control](/control/) para no interferir con la lógica de seguridad.
 - **Ejecución (MES):** el software a la medida ordena, registra y valida la operación; es la capa donde viven la trazabilidad y el control de calidad.
 - **Administración (ERP):** las órdenes, inventarios y consumos se intercambian con APIs REST o vistas de base de datos, sin que nadie recapture a mano.
 
-El principio es simple: un dato se captura una sola vez, en el punto donde ocurre, y de ahí viaja. Cuando en la línea hay [visión artificial](/vision) o modelos de [inteligencia artificial](/ai), el software a la medida suele ser el pegamento que registra sus resultados y los pone al alcance del resto de la planta.
+El principio es simple: un dato se captura una sola vez, en el punto donde ocurre, y de ahí viaja. Cuando en la línea hay [visión artificial](/vision/) o modelos de [inteligencia artificial](/ai/), el software a la medida suele ser el pegamento que registra sus resultados y los pone al alcance del resto de la planta.
 
 ## ¿Cómo es un proyecto típico, del diagnóstico a producción?
 
@@ -67,8 +67,8 @@ Compara ese ahorro anual contra la inversión total —desarrollo, integración 
 - **No definir un dueño interno.** Sin un responsable en planta que gestione requerimientos, el proyecto se estanca.
 - **Ignorar respaldos y continuidad.** Un sistema que coordina la operación necesita respaldo, monitoreo y un plan si algo falla.
 
-Si vas a elegir con quién construirlo, revisa nuestras [10 preguntas para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente); y si tu caso incluye inspección visual, aplica el mismo enfoque por etapas de la [guía de computer vision para empresas](/blog/computer-vision-empresas-guia).
+Si vas a elegir con quién construirlo, revisa nuestras [10 preguntas para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente/); y si tu caso incluye inspección visual, aplica el mismo enfoque por etapas de la [guía de computer vision para empresas](/blog/computer-vision-empresas-guia/).
 
 ## Tu primer proyecto empieza con un diagnóstico honesto
 
-Si tienes un proceso que vive en Excel, sistemas que no se hablan o un ERP que se queda corto en piso, el siguiente paso no es escribir código: es mapear el proceso y definir el alcance mínimo que entregue valor pronto. En Insytech hacemos ese diagnóstico y te damos una recomendación franca sobre [desarrollo de software a la medida](/software), incluso cuando lo más sensato es comprar. [Contáctanos](/contact) y platiquemos de tu proyecto.
+Si tienes un proceso que vive en Excel, sistemas que no se hablan o un ERP que se queda corto en piso, el siguiente paso no es escribir código: es mapear el proceso y definir el alcance mínimo que entregue valor pronto. En Insytech hacemos ese diagnóstico y te damos una recomendación franca sobre [desarrollo de software a la medida](/software/), incluso cuando lo más sensato es comprar. [Contáctanos](/contact/) y platiquemos de tu proyecto.

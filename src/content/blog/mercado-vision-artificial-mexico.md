@@ -26,7 +26,7 @@ Aunque la tecnología es transversal, la adopción se concentra en industrias do
 - **Alimentos y bebidas:** integridad de empaques, niveles de llenado, etiquetado correcto y fechas de caducidad legibles.
 - **Electrodomésticos y línea blanca:** acabados cosméticos, ensamble completo y verificación de variantes de producto.
 
-Si tu operación está en el norte del país, vale la pena leer nuestro análisis de [visión artificial en Monterrey y la industria de Nuevo León](/blog/vision-artificial-monterrey), donde estos sectores tienen una concentración particularmente alta.
+Si tu operación está en el norte del país, vale la pena leer nuestro análisis de [visión artificial en Monterrey y la industria de Nuevo León](/blog/vision-artificial-monterrey/), donde estos sectores tienen una concentración particularmente alta.
 
 ## ¿Qué tipos de soluciones ofrece el mercado?
 
@@ -36,9 +36,9 @@ No todos los sistemas de visión son iguales, y elegir la categoría equivocada 
 
 **Sistemas de visión tradicionales basados en reglas.** Configurados con herramientas de medición, conteo y comparación de patrones. Funcionan bien cuando la pieza y la iluminación son muy estables, pero se vuelven frágiles ante variaciones naturales del proceso.
 
-**Sistemas de visión con inteligencia artificial.** Modelos de deep learning entrenados con imágenes reales de tu producción, capaces de distinguir defectos reales de variaciones aceptables. Son la opción adecuada para defectos superficiales complejos, productos con apariencia variable o criterios de calidad que hoy dependen del juicio de un inspector experimentado. En Insytech, una empresa de ingeniería con base en Monterrey, nos especializamos en esta categoría, con una plataforma donde tu propio equipo genera revisiones del entrenamiento que mejoran la precisión del modelo en cada iteración: en lugar de recontratar un proyecto cada vez que cambia un producto, alimentas los casos nuevos y el sistema se pone al día. Puedes conocer el enfoque completo en nuestra página de [visión artificial para empresas](/vision).
+**Sistemas de visión con inteligencia artificial.** Modelos de deep learning entrenados con imágenes reales de tu producción, capaces de distinguir defectos reales de variaciones aceptables. Son la opción adecuada para defectos superficiales complejos, productos con apariencia variable o criterios de calidad que hoy dependen del juicio de un inspector experimentado. En Insytech, una empresa de ingeniería con base en Monterrey, nos especializamos en esta categoría, con una plataforma donde tu propio equipo genera revisiones del entrenamiento que mejoran la precisión del modelo en cada iteración: en lugar de recontratar un proyecto cada vez que cambia un producto, alimentas los casos nuevos y el sistema se pone al día. Puedes conocer el enfoque completo en nuestra página de [visión artificial para empresas](/vision/).
 
-**Integración con el sistema de control.** Cualquiera de las anteriores vale poco si opera aislada. Un sistema bien implementado se comunica con el PLC de la línea para rechazar piezas automáticamente, genera alertas y registra imágenes para trazabilidad. Si tu planta ya cuenta con arquitectura de [PLC y SCADA](/control), la visión debe integrarse a ella, no vivir en una isla.
+**Integración con el sistema de control.** Cualquiera de las anteriores vale poco si opera aislada. Un sistema bien implementado se comunica con el PLC de la línea para rechazar piezas automáticamente, genera alertas y registra imágenes para trazabilidad. Si tu planta ya cuenta con arquitectura de [PLC y SCADA](/control/), la visión debe integrarse a ella, no vivir en una isla.
 
 ## ¿Cómo evaluar opciones antes de invertir?
 
@@ -46,7 +46,7 @@ Estos criterios te ayudarán a comparar propuestas con una base común:
 
 1. **Parte del problema, no de la tecnología.** Define qué defecto quieres detectar, en qué punto de la línea y qué pasa cuando se detecta. Una propuesta seria comienza con un diagnóstico de tu proceso, no con un catálogo de cámaras.
 2. **Pide un piloto con tus piezas reales.** Las demostraciones con muestras ideales no predicen el desempeño en producción. Un piloto con imágenes de tu línea, incluyendo los casos ambiguos, es la mejor evidencia disponible.
-3. **Evalúa la integración, no solo la detección.** Pregunta cómo se conectará el sistema con tus PLCs, cómo se registrarán los resultados y cómo se alimentará tu [sistema de trazabilidad o MES](/tracking).
+3. **Evalúa la integración, no solo la detección.** Pregunta cómo se conectará el sistema con tus PLCs, cómo se registrarán los resultados y cómo se alimentará tu [sistema de trazabilidad o MES](/tracking/).
 4. **Considera el costo total, no solo el precio inicial.** Licencias, reentrenamiento de modelos ante cambios de producto, soporte y refacciones cambian significativamente la ecuación a tres o cinco años.
 5. **Verifica quién dará soporte y desde dónde.** Un sistema de inspección detenido puede detener la línea completa. La cercanía física y los tiempos de respuesta comprometidos importan tanto como la tecnología.
 
@@ -54,10 +54,10 @@ Estos criterios te ayudarán a comparar propuestas con una base común:
 
 Más útil que una cifra —que depende de cámaras, óptica, iluminación, cómputo e integración— es entender los órdenes de decisión. Una aplicación puntual con un sensor inteligente representa una inversión menor y un retorno rápido si el problema es simple. Un sistema de inspección con IA para defectos complejos, integrado al PLC y con registro para trazabilidad, es un proyecto de mayor alcance que típicamente se justifica contra el costo anual de inspectores, retrabajos, scrap y reclamaciones de cliente. La pregunta correcta no es "¿cuánto cuesta el sistema?" sino "¿cuánto me cuesta hoy el defecto que quiero eliminar?". Cuando ese número está claro, la decisión suele ser evidente.
 
-Aquí también pesa el enfoque tecnológico. Un sistema de visión con inteligencia artificial puede partir desde alrededor de una cuarta parte del costo de entrada de un sistema convencional y, a diferencia de este, se revaloriza con el tiempo en lugar de depreciarse con cada cambio de producto, porque el modelo acumula aprendizaje de tu proceso. Desglosamos esa comparación con cifras de referencia en [¿es cara la visión artificial?](/blog/vision-artificial-vs-sistemas-convencionales), donde contrastamos la inversión de un enfoque con IA frente a la de los sistemas convencionales.
+Aquí también pesa el enfoque tecnológico. Un sistema de visión con inteligencia artificial puede partir desde alrededor de una cuarta parte del costo de entrada de un sistema convencional y, a diferencia de este, se revaloriza con el tiempo en lugar de depreciarse con cada cambio de producto, porque el modelo acumula aprendizaje de tu proceso. Desglosamos esa comparación con cifras de referencia en [¿es cara la visión artificial?](/blog/vision-artificial-vs-sistemas-convencionales/), donde contrastamos la inversión de un enfoque con IA frente a la de los sistemas convencionales.
 
-Si estás construyendo el caso de negocio de tu primer proyecto, nuestra [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia) detalla el camino de diagnóstico a producción paso a paso.
+Si estás construyendo el caso de negocio de tu primer proyecto, nuestra [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia/) detalla el camino de diagnóstico a producción paso a paso.
 
 ## Da el siguiente paso con información de tu propia línea
 
-La mejor manera de evaluar el mercado de sistemas de visión artificial en México es aterrizarlo a tu caso: tus piezas, tus defectos, tu línea. En Insytech realizamos ese diagnóstico desde Monterrey para plantas en todo el país, con integración directa a sistemas de control y trazabilidad. [Contáctanos](/contact) y platiquemos sobre el problema de inspección que quieres resolver.
+La mejor manera de evaluar el mercado de sistemas de visión artificial en México es aterrizarlo a tu caso: tus piezas, tus defectos, tu línea. En Insytech realizamos ese diagnóstico desde Monterrey para plantas en todo el país, con integración directa a sistemas de control y trazabilidad. [Contáctanos](/contact/) y platiquemos sobre el problema de inspección que quieres resolver.

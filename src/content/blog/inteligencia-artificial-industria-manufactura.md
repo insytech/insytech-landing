@@ -8,19 +8,19 @@ La inteligencia artificial en la industria pasó de ser una promesa de conferenc
 
 ## ¿Qué significa aplicar inteligencia artificial en la industria hoy?
 
-Aplicar [inteligencia artificial industrial](/ai) hoy significa usar modelos que aprenden patrones a partir de tus datos —imágenes, señales de sensores, registros de producción— para tomar o apoyar una decisión que antes dependía de un criterio humano o de reglas fijas. No es un sistema que "entiende" tu planta: es un modelo estadístico entrenado para una tarea específica, como detectar un defecto, anticipar una falla o estimar una demanda.
+Aplicar [inteligencia artificial industrial](/ai/) hoy significa usar modelos que aprenden patrones a partir de tus datos —imágenes, señales de sensores, registros de producción— para tomar o apoyar una decisión que antes dependía de un criterio humano o de reglas fijas. No es un sistema que "entiende" tu planta: es un modelo estadístico entrenado para una tarea específica, como detectar un defecto, anticipar una falla o estimar una demanda.
 
-La distinción importante es entre IA y automatización tradicional. Un PLC que apaga un motor cuando la temperatura pasa un umbral es [automatización y control](/control), no IA, y funciona perfecto para eso. La IA aporta valor cuando el problema tiene demasiada variabilidad para escribirlo como reglas: miles de variantes de un defecto visual, o la interacción de veinte sensores que ningún umbral simple captura. Si tu problema se resuelve con una regla clara, esa regla es la respuesta correcta y más confiable.
+La distinción importante es entre IA y automatización tradicional. Un PLC que apaga un motor cuando la temperatura pasa un umbral es [automatización y control](/control/), no IA, y funciona perfecto para eso. La IA aporta valor cuando el problema tiene demasiada variabilidad para escribirlo como reglas: miles de variantes de un defecto visual, o la interacción de veinte sensores que ningún umbral simple captura. Si tu problema se resuelve con una regla clara, esa regla es la respuesta correcta y más confiable.
 
 ## ¿Qué casos reales de IA dan retorno en manufactura?
 
 Estos son los casos donde la IA aplicada a procesos ha demostrado retorno concreto en operación:
 
-- **Control de calidad con visión:** el caso estrella de la IA aplicada. Modelos de deep learning que detectan defectos superficiales, verifican ensambles o leen caracteres a velocidad de línea. Es el terreno más maduro; lo cubrimos a fondo en nuestra plataforma de [visión artificial](/vision) y en la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia).
+- **Control de calidad con visión:** el caso estrella de la IA aplicada. Modelos de deep learning que detectan defectos superficiales, verifican ensambles o leen caracteres a velocidad de línea. Es el terreno más maduro; lo cubrimos a fondo en nuestra plataforma de [visión artificial](/vision/) y en la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia/).
 - **Mantenimiento predictivo con IA:** modelos entrenados con series de tiempo de vibración, temperatura o consumo eléctrico que anticipan la falla de un equipo antes de que ocurra. El retorno viene de evitar paros no planeados, no de "predecir el futuro": necesita histórico de fallas reales para aprender a reconocer sus señales tempranas.
 - **Optimización de procesos:** ajuste de parámetros (temperaturas, velocidades, dosificaciones) a partir de datos históricos para reducir scrap o consumo energético. Suele empezar como recomendación al operador.
 - **Pronóstico de demanda:** modelos de series de tiempo que estiman la demanda futura por producto para mejorar planeación e inventario. El valor aparece cuando esos pronósticos alimentan decisiones reales de compra o producción, no un reporte que nadie usa.
-- **Trazabilidad inteligente:** clasificación y agrupación automática de eventos de producción que enriquecen el [sistema MES o de trazabilidad](/tracking) y convierten datos crudos en indicadores accionables.
+- **Trazabilidad inteligente:** clasificación y agrupación automática de eventos de producción que enriquecen el [sistema MES o de trazabilidad](/tracking/) y convierten datos crudos en indicadores accionables.
 
 El patrón común: cada caso ataca un costo que tu planta ya conoce y mide. Si no puedes nombrar el número que la IA va a mover, probablemente no es el proyecto correcto para empezar.
 
@@ -32,7 +32,7 @@ Esta es la pregunta que separa proyectos viables de deseos. La IA aprende de dat
 - **Etiquetas o contexto.** Un modelo de calidad necesita saber qué imágenes son "buenas" y cuáles "malas"; uno de mantenimiento necesita saber cuándo ocurrió cada falla. Ese etiquetado suele ser el cuello de botella del proyecto.
 - **Volumen razonable, no infinito.** Para defectos visuales simples, decenas o pocos cientos de imágenes bien elegidas pueden bastar para un piloto. Para señales de sensores, importa más tener varios ciclos de falla que millones de lecturas de operación normal.
 
-Si hoy no registras estos datos, el primer proyecto quizá no sea un modelo de IA, sino instrumentar el proceso para empezar a capturarlos. Ese paso previo se apoya bien en [software a la medida](/software) que estructure la recolección desde el inicio.
+Si hoy no registras estos datos, el primer proyecto quizá no sea un modelo de IA, sino instrumentar el proceso para empezar a capturarlos. Ese paso previo se apoya bien en [software a la medida](/software/) que estructure la recolección desde el inicio.
 
 ## ¿Cómo empezar sin un gran presupuesto?
 
@@ -42,11 +42,11 @@ La idea de que la IA industrial requiere un presupuesto de corporativo es uno de
 2. **Haz un piloto acotado.** Un piloto con datos reales y alcance limitado prueba la factibilidad con una fracción de la inversión total. Herramientas maduras y abiertas (Python, PyTorch o TensorFlow, y cómputo en el borde como NVIDIA Jetson cuando se necesita inferencia junto a la línea) reducen mucho el costo de entrada.
 3. **Reutiliza lo que ya existe.** Muchos casos parten de modelos preentrenados que solo se afinan con tus datos, en lugar de entrenar desde cero. Eso recorta tiempo y presupuesto de forma dramática.
 
-Cada etapa genera evidencia antes de comprometer la siguiente. Para dimensionar rangos de inversión del lado de la visión, nuestro análisis del [mercado de sistemas de visión artificial en México](/blog/mercado-vision-artificial-mexico) es un buen complemento.
+Cada etapa genera evidencia antes de comprometer la siguiente. Para dimensionar rangos de inversión del lado de la visión, nuestro análisis del [mercado de sistemas de visión artificial en México](/blog/mercado-vision-artificial-mexico/) es un buen complemento.
 
 ## ¿Qué mitos y errores debo evitar?
 
-Los tropiezos más frecuentes al adoptar [inteligencia artificial industrial](/ai) casi nunca son técnicos, son de expectativa:
+Los tropiezos más frecuentes al adoptar [inteligencia artificial industrial](/ai/) casi nunca son técnicos, son de expectativa:
 
 - **Creer que la IA se optimiza sola.** Un modelo se degrada cuando el proceso cambia; necesita monitoreo y reentrenamiento. No es un equipo que se instala y se olvida.
 - **Usar IA donde sobra una regla.** Si el problema es determinista, el machine learning industrial añade costo y opacidad sin beneficio. A veces la mejor "IA" es un buen sensor y una condición lógica.
@@ -56,4 +56,4 @@ Los tropiezos más frecuentes al adoptar [inteligencia artificial industrial](/a
 
 ## Empieza por el problema, no por la tecnología
 
-El mejor proyecto de IA no arranca eligiendo un modelo, sino nombrando con precisión el problema y el costo que quieres reducir. En Insytech hacemos ese diagnóstico contigo y te decimos con franqueza cuándo la IA es la respuesta y cuándo basta con automatización o una buena regla. [Contáctanos](/contact) y platiquemos qué problema de tu planta vale la pena resolver primero.
+El mejor proyecto de IA no arranca eligiendo un modelo, sino nombrando con precisión el problema y el costo que quieres reducir. En Insytech hacemos ese diagnóstico contigo y te decimos con franqueza cuándo la IA es la respuesta y cuándo basta con automatización o una buena regla. [Contáctanos](/contact/) y platiquemos qué problema de tu planta vale la pena resolver primero.

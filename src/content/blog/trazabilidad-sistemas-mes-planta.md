@@ -22,18 +22,18 @@ Un **sistema MES** (Manufacturing Execution System) es el software que opera ent
 - El **ERP** responde "qué debemos producir y cuánto costó".
 - El **MES** responde "qué está pasando en la línea en este momento".
 
-La confusión sale cara: forzar al ERP a hacer monitoreo de producción en tiempo real termina en hojas de cálculo paralelas y captura a mano horas después. Un MES bien integrado toma el dato en el origen y lo devuelve al operador —instrucciones, alertas— y al ERP —consumos, avances—. Ese puente casi siempre requiere [software a la medida](/software) que hable el idioma de tus máquinas y de tu ERP.
+La confusión sale cara: forzar al ERP a hacer monitoreo de producción en tiempo real termina en hojas de cálculo paralelas y captura a mano horas después. Un MES bien integrado toma el dato en el origen y lo devuelve al operador —instrucciones, alertas— y al ERP —consumos, avances—. Ese puente casi siempre requiere [software a la medida](/software/) que hable el idioma de tus máquinas y de tu ERP.
 
 ## ¿Cómo se captura el dato en piso (códigos, DataMatrix, OCR, sensores)?
 
-Una plataforma de [trazabilidad y sistemas MES](/tracking) vale lo que vale su captura: si el dato entra tarde, incompleto o a mano, todo lo demás es decoración. Las fuentes reales:
+Una plataforma de [trazabilidad y sistemas MES](/tracking/) vale lo que vale su captura: si el dato entra tarde, incompleto o a mano, todo lo demás es decoración. Las fuentes reales:
 
-- **Identificación de la pieza:** código de barras 1D para casos simples y **DataMatrix** cuando el espacio de marcado es mínimo o la pieza es metálica (marcado láser DPM). La lectura confiable de esos códigos, y el **OCR** de números de serie, es un problema de [visión artificial](/vision) más que de software de gestión.
-- **Captura desde la máquina:** el dato más confiable no lo teclea nadie; lo entrega el equipo. La integración con el [PLC de la línea](/control) vía OPC-UA, EtherNet/IP o Modbus TCP registra ciclos, paros, parámetros y conteos sin que nadie teclee.
+- **Identificación de la pieza:** código de barras 1D para casos simples y **DataMatrix** cuando el espacio de marcado es mínimo o la pieza es metálica (marcado láser DPM). La lectura confiable de esos códigos, y el **OCR** de números de serie, es un problema de [visión artificial](/vision/) más que de software de gestión.
+- **Captura desde la máquina:** el dato más confiable no lo teclea nadie; lo entrega el equipo. La integración con el [PLC de la línea](/control/) vía OPC-UA, EtherNet/IP o Modbus TCP registra ciclos, paros, parámetros y conteos sin que nadie teclee.
 - **Sensores y básculas:** temperatura, torque, peso y presencia que verifican la operación dentro de especificación.
 - **Captura asistida al operador:** pantallas en estación para lo que sí requiere criterio humano, diseñadas para que registrar sea más fácil que no hacerlo.
 
-Cuando el volumen crece, aplicar [inteligencia artificial](/ai) sobre el histórico ayuda a anticipar paros o desviaciones de calidad; pero eso es una segunda fase, no el arranque.
+Cuando el volumen crece, aplicar [inteligencia artificial](/ai/) sobre el histórico ayuda a anticipar paros o desviaciones de calidad; pero eso es una segunda fase, no el arranque.
 
 ## ¿Cómo empezar un proyecto de trazabilidad sin frenar la producción?
 
@@ -44,11 +44,11 @@ Regla de oro: nadie detiene una línea que factura para instalar un sistema que 
 3. **Monitoreo antes que control.** Primero ver —dashboards y monitoreo de producción en tiempo real—, después actuar —bloqueos por poka-yoke, rechazos—.
 4. **Escalar con evidencia.** Con una línea estable y su retorno medido, replicar a las demás es ingeniería repetible, no una nueva apuesta.
 
-Si vas a implementarlo con un tercero, nuestras [10 preguntas clave para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente) aplican igual para un proyecto de trazabilidad.
+Si vas a implementarlo con un tercero, nuestras [10 preguntas clave para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente/) aplican igual para un proyecto de trazabilidad.
 
 ## ¿Cómo se mide el retorno (scrap, recalls y OEE)?
 
-El retorno de la [trazabilidad y sistemas MES](/tracking) se construye con números que tu planta ya lleva:
+El retorno de la [trazabilidad y sistemas MES](/tracking/) se construye con números que tu planta ya lleva:
 
 - **Scrap y retrabajo:** detectar la desviación en la estación donde ocurre, no al final de la línea, corta el desperdicio acumulado.
 - **Recalls y reclamaciones:** con genealogía unitaria, un retiro se acota a las piezas afectadas en lugar de a producciones completas; la diferencia en costo y reputación es enorme.
@@ -65,8 +65,8 @@ Compara ese valor anual contra la inversión total —licencias o desarrollo, in
 - **Capturar por capturar.** Todo dato debe tener un uso: una alerta, un dashboard, un bloqueo. Datos que nadie mira son costo puro.
 - **Olvidar al operador.** Si registrar estorba, el piso encontrará cómo evadirlo. La captura tiene que ser más rápida que el atajo.
 
-Para la lectura de códigos y el OCR que alimentan todo esto, complementa con nuestra [guía de computer vision para empresas](/blog/computer-vision-empresas-guia).
+Para la lectura de códigos y el OCR que alimentan todo esto, complementa con nuestra [guía de computer vision para empresas](/blog/computer-vision-empresas-guia/).
 
 ## Da el primer paso hacia una planta trazable
 
-Saber qué produjo tu planta, con qué material y en qué condiciones no empieza comprando una plataforma: empieza definiendo qué evento vale la pena registrar primero. En Insytech diseñamos la trazabilidad y el sistema MES a la medida de tu proceso, integrados a tus máquinas y a tu ERP, arrancando por la línea de mayor retorno. [Contáctanos](/contact) y definimos qué conviene rastrear primero.
+Saber qué produjo tu planta, con qué material y en qué condiciones no empieza comprando una plataforma: empieza definiendo qué evento vale la pena registrar primero. En Insytech diseñamos la trazabilidad y el sistema MES a la medida de tu proceso, integrados a tus máquinas y a tu ERP, arrancando por la línea de mayor retorno. [Contáctanos](/contact/) y definimos qué conviene rastrear primero.

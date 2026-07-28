@@ -10,7 +10,7 @@ La automatización industrial dejó de ser un lujo de grandes corporativos: hoy 
 
 La automatización industrial es el uso de tecnología para que un proceso opere con mínima intervención humana; el control de procesos es la parte que lo mantiene dentro de parámetros —temperatura, presión, velocidad, posición, flujo— corrigiendo desviaciones en tiempo real. Van siempre juntos: automatizas para producir sin depender de la mano en cada paso, y controlas para que el resultado sea repetible.
 
-En la práctica, un proyecto de [automatización y control industrial](/control) abarca varias capas:
+En la práctica, un proyecto de [automatización y control industrial](/control/) abarca varias capas:
 
 - **Sensores e instrumentación:** miden lo que pasa en el proceso.
 - **Controladores (PLC):** deciden qué hacer con esas mediciones según la lógica programada.
@@ -46,7 +46,7 @@ No necesitas ser ingeniero de control, pero conviene reconocer las piezas del ro
 - **HMI (Interfaz Hombre-Máquina):** la pantalla donde el operador ve estados y alarmas y ajusta parámetros. Una buena HMI reduce errores y tiempos de paro más que casi cualquier otra mejora.
 - **SCADA:** el nivel de supervisión que junta varios PLC y HMI para monitoreo, históricos y alarmas a escala de planta.
 - **Redes y protocolos industriales:** EtherNet/IP, Modbus TCP, PROFINET y, cada vez más, OPC-UA para que máquinas de distintas marcas hablen entre sí. La integración de máquinas heterogéneas suele ser la parte más laboriosa del proyecto.
-- **Capas superiores:** el enlace con [trazabilidad y MES](/tracking), con [software a la medida](/software) para tu lógica de negocio, con [visión artificial](/vision) para inspección de calidad y con [inteligencia artificial](/ai) para decisiones o mantenimiento predictivo sobre los datos que genera el control.
+- **Capas superiores:** el enlace con [trazabilidad y MES](/tracking/), con [software a la medida](/software/) para tu lógica de negocio, con [visión artificial](/vision/) para inspección de calidad y con [inteligencia artificial](/ai/) para decisiones o mantenimiento predictivo sobre los datos que genera el control.
 
 El error frecuente es enamorarse de una marca; lo que importa es que la arquitectura sea abierta, documentada y mantenible por tu equipo.
 
@@ -60,7 +60,7 @@ Los proyectos que llegan bien a producción siguen una progresión que reduce el
 4. **Instalación y puesta en marcha.** Montaje, cableado, comisionado y ajuste fino en piso, con el paro de producción al mínimo indispensable.
 5. **Estabilización y capacitación.** El arranque no es el final: se afina la lógica con los casos reales que solo aparecen en producción y se capacita a tu gente para que el equipo sea autónomo.
 
-Cada etapa de un proyecto de [automatización y control industrial](/control) genera evidencia antes de comprometer el presupuesto de la siguiente, y define qué se te entrega: código, planos, documentación y usuarios. Ese método —y no la lista de logos— es lo que distingue a un integrador maduro, como detallamos en nuestras [10 preguntas clave para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente).
+Cada etapa de un proyecto de [automatización y control industrial](/control/) genera evidencia antes de comprometer el presupuesto de la siguiente, y define qué se te entrega: código, planos, documentación y usuarios. Ese método —y no la lista de logos— es lo que distingue a un integrador maduro, como detallamos en nuestras [10 preguntas clave para elegir un proveedor de automatización inteligente](/blog/como-elegir-proveedor-automatizacion-inteligente/).
 
 ## ¿Cómo se mide el ROI de la automatización industrial?
 
@@ -72,8 +72,8 @@ El retorno se construye con números que tu planta ya conoce, no con promesas de
 - **Trazabilidad y datos:** cada registro automático es evidencia para atacar causas raíz y cumplir requisitos de auditoría.
 - **Seguridad:** menos exposición del personal a riesgos, con su impacto directo en incidentes y costos asociados.
 
-Compara esos ahorros anuales contra la inversión total —ingeniería, hardware, integración y soporte— y obtendrás un periodo de recuperación honesto, casi siempre en meses o pocos años según el caso. Y si tu proyecto incluye inspección visual, la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia) es un buen complemento.
+Compara esos ahorros anuales contra la inversión total —ingeniería, hardware, integración y soporte— y obtendrás un periodo de recuperación honesto, casi siempre en meses o pocos años según el caso. Y si tu proyecto incluye inspección visual, la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia/) es un buen complemento.
 
 ## ¿Listo para automatizar el proceso correcto?
 
-El mejor primer proyecto no es el más ambicioso, sino el mejor definido: un proceso estable, con volumen y con una regla de decisión clara. En Insytech diagnosticamos tu operación y te damos una recomendación franca —incluyendo los casos donde la respuesta es "todavía no automatices esto"— antes de proponer una arquitectura de control. [Contáctanos](/contact) y platiquemos sobre tu proyecto de automatización y control industrial.
+El mejor primer proyecto no es el más ambicioso, sino el mejor definido: un proceso estable, con volumen y con una regla de decisión clara. En Insytech diagnosticamos tu operación y te damos una recomendación franca —incluyendo los casos donde la respuesta es "todavía no automatices esto"— antes de proponer una arquitectura de control. [Contáctanos](/contact/) y platiquemos sobre tu proyecto de automatización y control industrial.
