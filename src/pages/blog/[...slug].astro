@@ -3,6 +3,7 @@ import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
 import Title from "../../components/shared/Title.astro";
+import PostCTA from "../../components/blog/PostCTA.astro";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -95,6 +96,7 @@ const breadcrumbSchema = {
                 <div class="content-typography">
                     <Content />
                 </div>
+                <PostCTA />
             </article>
         </Container>
     </main>

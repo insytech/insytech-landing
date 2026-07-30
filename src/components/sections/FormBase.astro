@@ -71,13 +71,12 @@ import Paragraph from "../shared/Paragraph.astro";
                 for="phone"
                 class="block font-medium text-gray-800 dark:text-gray-200 mb-2"
             >
-                Teléfono*
+                Teléfono <span class="font-normal text-gray-500">(opcional)</span>
             </label>
             <input
                 type="tel"
                 id="phone"
                 name="phone"
-                required
                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-800 rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#005EB8]"
             />
         </div>
@@ -117,9 +116,9 @@ import Paragraph from "../shared/Paragraph.astro";
             >
         </button>
     </div>
-    <!-- NOTE: swap "a la brevedad" for a concrete SLA (e.g. "en menos de 24 h hábiles") once the business commits to one — specific response times convert better -->
     <p class="text-center text-sm text-gray-600 dark:text-gray-400">
-        Te responderemos a la brevedad.
+        Te respondemos por correo en menos de 24 horas hábiles. Si prefieres que
+        te llamemos, dínoslo en el mensaje.
     </p>
     <p
         id="contact-status"
@@ -208,7 +207,7 @@ import Paragraph from "../shared/Paragraph.astro";
 
                 if (statusEl) {
                     statusEl.textContent =
-                        "¡Gracias! Hemos recibido su información.";
+                        "¡Gracias! Te respondemos por correo en menos de 24 horas hábiles.";
                     statusEl.classList.remove("hidden");
                     statusEl.classList.add(
                         "text-green-600",
