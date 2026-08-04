@@ -24,10 +24,37 @@ Disallow: /
 User-agent: PetalBot
 Disallow: /
 
-# Limitar crawl para otros bots
+# Permitir crawlers de IA (búsqueda y respuesta)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Otros bots
 User-agent: *
 Allow: /
-Crawl-delay: 10
 
 # Sitemap
 Sitemap: https://insytech.mx/sitemap-index.xml
