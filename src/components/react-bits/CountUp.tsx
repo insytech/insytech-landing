@@ -112,5 +112,10 @@ export default function CountUp({
         return () => unsubscribe();
     }, [springValue, formatValue]);
 
-    return <span className={cn('font-bold', className)} ref={ref} />;
+    // ponytail: SSR muestra el valor final para que la cifra exista en el HTML; el efecto lo resetea a `from` al hidratar
+    return (
+        <span className={cn('font-bold', className)} ref={ref}>
+            {formatValue(direction === 'down' ? from : to)}
+        </span>
+    );
 }
