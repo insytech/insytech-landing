@@ -11,6 +11,17 @@ const GA_ID = import.meta.env.PUBLIC_GA_ID;
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', '${GA_ID}');
+
+      // Leads por clic directo: mailto / tel / WhatsApp
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a) return;
+        var h = a.getAttribute('href') || '';
+        var method = h.indexOf('mailto:') === 0 ? 'email'
+          : h.indexOf('tel:') === 0 ? 'phone'
+          : h.indexOf('wa.me') !== -1 ? 'whatsapp' : null;
+        if (method) gtag('event', 'contact_click', { method: method, link_url: h });
+      });
     `} />
   </>
 )}

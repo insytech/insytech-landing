@@ -215,6 +215,9 @@ import Paragraph from "../shared/Paragraph.astro";
                     );
                 }
                 (form as HTMLFormElement).reset();
+                (window as any).gtag?.("event", "generate_lead", {
+                    form_location: source,
+                });
             } catch (err) {
                 if (statusEl) {
                     statusEl.textContent =
