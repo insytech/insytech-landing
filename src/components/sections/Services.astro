@@ -241,13 +241,10 @@ type ServicesProps = {
                             class="flex justify-between items-end h-20 gap-2 mb-6"
                         >
                             {
-                                [...Array(16)].map((_, i) => (
+                                [...Array(16)].map(() => (
                                     <div
-                                        class="flex-1 bg-white rounded-full group-hover:bg-[#00B5E2] transition-all duration-500 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
-                                        style={{
-                                            height: `${20 + Math.random() * 80}%`,
-                                            transition: `height 0.4s ${i * 0.03}s cubic-bezier(0.175, 0.885, 0.32, 1.275)`,
-                                        }}
+                                        class="flex-1 bg-white rounded-full group-hover:bg-[#00B5E2] transition-colors duration-500 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
+                                        style={{ height: `${20 + Math.random() * 80}%` }}
                                     />
                                 ))
                             }
@@ -372,8 +369,8 @@ type ServicesProps = {
                                         <div class="mt-auto pt-2 border-t border-gray-200 dark:border-white/5 flex justify-center">
                                             <div class="w-full h-1 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                                                 <div
-                                                    class="h-full bg-[#005EB8] dark:bg-[#00B5E2] plc-load-bar"
-                                                    style="width: 30%"
+                                                    class="h-full w-full origin-left bg-[#005EB8] dark:bg-[#00B5E2] plc-load-bar"
+                                                    style="transform: scaleX(0.3)"
                                                 />
                                             </div>
                                             <div class="flex justify-between w-full mt-1 px-1">
@@ -671,6 +668,11 @@ type ServicesProps = {
                         const loadBars =
                             document.querySelectorAll(".plc-load-bar");
 
+                        // Los bursts se re-agendan solos; hay que poder matar el
+                        // delayedCall pendiente al salir de viewport.
+                        let pendingBurst: gsap.core.Tween | undefined;
+                        let pendingWave: gsap.core.Tween | undefined;
+
                         // Continuous logic bursts
                         const triggerBurst = () => {
                             const mod = Math.floor(Math.random() * 3) + 1;
@@ -688,7 +690,7 @@ type ServicesProps = {
                                 onStart: () => {
                                     if (loadBars[mod - 1])
                                         gsap.to(loadBars[mod - 1], {
-                                            width: `${30 + Math.random() * 50}%`,
+                                            scaleX: 0.3 + Math.random() * 0.5,
                                             duration: 0.4,
                                         });
                                 },
@@ -700,13 +702,13 @@ type ServicesProps = {
                                     });
                                     if (loadBars[mod - 1])
                                         gsap.to(loadBars[mod - 1], {
-                                            width: "30%",
+                                            scaleX: 0.3,
                                             duration: 1,
                                         });
                                 },
                             });
 
-                            gsap.delayedCall(
+                            pendingBurst = gsap.delayedCall(
                                 Math.random() * 1.5 + 0.5,
                                 triggerBurst,
                             );
@@ -728,11 +730,39 @@ type ServicesProps = {
                                     });
                                 },
                             });
-                            gsap.delayedCall(6, triggerWave);
+                            pendingWave = gsap.delayedCall(6, triggerWave);
                         };
 
-                        triggerBurst();
-                        triggerWave();
+                        // La simulación PLC solo corre con la sección en pantalla.
+                        const stage = document.querySelector("#services");
+                        if (!stage) return;
+
+                        let running = false;
+                        const start = () => {
+                            if (running) return;
+                            running = true;
+                            triggerBurst();
+                            triggerWave();
+                        };
+                        const stop = () => {
+                            if (!running) return;
+                            running = false;
+                            pendingBurst?.kill();
+                            pendingWave?.kill();
+                            gsap.killTweensOf(
+                                document.querySelectorAll(".plc-led-glow"),
+                            );
+                            gsap.killTweensOf(loadBars);
+                            gsap.set(document.querySelectorAll(".plc-led-glow"), {
+                                opacity: 0,
+                            });
+                        };
+
+                        const io = new IntersectionObserver(([entry]) => {
+                            if (entry.isIntersecting) start();
+                            else stop();
+                        });
+                        io.observe(stage);
                     };
 
                     const animateCounters = () => {

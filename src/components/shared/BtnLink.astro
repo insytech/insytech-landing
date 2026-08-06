@@ -26,9 +26,9 @@ const getTextColor = (variant: "primary" | "secondary") => {
 
 <a
     href={href}
-    class={`group px-6 py-3 rounded-full outline-none relative overflow-hidden border duration-300 ease-linear
-                    after:absolute after:inset-x-0 after:aspect-square after:scale-0 after:opacity-70 after:origin-center after:duration-300 after:ease-linear after:rounded-full after:top-0 after:left-0 after:bg-[#172554]
-                    ${getThemeStyle(variant)} hover:after:opacity-100 hover:after:scale-[2.5] ${className}`}
+    class={`btn-link group px-6 py-3 rounded-full outline-none relative overflow-hidden border
+                    after:absolute after:inset-x-0 after:aspect-square after:origin-center after:rounded-full after:top-0 after:left-0 after:bg-[#172554]
+                    ${getThemeStyle(variant)} ${className}`}
 >
     <span
         class={`relative ${getTextColor(variant)} z-10 transition-colors duration-300 group-hover:text-white`}
@@ -36,3 +36,42 @@ const getTextColor = (variant: "primary" | "secondary") => {
         {text}
     </span>
 </a>
+
+<style>
+    /* Transiciones acotadas por propiedad: las clases de duración y easing de
+       Tailwind no emiten transition-property, así que sin esto el enlace
+       transiciona `all` (valor inicial de CSS) fuera de GPU. */
+    .btn-link {
+        transition:
+            transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+            border-color 250ms cubic-bezier(0.23, 1, 0.32, 1),
+            background-color 250ms cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    /* Movimiento original del relleno (scale 0 -> 2.5, 300ms linear): decisión
+       de diseño confirmada, no tocar.
+       Vive aquí y no en clases `scale-*` de Tailwind 4 porque esas emiten la
+       propiedad `scale`, que se multiplica con `transform` en vez de
+       reemplazarlo — mezclarlas dejaba el círculo a ~0.875 en hover. */
+    .btn-link::after {
+        transform: scale(0);
+        opacity: 0.7;
+        transition:
+            transform 300ms linear,
+            opacity 300ms linear;
+    }
+
+    /* Feedback de pulsación: sutil (0.95-0.98) y rápido (100-160ms). */
+    .btn-link:active {
+        transform: scale(0.97);
+    }
+
+    /* El relleno de hover vive aquí y no en clases `hover:` de Tailwind: en
+       táctil el tap dejaría el estado hover pegado. */
+    @media (hover: hover) and (pointer: fine) {
+        .btn-link:hover::after {
+            opacity: 1;
+            transform: scale(2.5);
+        }
+    }
+</style>

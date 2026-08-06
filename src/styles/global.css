@@ -166,20 +166,30 @@ h3,
   font-family: var(--font-heading);
 }
 
-/* Accessibility — respect users who request reduced motion (WCAG 2.3.3) */
+/* Accessibility — respect users who request reduced motion (WCAG 2.3.3).
+   Reduced motion = menos movimiento, no cero feedback: se eliminan los
+   desplazamientos y los bucles decorativos, pero las transiciones de color y
+   opacidad se conservan (acortadas) para no perder señales de estado. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
+  /* Restringir transition-property a propiedades no espaciales es lo que hace
+     el trabajo: cualquier transición de transform deja de aplicarse (el cambio
+     ocurre instantáneo, sin movimiento) mientras color y opacidad siguen
+     atenuándose. Las @keyframes decorativas se colapsan. */
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     animation-delay: 0ms !important;
-    transition-duration: 0.01ms !important;
+    transition-property: opacity, color, background-color, border-color, fill,
+      stroke !important;
+    transition-duration: 150ms !important;
     transition-delay: 0ms !important;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1) !important;
   }
 }
 

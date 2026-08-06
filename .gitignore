@@ -36,3 +36,5 @@ pnpm-debug.log*
 CLAUDE.md
 Makefile
 .vanskills.lock
+# Planes de trabajo locales (no se commitean)
+plans/

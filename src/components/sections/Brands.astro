@@ -88,6 +88,9 @@ import Title from "../shared/Title.astro";
             duration: 1,
             stagger: 0.1,
             ease: "power2.out",
+            // Borra el opacity inline al terminar: si no, gana sobre la clase
+            // hover:opacity-100 y el hover de los logos queda muerto.
+            clearProps: "opacity",
             scrollTrigger: {
                 trigger: ".brand-logo",
                 start: "top 95%",

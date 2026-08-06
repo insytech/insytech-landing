@@ -16,18 +16,38 @@ export default function DashboardShowcase() {
     });
 
     useEffect(() => {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
         // --- Data Pulse (Living UI) ---
-        const interval = setInterval(() => {
-            setStats(prev => ({
-                efficiency: Math.min(Math.max(prev.efficiency + (Math.random() - 0.5) * 5, 45), 98), // Fluctuates between 45% and 98%
-                predictions: Math.min(Math.max(prev.predictions + (Math.random() - 0.5), 95), 99.9),
-                uptime: 99.9
-            }));
-        }, 1500);
+        // El interval y los tweens de flotación solo corren con el showcase en
+        // pantalla: si no, seguirían re-renderizando React y animando para siempre.
+        let interval: number | undefined;
+        const startPulse = () => {
+            if (interval !== undefined) return;
+            interval = window.setInterval(() => {
+                setStats(prev => ({
+                    efficiency: Math.min(Math.max(prev.efficiency + (Math.random() - 0.5) * 5, 45), 98), // Fluctuates between 45% and 98%
+                    predictions: Math.min(Math.max(prev.predictions + (Math.random() - 0.5), 95), 99.9),
+                    uptime: 99.9
+                }));
+            }, 1500);
+        };
+        const stopPulse = () => {
+            if (interval === undefined) return;
+            window.clearInterval(interval);
+            interval = undefined;
+        };
 
         // --- GSAP Animations ---
+        const floats: gsap.core.Tween[] = [];
         const ctx = gsap.context(() => {
             const panels = [neuralRef.current, analyticsRef.current, automationRef.current];
+
+            if (reduced) {
+                // Sin movimiento: los paneles aparecen ya colocados.
+                gsap.set(panels, { opacity: 1, visibility: "visible", x: 0, rotateY: 0 });
+                return;
+            }
 
             // Initial state: hidden and slightly rotated
             gsap.set(panels, { opacity: 0, visibility: "visible" });
@@ -50,35 +70,50 @@ export default function DashboardShowcase() {
             );
 
             // 2. Idle Floating Effect (Individual and asynchronous)
-            gsap.to(neuralRef.current, {
+            floats.push(gsap.to(neuralRef.current, {
                 y: 10,
                 duration: 4,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut"
-            });
+            }));
 
-            gsap.to(analyticsRef.current, {
+            floats.push(gsap.to(analyticsRef.current, {
                 y: -12,
                 duration: 5,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut",
                 delay: 1
-            });
+            }));
 
-            gsap.to(automationRef.current, {
+            floats.push(gsap.to(automationRef.current, {
                 y: 15,
                 duration: 6,
                 repeat: -1,
                 yoyo: true,
                 ease: "sine.inOut",
                 delay: 2
-            });
+            }));
         }, containerRef);
 
+        let io: IntersectionObserver | undefined;
+        if (!reduced && containerRef.current) {
+            io = new IntersectionObserver(([entry]) => {
+                if (entry.isIntersecting) {
+                    startPulse();
+                    floats.forEach(t => t.resume());
+                } else {
+                    stopPulse();
+                    floats.forEach(t => t.pause());
+                }
+            });
+            io.observe(containerRef.current);
+        }
+
         return () => {
-            clearInterval(interval);
+            stopPulse();
+            io?.disconnect();
             ctx.revert();
         };
     }, []);
@@ -191,8 +226,8 @@ export default function DashboardShowcase() {
                     </div>
                     <div className="h-2 bg-[#002B49]/10 dark:bg-white/10 rounded-full overflow-hidden">
                         <div
-                            className="h-full bg-gradient-to-r from-[#005EB8] to-[#00B5E2] shadow-[0_0_12px_rgba(0,181,226,0.5)] transition-all duration-500 ease-out"
-                            style={{ width: `${stats.efficiency}%` }}
+                            className="h-full w-full origin-left bg-gradient-to-r from-[#005EB8] to-[#00B5E2] shadow-[0_0_12px_rgba(0,181,226,0.5)] transition-transform duration-500 ease-out"
+                            style={{ transform: `scaleX(${stats.efficiency / 100})` }}
                         ></div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useLayoutEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect, useLayoutEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type { RootState } from '@react-three/fiber';
 import { Color, Mesh, ShaderMaterial } from 'three';
@@ -128,6 +128,23 @@ export interface SilkProps {
 
 const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', noiseIntensity = 1.5, rotation = 0 }) => {
   const meshRef = useRef<Mesh>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  // Pausa el render loop fuera de viewport y bajo reduced-motion: el último
+  // frame queda pintado (el fondo no desaparece), solo deja de renderizarse.
+  const [active, setActive] = useState(true);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Un frame para pintar el patrón, y congelar.
+      const t = window.setTimeout(() => setActive(false), 100);
+      return () => window.clearTimeout(t);
+    }
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const uniforms = useMemo<SilkUniforms>(
     () => ({
@@ -142,9 +159,11 @@ const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', no
   );
 
   return (
-    <Canvas dpr={[1, 2]} frameloop="always">
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
-    </Canvas>
+    <div ref={wrapRef} style={{ width: '100%', height: '100%' }}>
+      <Canvas dpr={[1, 2]} frameloop={active ? 'always' : 'never'}>
+        <SilkPlane ref={meshRef} uniforms={uniforms} />
+      </Canvas>
+    </div>
   );
 };
 
