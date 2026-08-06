@@ -32,9 +32,11 @@ export default function ThreeHero() {
     const height = container.clientHeight;
 
     // Renderer con efectos premium
+    // ponytail: antialias solo en pantallas grandes; en móvil cuesta y no se nota
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     const renderer = new THREE.WebGLRenderer({
         alpha: true,
-        antialias: true,
+        antialias: isDesktop,
         powerPreference: "high-performance"
     });
     renderer.setSize(width, height);
@@ -608,8 +610,10 @@ export default function ThreeHero() {
     const productInterval = 2500;
     let time = 0;
 
+    let rafId = 0;
+
     function animate() {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
         time += 0.016;
 
         const now = Date.now();
@@ -667,7 +671,28 @@ export default function ThreeHero() {
         renderer.render(scene, camera);
     }
 
-    animate();
+    // Bajo reduced-motion se pinta un solo frame: la escena se ve, pero la
+    // línea no corre. Con movimiento permitido, el bucle solo gira mientras el
+    // canvas está en pantalla — si no, seguiría renderizando a 60 fps con el
+    // visitante seis secciones más abajo.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        renderer.render(scene, camera);
+    } else {
+        let playing = false;
+        const play = () => {
+            if (playing) return;
+            playing = true;
+            animate();
+        };
+        const pause = () => {
+            if (!playing) return;
+            playing = false;
+            cancelAnimationFrame(rafId);
+        };
+        new IntersectionObserver(([entry]) => {
+            entry.isIntersecting ? play() : pause();
+        }).observe(container);
+    }
 
     // Responsividad
     window.addEventListener('resize', () => {

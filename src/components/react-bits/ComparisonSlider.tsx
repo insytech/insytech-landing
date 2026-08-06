@@ -81,7 +81,8 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
             onTouchMove={handleInteract}
             onClick={handleInteract}
             onKeyDown={handleKeyDown}
-            style={{ cursor: 'ew-resize' }}
+            // touchAction: en móvil el scroll de la página se robaba el gesto
+            style={{ cursor: 'ew-resize', touchAction: 'none' }}
         >
             {/* After Image (Base) */}
             <div className="absolute inset-0">
