@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 export default function DashboardShowcase() {
@@ -8,37 +8,11 @@ export default function DashboardShowcase() {
     const automationRef = useRef<HTMLDivElement>(null);
     const sparklineRef = useRef<SVGPathElement>(null);
 
-    // Living data states for brand identity (OEE, Nodes, Sync)
-    const [stats, setStats] = useState({
-        efficiency: 64.5, // Efficiency Gain - Starts higher as requested
-        predictions: 98,  // AI Confidence
-        uptime: 99.9      // System Uptime
-    });
-
     useEffect(() => {
         const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        // --- Data Pulse (Living UI) ---
-        // El interval y los tweens de flotación solo corren con el showcase en
-        // pantalla: si no, seguirían re-renderizando React y animando para siempre.
-        let interval: number | undefined;
-        const startPulse = () => {
-            if (interval !== undefined) return;
-            interval = window.setInterval(() => {
-                setStats(prev => ({
-                    efficiency: Math.min(Math.max(prev.efficiency + (Math.random() - 0.5) * 5, 45), 98), // Fluctuates between 45% and 98%
-                    predictions: Math.min(Math.max(prev.predictions + (Math.random() - 0.5), 95), 99.9),
-                    uptime: 99.9
-                }));
-            }, 1500);
-        };
-        const stopPulse = () => {
-            if (interval === undefined) return;
-            window.clearInterval(interval);
-            interval = undefined;
-        };
-
         // --- GSAP Animations ---
+        // Los tweens de flotación solo corren con el showcase en pantalla.
         const floats: gsap.core.Tween[] = [];
         const ctx = gsap.context(() => {
             const panels = [neuralRef.current, analyticsRef.current, automationRef.current];
@@ -100,19 +74,12 @@ export default function DashboardShowcase() {
         let io: IntersectionObserver | undefined;
         if (!reduced && containerRef.current) {
             io = new IntersectionObserver(([entry]) => {
-                if (entry.isIntersecting) {
-                    startPulse();
-                    floats.forEach(t => t.resume());
-                } else {
-                    stopPulse();
-                    floats.forEach(t => t.pause());
-                }
+                floats.forEach(t => (entry.isIntersecting ? t.resume() : t.pause()));
             });
             io.observe(containerRef.current);
         }
 
         return () => {
-            stopPulse();
             io?.disconnect();
             ctx.revert();
         };
@@ -147,7 +114,7 @@ export default function DashboardShowcase() {
         <div ref={containerRef} className="relative w-full h-full overflow-hidden text-[#002B49] dark:text-white">
             {/* --- CORE STAGE Identity (Bottom Center) --- */}
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col gap-1 z-0 text-center">
-                <span className="text-[10px] font-black text-[#002B49]/30 dark:text-white/30 tracking-[0.3em] uppercase">INSYTECH OS // V.20</span>
+                <span className="text-[10px] font-black text-[#002B49]/30 dark:text-white/30 tracking-[0.3em] uppercase">INSYTECH</span>
             </div>
 
             {/* --- NEURAL CORE: AI & STRATEGY (Docked Top Left) --- */}
@@ -157,9 +124,9 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5 relative z-10">
                     <div>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">NEURAL</p>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">CORE</p>
-                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Predictive Strategy</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">TRAZABILIDAD</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">DE PIEZA</p>
+                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Genealogía de producto</p>
                     </div>
                     <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
                         <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -167,9 +134,8 @@ export default function DashboardShowcase() {
                 </div>
 
                 <div className="mt-auto space-y-3 relative z-10">
-                    <div className="flex justify-between text-[12px] font-black text-[#002B49] dark:text-white uppercase transition-colors">
-                        <span>CONFIDENCE</span>
-                        <span className="font-mono text-[#005EB8] dark:text-cyan-400 text-[16px] font-black transition-colors">{stats.predictions.toFixed(1)}%</span>
+                    <div className="text-[11px] font-black text-[#002B49]/70 dark:text-white/70 uppercase tracking-wider">
+                        Ritmo de línea
                     </div>
 
                     {/* Sparkline / Trend Graph instead of Progress Bar */}
@@ -210,9 +176,9 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-5">
                     <div>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">PROCESS</p>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">ANALYTICS</p>
-                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Real-Time Optimization</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">OEE</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tight">DE LÍNEA</p>
+                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">En tiempo real</p>
                     </div>
                     <div className="flex size-9 rounded-xl bg-[#005EB8] items-center justify-center text-white shadow-lg">
                         <svg className="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
@@ -220,14 +186,13 @@ export default function DashboardShowcase() {
                 </div>
 
                 <div className="mt-auto space-y-3">
-                    <div className="flex justify-between text-[12px] font-black text-[#002B49] dark:text-white uppercase transition-colors">
-                        <span>EFFICIENCY</span>
-                        <span className="font-mono text-[#005EB8] dark:text-cyan-400 text-[16px] font-black">+{stats.efficiency.toFixed(1)}%</span>
+                    <div className="text-[11px] font-black text-[#002B49]/70 dark:text-white/70 uppercase tracking-wider">
+                        Disponibilidad · Rendimiento · Calidad
                     </div>
                     <div className="h-2 bg-[#002B49]/10 dark:bg-white/10 rounded-full overflow-hidden">
                         <div
-                            className="h-full w-full origin-left bg-gradient-to-r from-[#005EB8] to-[#00B5E2] shadow-[0_0_12px_rgba(0,181,226,0.5)] transition-transform duration-500 ease-out"
-                            style={{ transform: `scaleX(${stats.efficiency / 100})` }}
+                            className="h-full w-full origin-left bg-gradient-to-r from-[#005EB8] to-[#00B5E2] shadow-[0_0_12px_rgba(0,181,226,0.5)]"
+                            style={{ transform: "scaleX(0.72)" }}
                         ></div>
                     </div>
                 </div>
@@ -240,9 +205,9 @@ export default function DashboardShowcase() {
             >
                 <div className="flex justify-between items-start mb-4">
                     <div>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AI</p>
-                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">AUTOMATION</p>
-                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Integrated Scaling</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">SISTEMAS</p>
+                        <p className="text-[14px] font-semibold text-[#002B49] dark:text-white leading-none tracking-tighter">INTEGRADOS</p>
+                        <p className="text-[10px] text-[#002B49]/60 dark:text-white/60 font-bold uppercase mt-1">Una sola plataforma</p>
                     </div>
                     <div className="flex size-8 rounded-lg bg-[#002B49] items-center justify-center text-white shadow-lg">
                         <svg className="size-4 text-[#00B5E2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
@@ -251,10 +216,10 @@ export default function DashboardShowcase() {
 
                 <div className="grid grid-cols-2 gap-2 flex-1 content-center">
                     {[
-                        { title: 'CRM_SYNC', icon: 'bg-[#00B5E2]' },
-                        { title: 'MKT_FLOW', icon: 'bg-green-500' },
-                        { title: 'LEAD_AI', icon: 'bg-[#005EB8]' },
-                        { title: 'BI_INSIGHT', icon: 'bg-purple-500' }
+                        { title: 'MES', icon: 'bg-[#00B5E2]' },
+                        { title: 'SCADA', icon: 'bg-green-500' },
+                        { title: 'VISIÓN', icon: 'bg-[#005EB8]' },
+                        { title: 'CONTROL', icon: 'bg-purple-500' }
                     ].map((bot) => (
                         <div key={bot.title} className="w-[100px] aspect-video bg-white/50 dark:bg-white/5 rounded-xl flex flex-col items-center justify-center p-2 shadow-sm border border-[#002B49]/5 dark:border-white/5 group hover:bg-blue-50 dark:hover:bg-white/10 transition-all hover:scale-[1.02]">
                             <div className={`w-1.5 h-1.5 rounded-full ${bot.icon} mb-1.5 animate-pulse shadow-[0_0_8px_currentColor]`}></div>

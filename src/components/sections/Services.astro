@@ -175,6 +175,11 @@ type ServicesProps = {
     "nodes": [84, 12, 09]
 }`}
                              </pre>
+                            <p
+                                class="text-[8px] font-bold text-white/25 uppercase tracking-[0.25em] pt-1"
+                            >
+                                Simulación
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -262,10 +267,16 @@ type ServicesProps = {
                                     >Sync Integrity</span
                                 >
                             </div>
-                            <span
-                                class="text-2xl font-black text-white stats-counter font-mono"
-                                data-target="86.4">00.0%</span
-                            >
+                            <div class="flex flex-col items-end">
+                                <span
+                                    class="text-2xl font-black text-white stats-counter font-mono"
+                                    data-target="86.4">00.0%</span
+                                >
+                                <span
+                                    class="text-[8px] font-bold text-white/25 uppercase tracking-[0.25em]"
+                                    >Simulación</span
+                                >
+                            </div>
                         </div>
 
                         {/* Dynamic Scan Line */}
@@ -512,36 +523,11 @@ type ServicesProps = {
                                 {services[3].description}
                             </p>
 
-                            <div
-                                class="flex gap-6 sm:gap-10 border-l-2 border-white/10 pl-6 group-hover:border-[#00B5E2] transition-colors"
-                            >
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-3xl sm:text-4xl font-black text-[#00B5E2] stats-counter"
-                                        data-target="99.8">0.0%</span
-                                    >
-                                    <span
-                                        class="text-[9px] sm:text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1"
-                                        >Accuracy</span
-                                    >
-                                </div>
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-3xl sm:text-4xl font-black text-white stats-counter"
-                                        data-target="120">0</span
-                                    >
-                                    <span
-                                        class="text-[9px] sm:text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mt-1"
-                                        >Samples/s</span
-                                    >
-                                </div>
-                            </div>
-
                             <a
-                                href="/ai/"
+                                href="/vision/"
                                 class="inline-block text-center w-full sm:w-fit px-8 py-4 sm:px-10 sm:py-5 rounded-full bg-white text-black font-black text-[11px] sm:text-[12px] uppercase tracking-widest hover:bg-[#00B5E2] hover:text-white transition-all duration-300 shadow-xl"
                             >
-                                Launch AI Core
+                                Ver inspección con visión e IA
                             </a>
                         </div>
 
