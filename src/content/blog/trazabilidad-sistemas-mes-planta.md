@@ -2,6 +2,7 @@
 title: "Trazabilidad industrial y sistemas MES: guía práctica para tu planta"
 description: "Guía de trazabilidad industrial y sistemas MES en México: cómo capturar el dato en piso, reducir scrap, medir OEE y arrancar sin frenar tu producción."
 pubDate: 2026-07-20
+author: "rene-andrade"
 ---
 
 La trazabilidad industrial dejó de ser un requisito exclusivo de industrias reguladas para volverse la base del control de cualquier planta que quiera saber qué produjo, con qué material y en qué condiciones. Detrás de esa capacidad casi siempre hay un sistema MES (Manufacturing Execution System) que conecta el piso con las decisiones del negocio. Esta guía explica qué es la trazabilidad en manufactura, en qué se diferencia un MES de un ERP, cómo se captura el dato en piso, cómo arrancar sin frenar tus líneas y cómo medir el retorno con scrap, recalls y OEE. También aclara cuándo un proyecto se sobre-dimensiona, porque no todo proceso necesita rastrear cada tornillo.

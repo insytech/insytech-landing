@@ -2,6 +2,7 @@
 title: "¿Cuánto cuesta un sistema de trazabilidad industrial?"
 description: "Qué determina el costo de un sistema de trazabilidad industrial en México: estaciones, tipo de marcado, integración con ERP y los gastos que casi nadie cotiza."
 pubDate: 2026-07-30
+author: "rene-andrade"
 ---
 
 "Depende del proyecto" es la respuesta que recibe cualquiera que pregunta cuánto cuesta un sistema de trazabilidad industrial. Es verdad —el mismo alcance cuesta distinto en dos plantas con maquinaria distinta— pero por sí sola no le sirve a nadie. Lo útil es saber **de qué depende**: cuáles son las variables que mueven la cifra, cómo se reparte el dinero entre hardware, software e integración, qué gastos aparecen después de firmar y cómo pedir cotizaciones que puedas comparar entre sí. Con eso puedes estimar tu caso antes de la primera junta, y sobre todo detectar cuándo una cotización está inflada.

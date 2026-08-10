@@ -2,6 +2,7 @@
 title: "Mercado de visión artificial en México 2026: qué saber antes de invertir"
 description: "Panorama 2026 del mercado de visión artificial en México: qué lo impulsa, qué sectores lo adoptan, casos de uso y cómo elegir proveedor antes de invertir."
 pubDate: 2026-07-24
+author: "edgar-olivan"
 ---
 
 El mercado de visión artificial en México —o de sistemas de visión artificial, como también se le conoce— ha pasado de ser una curiosidad tecnológica a convertirse en una inversión estratégica para plantas de manufactura de todos los tamaños. Cada vez más gerentes de calidad, ingeniería y operaciones evalúan proyectos de inspección visual automatizada, y con razón: la combinación de nearshoring, exigencias de calidad más estrictas y escasez de personal capacitado ha creado las condiciones perfectas para su adopción. Antes de firmar una orden de compra, sin embargo, conviene entender cómo está compuesto este mercado, qué tipos de soluciones existen y qué criterios separan una buena inversión de un proyecto abandonado.

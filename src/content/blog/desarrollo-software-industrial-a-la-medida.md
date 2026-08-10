@@ -2,6 +2,7 @@
 title: "Desarrollo de software a la medida para la industria: guía para tu primer proyecto"
 description: "Guía de desarrollo de software a la medida para la industria en México: cuándo conviene, cómo se integra con MES y ERP, costos y cómo medir el ROI."
 pubDate: 2026-07-20
+author: "edgar-olivan"
 ---
 
 Muchas plantas en México llegan al mismo punto: el ERP no cubre un proceso crítico, el sistema comercial no habla con las máquinas, y el "sistema" que coordina la operación es una hoja de Excel que solo entiende una persona. Ahí es donde el [desarrollo de software a la medida](/software/) deja de ser un lujo y se vuelve la vía más corta para conectar el piso de planta con la administración. Esta guía explica, sin humo, cuándo conviene construir en lugar de comprar, qué software industrial se desarrolla con más frecuencia, cómo se integra con PLCs, MES y ERP y cómo medir el retorno.

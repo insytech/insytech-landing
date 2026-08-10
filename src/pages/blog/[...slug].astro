@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
 import Title from "../../components/shared/Title.astro";
 import PostCTA from "../../components/blog/PostCTA.astro";
+import { authors } from "../../utils/authors";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -16,13 +17,23 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
+const formatDate = (date: Date) =>
+    date.toLocaleDateString("es-MX", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "UTC",
+    });
+
 const pubDateISO = post.data.pubDate.toISOString().split("T")[0];
-const formattedDate = post.data.pubDate.toLocaleDateString("es-MX", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-});
+const formattedDate = formatDate(post.data.pubDate);
+
+const updatedISO = post.data.updatedDate?.toISOString().split("T")[0];
+const formattedUpdated = post.data.updatedDate
+    ? formatDate(post.data.updatedDate)
+    : undefined;
+
+const author = authors[post.data.author];
 
 const articleSchema = {
     "@context": "https://schema.org",
@@ -30,15 +41,22 @@ const articleSchema = {
     headline: post.data.title,
     description: post.data.description,
     datePublished: pubDateISO,
+    ...(updatedISO && { dateModified: updatedISO }),
     inLanguage: "es-MX",
     mainEntityOfPage: {
         "@type": "WebPage",
         "@id": new URL(`/blog/${post.id}/`, Astro.site).href,
     },
     author: {
-        "@type": "Organization",
-        name: "Insytech",
-        url: "https://insytech.mx",
+        "@type": "Person",
+        name: author.name,
+        ...(author.jobTitle && { jobTitle: author.jobTitle }),
+        ...(author.linkedin && { sameAs: [author.linkedin] }),
+        worksFor: {
+            "@type": "Organization",
+            name: "Insytech",
+            url: "https://insytech.mx",
+        },
     },
     publisher: {
         "@type": "Organization",
@@ -89,8 +107,23 @@ const breadcrumbSchema = {
                     </nav>
                     <Title>{post.data.title}</Title>
                     <p class="text-sm text-heading-3">
-                        Por <span class="font-medium">Insytech</span> ·
+                        Por <span class="font-medium">{author.name}</span>{
+                            author.jobTitle && `, ${author.jobTitle}`
+                        } ·
                         <time datetime={pubDateISO}>{formattedDate}</time>
+                        {
+                            formattedUpdated && (
+                                <>
+                                    {" · "}
+                                    <span>
+                                        Actualizado el{" "}
+                                        <time datetime={updatedISO}>
+                                            {formattedUpdated}
+                                        </time>
+                                    </span>
+                                </>
+                            )
+                        }
                     </p>
                 </header>
                 <div class="content-typography">

@@ -2,6 +2,7 @@
 title: "Inteligencia artificial en la industria: casos reales de IA en manufactura"
 description: "Guía honesta de inteligencia artificial en la industria: qué casos de IA en manufactura dan retorno, qué datos necesitas y cómo empezar sin gran presupuesto."
 pubDate: 2026-07-20
+author: "edgar-olivan"
 ---
 
 La inteligencia artificial en la industria pasó de ser una promesa de conferencia a una herramienta con casos de uso concretos en piso de planta, pero también acumuló una capa de exageración que confunde más de lo que ayuda. La IA no es magia ni un botón que optimiza sola una operación: es un conjunto de técnicas de machine learning industrial que resuelven bien ciertos problemas y muy mal otros. Esta guía busca separar lo real de lo vendido: qué significa aplicar IA hoy, qué casos dan retorno medible en manufactura, qué datos necesitas, cómo empezar sin un gran presupuesto y qué mitos evitar antes de firmar cualquier proyecto.

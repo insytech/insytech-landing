@@ -2,6 +2,7 @@
 title: "¿Es cara la visión artificial? El costo oculto de los sistemas convencionales"
 description: "Muchas empresas posponen la visión artificial por miedo al costo. Descubre por qué los sistemas de visión convencionales encarecen el proyecto y cómo un enfoque con IA lo vuelve accesible y rentable para tu planta en México."
 pubDate: 2026-07-21
+author: "edgar-olivan"
 ---
 
 "Suena bien, pero debe ser carísimo." Es la primera reacción de casi cualquier responsable de planta cuando se plantea automatizar la inspección con visión artificial. Y es una preocupación legítima: durante años, montar un sistema de visión implicó una inversión que solo los grandes corporativos podían justificar. Pero esa fama de "caro" viene, en su mayoría, del **enfoque convencional** para hacer visión, no de la tecnología en sí. Este artículo desglosa de dónde sale realmente el costo de un sistema de visión, por qué los sistemas convencionales encarecen el proyecto mucho más de lo que parece, y cómo un enfoque basado en inteligencia artificial cambia esa ecuación para una empresa en México.

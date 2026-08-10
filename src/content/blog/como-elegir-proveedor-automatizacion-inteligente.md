@@ -2,6 +2,7 @@
 title: "Cómo elegir un proveedor de automatización inteligente: 10 preguntas clave"
 description: "Checklist para evaluar a un proveedor de automatización inteligente: integración PLC/SCADA/ERP, soporte local, propiedad del código y escalabilidad."
 pubDate: 2026-07-16
+author: "rene-andrade"
 ---
 
 Elegir un proveedor de automatización inteligente es una decisión que tu planta vivirá durante años: mucho después de la puesta en marcha, seguirás dependiendo de ese proveedor para soporte, cambios de producto, expansiones y mantenimiento del sistema. Y a diferencia de comprar maquinaria estándar, aquí no hay ficha técnica que compare peras con peras: cada integrador propone arquitecturas, alcances y condiciones distintas. Esta guía reúne las diez preguntas que recomendamos hacer —y las respuestas que deberías esperar— antes de comprometer tu proyecto.

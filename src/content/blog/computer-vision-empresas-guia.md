@@ -2,6 +2,7 @@
 title: "Computer vision para empresas: guía práctica para tu primer proyecto"
 description: "Guía de computer vision para empresas en México: qué problemas resuelve, cómo es un proyecto típico, qué hardware implica y cómo medir el ROI."
 pubDate: 2026-07-16
+author: "edgar-olivan"
 ---
 
 El computer vision para empresas ya no es territorio exclusivo de corporativos con laboratorios de innovación: hoy es una herramienta al alcance de cualquier planta de manufactura en México que tenga un problema de inspección, conteo o verificación bien definido. Lo que sigue siendo escaso es información práctica sobre cómo abordar el primer proyecto. Esta guía condensa lo que hemos aprendido implementando sistemas de visión en piso de planta: qué problemas resuelve realmente la tecnología, cómo se estructura un proyecto típico, qué hardware y software implica, qué errores evitar y cómo medir el retorno.
