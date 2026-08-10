@@ -56,7 +56,7 @@ La señal de madurez más subestimada. Un buen proveedor de automatización inte
 
 Algunos patrones que en nuestra experiencia anticipan problemas: propuestas sin una etapa de diagnóstico previa, precios cerrados antes de ver tu proceso, dependencia total de una sola persona del lado del proveedor, licenciamientos que encarecen cada expansión futura, y contratos donde el soporte posterior al arranque es ambiguo o inexistente. Ninguna de estas señales descalifica por sí sola, pero dos o más juntas merecen una segunda opinión.
 
-También ayuda mirar el contexto: si tu proyecto involucra inspección visual, el panorama que describimos sobre [el mercado de sistemas de visión artificial en México](/blog/mercado-vision-artificial-mexico/) te dará una base para comparar categorías de solución antes de comparar proveedores.
+También ayuda mirar el contexto: si tu proyecto involucra inspección visual, el panorama que describimos sobre [el mercado de sistemas de visión artificial en México](/blog/mercado-vision-artificial-mexico/) te dará una base para comparar categorías de solución antes de comparar proveedores. Y si lo que tienes enfrente son varias cotizaciones de trazabilidad que no se parecen entre sí, revisa [qué determina su costo](/blog/costo-sistema-trazabilidad-industrial/) para ponerlas en la misma escala.
 
 ## Pon a prueba estas preguntas con nosotros
 
