@@ -19,7 +19,7 @@ Y es igual de importante saber cuándo **no** conviene: si un ERP o un software 
 
 ## ¿Qué tipos de software industrial se desarrollan con más frecuencia?
 
-El software industrial a la medida no es un solo producto, sino una familia de soluciones en torno a la trazabilidad y la captura de datos en piso. Los casos más comunes:
+El [software industrial](/software/) a la medida no es un solo producto, sino una familia de soluciones en torno a la trazabilidad y la captura de datos en piso. Los casos más comunes:
 
 - **Sistemas de trazabilidad y genealogía de producto:** cada pieza, lote o serie con su historia completa, base de cualquier proyecto de [trazabilidad y MES](/tracking/).
 - **Captura de datos en piso (paperless):** órdenes de trabajo, checklists y registros de calidad en tablet en vez de papel.
