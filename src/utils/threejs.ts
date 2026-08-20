@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 /**
  * Insytech Vision - Industrial Quality Inspection Animation
@@ -1285,6 +1287,10 @@ export default function ThreeHero() {
 
     frameCamera();
 
+    // Desplazamientos aportados por GSAP: la entrada y el scroll. El bucle los
+    // suma al encuadre base, así que conviven con el vaivén de la cámara.
+    const camFx = { dolly: 0, lift: 0, pan: 0 };
+
     // ============================================
     // ANIMACIÓN PRINCIPAL
     // ============================================
@@ -1379,8 +1385,9 @@ export default function ThreeHero() {
         ledPanelMaterial.opacity = 0.2 + Math.sin(time * 4) * 0.15;
 
         // Movimiento sutil de la cámara
-        camera.position.x = camBase.x + Math.sin(time * 0.3) * 0.3;
-        camera.position.y = camBase.y + Math.sin(time * 0.4) * 0.12;
+        camera.position.x = camBase.x + Math.sin(time * 0.3) * 0.3 + camFx.pan;
+        camera.position.y = camBase.y + Math.sin(time * 0.4) * 0.12 + camFx.lift;
+        camera.position.z = camBase.z + camFx.dolly;
         camera.lookAt(camBase.tx, camBase.ty, 0);
 
         renderer.render(scene, camera);
@@ -1393,6 +1400,27 @@ export default function ThreeHero() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         renderer.render(scene, camera);
     } else {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Entrada: la celda se acerca desde un plano más abierto.
+        gsap.fromTo(camFx,
+            { dolly: 3.4, lift: 0.7 },
+            { dolly: 0, lift: 0, duration: 1.6, ease: "power3.out", delay: 0.15 }
+        );
+
+        // Scroll: al salir el hero, la cámara retrocede y sube, y la escena se
+        // atenúa para no competir con la sección siguiente.
+        const scrollFx = gsap.timeline({
+            scrollTrigger: {
+                trigger: container,
+                start: "top top",
+                end: "bottom top",
+                scrub: 0.5
+            }
+        });
+        scrollFx.to(camFx, { dolly: 2.6, lift: 1.2, pan: 1.4, ease: "none" }, 0);
+        scrollFx.to(container, { opacity: 0.45, ease: "none" }, 0);
+
         let playing = false;
         const play = () => {
             if (playing) return;
