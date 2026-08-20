@@ -14,8 +14,10 @@ const productTypes = [
     { name: 'BEARING', shape: 'torus', color: 0xb9c4cd, defectRate: 0.10, label: 'BR-4455' }
 ];
 
-// Momento del último disparo de la cámara: alimenta el destello del piloto
+// Momento del último disparo de la cámara y su veredicto: alimentan el destello
+// del piloto y la pantalla de la estación de inspección.
 let lastCaptureAt = -Infinity;
+let lastVerdictOk = true;
 
 // Estadísticas de la línea
 const stats = {
@@ -483,6 +485,143 @@ export default function ThreeHero() {
 
     scene.add(cabinGroup);
 
+
+    // ============================================
+    // ESTACIÓN DE INSPECCIÓN
+    // Gabinete de acero inoxidable con monitor de resultados, detrás y a la
+    // derecha de la celda. La pantalla sigue el veredicto de la última pieza.
+    // ============================================
+
+    const stationGroup = new THREE.Group();
+    const stainlessMat = new THREE.MeshStandardMaterial({ color: 0xc9ced4, metalness: 0.72, roughness: 0.34 });
+    const stationDarkMat = new THREE.MeshStandardMaterial({ color: 0x2a2e33, metalness: 0.5, roughness: 0.45 });
+
+    // Cuerpo y zócalo
+    const cabinet = new THREE.Mesh(new THREE.BoxGeometry(1.7, 1.85, 0.85), stainlessMat);
+    cabinet.position.y = 0.95;
+    stationGroup.add(cabinet);
+
+    const plinth = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.75), stationDarkMat);
+    plinth.position.y = 0.05;
+    stationGroup.add(plinth);
+
+    // Rejilla de ventilación: hexágonos, como el gabinete real
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 5; col++) {
+            const hex = new THREE.Mesh(new THREE.CircleGeometry(0.075, 6), stationDarkMat);
+            hex.position.set(-0.42 + col * 0.21 + (row % 2) * 0.105, 0.45 + row * 0.19, 0.431);
+            hex.rotation.z = Math.PI / 6;
+            stationGroup.add(hex);
+        }
+    }
+
+    // Manija seccionadora y su palanca roja
+    const handleBase = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.26, 0.06), stationDarkMat);
+    handleBase.position.set(0.6, 1.3, 0.44);
+    stationGroup.add(handleBase);
+
+    const handleLever = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.17, 0.06), new THREE.MeshStandardMaterial({ color: 0xd42020, roughness: 0.5 }));
+    handleLever.position.set(0.6, 1.3, 0.48);
+    stationGroup.add(handleLever);
+
+    // Logo de Insytech en la puerta
+    const logoTex = new THREE.TextureLoader().load('/images/Versiones de logotipo-01.webp');
+    logoTex.colorSpace = THREE.SRGBColorSpace;
+    const logoPlate = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.06, 1.06 * (1134 / 5028)),
+        new THREE.MeshBasicMaterial({ map: logoTex, transparent: true })
+    );
+    logoPlate.position.set(-0.15, 1.28, 0.432);
+    stationGroup.add(logoPlate);
+
+    // Monitor inclinado sobre el gabinete
+    const monitorGroup = new THREE.Group();
+    const monitorShell = new THREE.Mesh(new THREE.BoxGeometry(1.72, 1.06, 0.09), stainlessMat);
+    monitorGroup.add(monitorShell);
+
+    /** Pantalla del HMI: lista de piezas, miniaturas y el bloque de veredicto. */
+    function hmiTexture(ok: boolean): THREE.CanvasTexture {
+        const canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 320;
+        const ctx = canvas.getContext('2d')!;
+
+        ctx.fillStyle = '#eef1f4';
+        ctx.fillRect(0, 0, 512, 320);
+
+        ctx.fillStyle = '#001489';
+        ctx.fillRect(0, 0, 512, 30);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.fillText('INSYTECH VISION', 12, 21);
+        ctx.font = '12px monospace';
+        ctx.fillText('LÍNEA 01', 420, 21);
+
+        // Lista de piezas
+        ctx.font = '11px monospace';
+        for (let i = 0; i < 9; i++) {
+            ctx.fillStyle = i % 2 ? '#e3e7ec' : '#f6f8fa';
+            ctx.fillRect(10, 44 + i * 28, 170, 24);
+            ctx.fillStyle = '#4b5563';
+            ctx.fillText(['PCB-2847', 'BR-4455', 'IC-7734', 'GR-1052', 'BT-0923', 'PCB-2848', 'GR-1053', 'IC-7735', 'BR-4456'][i], 18, 60 + i * 28);
+            ctx.fillStyle = i === 1 ? '#d93a1a' : '#0f9d58';
+            ctx.fillText(i === 1 ? 'NG' : 'OK', 150, 60 + i * 28);
+        }
+
+        // Miniaturas de captura
+        for (let i = 0; i < 2; i++) {
+            ctx.fillStyle = '#20242a';
+            ctx.fillRect(192, 44 + i * 122, 128, 112);
+            ctx.strokeStyle = ok ? '#00B5E2' : '#F97316';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(216, 68 + i * 122, 80, 64);
+        }
+
+        // Bloque de veredicto
+        ctx.fillStyle = ok ? '#12a150' : '#c62828';
+        ctx.fillRect(332, 44, 170, 190);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 58px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(ok ? 'OK' : 'NG', 417, 160);
+        ctx.font = '13px monospace';
+        ctx.fillText(ok ? 'PIEZA CONFORME' : 'PIEZA RECHAZADA', 417, 200);
+        ctx.textAlign = 'left';
+
+        // Barra de estado
+        ctx.fillStyle = '#d7dce2';
+        ctx.fillRect(10, 248, 492, 60);
+        ctx.fillStyle = '#374151';
+        ctx.font = '12px monospace';
+        ctx.fillText('INSPECCIÓN EN CURSO · CÁMARA 01 · MODELO v4', 22, 272);
+        ctx.fillText('TRAZABILIDAD: FOTO ARCHIVADA', 22, 294);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+    }
+
+    const hmiOk = hmiTexture(true);
+    const hmiNg = hmiTexture(false);
+    const screenMat = new THREE.MeshBasicMaterial({ map: hmiOk });
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.95), screenMat);
+    screen.position.z = 0.05;
+    monitorGroup.add(screen);
+
+    monitorGroup.position.set(0, 2.35, 0.1);
+    monitorGroup.rotation.x = -0.32;   // inclinado hacia el operador
+    stationGroup.add(monitorGroup);
+
+    // Pedestal del monitor
+    const monitorStem = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 0.14), stationDarkMat);
+    monitorStem.position.set(0, 1.95, -0.05);
+    stationGroup.add(monitorStem);
+
+    // Al frente y a la derecha, pegada a la celda
+    // Alineada con la celda, sin giro propio
+    stationGroup.position.set(3.3, CABIN_FLOOR, 2.4);
+    scene.add(stationGroup);
+
     // ============================================
     // CÁMARA INDUSTRIAL PRINCIPAL
     // Cuerpo maquinado de dos tonos con disipador, barril de lente escalonado con
@@ -931,7 +1070,9 @@ export default function ThreeHero() {
                 map: texture,
                 transparent: true,
                 opacity: 0,
-                depthTest: false // Asegurar que siempre se vea
+                // Con depthTest apagado la etiqueta se dibujaba encima de todo,
+                // incluida la pantalla de la estación. Respeta la profundidad.
+                depthTest: true
             });
             this.label = new THREE.Sprite(spriteMat);
             this.label.scale.set(2.2, 0.7, 1); // Escala más compacta
@@ -973,6 +1114,7 @@ export default function ThreeHero() {
                         }
 
                         lastCaptureAt = performance.now();
+                        lastVerdictOk = !this.isDefective;
 
                         // El registro del hero se escribe desde aqui: un renglon
                         // por pieza que termina de cruzar la cortina laser.
@@ -1073,6 +1215,13 @@ export default function ThreeHero() {
             // Verde fijo cuando está en espera
             ledRingMat.color.setHex(0x004400);
             scanLight.intensity = 1.5;
+        }
+
+        // La pantalla de la estación muestra el veredicto de la última pieza
+        const wantedHmi = lastVerdictOk ? hmiOk : hmiNg;
+        if (screenMat.map !== wantedHmi) {
+            screenMat.map = wantedHmi;
+            screenMat.needsUpdate = true;
         }
 
         // Piloto de captura: destello corto tras cada disparo
