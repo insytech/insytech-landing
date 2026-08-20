@@ -14,6 +14,9 @@ const productTypes = [
     { name: 'BEARING', shape: 'torus', color: 0x90A4AE, defectRate: 0.10, label: 'BR-4455' }
 ];
 
+// Momento del último disparo de la cámara: alimenta el destello del piloto
+let lastCaptureAt = -Infinity;
+
 // Estadísticas de la línea
 const stats = {
     totalInspected: 0,
@@ -128,7 +131,7 @@ export default function ThreeHero() {
     const laserCurtainMaterial = new THREE.MeshBasicMaterial({
         color: 0xff3333,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.3,
         side: THREE.DoubleSide
     });
     const laserCurtain = new THREE.Mesh(laserCurtainGeometry, laserCurtainMaterial);
@@ -143,7 +146,7 @@ export default function ThreeHero() {
             new THREE.MeshBasicMaterial({
                 color: 0xff4444,
                 transparent: true,
-                opacity: 0.85
+                opacity: 0.4
             })
         );
         beamLine.position.set(-1.5, 2, z); // Centrado en altura
@@ -186,7 +189,7 @@ export default function ThreeHero() {
     scannerGroup.add(laserReceiver);
 
     // Luz roja de escaneo más intensa
-    const scanLight = new THREE.PointLight(0xff3333, 3, 6);
+    const scanLight = new THREE.PointLight(0xff3333, 1.8, 6);
     scanLight.position.set(-1.5, 2, 0);
     scannerGroup.add(scanLight);
 
@@ -294,11 +297,70 @@ export default function ThreeHero() {
         new THREE.PlaneGeometry(6.2, CABIN_H - CABIN_BASE_Y - 0.3),
         new THREE.MeshPhysicalMaterial({
             color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
-            thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide
+            thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide,
+            depthWrite: false
         })
     );
     backPanel.position.set(-1.5, (CABIN_H + CABIN_BASE_Y) / 2, CABIN_Z[0] + 0.02);
     cabinGroup.add(backPanel);
+
+    // Acrílicos laterales: bajan del techo solo hasta media altura, para que el
+    // producto entre y salga por el hueco de abajo.
+    const sideGlassTop = CABIN_H;
+    const sideGlassBottom = (CABIN_H + CABIN_BASE_Y) / 2;
+    for (const x of CABIN_X) {
+        const side = new THREE.Mesh(
+            new THREE.PlaneGeometry(3.9, sideGlassTop - sideGlassBottom),
+            new THREE.MeshPhysicalMaterial({
+                color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
+                thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide,
+                depthWrite: false
+            })
+        );
+        side.rotation.y = Math.PI / 2;
+        side.position.set(x + Math.sign(-1.5 - x) * 0.02, (sideGlassTop + sideGlassBottom) / 2, 0);
+        cabinGroup.add(side);
+
+        // Canto inferior del panel
+        const edge = profileBeam(3.9, 'z');
+        edge.scale.set(0.5, 0.5, 1);
+        edge.position.set(x, sideGlassBottom, 0);
+        cabinGroup.add(edge);
+    }
+
+    // Faldón de aluminio al frente: cierra el bajo de la celda, del marco de base
+    // hasta justo debajo de la banda, para que se lea como cabina y no como pórtico.
+    const skirtTop = 0.2;   // a la altura del riel amarillo de la banda
+    const frontSkirt = new THREE.Mesh(
+        new THREE.BoxGeometry(6.2, skirtTop - CABIN_BASE_Y, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x9ba1a9, metalness: 0.8, roughness: 0.42 })
+    );
+    frontSkirt.position.set(-1.5, (skirtTop + CABIN_BASE_Y) / 2, CABIN_Z[1] - 0.02);
+    cabinGroup.add(frontSkirt);
+
+    // Travesaño que remata el faldón por arriba
+    const skirtRail = profileBeam(6.2 + PROFILE, 'x');
+    skirtRail.position.set(-1.5, skirtTop + PROFILE / 2, CABIN_Z[1]);
+    cabinGroup.add(skirtRail);
+
+    // Acrílico frontal: del techo a media altura, como los laterales. Va más
+    // transparente que los otros porque queda entre el observador y la escena.
+    const frontGlass = new THREE.Mesh(
+        new THREE.PlaneGeometry(6.2, CABIN_H - (CABIN_H + CABIN_BASE_Y) / 2),
+        new THREE.MeshPhysicalMaterial({
+            color: 0xc8e6f2, metalness: 0, roughness: 0.05, transmission: 0.94,
+            thickness: 0.3, transparent: true, opacity: 0.07, side: THREE.DoubleSide,
+            // Sin esto el panel escribe profundidad y recorta los láseres de detrás.
+            depthWrite: false
+        })
+    );
+    frontGlass.position.set(-1.5, (CABIN_H + (CABIN_H + CABIN_BASE_Y) / 2) / 2, CABIN_Z[1] - 0.02);
+    cabinGroup.add(frontGlass);
+
+    const frontGlassEdge = profileBeam(6.2, 'x');
+    frontGlassEdge.scale.set(1, 0.5, 0.5);
+    frontGlassEdge.position.set(-1.5, (CABIN_H + CABIN_BASE_Y) / 2, CABIN_Z[1] - 0.02);
+    cabinGroup.add(frontGlassEdge);
 
     // Techo: panel claro con canto de perfil
     const roof = new THREE.Mesh(
@@ -409,90 +471,127 @@ export default function ThreeHero() {
 
     // ============================================
     // CÁMARA INDUSTRIAL PRINCIPAL
+    // Cuerpo maquinado de dos tonos con disipador, barril de lente escalonado con
+    // anillo de foco, iluminador anular segmentado y conectores M12.
     // ============================================
 
     const cameraGroup = new THREE.Group();
 
-    // Cuerpo principal de la cámara (más grande y detallado)
-    const camBodyGeo = new THREE.BoxGeometry(1.2, 0.8, 1.5);
-    const camBodyMat = new THREE.MeshStandardMaterial({
-        color: 0x6c737d,
-        metalness: 0.75,
-        roughness: 0.28
-    });
-    const camBody = new THREE.Mesh(camBodyGeo, camBodyMat);
+    const camShellMat = new THREE.MeshStandardMaterial({ color: 0xa7aeb6, metalness: 0.9, roughness: 0.24 });
+    const camDarkMat = new THREE.MeshStandardMaterial({ color: 0x2b2f35, metalness: 0.7, roughness: 0.38 });
+    const camLensMat = new THREE.MeshStandardMaterial({ color: 0x1b1e23, metalness: 0.85, roughness: 0.18 });
+
+    // Cuerpo: bloque claro con franja oscura arriba, para que no se lea como una caja
+    const camBody = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.62, 1.35), camShellMat);
     cameraGroup.add(camBody);
 
-    // Detalle frontal
-    const camFront = new THREE.Mesh(
-        new THREE.BoxGeometry(1.0, 0.6, 0.1),
-        new THREE.MeshStandardMaterial({ color: 0x33383f, metalness: 0.8, roughness: 0.2 })
-    );
-    camFront.position.set(0, 0, -0.8);
+    const camTopBand = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.16, 1.37), camDarkMat);
+    camTopBand.position.set(0, 0.31, 0);
+    cameraGroup.add(camTopBand);
+
+    // Disipador: aletas en el lomo
+    for (let i = -4; i <= 4; i++) {
+        const fin = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.1, 0.05), camShellMat);
+        fin.position.set(0, 0.42, i * 0.13);
+        cameraGroup.add(fin);
+    }
+
+    // Frente: placa oscura embutida
+    const camFront = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.5, 0.08), camDarkMat);
+    camFront.position.set(0, 0, -0.7);
     cameraGroup.add(camFront);
 
-    // Lente principal (más prominente)
-    const lensHousing = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.33, 0.38, 0.85, 24),
-        new THREE.MeshStandardMaterial({ color: 0x23272d, metalness: 0.9, roughness: 0.12 })
-    );
+    // Barril escalonado: montura, cuerpo del lente y anillo de foco
+    const lensMount = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.14, 24), camDarkMat);
+    lensMount.rotation.x = Math.PI / 2;
+    lensMount.position.set(0, 0, -0.8);
+    cameraGroup.add(lensMount);
+
+    const lensHousing = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.27, 0.85, 24), camLensMat);
     lensHousing.rotation.x = Math.PI / 2;
-    lensHousing.position.set(0, 0, -1.2);
+    lensHousing.position.set(0, 0, -1.28);
     cameraGroup.add(lensHousing);
 
-    // Cristal del lente con reflejo
+    const focusRing = new THREE.Mesh(new THREE.CylinderGeometry(0.29, 0.29, 0.16, 24), camShellMat);
+    focusRing.rotation.x = Math.PI / 2;
+    focusRing.position.set(0, 0, -1.32);
+    cameraGroup.add(focusRing);
+
+    const lensHood = new THREE.Mesh(new THREE.CylinderGeometry(0.31, 0.25, 0.2, 24, 1, true), camDarkMat);
+    lensHood.rotation.x = Math.PI / 2;
+    lensHood.position.set(0, 0, -1.78);
+    cameraGroup.add(lensHood);
+
     const lensGlass = new THREE.Mesh(
-        new THREE.CircleGeometry(0.3, 32),
+        new THREE.CircleGeometry(0.22, 32),
         new THREE.MeshPhysicalMaterial({
-            color: 0x88ccff,
-            metalness: 0.1,
-            roughness: 0.0,
-            transmission: 0.5,
-            thickness: 0.1,
-            clearcoat: 1.0,
-            reflectivity: 1.0
+            color: 0x6fb7d8, metalness: 0.1, roughness: 0.02,
+            transmission: 0.55, thickness: 0.1, clearcoat: 1, reflectivity: 1
         })
     );
-    lensGlass.position.set(0, 0, -1.63);
+    lensGlass.position.set(0, 0, -1.74);
     cameraGroup.add(lensGlass);
 
-    // Anillo de LEDs alrededor del lente (guardamos referencia para animación)
-    const ledRingGeo = new THREE.TorusGeometry(0.38, 0.04, 8, 32);
+    // Iluminador anular segmentado. Su color lo anima el bucle: verde fijo en
+    // espera, parpadeo cuando hay pieza en la zona.
     const ledRingMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const ledRing = new THREE.Mesh(ledRingGeo, ledRingMat);
-    ledRing.position.set(0, 0, -1.6);
-    cameraGroup.add(ledRing);
+    for (let i = 0; i < 16; i++) {
+        const a = (i / 16) * Math.PI * 2;
+        const seg = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 0.04), ledRingMat);
+        seg.position.set(Math.cos(a) * 0.35, Math.sin(a) * 0.35, -1.86);
+        seg.rotation.z = a;
+        cameraGroup.add(seg);
+    }
+    const ringShroud = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.4, 0.08, 28, 1, true), camDarkMat);
+    ringShroud.rotation.x = Math.PI / 2;
+    ringShroud.position.set(0, 0, -1.84);
+    cameraGroup.add(ringShroud);
 
-    // LEDs indicadores en el cuerpo
-    const led1 = new THREE.Mesh(
-        new THREE.SphereGeometry(0.04, 8, 8),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-    );
-    led1.position.set(0.4, 0.3, -0.74);
-    cameraGroup.add(led1);
+    // Conectores M12 atrás
+    for (const x of [-0.24, 0.24]) {
+        const conn = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.22, 12), camDarkMat);
+        conn.rotation.x = Math.PI / 2;
+        conn.position.set(x, -0.08, 0.78);
+        cameraGroup.add(conn);
+    }
 
-    const led2 = new THREE.Mesh(
-        new THREE.SphereGeometry(0.04, 8, 8),
-        new THREE.MeshBasicMaterial({ color: 0x0088ff })
-    );
-    led2.position.set(0.5, 0.3, -0.74);
-    cameraGroup.add(led2);
+    // Placa de montaje y rótula donde entra el soporte
+    const camPlate = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.08, 0.6), camDarkMat);
+    camPlate.position.set(0, 0.4, 0.1);
+    cameraGroup.add(camPlate);
+
+    const camKnuckle = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), camShellMat);
+    camKnuckle.position.set(0, 0.5, 0.1);
+    cameraGroup.add(camKnuckle);
+
+    // Piloto de captura: destella cuando la cámara dispara sobre una pieza.
+    const captureLedMat = new THREE.MeshBasicMaterial({ color: 0x1d6b38 });
+    const captureLed = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 10), captureLedMat);
+    captureLed.position.set(0.51, 0.12, -0.35);
+    cameraGroup.add(captureLed);
+
+    const captureGlow = new THREE.PointLight(0x2bd96b, 0, 1.6);
+    captureGlow.position.set(0.62, 0.12, -0.35);
+    cameraGroup.add(captureGlow);
+
+    const LED_DIM = new THREE.Color(0x1d6b38);
+    const LED_BRIGHT = new THREE.Color(0x8dffb4);
 
     // OJO: en un Group, lookAt() apunta el eje +Z al objetivo (el -Z solo aplica a
     // camaras y luces), y el lente de este modelo esta en -Z. Por eso se mira al
     // punto OPUESTO al de inspeccion: asi el lente queda apuntando a la pieza.
-    const camPos = new THREE.Vector3(-4.2, 2.35, 0.7);
+    const camPos = new THREE.Vector3(-3.85, 2.5, 1.35);
     const camTarget = new THREE.Vector3(-1.5, 0.75, 0.2);
     cameraGroup.position.copy(camPos);
-    cameraGroup.scale.setScalar(0.95);
+    cameraGroup.scale.setScalar(0.5);
     cameraGroup.lookAt(camPos.clone().multiplyScalar(2).sub(camTarget));
 
     // Brazo que la sujeta al perfil de la cabina
     const camBracket = new THREE.Mesh(
-        new THREE.BoxGeometry(0.09, 1.45, 0.09),
+        new THREE.BoxGeometry(0.08, 1.5, 0.08),
         new THREE.MeshStandardMaterial({ color: 0x9aa0a8, metalness: 0.7, roughness: 0.35 })
     );
-    camBracket.position.set(-4.2, 3.35, 0.7);
+    camBracket.position.set(-3.85, 3.35, 1.35);
     scene.add(camBracket);
 
     scene.add(cameraGroup);
@@ -752,6 +851,8 @@ export default function ThreeHero() {
                             this.label.material.opacity = 1;
                         }
 
+                        lastCaptureAt = performance.now();
+
                         // El registro del hero se escribe desde aqui: un renglon
                         // por pieza que termina de cruzar la cortina laser.
                         document.dispatchEvent(new CustomEvent('insytech:verdict', {
@@ -835,7 +936,7 @@ export default function ThreeHero() {
         });
 
         // Animar cortina láser (pulsación sutil)
-        laserCurtainMaterial.opacity = 0.7 + Math.sin(time * 6) * 0.2;
+        laserCurtainMaterial.opacity = 0.32 + Math.sin(time * 6) * 0.1;
 
         // Detectar si hay productos en la zona del escáner
         const hasProductsInZone = products.some(p => p.mesh.position.x > -2 && p.mesh.position.x < -1);
@@ -852,6 +953,11 @@ export default function ThreeHero() {
             ledRingMat.color.setHex(0x004400);
             scanLight.intensity = 1.5;
         }
+
+        // Piloto de captura: destello corto tras cada disparo
+        const flash = Math.max(0, 1 - (performance.now() - lastCaptureAt) / 420);
+        captureLedMat.color.lerpColors(LED_DIM, LED_BRIGHT, flash);
+        captureGlow.intensity = flash * 1.6;
 
         // Baliza: destello que barre
         const sweep = (Math.sin(time * 2.4) + 1) / 2;
