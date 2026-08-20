@@ -8,10 +8,10 @@ import * as THREE from "three";
 // Tipos de productos industriales para inspección - colores más brillantes
 const productTypes = [
     { name: 'PCB', shape: 'box', color: 0x4CAF50, defectRate: 0.12, label: 'PCB-2847' },
-    { name: 'GEAR', shape: 'cylinder', color: 0xB0B0B0, defectRate: 0.08, label: 'GR-1052' },
+    { name: 'GEAR', shape: 'cylinder', color: 0xd2d7dc, defectRate: 0.08, label: 'GR-1052' },
     { name: 'CHIP', shape: 'box', color: 0x5C6BC0, defectRate: 0.15, label: 'IC-7734' },
     { name: 'BOTTLE', shape: 'bottle', color: 0x42A5F5, defectRate: 0.18, label: 'BT-0923' },
-    { name: 'BEARING', shape: 'torus', color: 0x90A4AE, defectRate: 0.10, label: 'BR-4455' }
+    { name: 'BEARING', shape: 'torus', color: 0xb9c4cd, defectRate: 0.10, label: 'BR-4455' }
 ];
 
 // Momento del último disparo de la cámara: alimenta el destello del piloto
@@ -62,6 +62,7 @@ export default function ThreeHero() {
 
     new MutationObserver(() => {
         fog.color.setHex(bandColor());
+        paintAcrylics();
         renderer.render(scene, camera);
     }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
@@ -216,6 +217,30 @@ export default function ThreeHero() {
     const CABIN_X = [-4.6, 1.6];
     const CABIN_Z = [-1.95, 1.95];
 
+    // Los acrílicos se pintan según el fondo de la banda: sobre el fondo oscuro
+    // basta un velo azulado, pero sobre la banda blanca del tema oscuro ese velo
+    // desaparece, así que ahí se vuelven grises y algo más densos.
+    const acrylics: Array<{ mat: THREE.MeshPhysicalMaterial; base: number }> = [];
+
+    function makeAcrylic(baseOpacity: number): THREE.MeshPhysicalMaterial {
+        const mat = new THREE.MeshPhysicalMaterial({
+            color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
+            thickness: 0.35, transparent: true, side: THREE.DoubleSide,
+            // Sin esto el panel escribe profundidad y recorta los láseres de detrás.
+            depthWrite: false
+        });
+        acrylics.push({ mat, base: baseOpacity });
+        return mat;
+    }
+
+    function paintAcrylics(): void {
+        const overWhite = document.documentElement.classList.contains('dark');
+        for (const { mat, base } of acrylics) {
+            mat.color.setHex(overWhite ? 0x8b9299 : 0xc8e6f2);
+            mat.opacity = overWhite ? base * 2.4 : base;
+        }
+    }
+
     /**
      * Tramo de perfil ranurado. `axis` es la dirección en la que corre el tramo;
      * las ranuras se dibujan sobre las dos caras perpendiculares que se ven.
@@ -295,11 +320,7 @@ export default function ThreeHero() {
     // los laterales, que es por donde entra y sale el producto.
     const backPanel = new THREE.Mesh(
         new THREE.PlaneGeometry(6.2, CABIN_H - CABIN_BASE_Y - 0.3),
-        new THREE.MeshPhysicalMaterial({
-            color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
-            thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide,
-            depthWrite: false
-        })
+        makeAcrylic(0.14)
     );
     backPanel.position.set(-1.5, (CABIN_H + CABIN_BASE_Y) / 2, CABIN_Z[0] + 0.02);
     cabinGroup.add(backPanel);
@@ -311,11 +332,7 @@ export default function ThreeHero() {
     for (const x of CABIN_X) {
         const side = new THREE.Mesh(
             new THREE.PlaneGeometry(3.9, sideGlassTop - sideGlassBottom),
-            new THREE.MeshPhysicalMaterial({
-                color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
-                thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide,
-                depthWrite: false
-            })
+            makeAcrylic(0.14)
         );
         side.rotation.y = Math.PI / 2;
         side.position.set(x + Math.sign(-1.5 - x) * 0.02, (sideGlassTop + sideGlassBottom) / 2, 0);
@@ -347,12 +364,7 @@ export default function ThreeHero() {
     // transparente que los otros porque queda entre el observador y la escena.
     const frontGlass = new THREE.Mesh(
         new THREE.PlaneGeometry(6.2, CABIN_H - (CABIN_H + CABIN_BASE_Y) / 2),
-        new THREE.MeshPhysicalMaterial({
-            color: 0xc8e6f2, metalness: 0, roughness: 0.05, transmission: 0.94,
-            thickness: 0.3, transparent: true, opacity: 0.07, side: THREE.DoubleSide,
-            // Sin esto el panel escribe profundidad y recorta los láseres de detrás.
-            depthWrite: false
-        })
+        makeAcrylic(0.07)
     );
     frontGlass.position.set(-1.5, (CABIN_H + (CABIN_H + CABIN_BASE_Y) / 2) / 2, CABIN_Z[1] - 0.02);
     cabinGroup.add(frontGlass);
@@ -466,6 +478,8 @@ export default function ThreeHero() {
     eStop.rotation.z = Math.PI / 2;
     eStop.position.set(panelX + 0.15, 1.78, 0.5);
     cabinGroup.add(eStop);
+
+    paintAcrylics();
 
     scene.add(cabinGroup);
 
@@ -713,6 +727,104 @@ export default function ThreeHero() {
 
     const products: Product[] = [];
 
+
+    const BELT_TOP = 0.08;   // cara superior de la banda: ahí se apoyan las piezas
+
+    /**
+     * Arma la pieza con su base en y = 0 y devuelve su altura real. Antes todas
+     * compartían la misma y, así que las altas (botella, rodamiento) se hundían.
+     */
+    function buildProduct(type: typeof productTypes[0]): { group: THREE.Group; height: number } {
+        const group = new THREE.Group();
+        const shell = (color: number, metalness: number, roughness: number) =>
+            new THREE.MeshStandardMaterial({ color, metalness, roughness });
+
+        const add = (mesh: THREE.Mesh) => {
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            group.add(mesh);
+            return mesh;
+        };
+
+        switch (type.shape) {
+            case 'box': {
+                // PCB: placa delgada con componentes y borde de contactos dorado
+                const H = 0.07;
+                const board = add(new THREE.Mesh(new THREE.BoxGeometry(0.62, H, 0.44), shell(type.color, 0.1, 0.7)));
+                board.position.y = H / 2;
+
+                for (const [cx, cz, w, d, h] of [[-0.15, 0.06, 0.16, 0.16, 0.1], [0.12, -0.08, 0.22, 0.12, 0.07], [0.2, 0.1, 0.08, 0.08, 0.12]]) {
+                    const comp = add(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), shell(0x22262c, 0.4, 0.5)));
+                    comp.position.set(cx, H + h / 2, cz);
+                }
+                for (let i = 0; i < 6; i++) {
+                    const pad = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.012, 0.06), shell(0xe8bd58, 0.55, 0.3)));
+                    pad.position.set(-0.28, H, -0.15 + i * 0.06);
+                }
+                return { group, height: 0.19 };
+            }
+
+            case 'cylinder': {
+                // Engrane: cubo, dientes alrededor y barreno central
+                const H = 0.22;
+                const hub = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, H, 24), shell(type.color, 0.42, 0.34)));
+                hub.position.y = H / 2;
+
+                for (let i = 0; i < 14; i++) {
+                    const a = (i / 14) * Math.PI * 2;
+                    const tooth = add(new THREE.Mesh(new THREE.BoxGeometry(0.07, H, 0.05), shell(type.color, 0.42, 0.34)));
+                    tooth.position.set(Math.cos(a) * 0.27, H / 2, Math.sin(a) * 0.27);
+                    tooth.rotation.y = -a;
+                }
+                const bore = add(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, H + 0.02, 16), shell(0x3a4046, 0.4, 0.5)));
+                bore.position.y = H / 2;
+                return { group, height: H };
+            }
+
+            case 'torus': {
+                // Rodamiento: acostado sobre la banda, no de canto
+                const ring = add(new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.07, 12, 28), shell(type.color, 0.45, 0.3)));
+                ring.rotation.x = Math.PI / 2;
+                ring.position.y = 0.07;
+
+                const inner = add(new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.12, 20), shell(0x9aa2aa, 0.45, 0.35)));
+                inner.position.y = 0.06;
+                return { group, height: 0.14 };
+            }
+
+            case 'bottle': {
+                // Botella: cuerpo, hombro, cuello y tapa
+                const body = add(new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.17, 0.42, 20), shell(type.color, 0.15, 0.12)));
+                body.position.y = 0.21;
+
+                const shoulder = add(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.16, 0.14, 20), shell(type.color, 0.15, 0.12)));
+                shoulder.position.y = 0.49;
+
+                const neck = add(new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.1, 16), shell(type.color, 0.15, 0.12)));
+                neck.position.y = 0.61;
+
+                const cap = add(new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.07, 16), shell(0xd9dee3, 0.5, 0.4)));
+                cap.position.y = 0.69;
+                return { group, height: 0.73 };
+            }
+
+            default: {
+                // Chip: encapsulado oscuro con patas laterales
+                const H = 0.1;
+                const pack = add(new THREE.Mesh(new THREE.BoxGeometry(0.34, H, 0.4), shell(type.color, 0.3, 0.45)));
+                pack.position.y = 0.05 + H / 2;
+
+                for (const side of [-1, 1]) {
+                    for (let i = 0; i < 5; i++) {
+                        const pin = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.02, 0.03), shell(0xd7dce1, 0.5, 0.3)));
+                        pin.position.set(side * 0.19, 0.05, -0.14 + i * 0.07);
+                    }
+                }
+                return { group, height: 0.15 };
+            }
+        }
+    }
+
     class Product {
         mesh: THREE.Group;
         type: typeof productTypes[0];
@@ -721,62 +833,38 @@ export default function ThreeHero() {
         label: THREE.Sprite | null = null;
         detected: boolean = false;
         scanProgress: number = 0;
+        height: number = 0.2;
 
         constructor(type: typeof productTypes[0], position: THREE.Vector3) {
             this.type = type;
             this.isDefective = Math.random() < type.defectRate;
             this.mesh = new THREE.Group();
 
-            // Crear geometría según tipo
-            let geometry: THREE.BufferGeometry;
-            switch (type.shape) {
-                case 'box':
-                    geometry = new THREE.BoxGeometry(0.5, 0.3, 0.6);
-                    break;
-                case 'cylinder':
-                    geometry = new THREE.CylinderGeometry(0.25, 0.25, 0.4, 16);
-                    break;
-                case 'torus':
-                    geometry = new THREE.TorusGeometry(0.25, 0.08, 8, 24);
-                    break;
-                case 'bottle':
-                    geometry = new THREE.CylinderGeometry(0.12, 0.18, 0.7, 12);
-                    break;
-                default:
-                    geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
-            }
+            const built = buildProduct(type);
+            this.height = built.height;
 
-            const material = new THREE.MeshStandardMaterial({
-                color: type.color,
-                metalness: 0.3,
-                roughness: 0.5
-            });
-
-            const productMesh = new THREE.Mesh(geometry, material);
-            productMesh.castShadow = true;
-            productMesh.receiveShadow = true;
-
-            // Añadir defecto visual si es defectuoso
+            // El defecto es un bulto en la propia pieza, a su altura real
             if (this.isDefective) {
-                const defectGeo = new THREE.SphereGeometry(0.08, 8, 8);
-                const defectMat = new THREE.MeshBasicMaterial({ color: 0xff2222 });
-                const defect = new THREE.Mesh(defectGeo, defectMat);
-                defect.position.set(
-                    (Math.random() - 0.5) * 0.3,
-                    0.15,
-                    (Math.random() - 0.5) * 0.3
+                const defect = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.055, 10, 8),
+                    new THREE.MeshStandardMaterial({ color: 0xd93a1a, emissive: 0x521204, roughness: 0.6 })
                 );
-                this.mesh.add(defect);
+                defect.position.set(
+                    (Math.random() - 0.5) * 0.28,
+                    built.height * 0.72,
+                    (Math.random() - 0.5) * 0.24
+                );
+                built.group.add(defect);
             }
 
-            this.mesh.add(productMesh);
+            this.mesh.add(built.group);
             this.mesh.position.copy(position);
             scene.add(this.mesh);
         }
 
         createDetectionUI() {
             // Bounding box
-            const boxGeo = new THREE.BoxGeometry(0.8, 0.6, 0.8);
+            const boxGeo = new THREE.BoxGeometry(0.78, this.height + 0.12, 0.62);
             const edges = new THREE.EdgesGeometry(boxGeo);
             const lineMat = new THREE.LineBasicMaterial({
                 color: this.isDefective ? 0xff4444 : 0x44ff44,
@@ -785,7 +873,7 @@ export default function ThreeHero() {
             });
             this.boundingBox = new THREE.LineSegments(edges, lineMat);
             this.boundingBox.position.copy(this.mesh.position);
-            this.boundingBox.position.y += 0.2;
+            this.boundingBox.position.y += this.height / 2;
             scene.add(this.boundingBox);
 
             // Label
@@ -848,7 +936,7 @@ export default function ThreeHero() {
             this.label = new THREE.Sprite(spriteMat);
             this.label.scale.set(2.2, 0.7, 1); // Escala más compacta
             this.label.position.copy(this.mesh.position);
-            this.label.position.y += 1.2; // Más cercano al producto
+            this.label.position.y += this.height + 0.75;
             this.label.position.z += 0.5; // Hacia la cámara
             scene.add(this.label);
         }
@@ -948,7 +1036,7 @@ export default function ThreeHero() {
         // Generar productos
         if (now - lastProductTime > productInterval) {
             const type = productTypes[Math.floor(Math.random() * productTypes.length)];
-            const product = new Product(type, new THREE.Vector3(-20, 0.25, 0));
+            const product = new Product(type, new THREE.Vector3(-20, BELT_TOP, 0));
             products.push(product);
             lastProductTime = now;
         }
