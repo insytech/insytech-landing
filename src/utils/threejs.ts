@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
 /**
  * Insytech Vision - Industrial Quality Inspection Animation
@@ -18,6 +19,7 @@ const productTypes = [
 // del piloto y la pantalla de la estación de inspección.
 let lastCaptureAt = -Infinity;
 let lastVerdictOk = true;
+let pusherFiredAt = -Infinity;
 
 // Estadísticas de la línea
 const stats = {
@@ -55,6 +57,13 @@ export default function ThreeHero() {
 
     const scene = new THREE.Scene();
 
+    // Sin mapa de entorno un material metálico no tiene nada que reflejar y sale
+    // negro. Este entorno de estudio es lo que permite usar metalness reales.
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environmentIntensity = 0.38;
+    pmrem.dispose();
+
     // Fog para difuminar los extremos de la cinta. Su color TIENE que ser el del
     // fondo de la banda, que se invierte con el tema: #211915 en claro, blanco en
     // oscuro. Si no, la bruma aparece como una franja del color contrario.
@@ -73,7 +82,7 @@ export default function ThreeHero() {
     // ============================================
 
     // Luz ambiental más brillante para ver mejor los productos
-    const ambientLight = new THREE.AmbientLight(0x6688aa, 1.2);
+    const ambientLight = new THREE.AmbientLight(0x6688aa, 0.45);
     scene.add(ambientLight);
 
     // Luz principal desde arriba (spotlight industrial) - más brillante
@@ -105,6 +114,11 @@ export default function ThreeHero() {
     // ZONA DE INSPECCIÓN (Scanner láser)
     // ============================================
 
+    // Altura de la celda: la comparten el escáner (para que la cortina llegue al
+    // perfil superior) y la propia estructura de la cabina.
+    const CABIN_H = 4.75;
+    const CURTAIN_H = CABIN_H - 0.14;   // del perfil superior a la banda
+
     const scannerGroup = new THREE.Group();
 
     // Marco del escáner
@@ -124,13 +138,13 @@ export default function ThreeHero() {
         side: THREE.DoubleSide
     });
     const ledPanel = new THREE.Mesh(ledPanelGeometry, ledPanelMaterial);
-    ledPanel.position.set(-1.5, 4, 0);
+    ledPanel.position.set(-1.5, CURTAIN_H, 0);
     ledPanel.rotation.x = Math.PI / 2;
     scannerGroup.add(ledPanel);
 
     // CORTINA LÁSER ROJA VERTICAL (estilo industrial real)
     // Plano vertical que cruza la banda transportadora - altura completa
-    const laserCurtainGeometry = new THREE.PlaneGeometry(0.05, 4);
+    const laserCurtainGeometry = new THREE.PlaneGeometry(0.05, CURTAIN_H);
     const laserCurtainMaterial = new THREE.MeshBasicMaterial({
         color: 0xff3333,
         transparent: true,
@@ -138,21 +152,21 @@ export default function ThreeHero() {
         side: THREE.DoubleSide
     });
     const laserCurtain = new THREE.Mesh(laserCurtainGeometry, laserCurtainMaterial);
-    laserCurtain.position.set(-1.5, 2, 0);
+    laserCurtain.position.set(-1.5, CURTAIN_H / 2, 0);
     laserCurtain.rotation.y = Math.PI / 2;
     scannerGroup.add(laserCurtain);
 
     // Líneas láser - van desde la barra superior hasta el suelo
     for (let z = -1.3; z <= 1.3; z += 0.25) {
         const beamLine = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.012, 0.012, 4, 8),
+            new THREE.CylinderGeometry(0.012, 0.012, CURTAIN_H, 8),
             new THREE.MeshBasicMaterial({
                 color: 0xff4444,
                 transparent: true,
                 opacity: 0.4
             })
         );
-        beamLine.position.set(-1.5, 2, z); // Centrado en altura
+        beamLine.position.set(-1.5, CURTAIN_H / 2, z); // Centrado en altura
         scannerGroup.add(beamLine);
     }
 
@@ -166,7 +180,7 @@ export default function ThreeHero() {
             emissive: 0x330000
         })
     );
-    laserEmitter.position.set(-1.5, 4.0, 0);
+    laserEmitter.position.set(-1.5, CURTAIN_H, 0);
     scannerGroup.add(laserEmitter);
 
     // LEDs en el emisor
@@ -175,7 +189,7 @@ export default function ThreeHero() {
             new THREE.SphereGeometry(0.03, 8, 8),
             new THREE.MeshBasicMaterial({ color: 0xff0000 })
         );
-        emitterLed.position.set(-1.5, 4.08, z);
+        emitterLed.position.set(-1.5, CURTAIN_H + 0.08, z);
         scannerGroup.add(emitterLed);
     }
 
@@ -193,7 +207,7 @@ export default function ThreeHero() {
 
     // Luz roja de escaneo más intensa
     const scanLight = new THREE.PointLight(0xff3333, 1.8, 6);
-    scanLight.position.set(-1.5, 2, 0);
+    scanLight.position.set(-1.5, CURTAIN_H / 2, 0);
     scannerGroup.add(scanLight);
 
     scannerGroup.position.set(0, 0, 0);
@@ -213,7 +227,6 @@ export default function ThreeHero() {
     const steelMat = new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.8, roughness: 0.3 });
 
     const PROFILE = 0.2;   // sección del perfil (40x40 a escala de la escena)
-    const CABIN_H = 4.75;
     const CABIN_FLOOR = -1.05;   // el piso está más abajo que la cinta: las patas bajan hasta ahí
     const CABIN_BASE_Y = -0.85;  // marco de base POR DEBAJO de la banda, si no choca con las piezas
     const CABIN_X = [-4.6, 1.6];
@@ -860,6 +873,67 @@ export default function ThreeHero() {
 
     scene.add(conveyorGroup);
 
+
+    // ============================================
+    // EXPULSOR DE RECHAZO
+    // Cilindro neumático que saca de la banda la pieza que no pasa la inspección
+    // y la deja caer en el contenedor. Antes la pieza rechazada seguía de largo.
+    // ============================================
+
+    const PUSHER_X = 5.9;          // aguas abajo de la cortina láser y de la estación
+    const pusherGroup = new THREE.Group();
+
+    const pusherBody = new THREE.Mesh(
+        new THREE.BoxGeometry(0.34, 0.3, 0.72),
+        new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.85, roughness: 0.3 })
+    );
+    pusherBody.position.set(PUSHER_X, 0.34, -2.15);
+    pusherGroup.add(pusherBody);
+
+    const pusherRod = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.05, 0.05, 1.0, 12),
+        new THREE.MeshStandardMaterial({ color: 0xd9dee3, metalness: 0.95, roughness: 0.12 })
+    );
+    pusherRod.rotation.x = Math.PI / 2;
+    pusherGroup.add(pusherRod);
+
+    const pusherPad = new THREE.Mesh(
+        new THREE.BoxGeometry(0.28, 0.26, 0.06),
+        new THREE.MeshStandardMaterial({ color: 0x2b2f35, metalness: 0.4, roughness: 0.6 })
+    );
+    pusherGroup.add(pusherPad);
+
+    // Soporte al bastidor
+    const pusherMount = new THREE.Mesh(
+        new THREE.BoxGeometry(0.12, 0.7, 0.12),
+        new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.8, roughness: 0.35 })
+    );
+    pusherMount.position.set(PUSHER_X, 0.02, -2.4);
+    pusherGroup.add(pusherMount);
+
+    /** Extiende y retrae el vástago: 0 recogido, 1 fuera. */
+    function setPusher(extend: number): void {
+        const z = -1.85 + extend * 1.25;
+        pusherRod.position.set(PUSHER_X, 0.34, z - 0.5);
+        pusherPad.position.set(PUSHER_X, 0.34, z);
+    }
+    setPusher(0);
+
+    // Contenedor de rechazo, del lado por el que sale la pieza
+    const binMat = new THREE.MeshStandardMaterial({ color: 0xb4551f, metalness: 0.35, roughness: 0.6 });
+    const bin = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.75, 1.2), binMat);
+    bin.position.set(PUSHER_X, CABIN_FLOOR + 0.38, 2.55);
+    pusherGroup.add(bin);
+
+    const binMouth = new THREE.Mesh(
+        new THREE.BoxGeometry(1.42, 0.06, 1.12),
+        new THREE.MeshStandardMaterial({ color: 0x14171b, roughness: 0.9 })
+    );
+    binMouth.position.set(PUSHER_X, CABIN_FLOOR + 0.74, 2.55);
+    pusherGroup.add(binMouth);
+
+    scene.add(pusherGroup);
+
     // ============================================
     // SISTEMA DE PRODUCTOS
     // ============================================
@@ -897,7 +971,7 @@ export default function ThreeHero() {
                     comp.position.set(cx, H + h / 2, cz);
                 }
                 for (let i = 0; i < 6; i++) {
-                    const pad = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.012, 0.06), shell(0xe8bd58, 0.55, 0.3)));
+                    const pad = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.012, 0.06), shell(0xe8bd58, 0.95, 0.28)));
                     pad.position.set(-0.28, H, -0.15 + i * 0.06);
                 }
                 return { group, height: 0.19 };
@@ -906,12 +980,12 @@ export default function ThreeHero() {
             case 'cylinder': {
                 // Engrane: cubo, dientes alrededor y barreno central
                 const H = 0.22;
-                const hub = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, H, 24), shell(type.color, 0.42, 0.34)));
+                const hub = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, H, 24), shell(type.color, 0.88, 0.26)));
                 hub.position.y = H / 2;
 
                 for (let i = 0; i < 14; i++) {
                     const a = (i / 14) * Math.PI * 2;
-                    const tooth = add(new THREE.Mesh(new THREE.BoxGeometry(0.07, H, 0.05), shell(type.color, 0.42, 0.34)));
+                    const tooth = add(new THREE.Mesh(new THREE.BoxGeometry(0.07, H, 0.05), shell(type.color, 0.88, 0.26)));
                     tooth.position.set(Math.cos(a) * 0.27, H / 2, Math.sin(a) * 0.27);
                     tooth.rotation.y = -a;
                 }
@@ -922,11 +996,11 @@ export default function ThreeHero() {
 
             case 'torus': {
                 // Rodamiento: acostado sobre la banda, no de canto
-                const ring = add(new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.07, 12, 28), shell(type.color, 0.45, 0.3)));
+                const ring = add(new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.07, 12, 28), shell(type.color, 0.9, 0.22)));
                 ring.rotation.x = Math.PI / 2;
                 ring.position.y = 0.07;
 
-                const inner = add(new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.12, 20), shell(0x9aa2aa, 0.45, 0.35)));
+                const inner = add(new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.12, 20), shell(0x9aa2aa, 0.85, 0.3)));
                 inner.position.y = 0.06;
                 return { group, height: 0.14 };
             }
@@ -955,7 +1029,7 @@ export default function ThreeHero() {
 
                 for (const side of [-1, 1]) {
                     for (let i = 0; i < 5; i++) {
-                        const pin = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.02, 0.03), shell(0xd7dce1, 0.5, 0.3)));
+                        const pin = add(new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.02, 0.03), shell(0xd7dce1, 0.9, 0.25)));
                         pin.position.set(side * 0.19, 0.05, -0.14 + i * 0.07);
                     }
                 }
@@ -973,6 +1047,8 @@ export default function ThreeHero() {
         detected: boolean = false;
         scanProgress: number = 0;
         height: number = 0.2;
+        rejected: boolean = false;
+        fallSpeed: number = 0;
 
         constructor(type: typeof productTypes[0], position: THREE.Vector3) {
             this.type = type;
@@ -1084,9 +1160,35 @@ export default function ThreeHero() {
 
         update(deltaTime: number): boolean {
             // Mover en la cinta
-            this.mesh.position.x += 0.02;
-            if (this.boundingBox) this.boundingBox.position.x = this.mesh.position.x;
-            if (this.label) this.label.position.x = this.mesh.position.x;
+            this.mesh.position.x += this.rejected ? 0.006 : 0.02;
+
+            // Expulsión: la pieza rechazada sale de la banda y cae al contenedor
+            if (this.isDefective && this.detected && !this.rejected && this.mesh.position.x >= PUSHER_X) {
+                this.rejected = true;
+                pusherFiredAt = performance.now();
+            }
+
+            if (this.rejected) {
+                this.mesh.position.z += 0.055;
+                if (this.mesh.position.z > 1.5) {
+                    this.fallSpeed += 0.012;
+                    this.mesh.position.y -= this.fallSpeed;
+                    this.mesh.rotation.z += 0.06;
+                }
+                if (this.label && this.label.material instanceof THREE.SpriteMaterial) {
+                    this.label.material.opacity = Math.max(0, this.label.material.opacity - 0.04);
+                }
+            }
+
+            if (this.boundingBox) {
+                this.boundingBox.position.x = this.mesh.position.x;
+                this.boundingBox.position.z = this.mesh.position.z;
+                this.boundingBox.position.y = this.mesh.position.y + this.height / 2;
+            }
+            if (this.label) {
+                this.label.position.x = this.mesh.position.x;
+                this.label.position.z = this.mesh.position.z + 0.5;
+            }
 
             // Rotación sutil
             this.mesh.rotation.y += 0.005;
@@ -1133,7 +1235,12 @@ export default function ThreeHero() {
                 }
             }
 
-            // Eliminar cuando sale
+            // Eliminar cuando sale de cuadro o cuando ya cayó al contenedor
+            if (this.mesh.position.y < CABIN_FLOOR + 0.55 && this.rejected) {
+                this.destroy();
+                return false;
+            }
+
             if (this.mesh.position.x > 20) {
                 this.destroy();
                 return false;
@@ -1184,6 +1291,15 @@ export default function ThreeHero() {
 
     let lastProductTime = 0;
     const productInterval = 2500;
+
+    // Arranque en caliente: sin esto la primera pieza tardaba ~16 s en llegar a
+    // la cortina y el visitante veía una línea vacía.
+    for (const startX of [-16, -11.5, -7, -2.5, 1.5, 6]) {
+        products.push(new Product(
+            productTypes[Math.floor(Math.random() * productTypes.length)],
+            new THREE.Vector3(startX, BELT_TOP, 0)
+        ));
+    }
     let time = 0;
 
     let rafId = 0;
@@ -1234,6 +1350,12 @@ export default function ThreeHero() {
             // Verde fijo cuando está en espera
             ledRingMat.color.setHex(0x004400);
             scanLight.intensity = 1.5;
+        }
+
+        // Vástago del expulsor: salida rápida, retorno lento
+        const sincePush = performance.now() - pusherFiredAt;
+        if (sincePush < 1100) {
+            setPusher(sincePush < 220 ? sincePush / 220 : Math.max(0, 1 - (sincePush - 220) / 880));
         }
 
         // La pantalla de la estación muestra el veredicto de la última pieza
