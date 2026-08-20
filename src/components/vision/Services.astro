@@ -16,16 +16,6 @@ import { bentoData } from "./BentoData";
         rootSelector="#services"
         client:only="react"
     />
-    <!-- Background Accents -->
-    <div
-        class="absolute top-0 right-0 w-full h-full pointer-events-none opacity-20 dark:opacity-40 overflow-hidden"
-    >
-        <div
-            class="absolute -top-[10%] -right-[10%] w-[40%] h-[40%] bg-[#00B5E2]/10 rounded-full blur-[120px]"
-        >
-        </div>
-    </div>
-
     <Container className="relative z-10">
         <div class="max-w-3xl mb-16" data-animate="fade-up">
             <h2
@@ -45,7 +35,7 @@ import { bentoData } from "./BentoData";
 
         <MagicBento
             cardData={bentoData}
-            enableSpotlight={true}
+            enableSpotlight={false}
             enableStars={false}
             enableBorderGlow={true}
             enableMagnetism={true}
