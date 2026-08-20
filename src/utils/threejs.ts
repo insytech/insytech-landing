@@ -213,7 +213,7 @@ export default function ThreeHero() {
     const steelMat = new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.8, roughness: 0.3 });
 
     const PROFILE = 0.2;   // sección del perfil (40x40 a escala de la escena)
-    const CABIN_H = 4.1;
+    const CABIN_H = 4.75;
     const CABIN_FLOOR = -1.05;   // el piso está más abajo que la cinta: las patas bajan hasta ahí
     const CABIN_BASE_Y = -0.85;  // marco de base POR DEBAJO de la banda, si no choca con las piezas
     const CABIN_X = [-4.6, 1.6];
@@ -366,7 +366,7 @@ export default function ThreeHero() {
     // transparente que los otros porque queda entre el observador y la escena.
     const frontGlass = new THREE.Mesh(
         new THREE.PlaneGeometry(6.2, CABIN_H - (CABIN_H + CABIN_BASE_Y) / 2),
-        makeAcrylic(0.07)
+        makeAcrylic(0.10)
     );
     frontGlass.position.set(-1.5, (CABIN_H + (CABIN_H + CABIN_BASE_Y) / 2) / 2, CABIN_Z[1] - 0.02);
     cabinGroup.add(frontGlass);
@@ -741,10 +741,10 @@ export default function ThreeHero() {
 
     // Brazo que la sujeta al perfil de la cabina
     const camBracket = new THREE.Mesh(
-        new THREE.BoxGeometry(0.08, 1.5, 0.08),
+        new THREE.BoxGeometry(0.08, 2.15, 0.08),
         new THREE.MeshStandardMaterial({ color: 0x9aa0a8, metalness: 0.7, roughness: 0.35 })
     );
-    camBracket.position.set(-3.85, 3.35, 1.35);
+    camBracket.position.set(-3.85, 3.68, 1.35);
     scene.add(camBracket);
 
     scene.add(cameraGroup);
@@ -1156,8 +1156,27 @@ export default function ThreeHero() {
     // Vista lateral baja: la banda es un rectangulo muy ancho a sangre, asi que
     // la camara se acuesta en vez de mirar desde arriba como en la tarjeta.
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(2, 3.1, 10.4);
-    camera.lookAt(0, 1.75, 0);
+
+    // Encuadre según la forma del contenedor: en móvil la banda es casi cuadrada
+    // y con el encuadre ancho la celda quedaba diminuta, así que ahí se cierra
+    // sobre ella. La celda subió de alto, así que la cámara también se aleja.
+    const host: HTMLElement = container;
+    const camBase = { x: 2, y: 3.4, z: 11.4, tx: 0, ty: 2.05 };
+
+    function frameCamera(): void {
+        const aspect = (host.clientWidth || 1) / (host.clientHeight || 1);
+        if (aspect < 1.7) {
+            Object.assign(camBase, { x: 0.2, y: 3.4, z: 10.4, tx: -1.5, ty: 2.3 });
+        } else if (aspect < 2.6) {
+            Object.assign(camBase, { x: 1.1, y: 3.3, z: 10.4, tx: -0.9, ty: 2.1 });
+        } else {
+            Object.assign(camBase, { x: 2, y: 3.4, z: 11.4, tx: 0, ty: 2.05 });
+        }
+        camera.position.set(camBase.x, camBase.y, camBase.z);
+        camera.lookAt(camBase.tx, camBase.ty, 0);
+    }
+
+    frameCamera();
 
     // ============================================
     // ANIMACIÓN PRINCIPAL
@@ -1238,9 +1257,9 @@ export default function ThreeHero() {
         ledPanelMaterial.opacity = 0.2 + Math.sin(time * 4) * 0.15;
 
         // Movimiento sutil de la cámara
-        camera.position.x = 2 + Math.sin(time * 0.3) * 0.3;
-        camera.position.y = 3.1 + Math.sin(time * 0.4) * 0.12;
-        camera.lookAt(0, 1.75, 0);
+        camera.position.x = camBase.x + Math.sin(time * 0.3) * 0.3;
+        camera.position.y = camBase.y + Math.sin(time * 0.4) * 0.12;
+        camera.lookAt(camBase.tx, camBase.ty, 0);
 
         renderer.render(scene, camera);
     }
@@ -1274,6 +1293,8 @@ export default function ThreeHero() {
         const newHeight = container.clientHeight;
         camera.aspect = newWidth / newHeight;
         camera.updateProjectionMatrix();
+        frameCamera();
+        frameCamera();
         renderer.setSize(newWidth, newHeight);
     });
 

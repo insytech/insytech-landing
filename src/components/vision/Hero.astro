@@ -76,7 +76,7 @@ const indice = [
             <Container>
                 <ul
                     id="verdict-log"
-                    class="flex items-center gap-6 overflow-hidden py-3 font-mono text-[11px] tracking-[0.06em] whitespace-nowrap"
+                    class="mono-tech flex items-center gap-6 overflow-hidden py-3 text-[11px] tracking-[0.06em] whitespace-nowrap"
                 >
                     <li data-placeholder class="text-white/35 dark:text-[#211915]/45">
                         Esperando piezas…
@@ -93,7 +93,7 @@ const indice = [
             {
                 indice.map((item) => (
                     <div class="flex gap-4 pt-6 pr-8 md:border-l border-[#211915]/10 dark:border-white/10 md:first:border-l-0 md:pl-6 md:first:pl-0">
-                        <span class="font-mono text-xs text-[#00B5E2] pt-1">
+                        <span class="mono-tech text-xs text-[#00B5E2] pt-1">
                             {item.num}
                         </span>
                         <div>
@@ -112,6 +112,12 @@ const indice = [
 </section>
 
 <style>
+    /* Etiquetas técnicas en IBM Plex Mono (se carga en VisionLayout junto a
+       Raleway, en la misma petición a Google Fonts). */
+    .mono-tech {
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+
     /* Entrada de cada renglón del registro. Se aplica desde el script de abajo,
        que inserta los <li>: el CSS con ámbito de Astro no alcanza a los nodos
        creados por la isla de Three.js, pero sí a los que crea este script,
