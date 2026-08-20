@@ -50,8 +50,17 @@ export default function ThreeHero() {
 
     const scene = new THREE.Scene();
 
-    // Fog muy sutil para profundidad (menos denso)
-    scene.fog = new THREE.Fog(0x1a1a25, 25, 50);
+    // Fog para difuminar los extremos de la cinta. Su color TIENE que ser el del
+    // fondo de la banda, que se invierte con el tema: #211915 en claro, blanco en
+    // oscuro. Si no, la bruma aparece como una franja del color contrario.
+    const bandColor = () => document.documentElement.classList.contains('dark') ? 0xffffff : 0x211915;
+    const fog = new THREE.Fog(bandColor(), 13, 30);
+    scene.fog = fog;
+
+    new MutationObserver(() => {
+        fog.color.setHex(bandColor());
+        renderer.render(scene, camera);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
     // ============================================
     // ILUMINACIÓN INDUSTRIAL PROFESIONAL
@@ -99,29 +108,6 @@ export default function ThreeHero() {
         metalness: 0.8,
         roughness: 0.2
     });
-
-    // Postes laterales - a los lados de la banda para que los productos no pasen a través
-    const leftPost = new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 4, 0.15),
-        frameMaterial
-    );
-    leftPost.position.set(-1.5, 2, 1.6); // Movido al frente de la banda
-    scannerGroup.add(leftPost);
-
-    const rightPost = new THREE.Mesh(
-        new THREE.BoxGeometry(0.15, 4, 0.15),
-        frameMaterial
-    );
-    rightPost.position.set(-1.5, 2, -1.6); // Movido al fondo de la banda
-    scannerGroup.add(rightPost);
-
-    // Barra superior conectando los postes (perpendicular a la banda)
-    const topBar = new THREE.Mesh(
-        new THREE.BoxGeometry(0.25, 0.25, 3.4),
-        frameMaterial
-    );
-    topBar.position.set(-1.5, 4, 0);
-    scannerGroup.add(topBar);
 
     // Panel de luz LED en barra superior (efecto de escáner activo)
     const ledPanelGeometry = new THREE.PlaneGeometry(0.15, 3.2);
@@ -208,6 +194,75 @@ export default function ThreeHero() {
     scene.add(scannerGroup);
 
     // ============================================
+    // CABINA DE INSPECCIÓN (perfil de aluminio + acrílico)
+    // Como las celdas reales: cuatro postes, marco superior, barras LED dentro
+    // y baliza arriba. Encierra el escáner y le da escala a la cinta.
+    // ============================================
+
+    const cabinGroup = new THREE.Group();
+    const profileMat = new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.75, roughness: 0.32 });
+    const CABIN_X = [-4.6, 1.6];
+    const CABIN_Z = [-1.95, 1.95];
+    const CABIN_H = 4.1;
+
+    for (const x of CABIN_X) {
+        for (const z of CABIN_Z) {
+            const post = new THREE.Mesh(new THREE.BoxGeometry(0.16, CABIN_H, 0.16), profileMat);
+            post.position.set(x, CABIN_H / 2, z);
+            cabinGroup.add(post);
+        }
+    }
+
+    // Marco superior: dos vigas a lo largo y dos a lo ancho
+    for (const z of CABIN_Z) {
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(6.36, 0.16, 0.16), profileMat);
+        beam.position.set(-1.5, CABIN_H, z);
+        cabinGroup.add(beam);
+    }
+    for (const x of CABIN_X) {
+        const beam = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 4.06), profileMat);
+        beam.position.set(x, CABIN_H, 0);
+        cabinGroup.add(beam);
+    }
+
+    // Techo opaco
+    const roof = new THREE.Mesh(
+        new THREE.BoxGeometry(6.2, 0.06, 3.9),
+        new THREE.MeshStandardMaterial({ color: 0x6f757d, metalness: 0.5, roughness: 0.6 })
+    );
+    roof.position.set(-1.5, CABIN_H + 0.08, 0);
+    cabinGroup.add(roof);
+
+    // Barras LED de iluminación interior + su luz real
+    for (const z of [-1.1, 1.1]) {
+        const bar = new THREE.Mesh(
+            new THREE.BoxGeometry(5.4, 0.1, 0.14),
+            new THREE.MeshBasicMaterial({ color: 0xf2f8ff })
+        );
+        bar.position.set(-1.5, CABIN_H - 0.28, z);
+        cabinGroup.add(bar);
+
+        const barLight = new THREE.RectAreaLight(0xffffff, 3, 5.4, 0.3);
+        barLight.position.set(-1.5, CABIN_H - 0.34, z);
+        barLight.lookAt(-1.5, 0, z);
+        cabinGroup.add(barLight);
+    }
+
+    // Baliza naranja: el detalle que hace que se lea como celda industrial
+    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff8a00, transparent: true, opacity: 0.9 });
+    const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.24, 0.34, 20), beaconMat);
+    beacon.position.set(0.6, CABIN_H + 0.28, 0);
+    cabinGroup.add(beacon);
+    const beaconBase = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 20), profileMat);
+    beaconBase.position.set(0.6, CABIN_H + 0.09, 0);
+    cabinGroup.add(beaconBase);
+    const beaconLight = new THREE.PointLight(0xff8a00, 1.4, 4);
+    beaconLight.position.set(0.6, CABIN_H + 0.28, 0);
+    cabinGroup.add(beaconLight);
+
+    scene.add(cabinGroup);
+
+    // ============================================
     // CÁMARA INDUSTRIAL PRINCIPAL
     // ============================================
 
@@ -216,9 +271,9 @@ export default function ThreeHero() {
     // Cuerpo principal de la cámara (más grande y detallado)
     const camBodyGeo = new THREE.BoxGeometry(1.2, 0.8, 1.5);
     const camBodyMat = new THREE.MeshStandardMaterial({
-        color: 0x2a2a3a,
-        metalness: 0.7,
-        roughness: 0.3
+        color: 0x6c737d,
+        metalness: 0.75,
+        roughness: 0.28
     });
     const camBody = new THREE.Mesh(camBodyGeo, camBodyMat);
     cameraGroup.add(camBody);
@@ -226,18 +281,18 @@ export default function ThreeHero() {
     // Detalle frontal
     const camFront = new THREE.Mesh(
         new THREE.BoxGeometry(1.0, 0.6, 0.1),
-        new THREE.MeshStandardMaterial({ color: 0x1a1a25, metalness: 0.8, roughness: 0.2 })
+        new THREE.MeshStandardMaterial({ color: 0x33383f, metalness: 0.8, roughness: 0.2 })
     );
     camFront.position.set(0, 0, -0.8);
     cameraGroup.add(camFront);
 
     // Lente principal (más prominente)
     const lensHousing = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.35, 0.4, 0.6, 24),
-        new THREE.MeshStandardMaterial({ color: 0x1a1a25, metalness: 0.9, roughness: 0.1 })
+        new THREE.CylinderGeometry(0.33, 0.38, 0.85, 24),
+        new THREE.MeshStandardMaterial({ color: 0x23272d, metalness: 0.9, roughness: 0.12 })
     );
     lensHousing.rotation.x = Math.PI / 2;
-    lensHousing.position.set(0, 0, -1.1);
+    lensHousing.position.set(0, 0, -1.2);
     cameraGroup.add(lensHousing);
 
     // Cristal del lente con reflejo
@@ -253,14 +308,14 @@ export default function ThreeHero() {
             reflectivity: 1.0
         })
     );
-    lensGlass.position.set(0, 0, -1.42);
+    lensGlass.position.set(0, 0, -1.63);
     cameraGroup.add(lensGlass);
 
     // Anillo de LEDs alrededor del lente (guardamos referencia para animación)
     const ledRingGeo = new THREE.TorusGeometry(0.38, 0.04, 8, 32);
     const ledRingMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const ledRing = new THREE.Mesh(ledRingGeo, ledRingMat);
-    ledRing.position.set(0, 0, -1.4);
+    ledRing.position.set(0, 0, -1.6);
     cameraGroup.add(ledRing);
 
     // LEDs indicadores en el cuerpo
@@ -278,38 +333,23 @@ export default function ThreeHero() {
     led2.position.set(0.5, 0.3, -0.74);
     cameraGroup.add(led2);
 
-    // Soporte de montaje - conecta cámara con barra superior
-    const mountArm = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.06, 0.06, 0.8, 12),
-        new THREE.MeshStandardMaterial({ color: 0x3a3a4a, metalness: 0.6, roughness: 0.4 })
-    );
-    mountArm.position.set(0, 0.6, 0);
-    cameraGroup.add(mountArm);
+    // OJO: en un Group, lookAt() apunta el eje +Z al objetivo (el -Z solo aplica a
+    // camaras y luces), y el lente de este modelo esta en -Z. Por eso se mira al
+    // punto OPUESTO al de inspeccion: asi el lente queda apuntando a la pieza.
+    const camPos = new THREE.Vector3(-4.2, 2.35, 0.7);
+    const camTarget = new THREE.Vector3(-1.5, 0.75, 0.2);
+    cameraGroup.position.copy(camPos);
+    cameraGroup.scale.setScalar(0.95);
+    cameraGroup.lookAt(camPos.clone().multiplyScalar(2).sub(camTarget));
 
-    // Base de montaje sobre la barra
-    const mountBase = new THREE.Mesh(
-        new THREE.BoxGeometry(0.4, 0.08, 0.4),
-        new THREE.MeshStandardMaterial({ color: 0x2a2a3a, metalness: 0.7, roughness: 0.3 })
+    // Brazo que la sujeta al perfil de la cabina
+    const camBracket = new THREE.Mesh(
+        new THREE.BoxGeometry(0.09, 1.45, 0.09),
+        new THREE.MeshStandardMaterial({ color: 0x9aa0a8, metalness: 0.7, roughness: 0.35 })
     );
-    mountBase.position.set(0, 1.0, 0);
-    cameraGroup.add(mountBase);
+    camBracket.position.set(-4.2, 3.35, 0.7);
+    scene.add(camBracket);
 
-    // Cable de la cámara - sale hacia atrás
-    const cableCurve = new THREE.QuadraticBezierCurve3(
-        new THREE.Vector3(0.4, 0.2, 0.5),
-        new THREE.Vector3(1.0, 0.5, 1.0),
-        new THREE.Vector3(1.5, 0, 1.5)
-    );
-    const cableGeo = new THREE.TubeGeometry(cableCurve, 20, 0.025, 8, false);
-    const cable = new THREE.Mesh(
-        cableGeo,
-        new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.8 })
-    );
-    cameraGroup.add(cable);
-
-    // Posicionar cámara sobre la cortina láser
-    cameraGroup.position.set(-1.5, 4.5, 0); // Ahora sobre la cortina (x=-1.5)
-    cameraGroup.rotation.x = Math.PI / 4; // Inclinada hacia abajo mirando productos
     scene.add(cameraGroup);
 
     // ============================================
@@ -320,7 +360,7 @@ export default function ThreeHero() {
 
     // Base metálica de la cinta - color más claro
     const conveyorBase = new THREE.Mesh(
-        new THREE.BoxGeometry(25, 0.3, 3),
+        new THREE.BoxGeometry(46, 0.3, 3),
         new THREE.MeshStandardMaterial({
             color: 0x4a4a55,
             metalness: 0.5,
@@ -333,7 +373,7 @@ export default function ThreeHero() {
 
     // Superficie de la cinta - gris más claro para contraste
     const beltSurface = new THREE.Mesh(
-        new THREE.BoxGeometry(24, 0.05, 2.6),
+        new THREE.BoxGeometry(45, 0.05, 2.6),
         new THREE.MeshStandardMaterial({
             color: 0x3a3a45,
             metalness: 0.2,
@@ -346,7 +386,7 @@ export default function ThreeHero() {
 
     // Líneas de la cinta para efecto de movimiento - más visibles
     const beltLines: THREE.Mesh[] = [];
-    for (let i = -12; i <= 12; i += 0.4) {
+    for (let i = -22; i <= 22; i += 0.4) {
         const line = new THREE.Mesh(
             new THREE.BoxGeometry(0.08, 0.04, 2.4),
             new THREE.MeshStandardMaterial({ color: 0x505060 })
@@ -364,21 +404,21 @@ export default function ThreeHero() {
     });
 
     const leftRail = new THREE.Mesh(
-        new THREE.BoxGeometry(25, 0.2, 0.15),
+        new THREE.BoxGeometry(46, 0.2, 0.15),
         railMaterial
     );
     leftRail.position.set(0, 0.1, 1.4);
     conveyorGroup.add(leftRail);
 
     const rightRail = new THREE.Mesh(
-        new THREE.BoxGeometry(25, 0.2, 0.15),
+        new THREE.BoxGeometry(46, 0.2, 0.15),
         railMaterial
     );
     rightRail.position.set(0, 0.1, -1.4);
     conveyorGroup.add(rightRail);
 
     // Rodillos en los extremos
-    for (let x of [-12, 12]) {
+    for (let x of [-22, 22]) {
         const roller = new THREE.Mesh(
             new THREE.CylinderGeometry(0.25, 0.25, 3.2, 16),
             new THREE.MeshStandardMaterial({ color: 0x4a4a55, metalness: 0.7, roughness: 0.3 })
@@ -567,6 +607,12 @@ export default function ThreeHero() {
                             this.label.material.opacity = 1;
                         }
 
+                        // El registro del hero se escribe desde aqui: un renglon
+                        // por pieza que termina de cruzar la cortina laser.
+                        document.dispatchEvent(new CustomEvent('insytech:verdict', {
+                            detail: { label: this.type.label, ok: !this.isDefective }
+                        }));
+
                         // Actualizar estadísticas
                         stats.totalInspected++;
                         if (this.isDefective) {
@@ -579,7 +625,7 @@ export default function ThreeHero() {
             }
 
             // Eliminar cuando sale
-            if (this.mesh.position.x > 14) {
+            if (this.mesh.position.x > 20) {
                 this.destroy();
                 return false;
             }
@@ -598,9 +644,11 @@ export default function ThreeHero() {
     // CÁMARA PERSPECTIVA
     // ============================================
 
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
-    camera.position.set(4, 6, 8);
-    camera.lookAt(0, 1, 0);
+    // Vista lateral baja: la banda es un rectangulo muy ancho a sangre, asi que
+    // la camara se acuesta en vez de mirar desde arriba como en la tarjeta.
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
+    camera.position.set(2, 3.2, 10.4);
+    camera.lookAt(0, 2, 0);
 
     // ============================================
     // ANIMACIÓN PRINCIPAL
@@ -621,7 +669,7 @@ export default function ThreeHero() {
         // Generar productos
         if (now - lastProductTime > productInterval) {
             const type = productTypes[Math.floor(Math.random() * productTypes.length)];
-            const product = new Product(type, new THREE.Vector3(-13, 0.25, 0));
+            const product = new Product(type, new THREE.Vector3(-20, 0.25, 0));
             products.push(product);
             lastProductTime = now;
         }
@@ -636,8 +684,8 @@ export default function ThreeHero() {
         // Animar líneas de la cinta
         beltLines.forEach(line => {
             line.position.x += 0.02;
-            if (line.position.x > 12) {
-                line.position.x = -12;
+            if (line.position.x > 22) {
+                line.position.x = -22;
             }
         });
 
@@ -660,13 +708,18 @@ export default function ThreeHero() {
             scanLight.intensity = 1.5;
         }
 
+        // Baliza: destello que barre
+        const sweep = (Math.sin(time * 2.4) + 1) / 2;
+        beaconMat.opacity = 0.45 + sweep * 0.5;
+        beaconLight.intensity = 0.5 + sweep * 1.8;
+
         // LED panel pulsating rojo
         ledPanelMaterial.opacity = 0.2 + Math.sin(time * 4) * 0.15;
 
         // Movimiento sutil de la cámara
-        camera.position.x = 4 + Math.sin(time * 0.3) * 0.5;
-        camera.position.y = 6 + Math.sin(time * 0.4) * 0.3;
-        camera.lookAt(0, 1, 0);
+        camera.position.x = 2 + Math.sin(time * 0.3) * 0.3;
+        camera.position.y = 3.2 + Math.sin(time * 0.4) * 0.12;
+        camera.lookAt(0, 2, 0);
 
         renderer.render(scene, camera);
     }
