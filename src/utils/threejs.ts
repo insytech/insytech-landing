@@ -194,71 +194,216 @@ export default function ThreeHero() {
     scene.add(scannerGroup);
 
     // ============================================
-    // CABINA DE INSPECCIÓN (perfil de aluminio + acrílico)
-    // Como las celdas reales: cuatro postes, marco superior, barras LED dentro
-    // y baliza arriba. Encierra el escáner y le da escala a la cinta.
+    // CELDA DE INSPECCIÓN
+    // Estructura de perfil de aluminio ranurado, como las celdas reales: el perfil
+    // no es una caja lisa, se reconoce por la ranura clara que corre por su cara.
+    // Sostiene la iluminación, la cámara y la torreta andon.
     // ============================================
 
     const cabinGroup = new THREE.Group();
-    const profileMat = new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.75, roughness: 0.32 });
+
+    const anodizedMat = new THREE.MeshStandardMaterial({ color: 0x33363b, metalness: 0.55, roughness: 0.45 });
+    const grooveMat = new THREE.MeshStandardMaterial({ color: 0xb7bdc4, metalness: 0.85, roughness: 0.22 });
+    const steelMat = new THREE.MeshStandardMaterial({ color: 0x8f959d, metalness: 0.8, roughness: 0.3 });
+
+    const PROFILE = 0.2;   // sección del perfil (40x40 a escala de la escena)
+    const CABIN_H = 4.1;
+    const CABIN_FLOOR = -1.25;   // el piso está más abajo que la cinta: las patas bajan hasta ahí
+    const CABIN_BASE_Y = -0.85;  // marco de base POR DEBAJO de la banda, si no choca con las piezas
     const CABIN_X = [-4.6, 1.6];
     const CABIN_Z = [-1.95, 1.95];
-    const CABIN_H = 4.1;
 
+    /**
+     * Tramo de perfil ranurado. `axis` es la dirección en la que corre el tramo;
+     * las ranuras se dibujan sobre las dos caras perpendiculares que se ven.
+     */
+    function profileBeam(length: number, axis: 'x' | 'y' | 'z'): THREE.Group {
+        const beam = new THREE.Group();
+        const size = (a: 'x' | 'y' | 'z') => (a === axis ? length : PROFILE);
+        beam.add(new THREE.Mesh(new THREE.BoxGeometry(size('x'), size('y'), size('z')), anodizedMat));
+
+        const g = PROFILE * 0.34;                 // ancho de la ranura
+        const off = PROFILE / 2 + 0.002;          // apenas por fuera de la cara
+        const faces: Array<[number, number, number, number, number, number]> = axis === 'y'
+            ? [[0, 0, off, g, length * 0.97, 0.01], [off, 0, 0, 0.01, length * 0.97, g]]
+            : axis === 'x'
+                ? [[0, off, 0, length * 0.97, 0.01, g], [0, 0, off, length * 0.97, g, 0.01]]
+                : [[0, off, 0, g, 0.01, length * 0.97], [off, 0, 0, 0.01, g, length * 0.97]];
+        for (const [px, py, pz, sx, sy, sz] of faces) {
+            const groove = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), grooveMat);
+            groove.position.set(px, py, pz);
+            beam.add(groove);
+        }
+        return beam;
+    }
+
+    // Postes
     for (const x of CABIN_X) {
         for (const z of CABIN_Z) {
-            const post = new THREE.Mesh(new THREE.BoxGeometry(0.16, CABIN_H, 0.16), profileMat);
-            post.position.set(x, CABIN_H / 2, z);
+            const post = profileBeam(CABIN_H - CABIN_FLOOR, 'y');
+            post.position.set(x, (CABIN_H + CABIN_FLOOR) / 2, z);
             cabinGroup.add(post);
+
+            // Pata niveladora, apoyada en el piso
+            const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.16, 0.12, 12), steelMat);
+            foot.position.set(x, CABIN_FLOOR + 0.06, z);
+            cabinGroup.add(foot);
         }
     }
 
-    // Marco superior: dos vigas a lo largo y dos a lo ancho
-    for (const z of CABIN_Z) {
-        const beam = new THREE.Mesh(new THREE.BoxGeometry(6.36, 0.16, 0.16), profileMat);
-        beam.position.set(-1.5, CABIN_H, z);
-        cabinGroup.add(beam);
-    }
-    for (const x of CABIN_X) {
-        const beam = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 4.06), profileMat);
-        beam.position.set(x, CABIN_H, 0);
-        cabinGroup.add(beam);
+    // Marco superior y travesaños de base (los de abajo atan la estructura al suelo)
+    for (const y of [CABIN_H, CABIN_BASE_Y]) {
+        for (const z of CABIN_Z) {
+            const beam = profileBeam(6.2 + PROFILE, 'x');
+            beam.position.set(-1.5, y, z);
+            cabinGroup.add(beam);
+        }
+        for (const x of CABIN_X) {
+            const beam = profileBeam(3.9 + PROFILE, 'z');
+            beam.position.set(x, y, 0);
+            cabinGroup.add(beam);
+        }
     }
 
-    // Techo opaco
-    const roof = new THREE.Mesh(
-        new THREE.BoxGeometry(6.2, 0.06, 3.9),
-        new THREE.MeshStandardMaterial({ color: 0x6f757d, metalness: 0.5, roughness: 0.6 })
+    // Escuadras de esquina: el detalle que quita el aire de dibujo de líneas
+    for (const x of CABIN_X) {
+        for (const z of CABIN_Z) {
+            for (const [dx, dz] of [[Math.sign(-1.5 - x) * 0.42, 0], [0, Math.sign(-z) * 0.42]]) {
+                const gusset = new THREE.Mesh(new THREE.BoxGeometry(dx ? 0.5 : 0.1, 0.5, dz ? 0.5 : 0.1), steelMat);
+                gusset.position.set(x + dx / 2, CABIN_H - 0.3, z + dz / 2);
+                gusset.rotation.z = dx ? Math.PI / 4 : 0;
+                gusset.rotation.x = dz ? Math.PI / 4 : 0;
+                cabinGroup.add(gusset);
+            }
+        }
+    }
+
+    // Riostras de esquina en la cara de atrás: dos, simétricas. Una diagonal larga
+    // sola rompía la simetría del fondo y cruzaba la zona de inspección.
+    for (const x of CABIN_X) {
+        const dir = Math.sign(-1.5 - x);
+        const cornerBrace = profileBeam(1.55, 'y');
+        cornerBrace.position.set(x + dir * 0.55, CABIN_H - 0.55, CABIN_Z[0]);
+        cornerBrace.rotation.z = dir * (Math.PI / 4);
+        cabinGroup.add(cornerBrace);
+    }
+
+    // Acrílico SOLO en la cara de atrás: cierra el fondo de la celda y deja libres
+    // los laterales, que es por donde entra y sale el producto.
+    const backPanel = new THREE.Mesh(
+        new THREE.PlaneGeometry(6.2, CABIN_H - CABIN_BASE_Y - 0.3),
+        new THREE.MeshPhysicalMaterial({
+            color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
+            thickness: 0.35, transparent: true, opacity: 0.14, side: THREE.DoubleSide
+        })
     );
-    roof.position.set(-1.5, CABIN_H + 0.08, 0);
+    backPanel.position.set(-1.5, (CABIN_H + CABIN_BASE_Y) / 2, CABIN_Z[0] + 0.02);
+    cabinGroup.add(backPanel);
+
+    // Techo: panel claro con canto de perfil
+    const roof = new THREE.Mesh(
+        new THREE.BoxGeometry(6.1, 0.05, 3.8),
+        new THREE.MeshStandardMaterial({ color: 0xd8dce1, metalness: 0.3, roughness: 0.75 })
+    );
+    roof.position.set(-1.5, CABIN_H + 0.11, 0);
     cabinGroup.add(roof);
 
-    // Barras LED de iluminación interior + su luz real
-    for (const z of [-1.1, 1.1]) {
-        const bar = new THREE.Mesh(
-            new THREE.BoxGeometry(5.4, 0.1, 0.14),
-            new THREE.MeshBasicMaterial({ color: 0xf2f8ff })
-        );
-        bar.position.set(-1.5, CABIN_H - 0.28, z);
-        cabinGroup.add(bar);
+    // Luminarias: carcasa oscura con lente encendido, no una barra blanca suelta
+    for (const z of [-1.15, 1.15]) {
+        const housing = new THREE.Mesh(new THREE.BoxGeometry(5.2, 0.16, 0.22), anodizedMat);
+        housing.position.set(-1.5, CABIN_H - 0.26, z);
+        cabinGroup.add(housing);
 
-        const barLight = new THREE.RectAreaLight(0xffffff, 3, 5.4, 0.3);
-        barLight.position.set(-1.5, CABIN_H - 0.34, z);
+        const lens = new THREE.Mesh(
+            new THREE.BoxGeometry(5.0, 0.06, 0.16),
+            new THREE.MeshBasicMaterial({ color: 0xf4f9ff })
+        );
+        lens.position.set(-1.5, CABIN_H - 0.35, z);
+        cabinGroup.add(lens);
+
+        for (const sx of [-2.6, 2.6]) {
+            const clamp = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.3, 0.12), steelMat);
+            clamp.position.set(-1.5 + sx, CABIN_H - 0.14, z);
+            cabinGroup.add(clamp);
+        }
+
+        const barLight = new THREE.RectAreaLight(0xffffff, 3, 5.0, 0.3);
+        barLight.position.set(-1.5, CABIN_H - 0.4, z);
         barLight.lookAt(-1.5, 0, z);
         cabinGroup.add(barLight);
     }
 
-    // Baliza naranja: el detalle que hace que se lea como celda industrial
+    // Torreta andon: poste, domo ámbar y capucha, sobre su caja de conexión
+    const andonX = 0.75;
+    const andonBase = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.16, 0.34), anodizedMat);
+    andonBase.position.set(andonX, CABIN_H + 0.21, 0);
+    cabinGroup.add(andonBase);
+
+    const andonPole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.34, 12), steelMat);
+    andonPole.position.set(andonX, CABIN_H + 0.45, 0);
+    cabinGroup.add(andonPole);
+
     const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff8a00, transparent: true, opacity: 0.9 });
-    const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.24, 0.34, 20), beaconMat);
-    beacon.position.set(0.6, CABIN_H + 0.28, 0);
+    const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.24, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.62), beaconMat);
+    beacon.position.set(andonX, CABIN_H + 0.62, 0);
     cabinGroup.add(beacon);
-    const beaconBase = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.1, 20), profileMat);
-    beaconBase.position.set(0.6, CABIN_H + 0.09, 0);
-    cabinGroup.add(beaconBase);
+
+    const beaconCap = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.24, 0.1, 20), steelMat);
+    beaconCap.position.set(andonX, CABIN_H + 0.87, 0);
+    cabinGroup.add(beaconCap);
+
     const beaconLight = new THREE.PointLight(0xff8a00, 1.4, 4);
-    beaconLight.position.set(0.6, CABIN_H + 0.28, 0);
+    beaconLight.position.set(andonX, CABIN_H + 0.62, 0);
     cabinGroup.add(beaconLight);
+
+    // Gabinete de control montado en el poste derecho: inoxidable, con selector,
+    // piloto verde y paro de emergencia.
+    const panelX = 1.72;
+    const panel = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 1.15, 0.85),
+        new THREE.MeshStandardMaterial({ color: 0xc3c8ce, metalness: 0.85, roughness: 0.28 })
+    );
+    panel.position.set(panelX, 1.9, 0.5);
+    cabinGroup.add(panel);
+
+    const panelDoor = new THREE.Mesh(
+        new THREE.BoxGeometry(0.02, 1.0, 0.72),
+        new THREE.MeshStandardMaterial({ color: 0xd9dee3, metalness: 0.7, roughness: 0.35 })
+    );
+    panelDoor.position.set(panelX + 0.08, 1.9, 0.5);
+    cabinGroup.add(panelDoor);
+
+    const pilot = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.05, 0.05, 0.04, 12),
+        new THREE.MeshBasicMaterial({ color: 0x2bd96b })
+    );
+    pilot.rotation.z = Math.PI / 2;
+    pilot.position.set(panelX + 0.11, 2.2, 0.62);
+    cabinGroup.add(pilot);
+
+    const selector = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.045, 0.045, 0.05, 12),
+        new THREE.MeshStandardMaterial({ color: 0x2b2f34, metalness: 0.6, roughness: 0.4 })
+    );
+    selector.rotation.z = Math.PI / 2;
+    selector.position.set(panelX + 0.11, 2.2, 0.4);
+    cabinGroup.add(selector);
+
+    const eStopBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.09, 0.09, 0.04, 16),
+        new THREE.MeshStandardMaterial({ color: 0xf2c200, metalness: 0.3, roughness: 0.6 })
+    );
+    eStopBase.rotation.z = Math.PI / 2;
+    eStopBase.position.set(panelX + 0.11, 1.78, 0.5);
+    cabinGroup.add(eStopBase);
+
+    const eStop = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.07, 0.07, 0.06, 16),
+        new THREE.MeshStandardMaterial({ color: 0xd42020, metalness: 0.2, roughness: 0.5 })
+    );
+    eStop.rotation.z = Math.PI / 2;
+    eStop.position.set(panelX + 0.15, 1.78, 0.5);
+    cabinGroup.add(eStop);
 
     scene.add(cabinGroup);
 
@@ -647,8 +792,8 @@ export default function ThreeHero() {
     // Vista lateral baja: la banda es un rectangulo muy ancho a sangre, asi que
     // la camara se acuesta en vez de mirar desde arriba como en la tarjeta.
     const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 100);
-    camera.position.set(2, 3.2, 10.4);
-    camera.lookAt(0, 2, 0);
+    camera.position.set(2, 3.1, 10.4);
+    camera.lookAt(0, 1.75, 0);
 
     // ============================================
     // ANIMACIÓN PRINCIPAL
@@ -718,8 +863,8 @@ export default function ThreeHero() {
 
         // Movimiento sutil de la cámara
         camera.position.x = 2 + Math.sin(time * 0.3) * 0.3;
-        camera.position.y = 3.2 + Math.sin(time * 0.4) * 0.12;
-        camera.lookAt(0, 2, 0);
+        camera.position.y = 3.1 + Math.sin(time * 0.4) * 0.12;
+        camera.lookAt(0, 1.75, 0);
 
         renderer.render(scene, camera);
     }
