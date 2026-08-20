@@ -211,7 +211,7 @@ export default function ThreeHero() {
 
     const PROFILE = 0.2;   // sección del perfil (40x40 a escala de la escena)
     const CABIN_H = 4.1;
-    const CABIN_FLOOR = -1.25;   // el piso está más abajo que la cinta: las patas bajan hasta ahí
+    const CABIN_FLOOR = -1.05;   // el piso está más abajo que la cinta: las patas bajan hasta ahí
     const CABIN_BASE_Y = -0.85;  // marco de base POR DEBAJO de la banda, si no choca con las piezas
     const CABIN_X = [-4.6, 1.6];
     const CABIN_Z = [-1.95, 1.95];
@@ -670,6 +670,39 @@ export default function ThreeHero() {
         roller.rotation.x = Math.PI / 2;
         roller.position.set(x, 0, 0);
         conveyorGroup.add(roller);
+    }
+
+    // ── Bastidor de la cinta ─────────────────────────────────────────────────
+    // Sin esto la banda parece flotar: patas de perfil hasta el piso, largueros
+    // longitudinales que las atan y crucetas por pareja.
+    const CONVEYOR_UNDER = -0.32;                 // cara inferior del cajón
+    const LEG_Z = [-1.05, 1.05];
+    const legLength = CONVEYOR_UNDER - CABIN_FLOOR;
+
+    for (let x = -20; x <= 20; x += 5) {
+        for (const z of LEG_Z) {
+            const leg = profileBeam(legLength, 'y');
+            leg.position.set(x, CABIN_FLOOR + legLength / 2, z);
+            conveyorGroup.add(leg);
+
+            const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.14, 0.1, 12), steelMat);
+            foot.position.set(x, CABIN_FLOOR + 0.05, z);
+            conveyorGroup.add(foot);
+        }
+
+        // Cruceta que une la pareja de patas
+        const crossBar = profileBeam(LEG_Z[1] - LEG_Z[0], 'z');
+        crossBar.scale.set(0.7, 0.7, 1);
+        crossBar.position.set(x, CABIN_FLOOR + legLength * 0.35, 0);
+        conveyorGroup.add(crossBar);
+    }
+
+    // Largueros inferiores a lo largo de toda la cinta
+    for (const z of LEG_Z) {
+        const stringer = profileBeam(46, 'x');
+        stringer.scale.set(1, 0.8, 0.8);
+        stringer.position.set(0, CABIN_FLOOR + 0.34, z);
+        conveyorGroup.add(stringer);
     }
 
     scene.add(conveyorGroup);
