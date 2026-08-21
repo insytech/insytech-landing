@@ -15,6 +15,20 @@ export default defineConfig({
     adapter: vercel(),
     vite: {
         plugins: [tailwindcss()],
+        // Estas dependencias las montan islas que Vite solo descubre al navegar
+        // (Silk, MagicBento, la escena de /vision). Al descubrirlas re-optimiza y
+        // cambia el hash de `?v=`, y las peticiones en vuelo responden
+        // "504 Outdated Optimize Dep". Declarándolas se pre-empaquetan al
+        // arrancar. Solo afecta a dev: el build ya empaqueta todo por adelantado.
+        optimizeDeps: {
+            include: [
+                '@react-three/fiber',
+                'three',
+                'gsap',
+                'gsap/ScrollTrigger',
+                'framer-motion',
+            ],
+        },
     },
     integrations: [react(), sitemap()],
     // ponytail: las redirecciones heredadas viven en public/*/index.html, no aquí.
