@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -102,15 +103,8 @@ export default function ThreeHero() {
     frontLight.position.set(0, 8, 10);
     scene.add(frontLight);
 
-    // Luz de relleno lateral azul (atmósfera tech) - más intensa
-    const fillLight = new THREE.DirectionalLight(0x4488ff, 0.8);
-    fillLight.position.set(-8, 6, 8);
-    scene.add(fillLight);
-
-    // Luz de acento cálida - más intensa
-    const accentLight = new THREE.DirectionalLight(0xffaa44, 0.5);
-    accentLight.position.set(8, 5, -5);
-    scene.add(accentLight);
+    // El relleno lateral y el acento cálido los aporta ahora el mapa de entorno:
+    // dos direccionales menos que evaluar por fragmento.
 
     // ============================================
     // ZONA DE INSPECCIÓN (Scanner láser)
@@ -185,15 +179,22 @@ export default function ThreeHero() {
     laserEmitter.position.set(-1.5, CURTAIN_H, 0);
     scannerGroup.add(laserEmitter);
 
-    // LEDs en el emisor
-    for (let z = -1.2; z <= 1.2; z += 0.4) {
-        const emitterLed = new THREE.Mesh(
-            new THREE.SphereGeometry(0.03, 8, 8),
-            new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        );
-        emitterLed.position.set(-1.5, CURTAIN_H + 0.08, z);
-        scannerGroup.add(emitterLed);
+    // LEDs del emisor, en una sola malla instanciada
+    const emitterLeds = new THREE.InstancedMesh(
+        new THREE.SphereGeometry(0.03, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+        7
+    );
+    {
+        const m = new THREE.Matrix4();
+        const q = new THREE.Quaternion();
+        const one = new THREE.Vector3(1, 1, 1);
+        for (let i = 0; i < 7; i++) {
+            const pos = new THREE.Vector3(-1.5, CURTAIN_H + 0.08, -1.2 + i * 0.4);
+            emitterLeds.setMatrixAt(i, m.compose(pos, q, one));
+        }
     }
+    scannerGroup.add(emitterLeds);
 
     // BARRA RECEPTORA inferior (donde se reciben los láseres)
     const laserReceiver = new THREE.Mesh(
@@ -418,10 +419,14 @@ export default function ThreeHero() {
             cabinGroup.add(clamp);
         }
 
-        const barLight = new THREE.RectAreaLight(0xffffff, 3, 5.0, 0.3);
-        barLight.position.set(-1.5, CABIN_H - 0.4, z);
-        barLight.lookAt(-1.5, 0, z);
-        cabinGroup.add(barLight);
+        // Solo la barra frontal aporta luz real: las de área son las más caras
+        // del render y con dos el resultado era casi idéntico.
+        if (z > 0) {
+            const barLight = new THREE.RectAreaLight(0xffffff, 5, 5.0, 0.3);
+            barLight.position.set(-1.5, CABIN_H - 0.4, z);
+            barLight.lookAt(-1.5, 0, z);
+            cabinGroup.add(barLight);
+        }
     }
 
     // Torreta andon: poste, domo ámbar y capucha, sobre su caja de conexión
@@ -520,15 +525,21 @@ export default function ThreeHero() {
     plinth.position.y = 0.05;
     stationGroup.add(plinth);
 
-    // Rejilla de ventilación: hexágonos, como el gabinete real
-    for (let row = 0; row < 3; row++) {
-        for (let col = 0; col < 5; col++) {
-            const hex = new THREE.Mesh(new THREE.CircleGeometry(0.075, 6), stationDarkMat);
-            hex.position.set(-0.42 + col * 0.21 + (row % 2) * 0.105, 0.45 + row * 0.19, 0.431);
-            hex.rotation.z = Math.PI / 6;
-            stationGroup.add(hex);
+    // Rejilla de ventilación: 15 hexágonos en una sola malla instanciada
+    const hexGrid = new THREE.InstancedMesh(new THREE.CircleGeometry(0.075, 6), stationDarkMat, 15);
+    {
+        const m = new THREE.Matrix4();
+        const q = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 6);
+        const one = new THREE.Vector3(1, 1, 1);
+        let i = 0;
+        for (let row = 0; row < 3; row++) {
+            for (let col = 0; col < 5; col++) {
+                const pos = new THREE.Vector3(-0.42 + col * 0.21 + (row % 2) * 0.105, 0.45 + row * 0.19, 0.431);
+                hexGrid.setMatrixAt(i++, m.compose(pos, q, one));
+            }
         }
     }
+    stationGroup.add(hexGrid);
 
     // Manija seccionadora y su palanca roja
     const handleBase = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.26, 0.06), stationDarkMat);
@@ -703,13 +714,19 @@ export default function ThreeHero() {
     // Iluminador anular segmentado. Su color lo anima el bucle: verde fijo en
     // espera, parpadeo cuando hay pieza en la zona.
     const ledRingMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    for (let i = 0; i < 16; i++) {
-        const a = (i / 16) * Math.PI * 2;
-        const seg = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.05, 0.04), ledRingMat);
-        seg.position.set(Math.cos(a) * 0.35, Math.sin(a) * 0.35, -1.86);
-        seg.rotation.z = a;
-        cameraGroup.add(seg);
+    const ledRing = new THREE.InstancedMesh(new THREE.BoxGeometry(0.07, 0.05, 0.04), ledRingMat, 16);
+    {
+        const m = new THREE.Matrix4();
+        const q = new THREE.Quaternion();
+        const axis = new THREE.Vector3(0, 0, 1);
+        const one = new THREE.Vector3(1, 1, 1);
+        for (let i = 0; i < 16; i++) {
+            const a = (i / 16) * Math.PI * 2;
+            const pos = new THREE.Vector3(Math.cos(a) * 0.35, Math.sin(a) * 0.35, -1.86);
+            ledRing.setMatrixAt(i, m.compose(pos, q.setFromAxisAngle(axis, a), one));
+        }
     }
+    cameraGroup.add(ledRing);
     const ringShroud = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.4, 0.08, 28, 1, true), camDarkMat);
     ringShroud.rotation.x = Math.PI / 2;
     ringShroud.position.set(0, 0, -1.84);
@@ -796,17 +813,31 @@ export default function ThreeHero() {
     beltSurface.receiveShadow = true;
     conveyorGroup.add(beltSurface);
 
-    // Líneas de la cinta para efecto de movimiento - más visibles
-    const beltLines: THREE.Mesh[] = [];
-    for (let i = -22; i <= 22; i += 0.4) {
-        const line = new THREE.Mesh(
-            new THREE.BoxGeometry(0.08, 0.04, 2.4),
-            new THREE.MeshStandardMaterial({ color: 0x505060 })
-        );
-        line.position.set(i, 0.06, 0);
-        beltLines.push(line);
-        conveyorGroup.add(line);
-    }
+    // Tablillas: antes eran ~110 mallas que se movían una por una (110 llamadas
+    // de dibujo). Ahora son una textura que se desplaza sobre un solo plano.
+    const slatCanvas = document.createElement('canvas');
+    slatCanvas.width = 32;
+    slatCanvas.height = 4;
+    const slatCtx = slatCanvas.getContext('2d')!;
+    slatCtx.fillStyle = '#3a3a45';
+    slatCtx.fillRect(0, 0, 32, 4);
+    slatCtx.fillStyle = '#575767';
+    slatCtx.fillRect(0, 0, 7, 4);
+
+    const slatTexture = new THREE.CanvasTexture(slatCanvas);
+    slatTexture.colorSpace = THREE.SRGBColorSpace;
+    slatTexture.wrapS = THREE.RepeatWrapping;
+    slatTexture.wrapT = THREE.RepeatWrapping;
+    slatTexture.repeat.set(112, 1);   // una tablilla cada 0.4 unidades
+
+    const beltTread = new THREE.Mesh(
+        new THREE.PlaneGeometry(45, 2.4),
+        new THREE.MeshStandardMaterial({ map: slatTexture, metalness: 0.25, roughness: 0.62 })
+    );
+    beltTread.rotation.x = -Math.PI / 2;
+    beltTread.position.set(0, 0.06, 0);
+    beltTread.receiveShadow = true;
+    conveyorGroup.add(beltTread);
 
     // Rieles laterales
     const railMaterial = new THREE.MeshStandardMaterial({
@@ -985,12 +1016,18 @@ export default function ThreeHero() {
                 const hub = add(new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, H, 24), shell(type.color, 0.88, 0.26)));
                 hub.position.y = H / 2;
 
+                const teeth = new THREE.InstancedMesh(new THREE.BoxGeometry(0.07, H, 0.05), shell(type.color, 0.88, 0.26), 14);
+                teeth.castShadow = true;
+                const tm = new THREE.Matrix4();
+                const tq = new THREE.Quaternion();
+                const up = new THREE.Vector3(0, 1, 0);
+                const unit = new THREE.Vector3(1, 1, 1);
                 for (let i = 0; i < 14; i++) {
                     const a = (i / 14) * Math.PI * 2;
-                    const tooth = add(new THREE.Mesh(new THREE.BoxGeometry(0.07, H, 0.05), shell(type.color, 0.88, 0.26)));
-                    tooth.position.set(Math.cos(a) * 0.27, H / 2, Math.sin(a) * 0.27);
-                    tooth.rotation.y = -a;
+                    const pos = new THREE.Vector3(Math.cos(a) * 0.27, H / 2, Math.sin(a) * 0.27);
+                    teeth.setMatrixAt(i, tm.compose(pos, tq.setFromAxisAngle(up, -a), unit));
                 }
+                group.add(teeth);
                 const bore = add(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, H + 0.02, 16), shell(0x3a4046, 0.4, 0.5)));
                 bore.position.y = H / 2;
                 return { group, height: H };
@@ -1258,6 +1295,55 @@ export default function ThreeHero() {
         }
     }
 
+
+    /**
+     * Fusiona la geometría estática de un grupo en una malla por material. La
+     * estructura no se mueve nunca, así que no hay razón para pagar una llamada
+     * de dibujo por cada tramo de perfil: cada viga eran tres mallas.
+     */
+    function bakeStatic(root: THREE.Object3D): void {
+        root.updateMatrixWorld(true);
+        const inverse = new THREE.Matrix4().copy(root.matrixWorld).invert();
+        const byKey = new Map<string, { mat: THREE.Material; items: Array<{ mesh: THREE.Mesh; geo: THREE.BufferGeometry }> }>();
+
+        root.traverse((node) => {
+            if (!(node instanceof THREE.Mesh) || node instanceof THREE.InstancedMesh) return;
+            if (Array.isArray(node.material)) return;
+            const mat = node.material as THREE.Material;
+
+            const geo = node.geometry.clone();
+            geo.applyMatrix4(new THREE.Matrix4().multiplyMatrices(inverse, node.matrixWorld));
+            // Los atributos tienen que coincidir para poder fusionar
+            const key = mat.uuid + '|' + Object.keys(geo.attributes).sort().join(',');
+            const bucket = byKey.get(key) ?? { mat, items: [] };
+            bucket.items.push({ mesh: node, geo });
+            byKey.set(key, bucket);
+        });
+
+        for (const { mat, items } of byKey.values()) {
+            // Con una sola malla no hay nada que ganar: se deja intacta. Quitarla
+            // aquí fue lo que borró la banda, la pantalla y los acrílicos.
+            if (items.length < 2) {
+                items[0].geo.dispose();
+                continue;
+            }
+
+            const merged = BufferGeometryUtils.mergeGeometries(items.map((i) => i.geo), false);
+            for (const item of items) item.geo.dispose();
+            if (!merged) continue;
+
+            const mesh = new THREE.Mesh(merged, mat);
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            root.add(mesh);
+            for (const item of items) item.mesh.removeFromParent();
+        }
+    }
+
+    bakeStatic(cabinGroup);
+    bakeStatic(conveyorGroup);
+    bakeStatic(stationGroup);
+
     // ============================================
     // CÁMARA PERSPECTIVA
     // ============================================
@@ -1331,13 +1417,9 @@ export default function ThreeHero() {
             }
         }
 
-        // Animar líneas de la cinta
-        beltLines.forEach(line => {
-            line.position.x += 0.02;
-            if (line.position.x > 22) {
-                line.position.x = -22;
-            }
-        });
+        // Tablillas: se desplaza la textura, no 110 mallas. 0.02 unidades por
+        // cuadro entre 0.4 de paso de tablilla = 0.05 de repetición.
+        slatTexture.offset.x -= 0.05;
 
         // Animar cortina láser (pulsación sutil)
         laserCurtainMaterial.opacity = 0.32 + Math.sin(time * 6) * 0.1;
