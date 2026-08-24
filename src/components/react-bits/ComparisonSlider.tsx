@@ -76,7 +76,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(sliderPos)}
-            className={cn("relative w-full aspect-[16/9] rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-xl select-none group", className)}
+            className={cn("relative w-full overflow-hidden select-none group", className)}
             onMouseMove={(e) => e.buttons === 1 && handleInteract(e)}
             onTouchMove={handleInteract}
             onClick={handleInteract}
@@ -99,7 +99,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                 />
 
                 {/* Vision Metrics Overlay */}
-                <div className="absolute bottom-6 right-6 flex flex-col gap-2 items-end z-20">
+                <div className="absolute inset-0 mx-auto w-full max-w-7xl pointer-events-none z-20"><div className="absolute bottom-6 right-4 sm:right-8 md:right-14 lg:right-5 flex flex-col gap-2 items-end pointer-events-auto">
                     {afterMetrics.map((metric, i) => (
                         <motion.div
                             key={metric.label}
@@ -122,13 +122,13 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                             </div>
                         </motion.div>
                     ))}
-                </div>
+                </div></div>
 
-                <div className="absolute top-6 right-6 z-20">
+                <div className="absolute inset-0 mx-auto w-full max-w-7xl pointer-events-none z-20"><div className="absolute top-6 right-4 sm:right-8 md:right-14 lg:right-5 pointer-events-auto">
                     <div className="bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.1em] shadow-lg flex items-center justify-center min-w-[110px] h-7">
                         <ShinyText text={afterLabel} disabled={false} speed={3} className="text-white" color="#ffffff" />
                     </div>
-                </div>
+                </div></div>
             </div>
 
             {/* Before Image (Overlay) */}
@@ -145,7 +145,7 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                 <div className="absolute inset-0 bg-black/20 pointer-events-none" />
 
                 {/* Manual Metrics Overlay */}
-                <div className="absolute bottom-6 left-6 flex flex-col gap-2 z-20">
+                <div className="absolute inset-0 mx-auto w-full max-w-7xl pointer-events-none z-20"><div className="absolute bottom-6 left-4 sm:left-8 md:left-14 lg:left-5 flex flex-col gap-2 pointer-events-auto">
                     {beforeMetrics.map((metric, i) => (
                         <motion.div
                             key={metric.label}
@@ -168,13 +168,13 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
                             </div>
                         </motion.div>
                     ))}
-                </div>
+                </div></div>
 
-                <div className="absolute top-6 left-6 z-20">
+                <div className="absolute inset-0 mx-auto w-full max-w-7xl pointer-events-none z-20"><div className="absolute top-6 left-4 sm:left-8 md:left-14 lg:left-5 pointer-events-auto">
                     <div className="bg-gray-800 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.1em] shadow-lg flex items-center justify-center min-w-[80px] h-7">
                         {beforeLabel}
                     </div>
-                </div>
+                </div></div>
             </div>
 
             {/* Handle */}

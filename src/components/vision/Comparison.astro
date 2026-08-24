@@ -26,13 +26,13 @@ const afterMetrics = [
 
 <section
     id="comparison"
-    class="relative py-24 overflow-hidden bg-white dark:bg-gray-950"
+    class="relative py-24 overflow-clip bg-white dark:bg-gray-950"
 >
     <Container className="relative z-10">
-        <!-- Encabezado -->
-        <div class="max-w-3xl mx-auto text-center mb-16" data-animate="fade-up">
+        <div class="max-w-3xl mx-auto text-center mb-14" data-animate="fade-up">
             <h2
-                class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white leading-[1.05] tracking-tight mb-4"
+                data-reveal="heading"
+                class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-4"
             >
                 Inspección manual vs.
                 <span
@@ -45,31 +45,35 @@ const afterMetrics = [
             <p
                 class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
             >
-                Descubre cómo la automatización de inspección visual mediante IA
-                optimiza tus procesos de calidad y reduce costos operativos.
-            </p>
-        </div>
-
-        <div class="max-w-5xl mx-auto">
-            <ComparisonSlider
-                beforeImage="/images/vision-before.webp"
-                afterImage="/images/vision-after.webp"
-                beforeAlt="Inspección de calidad manual de piezas industriales, propensa a errores"
-                afterAlt="Sistema de visión artificial de Insytech inspeccionando piezas y detectando defectos en la línea de producción"
-                beforeMetrics={beforeMetrics}
-                afterMetrics={afterMetrics}
-                client:visible
-            />
-
-            <p
-                class="text-center text-sm text-gray-500 dark:text-gray-400 mt-6 animate-pulse"
-            >
-                Arrastra el control para comparar la capacidad de detección
+                La misma pieza, los dos criterios. Arrastra el control y compara
+                qué se documenta de cada lado.
             </p>
         </div>
     </Container>
-</section>
 
-<style>
-    /* Estilos base si son necesarios */
-</style>
+    <!-- Fuera del Container a propósito: el comparador es lo único interactivo
+         de la página y lo que prueba el argumento, así que ocupa el ancho
+         completo en lugar de quedar contenido como una figura más. El alto se
+         acota con clamp porque a 16/9 sobre 1920px serían 1080px de alto y la
+         sección dejaría de caber en pantalla. -->
+    <div class="relative z-10 mt-2" data-animate="fade-up" data-animate-delay=".1s">
+        <ComparisonSlider
+            beforeImage="/images/vision-before.webp"
+            afterImage="/images/vision-after.webp"
+            beforeAlt="Inspección de calidad manual de piezas industriales, propensa a errores"
+            afterAlt="Sistema de visión artificial de Insytech inspeccionando piezas y detectando defectos en la línea de producción"
+            beforeMetrics={beforeMetrics}
+            afterMetrics={afterMetrics}
+            className="h-[clamp(24rem,68vh,42rem)] border-y border-gray-200 dark:border-white/10"
+            client:visible
+        />
+    </div>
+
+    <Container className="relative z-10">
+        <p
+            class="text-center text-sm text-gray-500 dark:text-gray-400 mt-6 animate-pulse"
+        >
+            Arrastra el control para comparar la capacidad de detección
+        </p>
+    </Container>
+</section>
