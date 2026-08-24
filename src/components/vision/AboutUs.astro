@@ -96,13 +96,13 @@ import ShinyText from "../react-bits/ShinyText";
                             </svg>
                         </div>
                         <span class="flex items-center gap-1">
-                            Precisión superior al
+                            Inspección del
                             <CountUp
-                                to={99.7}
+                                to={100}
                                 from={0}
                                 duration={1}
                                 client:visible
-                            />%
+                            />% de las piezas
                         </span>
                     </li>
                     <li
@@ -125,15 +125,7 @@ import ShinyText from "../react-bits/ShinyText";
                                     d="M4.5 12.75l6 6 9-13.5"></path>
                             </svg>
                         </div>
-                        <span class="flex items-center gap-1">
-                            Latencia menor a
-                            <CountUp
-                                to={50}
-                                from={0}
-                                duration={1}
-                                client:visible
-                            />ms
-                        </span>
+                        <span>Foto de cada pieza inspeccionada</span>
                     </li>
                     <li
                         class="flex items-center gap-3 text-gray-700 dark:text-gray-300"

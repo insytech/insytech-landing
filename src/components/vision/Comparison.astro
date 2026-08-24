@@ -2,16 +2,25 @@
 import Container from "../shared/Container.astro";
 import ComparisonSlider from "../react-bits/ComparisonSlider";
 
+// La comparación va sobre cobertura, evidencia y criterio, no sobre precisión.
+// Las tres son ciertas por construcción y no dependen de una medición: la
+// inspección en línea ve cada pieza que pasa la estación, guarda la foto y
+// aplica el mismo modelo siempre. La precisión, en cambio, es por aplicación
+// (pieza, óptica, iluminación), así que no hay una cifra global publicable: la
+// mejor corrida de entrenamiento del proyecto da 0.786 de mAP50.
+//
+// NO devolver aquí cifras de precisión, latencia ni "consistencia 100%". Estaban
+// antes (99.7 %, <50 ms, 100 %) y ninguna tenía medición detrás.
 const beforeMetrics = [
-    { label: "Precisión", number: 85, prefix: "~", suffix: "%" },
-    { label: "Tiempo", number: 5, prefix: "2-", suffix: "s" },
-    { label: "Consistencia", value: "Variable" },
+    { label: "Cobertura", value: "Muestreo" },
+    { label: "Evidencia", value: "En papel" },
+    { label: "Criterio", value: "Varía" },
 ];
 
 const afterMetrics = [
-    { label: "Precisión", number: 99.7, suffix: "%" },
-    { label: "Latencia", number: 50, prefix: "<", suffix: "ms" },
-    { label: "Consistencia", number: 100, suffix: "%" },
+    { label: "Cobertura", number: 100, suffix: "%" },
+    { label: "Evidencia", value: "Cada pieza" },
+    { label: "Criterio", value: "Constante" },
 ];
 ---
 
