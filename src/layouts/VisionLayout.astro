@@ -83,6 +83,11 @@ const {
         }
         <WhatsappWidget />
         <script>
+            import { initSmoothScroll } from "@utils/smoothScroll";
+
+            initSmoothScroll();
+        </script>
+        <script>
             // Reveal on scroll para [data-animate]
             (() => {
                 const els = Array.from(
