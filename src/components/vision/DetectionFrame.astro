@@ -19,16 +19,23 @@ interface Props {
         | "ocr"
         | "ppe";
     label: string;
+    /** Sufijo para los ids del SVG: el visor se renderiza dos veces
+     *  (columna fija en escritorio, en línea en móvil) y los gradientes del
+     *  mapa de calor colisionarían con ids repetidos en el documento. */
+    uid: string;
     class?: string;
 }
 
-const { variant, label, class: className = "" } = Astro.props;
+// El resto de atributos (data-frame, data-active) se reenvia al nodo raiz:
+// sin esto Astro los descarta y el cross-fade no encuentra a quien conmutar.
+const { variant, label, uid, class: className = "", ...rest } = Astro.props;
 
 const ACCENT = "#00B5E2";
 const FLAG = "#F97316";
 ---
 
 <div
+    {...rest}
     class={`detection-frame relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-100 dark:border-white/10 dark:bg-[#070B16] ${className}`}
     role="img"
     aria-label={`Esquema de ${label}`}
@@ -129,17 +136,17 @@ const FLAG = "#F97316";
             variant === "anomaly" && (
                 <g>
                     <defs>
-                        <radialGradient id="heat-a">
+                        <radialGradient id={`heat-a-${uid}`}>
                             <stop offset="0%" stop-color={FLAG} stop-opacity="0.85" />
                             <stop offset="100%" stop-color={FLAG} stop-opacity="0" />
                         </radialGradient>
-                        <radialGradient id="heat-b">
+                        <radialGradient id={`heat-b-${uid}`}>
                             <stop offset="0%" stop-color={ACCENT} stop-opacity="0.5" />
                             <stop offset="100%" stop-color={ACCENT} stop-opacity="0" />
                         </radialGradient>
                     </defs>
-                    <circle cx="102" cy="42" r="26" fill="url(#heat-a)" />
-                    <circle cx="54" cy="62" r="30" fill="url(#heat-b)" />
+                    <circle cx="102" cy="42" r="26" fill={`url(#heat-a-${uid})`} />
+                    <circle cx="54" cy="62" r="30" fill={`url(#heat-b-${uid})`} />
                     <rect
                         x="24"
                         y="24"

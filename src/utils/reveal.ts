@@ -61,6 +61,14 @@ function initCapabilityIndex(): void {
             .forEach((link) => {
                 link.dataset.active = String(link.dataset.indexLink === id);
             });
+        // The pinned viewport holds all six frames stacked; only the current one
+        // is opaque, so scrolling the text reads as the viewport changing rather
+        // than as six separate figures going by.
+        document
+            .querySelectorAll<HTMLElement>("[data-frame]")
+            .forEach((frame) => {
+                frame.dataset.active = String(frame.dataset.frame === id);
+            });
     };
 
     articles.forEach((article) => {

@@ -101,13 +101,26 @@ const capabilities = [
             </p>
         </div>
 
-        <div class="grid lg:grid-cols-[15rem_1fr] gap-10 lg:gap-16">
-            <!-- El índice solo se fija en escritorio: en móvil ocuparía media
-                 pantalla durante toda la sección. -->
-            <nav
-                class="hidden lg:block lg:sticky lg:top-28 lg:self-start"
-                aria-label="Capacidades"
-            >
+        <div class="grid lg:grid-cols-2 gap-10 lg:gap-16">
+            <!-- Columna fija: el visor no se repite por capacidad, se queda y
+                 cambia. En movil no hay sticky, asi que cada articulo lleva su
+                 propio visor en linea mas abajo y esta columna se oculta. -->
+            <div class="hidden lg:flex lg:sticky lg:top-28 lg:self-start flex-col gap-8">
+                <div class="relative aspect-[16/10] w-full">
+                    {
+                        capabilities.map((cap, i) => (
+                            <DetectionFrame
+                                variant={cap.variant}
+                                label={cap.frameLabel}
+                                uid={cap.id}
+                                data-frame={cap.id}
+                                data-active={i === 0 ? "true" : "false"}
+                                class="capability-frame absolute inset-0"
+                            />
+                        ))
+                    }
+                </div>
+
                 <ol class="flex flex-col gap-1">
                     {
                         capabilities.map((cap, i) => (
@@ -126,20 +139,21 @@ const capabilities = [
                         ))
                     }
                 </ol>
-            </nav>
+            </div>
 
-            <div class="flex flex-col gap-16 lg:gap-24" data-reveal="group">
+            <div class="flex flex-col">
                 {
                     capabilities.map((cap, i) => (
                         <article
                             id={cap.id}
                             data-capability={cap.id}
-                            class="scroll-mt-28 flex flex-col gap-6"
+                            class="scroll-mt-28 flex min-h-[60vh] flex-col justify-center gap-6 py-10 lg:py-16"
                         >
                             <DetectionFrame
                                 variant={cap.variant}
                                 label={cap.frameLabel}
-                                class="max-w-md"
+                                uid={`${cap.id}-inline`}
+                                class="lg:hidden"
                             />
                             <div class="flex max-w-2xl flex-col gap-4">
                                 <h3 class="flex items-baseline gap-3 text-2xl font-bold font-heading text-[#211915] dark:text-white">
@@ -162,10 +176,23 @@ const capabilities = [
                 }
             </div>
         </div>
+
     </Container>
 </section>
 
 <style>
+    /* El cross-fade se hace con opacidad, no con transform: bajo
+       reduced-motion global.css conserva las transiciones de opacidad y
+       elimina las espaciales, asi que el cambio sigue siendo legible. */
+    .capability-frame {
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+    }
+    .capability-frame[data-active="true"] {
+        opacity: 1;
+    }
+
     .index-link[data-active="true"] {
         color: var(--primary);
         background-color: rgb(0 94 184 / 0.07);
