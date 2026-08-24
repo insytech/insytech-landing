@@ -50,8 +50,8 @@ const capabilities = [
         id: "seguridad-epp",
         title: "Verificación de equipo de protección",
         body: [
-            "En áreas de riesgo la supervisión visual del EPP depende de que alguien esté mirando en el momento correcto. Las cámaras que ya tienes instaladas pueden hacer esa verificación de forma continua.",
-            "El sistema detecta casco, lentes, guantes, chaleco y calzado en los accesos y zonas designadas, y puede generar alerta o bloquear el acceso cuando falta algo. Configuramos la retención de imágenes según tu política de privacidad: para muchos clientes basta con el evento y el conteo, sin guardar video.",
+            "En áreas de riesgo la supervisión visual del EPP depende de que alguien esté mirando en el momento correcto. Las cámaras que ya tienes instaladas pueden hacer esa verificación de forma continua, con un modelo entrenado específicamente para esto.",
+            "Detecta casco y chaleco sobre cada persona en la zona, y lo hace señalando directamente la falta: el modelo tiene clases propias para «sin casco» y «sin chaleco», así que reporta la violación en lugar de inferirla. Si tu área exige otro elemento, se entrena como una clase adicional. Configuramos la retención de imágenes según tu política de privacidad: para muchos clientes basta con el evento y el conteo, sin guardar video.",
         ],
     },
 ];
