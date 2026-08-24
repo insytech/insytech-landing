@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "./typography";
 import ComparisonSlider from "../react-bits/ComparisonSlider";
 
 // La comparación va sobre cobertura, evidencia y criterio, no sobre precisión.
@@ -26,13 +27,13 @@ const afterMetrics = [
 
 <section
     id="comparison"
-    class="relative py-24 overflow-clip bg-white dark:bg-gray-950"
+    class={`relative ${PAD.display} overflow-clip ${SURFACE.raised}`}
 >
     <Container className="relative z-10">
         <div class="max-w-3xl mx-auto text-center mb-14" data-animate="fade-up">
             <h2
                 data-reveal="heading"
-                class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-4"
+                class={`${HEADING.display} mb-4`}
             >
                 Inspección manual vs.
                 <span

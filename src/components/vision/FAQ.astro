@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "./typography";
 
 const faqItems = [
     {
@@ -66,14 +67,14 @@ const faqSchema = {
 
 <section
     id="faq"
-    class="relative py-20 overflow-hidden bg-white dark:bg-gray-950"
+    class={`relative ${PAD.minor} overflow-clip ${SURFACE.base}`}
 >
     <Container className="relative z-10">
         <div class="max-w-3xl mx-auto">
             <!-- Header -->
             <div class="text-center mb-12" data-animate="fade-up">
                 <h2
-                    class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-4"
+                    class={`${HEADING.minor} mb-4`}
                 >
                     Preguntas
                     <span
@@ -93,7 +94,7 @@ const faqSchema = {
             >
                 {
                     faqItems.map((item, index) => (
-                        <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors">
+                        <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-clip bg-gray-50 dark:bg-gray-900/50 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors">
                             <button
                                 class="faq-trigger w-full px-6 py-5 flex items-center justify-between text-left"
                                 aria-expanded="false"

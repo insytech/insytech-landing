@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "./typography";
 
 // Post -> service linking already existed; the return path did not. These four
 // posts outrank /vision/ for its own topic (pos. 2.7, 6.9 and 12.3 against 27.2),
@@ -31,13 +32,13 @@ const resources = [
 
 <section
     id="resources"
-    class="relative py-20 overflow-hidden border-t border-[#211915]/10 bg-gray-50 dark:border-white/10 dark:bg-gray-900"
+    class={`relative ${PAD.minor} overflow-clip ${SURFACE.base}`}
 >
     <Container className="relative z-10">
         <div class="max-w-3xl mb-10" data-animate="fade-up">
             <h2
                 data-reveal="heading"
-                class="text-3xl md:text-4xl font-black font-heading text-[#211915] dark:text-white leading-[1.1] tracking-tight mb-4"
+                class={`${HEADING.minor} mb-4`}
             >
                 Antes de decidir, léete esto
             </h2>

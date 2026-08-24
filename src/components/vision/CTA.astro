@@ -1,6 +1,7 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "./typography";
 
 const steps = [
     {
@@ -21,7 +22,7 @@ const steps = [
 ];
 ---
 
-<section id="cta" class="relative py-20 overflow-hidden bg-gradient-to-b from-gray-50 via-slate-50 to-white dark:from-gray-900 dark:via-[#0B1121] dark:to-gray-950">
+<section id="cta" class={`relative ${PAD.minor} overflow-clip bg-gradient-to-b from-gray-50 via-slate-50 to-white dark:from-gray-900 dark:via-[#0B1121] dark:to-gray-950`}>
     <!-- Patrón de fondo sutil -->
     <div class="absolute inset-0 z-0">
         <!-- Grid pattern overlay - Subtle & Clean -->
@@ -35,7 +36,7 @@ const steps = [
         <div class="max-w-5xl mx-auto">
             <!-- Header -->
             <div class="text-center mb-16" data-animate="fade-up">
-                <h2 class="text-4xl md:text-5xl font-black font-heading text-gray-900 dark:text-white leading-[1.05] mb-4 tracking-tight">
+                <h2 class={`${HEADING.minor} mb-4`}>
                     De la idea a producción en
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#005EB8] via-[#00B5E2] to-[#4da6ff] dark:from-[#38bdf8] dark:via-[#00B5E2] dark:to-[#005EB8]">
                         semanas
