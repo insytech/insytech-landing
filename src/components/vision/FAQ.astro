@@ -4,11 +4,11 @@ import Container from "../shared/Container.astro";
 const faqItems = [
     {
         question: "¿Qué tipos de cámara y hardware soportan?",
-        answer: "Soportamos cámaras industriales Basler, FLIR, Cognex y Keyence (GigE/USB3). Resoluciones de 1MP a 20MP, procesamiento GPU con NVIDIA Jetson/RTX, latencia <50ms. Gabinetes IP65/IP67 para ambientes de -10°C a 50°C.",
+        answer: "La plataforma trabaja con cualquier cámara USB estándar UVC y con cámaras IP por RTSP (Hikvision, Dahua, Axis o equivalentes), tomando 1080p a 30 fps como referencia de inspección. La inferencia corre en planta sobre un dispositivo Edge preparado con acelerador de IA dedicado, y el entrenamiento en un servidor con GPU. Si tu aplicación necesita cámara industrial de alta resolución u óptica especializada, la integramos como parte del proyecto.",
     },
     {
         question: "¿Cómo se integra con mi sistema de control?",
-        answer: "Nos conectamos nativamente con PLCs Allen-Bradley, Siemens, Omron y Mitsubishi mediante OPC-UA, Modbus TCP, Ethernet/IP y Profinet. También soportamos I/O digital 24V para aplicaciones de alta velocidad.",
+        answer: "Exponemos un servidor OPC UA para PLCs y SCADA, y hablamos Modbus para control de maquinaria. El PLC puede disparar la inspección y recibir el veredicto, y publicamos métricas y eventos por MQTT. Si tu planta usa un protocolo que no está en esa lista, lo evaluamos en el levantamiento antes de cotizar.",
     },
     {
         question: "¿Cuánto tiempo toma la implementación?",
@@ -17,6 +17,30 @@ const faqItems = [
     {
         question: "¿Qué pasa cuando el sistema detecta un defecto?",
         answer: "El sistema puede ejecutar acciones automáticas en tiempo real: activar rechazadores, enviar señales al PLC, generar alertas, y registrar imágenes para trazabilidad. Todo configurable según tu proceso.",
+    },
+    {
+        question: "¿Cuánto cuesta un sistema de visión artificial?",
+        answer: "Depende de tres cosas: cuántos puntos de inspección necesitas, a qué velocidad corre la línea y si el defecto ya está documentado con imágenes. Un punto con un defecto conocido es un proyecto muy distinto a una celda de seis cámaras con tolerancias de centésimas. Lo cotizamos sobre tu proceso, no sobre un catálogo: mándanos una foto de la pieza y el tiempo de ciclo y te decimos qué implica.",
+    },
+    {
+        question: "¿En qué se diferencia de un sensor convencional?",
+        answer: "Un sensor fotoeléctrico o de proximidad responde a una sola condición fija y hay que reajustarlo cada vez que cambia la pieza. Un sistema de visión evalúa la imagen completa, distingue varios defectos a la vez y guarda la evidencia de cada pieza. Donde un sensor te dice «pasó algo», la visión te dice qué pasó y te deja la foto para demostrarlo.",
+    },
+    {
+        question: "¿Necesito defectos ya etiquetados para entrenar el modelo?",
+        answer: "No siempre. Cuando el defecto es raro o nunca se documentó, usamos detección de anomalías: el modelo aprende cómo se ve una pieza buena y marca en un mapa de calor cualquier zona que se sale de ese patrón. Basta con imágenes de producto conforme, que es justo lo que casi toda planta ya tiene a mano.",
+    },
+    {
+        question: "¿Funciona con la iluminación que ya tengo en planta?",
+        answer: "Casi nunca, y conviene saberlo desde el principio: la iluminación de nave cambia con la hora del día y con el turno, y eso mueve los resultados. Cada estación lleva su propia iluminación controlada y, cuando hace falta, un blindaje contra luz ambiente. Es la parte que más determina si el sistema funciona, y la que más seguido se subestima.",
+    },
+    {
+        question: "¿Qué pasa cuando cambio de producto o de modelo?",
+        answer: "El sistema se entrega con recetas por número de parte: el operador selecciona el modelo desde la interfaz, o el PLC lo cambia solo según la orden de producción. Para una variante nueva se entrena una receta adicional con imágenes de esa pieza; no hay que rehacer la instalación ni volver a programar la celda.",
+    },
+    {
+        question: "¿Dan servicio en Monterrey y el área metropolitana?",
+        answer: "Sí. Estamos en Monterrey y ahí hacemos el levantamiento en planta, la instalación y la puesta en marcha, con soporte presencial en el área metropolitana. También atendemos plantas en Saltillo, Ramos Arizpe, Tamaulipas y el Bajío, donde el arranque se hace en sitio y el seguimiento posterior es remoto.",
     },
 ];
 

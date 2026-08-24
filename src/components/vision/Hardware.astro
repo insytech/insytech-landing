@@ -1,0 +1,211 @@
+---
+import Container from "../shared/Container.astro";
+
+// Claims here are verified against insytech-vision/HARDWARE-SPECS.md and
+// GENERAL-STATUS.md. Two tiers on purpose: `platform` is what the product ships
+// out of the box and must stay literally true, the closing card is project
+// scope. Do NOT promote a capability into `platform` without checking the spec
+// first — an earlier version of this page advertised GigE industrial cameras,
+// IP65/IP67 enclosures, -10..50 C operation and Profinet/EtherNet-IP, none of
+// which the platform has (the spec rates the cabinet at 5-40 C and lists those
+// two protocols as missing).
+const platform = [
+    {
+        title: "Cámaras",
+        icon: [
+            "M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z",
+            "M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z",
+        ],
+        points: [
+            {
+                strong: "Cualquier cámara USB estándar UVC",
+                rest: " conectada directo al dispositivo de borde.",
+            },
+            {
+                strong: "Cámaras IP por RTSP",
+                rest: ": Hikvision, Dahua, Axis o cualquiera con salida RTSP.",
+            },
+            {
+                strong: "1080p a 30 fps",
+                rest: " como referencia de inspección visual. Sin licencias por cámara.",
+            },
+        ],
+    },
+    {
+        title: "Inferencia en el borde",
+        icon: [
+            "M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 002.25-2.25V6.75a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25zm.75-12h9v9h-9v-9z",
+        ],
+        points: [
+            {
+                strong: "Dispositivo Edge preparado",
+                rest: " con acelerador de IA dedicado, instalado junto a la línea y listo para operar.",
+            },
+            {
+                strong: "El modelo corre en la planta",
+                rest: ", no en la nube: si se cae el enlace, la celda sigue inspeccionando.",
+            },
+            {
+                strong: "Un dispositivo por línea",
+                rest: ", así una estación no compite por cómputo con las demás.",
+            },
+        ],
+    },
+    {
+        title: "Servidor y red",
+        icon: [
+            "M21.75 17.25v-.228a4.5 4.5 0 00-.12-1.03l-2.268-9.64a3.375 3.375 0 00-3.285-2.602H7.923a3.375 3.375 0 00-3.285 2.602l-2.268 9.64a4.5 4.5 0 00-.12 1.03v.228m19.5 0a3 3 0 01-3 3H5.25a3 3 0 01-3-3m19.5 0a3 3 0 00-3-3H5.25a3 3 0 00-3 3m16.5-6h-15",
+        ],
+        points: [
+            {
+                strong: "Opera sin internet",
+                rest: ". Nada de tu producción sale de la planta y no hay nube de la que depender.",
+            },
+            {
+                strong: "Los dispositivos se dan de alta solos",
+                rest: " por descubrimiento en red: los conectas y el servidor los provisiona.",
+            },
+            {
+                strong: "Servidor con GPU NVIDIA",
+                rest: " para entrenar y redesplegar modelos a los dispositivos desde una sola consola.",
+            },
+        ],
+    },
+];
+
+// Verified: GENERAL-STATUS.md lists an OPC UA server and Modbus PLC comms at
+// 75%, plus MQTT pub/sub and a PHOTO_TRIGGER inference mode driven by the PLC.
+// Profinet and EtherCAT are explicitly listed as missing — do not add them.
+const control = [
+    "Servidor OPC UA para PLCs y SCADA",
+    "Modbus para control de maquinaria",
+    "MQTT para métricas y eventos",
+    "Disparo de la inspección desde el PLC",
+];
+---
+
+<section
+    id="hardware"
+    class="relative py-20 overflow-hidden border-t border-[#211915]/10 bg-gray-50 dark:border-white/10 dark:bg-gray-900"
+>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mb-12" data-animate="fade-up">
+            <h2
+                class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-6"
+            >
+                Hardware y <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >compatibilidad</span
+                >
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                Nuestra plataforma corre sobre hardware accesible y sin licencias
+                por cámara. Cuando el proceso exige óptica industrial o un
+                protocolo específico, lo integramos como parte del proyecto.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            {
+                platform.map((b, i) => (
+                    <div
+                        class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-7 flex flex-col gap-5"
+                        data-animate="fade-up"
+                        data-animate-delay={`.${i + 1}s`}
+                    >
+                        <div class="flex items-center gap-3">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-[#005EB8]/10 dark:bg-[#005EB8]/20 flex items-center justify-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-5 h-5 text-[#005EB8] dark:text-[#4da6ff]"
+                                    aria-hidden="true"
+                                >
+                                    {b.icon.map((d) => (
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d={d}
+                                        />
+                                    ))}
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold font-heading text-[#211915] dark:text-white">
+                                {b.title}
+                            </h3>
+                        </div>
+                        <ul class="flex flex-col gap-3">
+                            {b.points.map((p) => (
+                                <li class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    <strong class="font-semibold text-[#211915] dark:text-gray-200">
+                                        {p.strong}
+                                    </strong>
+                                    {p.rest}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))
+            }
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-6">
+            <div
+                class="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-7 flex flex-col gap-4"
+                data-animate="fade-up"
+            >
+                <h3
+                    class="text-xl font-bold font-heading text-[#211915] dark:text-white"
+                >
+                    Conexión con tu automatización
+                </h3>
+                <ul class="flex flex-col gap-2">
+                    {
+                        control.map((c) => (
+                            <li class="flex items-start gap-3 text-gray-600 dark:text-gray-400 leading-relaxed">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="2.5"
+                                    stroke="currentColor"
+                                    class="flex-shrink-0 w-4 h-4 mt-1.5 text-[#005EB8] dark:text-[#4da6ff]"
+                                    aria-hidden="true"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M4.5 12.75l6 6 9-13.5"
+                                    />
+                                </svg>
+                                <span>{c}</span>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            <div
+                class="rounded-xl border border-[#005EB8]/30 dark:border-[#4da6ff]/35 bg-[#005EB8]/5 dark:bg-[#00B5E2]/5 p-7 flex flex-col gap-4"
+                data-animate="fade-up"
+                data-animate-delay=".1s"
+            >
+                <h3
+                    class="text-xl font-bold font-heading text-[#211915] dark:text-white"
+                >
+                    Cuando el proceso pide más
+                </h3>
+                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    Somos integradores, no solo proveedores de una plataforma. Si
+                    tu aplicación necesita cámara industrial de alta resolución,
+                    óptica especializada, gabinete para ambiente severo o un
+                    protocolo que no está en esta lista, entra en el alcance del
+                    proyecto y lo especificamos contigo antes de cotizar.
+                </p>
+            </div>
+        </div>
+    </Container>
+</section>

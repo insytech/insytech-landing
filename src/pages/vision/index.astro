@@ -2,10 +2,15 @@
 import VisionLayout from "@layouts/VisionLayout.astro";
 import Hero from "@components/vision/Hero.astro";
 import Services from "@components/vision/Services.astro";
+import ServiceDetails from "@components/vision/ServiceDetails.astro";
+import InspectionTypes from "@components/vision/InspectionTypes.astro";
+import Hardware from "@components/vision/Hardware.astro";
 import Comparison from "@components/vision/Comparison.astro";
 import AboutUs from "@components/vision/AboutUs.astro";
+import Industries from "@components/vision/Industries.astro";
 import CTA from "@components/vision/CTA.astro";
 import FAQ from "@components/vision/FAQ.astro";
+import Resources from "@components/vision/Resources.astro";
 import ContactForm from "@components/sections/ContactForm.astro";
 ---
 
@@ -16,10 +21,15 @@ import ContactForm from "@components/sections/ContactForm.astro";
 	<main class="flex flex-col overflow-hidden">
 		<Hero />
 		<Services />
+		<ServiceDetails />
+		<InspectionTypes />
+		<Hardware />
 		<Comparison />
 		<AboutUs />
+		<Industries />
 		<CTA />
 		<FAQ />
+		<Resources />
 		<div class="relative">
 			<div class="absolute inset-0 z-0">
 				<div class="absolute inset-0 bg-gray-100 dark:bg-gray-900/20">

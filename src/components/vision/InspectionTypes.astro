@@ -1,0 +1,116 @@
+---
+import Container from "../shared/Container.astro";
+
+// Every row answers a real Search Console query: `sistema de visión artificial`
+// (pos. 53) and `mexico automated optical inspection system market` (pos. 85)
+// were landing on /vision/ while the page never named a single inspection type.
+// The OCR row reinforces `data matrix` and `código de barras`, which already
+// rank in positions 1-3.
+const inspectionTypes = [
+    {
+        type: "Inspección dimensional",
+        solves:
+            "Compara la geometría de la pieza contra la referencia para detectar piezas fuera de forma, cortas o deformadas. La tolerancia alcanzable depende de la óptica y se define en el levantamiento.",
+        reference: "proyecto a medida",
+    },
+    {
+        type: "Inspección superficial",
+        solves:
+            "Rayones, porosidad, rebaba, manchas, golpes y falta de recubrimiento en metal, plástico o vidrio.",
+        reference: "iluminación dirigida",
+    },
+    {
+        type: "Presencia y ausencia",
+        solves:
+            "Verifica que cada componente, sello, empaque, etiqueta o tornillo esté colocado antes de que la pieza avance al siguiente paso.",
+        reference: "a velocidad de línea",
+    },
+    {
+        type: "OCR y OCV industrial",
+        solves:
+            "Lee y valida números de serie, lotes, fechas de caducidad, códigos de barras y Data Matrix impresos con bajo contraste o sobre superficie curva.",
+        reference: "marcado láser e inkjet",
+    },
+    {
+        type: "Verificación de ensamble",
+        solves:
+            "Confirma orden, orientación y cantidad de piezas en subensambles completos, no solo en componentes sueltos.",
+        reference: "multi-cámara",
+    },
+    {
+        type: "Clasificación por color y textura",
+        solves:
+            "Separa variantes y tonos que el operador confunde después de varias horas de turno.",
+        reference: "cámara color calibrada",
+    },
+];
+---
+
+<section
+    id="inspection-types"
+    class="relative py-20 overflow-hidden bg-white dark:bg-gray-950"
+>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mb-12" data-animate="fade-up">
+            <h2
+                class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-6"
+            >
+                Tipos de <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >inspección</span
+                > que resolvemos
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                No todos los defectos se detectan igual. Antes de proponerte un
+                sistema de visión artificial definimos qué clase de inspección
+                necesita tu proceso, porque de eso dependen la cámara, la óptica
+                y la iluminación.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto" data-animate="fade-up" data-animate-delay=".1s">
+            <table class="w-full min-w-[46rem] border-collapse text-left">
+                <caption class="sr-only">
+                    Tipos de inspección por visión artificial que Insytech
+                    implementa, qué resuelve cada uno y su referencia técnica
+                    típica.
+                </caption>
+                <thead>
+                    <tr
+                        class="border-b border-gray-200 dark:border-gray-700 text-xs uppercase tracking-[0.12em] text-gray-500 dark:text-gray-500"
+                    >
+                        <th scope="col" class="font-medium py-3 pr-6 w-[17rem]"
+                            >Tipo</th
+                        >
+                        <th scope="col" class="font-medium py-3 pr-6">
+                            Qué resuelve
+                        </th>
+                        <th scope="col" class="font-medium py-3 w-[13rem]">
+                            Referencia típica
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        inspectionTypes.map((t) => (
+                            <tr class="border-b border-gray-200 dark:border-gray-800 align-top">
+                                <th
+                                    scope="row"
+                                    class="py-5 pr-6 font-bold text-[#211915] dark:text-white"
+                                >
+                                    {t.type}
+                                </th>
+                                <td class="py-5 pr-6 text-gray-600 dark:text-gray-400 leading-relaxed">
+                                    {t.solves}
+                                </td>
+                                <td class="py-5 font-medium text-[#005EB8] dark:text-[#4da6ff]">
+                                    {t.reference}
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Container>
+</section>

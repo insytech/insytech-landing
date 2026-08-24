@@ -39,3 +39,6 @@ Makefile
 # Planes de trabajo locales (no se commitean)
 plans/
 .impeccable/
+
+# Working files for design canvases (the canvas itself lives in the Artifact)
+.design/
