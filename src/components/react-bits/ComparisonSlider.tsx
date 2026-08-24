@@ -84,8 +84,14 @@ const ComparisonSlider: React.FC<ComparisonSliderProps> = ({
             // touchAction: en móvil el scroll de la página se robaba el gesto
             style={{ cursor: 'ew-resize', touchAction: 'none' }}
         >
-            {/* After Image (Base) */}
-            <div className="absolute inset-0">
+            {/* After Image (Base) — recortada a su propio lado del control. Sin
+                este clipPath la insignia y las métricas de Insytech Vision viven
+                en z-20 sobre el wrapper z-10 de "before" y seguían visibles al
+                arrastrar el control hasta el extremo. */}
+            <div
+                className="absolute inset-0"
+                style={{ clipPath: `inset(0 0 0 ${sliderPos}%)` }}
+            >
                 <img
                     src={afterImage}
                     alt={afterAlt ?? afterLabel}
