@@ -1,0 +1,35 @@
+---
+import Container from "../shared/Container.astro";
+import ClientLogos from "../shared/ClientLogos.astro";
+import { SURFACE } from "./typography";
+
+// Prueba social, tomada de la presentación de ventas. /vision/ no tenía ninguna:
+// ni un cliente, ni un año de operación. Para un comprador industrial eso pesa
+// más que cualquier lista de capacidades, y los logos ya eran públicos en el
+// Hero de la home, así que no había nada que decidir sobre permisos.
+//
+// Va inmediatamente después del Hero a propósito: la prueba sirve antes de
+// pedirle al visitante que lea seis capacidades.
+---
+
+<section
+    id="trust"
+    class={`relative overflow-clip py-12 lg:py-14 ${SURFACE.base}`}
+>
+    <Container className="relative z-10">
+        <div
+            class="flex flex-col items-center gap-3 text-center"
+            data-animate="fade-up"
+        >
+            <p class="text-lg text-[#211915] dark:text-gray-200">
+                Más de <strong class="font-bold">9 años</strong> optimizando
+                procesos industriales en México
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Empresas que han confiado en nuestras soluciones
+            </p>
+        </div>
+
+        <ClientLogos class="mt-6" />
+    </Container>
+</section>

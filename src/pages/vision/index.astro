@@ -1,6 +1,7 @@
 ---
 import VisionLayout from "@layouts/VisionLayout.astro";
 import Hero from "@components/vision/Hero.astro";
+import Trust from "@components/vision/Trust.astro";
 import Services from "@components/vision/Services.astro";
 import ServiceDetails from "@components/vision/ServiceDetails.astro";
 import InspectionTypes from "@components/vision/InspectionTypes.astro";
@@ -18,8 +19,12 @@ import ContactForm from "@components/sections/ContactForm.astro";
 	title="Visión Artificial (Computer Vision): detecta cada defecto | Insytech"
 	description="Visión artificial (computer vision) para empresas en México: automatizamos la inspección de calidad y la detección de defectos con IA. Solicita una demo."
 >
-	<main class="flex flex-col overflow-hidden">
+	<!-- overflow-clip y no overflow-hidden: hidden crea un contenedor de
+	     scroll y rompe el position:sticky de la columna de capacidades. clip
+	     recorta igual sin crear contenedor. -->
+	<main class="flex flex-col overflow-clip">
 		<Hero />
+		<Trust />
 		<Services />
 		<ServiceDetails />
 		<InspectionTypes />

@@ -1492,12 +1492,20 @@ export default function ThreeHero() {
 
         // Scroll: al salir el hero, la cámara retrocede y sube, y la escena se
         // atenúa para no competir con la sección siguiente.
+        // El id permite matar este trigger por nombre. Sin él, cualquier
+        // navegación que reemplace el contenedor deja el trigger apuntando a un
+        // nodo huérfano y ScrollTrigger sigue midiéndolo en cada refresh.
         const scrollFx = gsap.timeline({
             scrollTrigger: {
+                id: "vision-hero-scene",
                 trigger: container,
                 start: "top top",
                 end: "bottom top",
-                scrub: 0.5
+                scrub: 0.5,
+                // Lenis mueve el scroll dentro del ticker de GSAP; sin
+                // invalidateOnRefresh el scrub conserva medidas de antes del
+                // resize y la cámara queda desfasada del scroll real.
+                invalidateOnRefresh: true
             }
         });
         scrollFx.to(camFx, { dolly: 2.6, lift: 1.2, pan: 1.4, ease: "none" }, 0);
