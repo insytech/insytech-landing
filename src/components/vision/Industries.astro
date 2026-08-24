@@ -39,6 +39,7 @@ const industries = [
     <Container className="relative z-10">
         <div class="max-w-3xl mb-12" data-animate="fade-up">
             <h2
+                data-reveal="heading"
                 class="text-4xl md:text-5xl font-black font-heading text-[#211915] dark:text-white leading-[1.05] tracking-tight mb-6"
             >
                 Visión artificial por <span
@@ -53,13 +54,11 @@ const industries = [
             </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10" data-reveal="group">
             {
                 industries.map((ind, i) => (
                     <div
                         class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 p-6 flex flex-col gap-3 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors"
-                        data-animate="fade-up"
-                        data-animate-delay={`.${(i % 3) + 1}s`}
                     >
                         <h3 class="text-lg font-bold font-heading text-[#211915] dark:text-white">
                             {ind.name}
@@ -74,7 +73,6 @@ const industries = [
 
         <div
             class="rounded-xl border border-[#005EB8]/30 dark:border-[#4da6ff]/35 bg-[#005EB8]/5 dark:bg-[#00B5E2]/5 px-7 py-6 flex items-center gap-4"
-            data-animate="fade-up"
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

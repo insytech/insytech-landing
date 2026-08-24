@@ -36,6 +36,7 @@ const resources = [
     <Container className="relative z-10">
         <div class="max-w-3xl mb-10" data-animate="fade-up">
             <h2
+                data-reveal="heading"
                 class="text-3xl md:text-4xl font-black font-heading text-[#211915] dark:text-white leading-[1.1] tracking-tight mb-4"
             >
                 Antes de decidir, léete esto
@@ -45,14 +46,12 @@ const resources = [
             </p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-5">
+        <div class="grid md:grid-cols-2 gap-5" data-reveal="group">
             {
                 resources.map((r, i) => (
                     <a
                         href={r.href}
                         class="group rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-6 flex items-start justify-between gap-5 hover:border-[#005EB8]/40 dark:hover:border-[#4da6ff]/50 transition-colors"
-                        data-animate="fade-up"
-                        data-animate-delay={`.${(i % 2) + 1}s`}
                     >
                         <span class="flex flex-col gap-2">
                             <span class="font-bold font-heading text-[#211915] dark:text-white group-hover:text-[#005EB8] dark:group-hover:text-[#4da6ff] transition-colors">
