@@ -1,0 +1,17 @@
+# Native build scripts pnpm may run. sharp and @tailwindcss/oxide ship platform
+# binaries and esbuild fetches its own, so all three need their install script.
+# msw is a transitive test-only dependency and never runs in this project.
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true
+  sharp: true
+  msw: false
+
+# Build-time-only transitive deps of @astrojs/vercel -> @vercel/nft. The adapter
+# is already on its latest version, so these advisories can only be closed by
+# forcing the patched releases. None of these ship to the browser.
+overrides:
+  tar: "^7.5.7"
+  fast-uri: "^3.1.1"
+  picomatch: "^4.0.4"
+  path-to-regexp: "^8.4.1"
