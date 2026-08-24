@@ -82,7 +82,7 @@ const capabilities = [
 
 <section
     id="capacidades"
-    class="relative py-20 overflow-hidden border-t border-[#211915]/10 bg-gray-50 dark:border-white/10 dark:bg-gray-900"
+    class="relative py-20 overflow-clip border-t border-[#211915]/10 bg-gray-50 dark:border-white/10 dark:bg-gray-900"
 >
     <Container className="relative z-10">
         <div class="max-w-3xl mb-14" data-animate="fade-up">
@@ -101,96 +101,121 @@ const capabilities = [
             </p>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-10 lg:gap-16">
-            <!-- Columna fija: el visor no se repite por capacidad, se queda y
-                 cambia. En movil no hay sticky, asi que cada articulo lleva su
-                 propio visor en linea mas abajo y esta columna se oculta. -->
-            <div class="hidden lg:flex lg:sticky lg:top-28 lg:self-start flex-col gap-8">
-                <div class="relative aspect-[16/10] w-full">
-                    {
-                        capabilities.map((cap, i) => (
+        <!-- Truco de maquetacion: cada <article> es `display: contents` en
+             escritorio, asi sus dos hijos se vuelven celdas de ESTA reja y todos
+             caen en la misma fila y columna, superpuestos. En movil el article
+             vuelve a ser un bloque normal y queda visor sobre texto, apilado.
+             Un solo marcado sirve a los dos casos, sin duplicar el contenido. -->
+        <div
+            data-capability-stepper
+            class="capability-stepper"
+        >
+            <ol
+                class="capability-index flex-col gap-1 self-center"
+            >
+                {
+                    capabilities.map((cap, i) => (
+                        <li>
+                            <button
+                                type="button"
+                                data-index-link={cap.id}
+                                class="index-link flex w-full items-baseline gap-3 rounded-lg px-3 py-2 text-left text-sm text-gray-500 transition-colors hover:text-[#005EB8] dark:text-gray-500 dark:hover:text-[#4da6ff]"
+                            >
+                                <span class="font-mono text-xs tabular-nums opacity-60">
+                                    {String(i + 1).padStart(2, "0")}
+                                </span>
+                                <span class="font-medium">{cap.short}</span>
+                            </button>
+                        </li>
+                    ))
+                }
+            </ol>
+
+            {
+                capabilities.map((cap, i) => (
+                    <article
+                        id={cap.id}
+                        data-step={cap.id}
+                        data-active={i === 0 ? "true" : "false"}
+                        class="capability-step scroll-mt-28 mb-16"
+                    >
+                        <div class="capability-media mb-6">
                             <DetectionFrame
                                 variant={cap.variant}
                                 label={cap.frameLabel}
                                 uid={cap.id}
-                                data-frame={cap.id}
-                                data-active={i === 0 ? "true" : "false"}
-                                class="capability-frame absolute inset-0"
                             />
-                        ))
-                    }
-                </div>
+                        </div>
 
-                <ol class="flex flex-col gap-1">
-                    {
-                        capabilities.map((cap, i) => (
-                            <li>
-                                <a
-                                    href={`#${cap.id}`}
-                                    data-index-link={cap.id}
-                                    class="index-link flex items-baseline gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:text-[#005EB8] dark:text-gray-500 dark:hover:text-[#4da6ff]"
+                        <div class="capability-copy flex max-w-xl flex-col gap-4">
+                            <h3 class="flex items-baseline gap-3 text-2xl font-bold font-heading text-[#211915] dark:text-white">
+                                <span
+                                    class="font-mono text-sm tabular-nums text-[#005EB8]/60 dark:text-[#4da6ff]/60"
+                                    aria-hidden="true"
                                 >
-                                    <span class="font-mono text-xs tabular-nums opacity-60">
-                                        {String(i + 1).padStart(2, "0")}
-                                    </span>
-                                    <span class="font-medium">{cap.short}</span>
-                                </a>
-                            </li>
-                        ))
-                    }
-                </ol>
-            </div>
-
-            <div class="flex flex-col">
-                {
-                    capabilities.map((cap, i) => (
-                        <article
-                            id={cap.id}
-                            data-capability={cap.id}
-                            class="scroll-mt-28 flex min-h-[60vh] flex-col justify-center gap-6 py-10 lg:py-16"
-                        >
-                            <DetectionFrame
-                                variant={cap.variant}
-                                label={cap.frameLabel}
-                                uid={`${cap.id}-inline`}
-                                class="lg:hidden"
-                            />
-                            <div class="flex max-w-2xl flex-col gap-4">
-                                <h3 class="flex items-baseline gap-3 text-2xl font-bold font-heading text-[#211915] dark:text-white">
-                                    <span
-                                        class="font-mono text-sm tabular-nums text-[#005EB8]/60 dark:text-[#4da6ff]/60"
-                                        aria-hidden="true"
-                                    >
-                                        {String(i + 1).padStart(2, "0")}
-                                    </span>
-                                    {cap.title}
-                                </h3>
-                                {cap.body.map((p) => (
-                                    <p class="leading-relaxed text-gray-600 dark:text-gray-400">
-                                        {p}
-                                    </p>
-                                ))}
-                            </div>
-                        </article>
-                    ))
-                }
-            </div>
+                                    {String(i + 1).padStart(2, "0")}
+                                </span>
+                                {cap.title}
+                            </h3>
+                            {cap.body.map((p) => (
+                                <p class="leading-relaxed text-gray-600 dark:text-gray-400">
+                                    {p}
+                                </p>
+                            ))}
+                        </div>
+                    </article>
+                ))
+            }
         </div>
 
     </Container>
 </section>
 
 <style>
-    /* El cross-fade se hace con opacidad, no con transform: bajo
-       reduced-motion global.css conserva las transiciones de opacidad y
-       elimina las espaciales, asi que el cambio sigue siendo legible. */
-    .capability-frame {
-        opacity: 0;
-        transition: opacity 0.45s ease;
-        pointer-events: none;
+    /* El indice y la superposicion de pasos solo existen cuando el stepper esta
+       encendido, y JS solo lo enciende en escritorio y con movimiento
+       permitido. Si no lo enciende (movil, reduced-motion, JS caido) el bloque
+       se queda como lo que ya es en el marcado: seis capacidades apiladas,
+       todas visibles y legibles. */
+    .capability-index {
+        display: none;
     }
-    .capability-frame[data-active="true"] {
-        opacity: 1;
+
+    @media (min-width: 1024px) {
+        .capability-stepper[data-enabled="true"] {
+            display: grid;
+            grid-template-columns: 13rem 1fr 1.1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        [data-enabled="true"] .capability-index {
+            display: flex;
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        /* `contents` disuelve el article, asi sus dos hijos se vuelven celdas de
+           la reja del stepper. Todos apuntan a la misma fila y columna, asi que
+           quedan superpuestos y se conmuta por opacidad. */
+        [data-enabled="true"] .capability-step {
+            display: contents;
+        }
+
+        [data-enabled="true"] .capability-media {
+            grid-column: 2;
+            grid-row: 1;
+            margin-bottom: 0;
+        }
+
+        [data-enabled="true"] .capability-copy {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        [data-enabled="true"] .capability-step:not([data-active="true"]) {
+            pointer-events: none;
+        }
     }
 
     .index-link[data-active="true"] {

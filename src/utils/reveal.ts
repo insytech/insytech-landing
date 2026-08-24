@@ -22,17 +22,19 @@ export function initReveals(): void {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // The sticky index runs before the reduced-motion gate on purpose:
-    // highlighting where you are is orientation, not decoration, and without it
-    // the pinned column is a list that never responds.
-    initCapabilityIndex();
-
+    // Pinning is desktop-and-motion-only: on a phone it costs more than it
+    // gives, and under reduced motion taking over the scroll is the wrong move.
+    // Both fall back to the stacked list the markup already renders.
     // Reduced motion: everything is already in its final state in the markup, so
     // doing nothing is the correct outcome, not a degraded one.
     if (prefersReducedMotion()) return;
 
     registerMotion();
     gsap.registerPlugin(SplitText);
+
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+        initCapabilityStepper();
+    }
 
     // SplitText measures line boxes. Splitting before the webfont swaps means
     // measuring Raleway's fallback and baking in line breaks that are wrong once
@@ -47,42 +49,121 @@ export function initReveals(): void {
 }
 
 /**
- * Marks the sticky capability index against whichever article is currently in
- * the reading band. One trigger per article rather than a scroll listener, so it
- * shares ScrollTrigger's single measured pass instead of adding a second one.
+ * Pins the capability block and advances it a step at a time: the index marks
+ * the current one, the viewport swaps, and the copy animates in.
+ *
+ * Desktop only. Pinning takes over the scroll, which on a phone costs more than
+ * it gives, and under reduced motion hijacking the scroll is exactly the wrong
+ * move — both fall back to the plain stacked list the markup already is.
  */
-function initCapabilityIndex(): void {
-    const articles = document.querySelectorAll<HTMLElement>("[data-capability]");
-    if (!articles.length) return;
+function initCapabilityStepper(): void {
+    const stepper = document.querySelector<HTMLElement>(
+        "[data-capability-stepper]"
+    );
+    if (!stepper) return;
 
-    const setActive = (id: string | null) => {
-        document
-            .querySelectorAll<HTMLElement>("[data-index-link]")
-            .forEach((link) => {
-                link.dataset.active = String(link.dataset.indexLink === id);
-            });
-        // The pinned viewport holds all six frames stacked; only the current one
-        // is opaque, so scrolling the text reads as the viewport changing rather
-        // than as six separate figures going by.
-        document
-            .querySelectorAll<HTMLElement>("[data-frame]")
-            .forEach((frame) => {
-                frame.dataset.active = String(frame.dataset.frame === id);
-            });
+    const steps = Array.from(
+        stepper.querySelectorAll<HTMLElement>("[data-step]")
+    );
+    if (steps.length < 2) return;
+
+    const links = Array.from(
+        stepper.querySelectorAll<HTMLElement>("[data-index-link]")
+    );
+
+    // Un unico timeline vivo para todo el bloque. Con un tween independiente por
+    // paso, invertir la direccion del scroll dejaba el orden de kills
+    // indeterminado y dos pasos acababan superpuestos: el tween del paso que se
+    // abandonaba seguia corriendo y devolvia su opacidad a 1 despues de haberlo
+    // ocultado. Con uno solo, cada transicion parte de un estado conocido.
+    const OUT_DURATION = 0.18;
+
+    let current = -1;
+    let tl: gsap.core.Timeline | null = null;
+
+    const allParts = steps.flatMap((step) =>
+        Array.from(
+            step.querySelectorAll<HTMLElement>(
+                ".capability-media, .capability-copy"
+            )
+        )
+    );
+
+    const partsOf = (step: HTMLElement) =>
+        Array.from(
+            step.querySelectorAll<HTMLElement>(
+                ".capability-media, .capability-copy"
+            )
+        );
+
+    const show = (i: number, animate: boolean) => {
+        if (i === current) return;
+        current = i;
+
+        steps.forEach((step, n) => {
+            step.dataset.active = String(n === i);
+        });
+        links.forEach((link, n) => {
+            link.dataset.active = String(n === i);
+        });
+
+        // Secuencia, no cross-fade. Los pasos se superponen en la misma celda de
+        // la reja, asi que solaparlos durante la transicion es exactamente el
+        // texto encimado que hay que evitar: primero sale el anterior, rapido, y
+        // despues entra el siguiente. Deja un hueco de ~0.18s en blanco, que es
+        // el precio de no encimar nunca.
+        tl?.kill();
+        gsap.killTweensOf(allParts);
+
+        const parts = partsOf(steps[i]);
+        const others = allParts.filter((el) => !parts.includes(el));
+
+        if (!animate) {
+            gsap.set(others, { autoAlpha: 0 });
+            gsap.set(parts, { autoAlpha: 1, y: 0 });
+            return;
+        }
+
+        tl = gsap
+            .timeline()
+            .to(others, { autoAlpha: 0, duration: OUT_DURATION, ease: "none" })
+            .fromTo(
+                parts,
+                { autoAlpha: 0, y: 24 },
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: MOTION.GROUP_DURATION,
+                    stagger: 0.08,
+                    ease: MOTION.EASE,
+                }
+            );
     };
 
-    articles.forEach((article) => {
-        const id = article.dataset.capability!;
-        ScrollTrigger.create({
-            trigger: article,
-            // Band across the upper half: an article counts as "current" from
-            // the moment its top reaches the header down to when it leaves.
-            start: "top 40%",
-            end: "bottom 40%",
-            onToggle: (self) => {
-                if (self.isActive) setActive(id);
-            },
-        });
+    stepper.dataset.enabled = "true";
+
+    show(0, false);
+
+    ScrollTrigger.create({
+        trigger: stepper,
+        start: "center center",
+        // One viewport of scroll per step. Less feels like the content is being
+        // yanked past; more and the visitor wonders whether the page is stuck.
+        end: () => "+=" + window.innerHeight * steps.length,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+            const i = Math.min(
+                steps.length - 1,
+                Math.floor(self.progress * steps.length)
+            );
+            show(i, true);
+        },
+    });
+
+    links.forEach((link, i) => {
+        link.addEventListener("click", () => show(i, true));
     });
 }
 
