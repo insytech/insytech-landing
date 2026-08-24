@@ -1,0 +1,108 @@
+---
+// Rejilla de logos de cliente. Se extrajo de sections/Brands.astro al necesitar
+// una segunda variante en /vision/: Brands trae la etiqueta y el margen
+// afinados para el Hero de la home, y copiar el grid habría dejado dos listas
+// de clientes que se desincronizan. Aqui vive la lista; quien la usa decide el
+// encabezado y el aire.
+interface Props {
+    class?: string;
+}
+const { class: className = "" } = Astro.props;
+---
+
+<div class={className}>
+    <div
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-4 px-2 overflow-hidden"
+    >
+        <img
+    src="/logos/navistar.webp"
+    alt="Navistar"
+    width="214"
+    height="27"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+        <img
+    src="/logos/nasa.webp"
+    alt="NASA Nacional de Acero"
+    width="386"
+    height="130"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+        <img
+    src="/logos/polaris.webp"
+    alt="Polaris"
+    width="480"
+    height="54"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+        <img
+    src="/logos/pentair.webp"
+    alt="Pentair"
+    width="1536"
+    height="389"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+        <img
+    src="/logos/franklin-electric.webp"
+    alt="Franklin Electric"
+    width="720"
+    height="254"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+        <img
+    src="/logos/tempel-group.webp"
+    alt="Tempel Group"
+    width="120"
+    height="40"
+    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
+    loading="lazy"
+        />
+    </div>
+</div>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const initBrands = () => {
+        // Progressive enhancement: logos are visible without JS; under
+        // reduced motion keep them visible and skip the entrance animation
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            return;
+        }
+
+        // Initial hidden state, applied only when animating
+        gsap.set(".brand-logo", { opacity: 0, y: 20 });
+
+        gsap.to(".brand-logo", {
+            opacity: 0.7,
+            y: 0,
+            x: 0,
+            duration: 1,
+            stagger: 0.1,
+            ease: "power2.out",
+            // Borra el opacity inline al terminar: si no, gana sobre la clase
+            // hover:opacity-100 y el hover de los logos queda muerto.
+            clearProps: "opacity",
+            scrollTrigger: {
+                trigger: ".brand-logo",
+                start: "top 95%",
+            },
+        });
+    };
+
+    document.addEventListener("DOMContentLoaded", initBrands);
+</script>
+
+<style>
+    .brand-logo {
+        will-change: transform, opacity;
+    }
+</style>

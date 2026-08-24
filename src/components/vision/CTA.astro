@@ -3,22 +3,33 @@ import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import { HEADING, PAD, SURFACE } from "./typography";
 
+// Fases y duraciones tomadas del deck de ventas (Insytech-Vision Deployment
+// Timeline). Antes los tres pasos eran genericos y sin una sola cifra, asi que
+// "en semanas" quedaba como promesa suelta; el deck ya compromete estos plazos
+// frente al cliente, y sumados dan de 6 a 10 semanas, que es lo que sostiene el
+// titular.
 const steps = [
     {
         number: "1",
-        title: "Análisis",
-        description: "Evaluamos tu proceso y definimos los puntos críticos de inspección."
+        title: "Validación del caso",
+        duration: "2 semanas",
+        description:
+            "Definimos el punto de inspección y confirmamos que el caso de negocio se sostiene, antes de que inviertas en hardware.",
     },
     {
-        number: "2", 
-        title: "Implementación",
-        description: "Instalamos hardware y entrenamos modelos con tus productos reales."
+        number: "2",
+        title: "Prototipado",
+        duration: "2 a 4 semanas",
+        description:
+            "Recolectamos imágenes de tu propia línea, entrenamos el modelo y lo evaluamos sobre tus piezas reales.",
     },
     {
         number: "3",
-        title: "Producción",
-        description: "Sistema en línea, integrado con tu PLC y generando valor desde el día uno."
-    }
+        title: "Puesta en planta",
+        duration: "2 a 4 semanas",
+        description:
+            "Instalación, integración con tu control y arranque en línea. De ahí se escala a las demás líneas.",
+    },
 ];
 ---
 
@@ -63,9 +74,12 @@ const steps = [
                             </div>
                             
                             <!-- Contenido -->
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                                 {step.title}
                             </h3>
+                            <p class="mb-2 font-mono text-xs uppercase tracking-[0.12em] text-[#005EB8] dark:text-[#4da6ff]">
+                                {step.duration}
+                            </p>
                             <p class="text-gray-600 dark:text-slate-400 leading-relaxed text-sm lg:text-base">
                                 {step.description}
                             </p>
