@@ -85,8 +85,9 @@ const capabilities = [
     id="capacidades"
     class={`relative ${PAD.section} overflow-clip ${SURFACE.base}`}
 >
+    <div data-capability-pin class="capability-pin">
     <Container className="relative z-10">
-        <div class="max-w-3xl mb-14" data-animate="fade-up">
+        <div class="max-w-3xl mb-10" data-animate="fade-up">
             <h2
                 data-reveal="heading"
                 class={`${HEADING.section} mb-6`}
@@ -170,6 +171,7 @@ const capabilities = [
         </div>
 
     </Container>
+    </div>
 </section>
 
 <style>
@@ -182,8 +184,24 @@ const capabilities = [
         display: none;
     }
 
+    /* Con los pasos encendidos el bloque ocupa la ventana completa y centra su
+       contenido: al fijarse, el titular se queda arriba y el aire sobrante se
+       reparte, en vez de acumularse debajo de un bloque corto. */
     @media (min-width: 1024px) {
-        .capability-stepper[data-enabled="true"] {
+        .capability-pin[data-enabled="true"] {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* El nav flotante cubre la franja superior, asi que centrar contra
+               la ventana completa deja el bloque montado arriba y con exceso de
+               aire abajo. Este relleno compensa esa altura. */
+            padding-top: 3.5rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        [data-enabled="true"] .capability-stepper {
             display: grid;
             grid-template-columns: 13rem 1fr 1.1fr;
             gap: 3rem;

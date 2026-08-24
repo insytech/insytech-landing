@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { MOTION, registerMotion, prefersReducedMotion } from "./motion";
+import { getLenis } from "./smoothScroll";
 
 /**
  * Scroll-driven reveals for /vision/, opt-in through data attributes:
@@ -57,10 +58,11 @@ export function initReveals(): void {
  * move — both fall back to the plain stacked list the markup already is.
  */
 function initCapabilityStepper(): void {
+    const pin = document.querySelector<HTMLElement>("[data-capability-pin]");
     const stepper = document.querySelector<HTMLElement>(
         "[data-capability-stepper]"
     );
-    if (!stepper) return;
+    if (!pin || !stepper) return;
 
     const steps = Array.from(
         stepper.querySelectorAll<HTMLElement>("[data-step]")
@@ -140,13 +142,16 @@ function initCapabilityStepper(): void {
             );
     };
 
-    stepper.dataset.enabled = "true";
+    pin.dataset.enabled = "true";
 
     show(0, false);
 
-    ScrollTrigger.create({
-        trigger: stepper,
-        start: "center center",
+    const st = ScrollTrigger.create({
+        trigger: pin,
+        // Se fija al tope, no al centro: el contenedor ya mide una ventana
+        // completa y centra su contenido, asi que anclar al centro dejaba media
+        // pantalla vacia antes de empezar.
+        start: "top top",
         // One viewport of scroll per step. Less feels like the content is being
         // yanked past; more and the visitor wonders whether the page is stuck.
         end: () => "+=" + window.innerHeight * steps.length,
@@ -162,8 +167,17 @@ function initCapabilityStepper(): void {
         },
     });
 
+    // Al hacer clic hay que MOVER el scroll, no solo conmutar lo visible. Antes
+    // se llamaba a show() directo: el paso cambiaba, pero el ScrollTrigger seguia
+    // en la posicion del paso anterior, asi que al primer movimiento recalculaba
+    // el indice desde ahi y la seccion "regresaba" al 01.
     links.forEach((link, i) => {
-        link.addEventListener("click", () => show(i, true));
+        link.addEventListener("click", () => {
+            const mid = st.start + ((i + 0.5) / steps.length) * (st.end - st.start);
+            const lenis = getLenis();
+            if (lenis) lenis.scrollTo(mid);
+            else window.scrollTo({ top: mid, behavior: "smooth" });
+        });
     });
 }
 
