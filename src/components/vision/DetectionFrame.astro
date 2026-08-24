@@ -1,0 +1,235 @@
+---
+// Visor de inspección esquemático: el lenguaje visual del producto (encuadre de
+// cámara, cajas de detección, mapa de calor) sin fingir una captura real.
+//
+// Deliberadamente NO lleva porcentajes de confianza ni conteos concretos: sería
+// inventar resultados medidos, que es justo lo que se quitó del resto de la
+// página. Las etiquetas nombran la clase, no su desempeño.
+//
+// Tampoco usa las imágenes de dataset/samples de insytech-vision: MVTec AD es
+// CC BY-NC-SA y cada dataset trae su propia licencia, y publicar como material
+// de marketing es un permiso distinto al de entrenar.
+
+interface Props {
+    variant:
+        | "defects"
+        | "count"
+        | "edge"
+        | "anomaly"
+        | "ocr"
+        | "ppe";
+    label: string;
+    class?: string;
+}
+
+const { variant, label, class: className = "" } = Astro.props;
+
+const ACCENT = "#00B5E2";
+const FLAG = "#F97316";
+---
+
+<div
+    class={`detection-frame relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-gray-200 bg-gray-100 dark:border-white/10 dark:bg-[#070B16] ${className}`}
+    role="img"
+    aria-label={`Esquema de ${label}`}
+>
+    <!-- Retícula de fondo -->
+    <div class="detection-grid absolute inset-0 opacity-[0.35] dark:opacity-100">
+    </div>
+
+    <svg
+        class="absolute inset-0 h-full w-full"
+        viewBox="0 0 160 100"
+        fill="none"
+        aria-hidden="true"
+    >
+        <!-- Esquinas de encuadre, comunes a todas las variantes -->
+        <g stroke={ACCENT} stroke-width="1.2" opacity="0.7">
+            <path d="M8 18V8h10M142 8h10v10M152 82v10h-10M18 92H8V82" />
+        </g>
+
+        {
+            variant === "defects" && (
+                <g>
+                    <rect
+                        x="26"
+                        y="30"
+                        width="42"
+                        height="34"
+                        rx="2"
+                        stroke={ACCENT}
+                        stroke-width="1.4"
+                    />
+                    <rect
+                        x="92"
+                        y="42"
+                        width="34"
+                        height="30"
+                        rx="2"
+                        stroke={FLAG}
+                        stroke-width="1.6"
+                    />
+                    <path
+                        d="M99 52l20 12M119 52l-20 12"
+                        stroke={FLAG}
+                        stroke-width="1.2"
+                        opacity="0.8"
+                    />
+                </g>
+            )
+        }
+
+        {
+            variant === "count" && (
+                <g stroke={ACCENT} stroke-width="1.1">
+                    {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+                        <rect
+                            x={20 + (i % 4) * 32}
+                            y={i < 4 ? 28 : 58}
+                            width="22"
+                            height="18"
+                            rx="2"
+                        />
+                    ))}
+                </g>
+            )
+        }
+
+        {
+            variant === "edge" && (
+                <g>
+                    <rect
+                        x="54"
+                        y="34"
+                        width="52"
+                        height="34"
+                        rx="3"
+                        stroke={ACCENT}
+                        stroke-width="1.4"
+                    />
+                    <path
+                        d="M30 51h24M106 51h24"
+                        stroke={ACCENT}
+                        stroke-width="1.2"
+                        stroke-dasharray="3 3"
+                    />
+                    <circle cx="30" cy="51" r="3" fill={ACCENT} />
+                    <circle cx="130" cy="51" r="3" fill={FLAG} />
+                    <path
+                        d="M68 45h24M68 51h16M68 57h20"
+                        stroke={ACCENT}
+                        stroke-width="1.1"
+                        opacity="0.6"
+                    />
+                </g>
+            )
+        }
+
+        {
+            variant === "anomaly" && (
+                <g>
+                    <defs>
+                        <radialGradient id="heat-a">
+                            <stop offset="0%" stop-color={FLAG} stop-opacity="0.85" />
+                            <stop offset="100%" stop-color={FLAG} stop-opacity="0" />
+                        </radialGradient>
+                        <radialGradient id="heat-b">
+                            <stop offset="0%" stop-color={ACCENT} stop-opacity="0.5" />
+                            <stop offset="100%" stop-color={ACCENT} stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <circle cx="102" cy="42" r="26" fill="url(#heat-a)" />
+                    <circle cx="54" cy="62" r="30" fill="url(#heat-b)" />
+                    <rect
+                        x="24"
+                        y="24"
+                        width="112"
+                        height="52"
+                        rx="2"
+                        stroke={ACCENT}
+                        stroke-width="1"
+                        opacity="0.45"
+                    />
+                </g>
+            )
+        }
+
+        {
+            variant === "ocr" && (
+                <g>
+                    <rect
+                        x="34"
+                        y="40"
+                        width="92"
+                        height="20"
+                        rx="2"
+                        stroke={ACCENT}
+                        stroke-width="1.4"
+                    />
+                    <g stroke={ACCENT} stroke-width="2" opacity="0.75">
+                        <path d="M42 46v8M47 46v8M54 46v8M58 46v8M65 46v8M72 46v8M76 46v8M83 46v8M90 46v8M94 46v8M101 46v8M108 46v8M112 46v8M118 46v8" />
+                    </g>
+                    <path
+                        d="M34 68h92"
+                        stroke={FLAG}
+                        stroke-width="1"
+                        stroke-dasharray="2 3"
+                        opacity="0.7"
+                    />
+                </g>
+            )
+        }
+
+        {
+            variant === "ppe" && (
+                <g>
+                    <circle
+                        cx="80"
+                        cy="34"
+                        r="10"
+                        stroke={ACCENT}
+                        stroke-width="1.4"
+                    />
+                    <path
+                        d="M64 78c0-11 7-18 16-18s16 7 16 18"
+                        stroke={ACCENT}
+                        stroke-width="1.4"
+                    />
+                    <rect
+                        x="66"
+                        y="20"
+                        width="28"
+                        height="14"
+                        rx="2"
+                        stroke={FLAG}
+                        stroke-width="1.4"
+                    />
+                    <rect
+                        x="62"
+                        y="58"
+                        width="36"
+                        height="22"
+                        rx="2"
+                        stroke={FLAG}
+                        stroke-width="1.4"
+                    />
+                </g>
+            )
+        }
+    </svg>
+
+    <span
+        class="absolute bottom-3 left-3 rounded border border-[#00B5E2]/40 bg-white/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[#005EB8] dark:bg-[#070B16]/80 dark:text-[#4da6ff]"
+    >
+        {label}
+    </span>
+</div>
+
+<style>
+    .detection-grid {
+        background-image:
+            linear-gradient(to right, rgb(0 181 226 / 0.14) 1px, transparent 1px),
+            linear-gradient(to bottom, rgb(0 181 226 / 0.14) 1px, transparent 1px);
+        background-size: 16px 16px;
+    }
+</style>

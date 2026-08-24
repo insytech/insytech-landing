@@ -1,14 +1,22 @@
 ---
 import Container from "../shared/Container.astro";
+import DetectionFrame from "./DetectionFrame.astro";
 
 // The six MagicBento cards above give each capability ~20 words, which is why
 // /vision/ ranked 27.2 while its own blog posts ranked 2.7-12.3 for the same
 // topic. Each card now has a real subsection with a heading Google can index.
 // Anchors match the bento labels so the cards can link down to them.
+//
+// Layout is a sticky index beside scrolling detail rather than six stacked
+// prose blocks: the page already carries 29 bordered cards, and six more walls
+// of text at container width was its flattest stretch.
 const capabilities = [
     {
         id: "deteccion-de-defectos",
         title: "Detección de defectos",
+        short: "Detección de defectos",
+        variant: "defects" as const,
+        frameLabel: "Clasificación",
         body: [
             "Es el caso que más nos piden y el que más rápido se paga. Entrenamos modelos de visión profunda con imágenes de tu propia línea, no con datasets genéricos, porque un rayón en lámina pintada no se parece a un rayón en plástico translúcido.",
             "El modelo corre sobre cada pieza que pasa y emite un veredicto dentro del tiempo de ciclo. Cuando el defecto es sutil o variable, combinamos clasificación con segmentación para marcar exactamente dónde está la falla, y no solo si la pieza pasa o no.",
@@ -17,6 +25,9 @@ const capabilities = [
     {
         id: "conteo-de-objetos",
         title: "Conteo y seguimiento de objetos",
+        short: "Conteo y seguimiento",
+        variant: "count" as const,
+        frameLabel: "Seguimiento",
         body: [
             "Contar a mano funciona hasta que la línea acelera o el turno se alarga. El sistema sigue cada pieza cuadro a cuadro y mantiene el conteo aunque los objetos se toquen, se traslapen o cambien de orientación en la banda.",
             "Sirve igual para cerrar inventario en recibo, verificar cantidad por charola antes de sellar, o cuadrar producción real contra lo que reporta el MES. El conteo se escribe directo al PLC o al sistema de piso, sin captura manual de por medio.",
@@ -25,6 +36,9 @@ const capabilities = [
     {
         id: "edge-ai-tracking",
         title: "Procesamiento en el borde",
+        short: "Procesamiento en el borde",
+        variant: "edge" as const,
+        frameLabel: "En planta",
         body: [
             "Mandar video a un servidor central agrega latencia y una dependencia de red que en planta siempre acaba fallando. Nosotros ejecutamos el modelo en hardware junto a la línea, así la decisión sale en milisegundos y la celda sigue trabajando aunque se caiga el enlace.",
             "Eso permite acciones dentro del ciclo: activar un rechazador, detener el transportador o marcar la pieza antes de que avance. También reduce el ancho de banda, porque solo viaja el resultado y las imágenes de las piezas rechazadas.",
@@ -33,6 +47,9 @@ const capabilities = [
     {
         id: "mapas-de-calor-de-anomalias",
         title: "Mapas de calor de anomalías",
+        short: "Mapas de calor",
+        variant: "anomaly" as const,
+        frameLabel: "Anomalías",
         body: [
             "Muchas plantas quieren visión artificial pero no tienen defectos documentados: el problema es raro, o cuando aparece nadie lo fotografía. Para esos casos entrenamos con piezas conformes únicamente.",
             "El modelo aprende cómo se ve el producto correcto y señala en un mapa de calor cualquier zona que se sale del patrón, incluso defectos que nunca había visto. Es la vía más rápida para arrancar cuando no hay histórico, y sirve además para descubrir modos de falla que nadie había clasificado.",
@@ -41,6 +58,9 @@ const capabilities = [
     {
         id: "ocr-industrial",
         title: "OCR y verificación de código",
+        short: "OCR y códigos",
+        variant: "ocr" as const,
+        frameLabel: "Lectura",
         body: [
             "Leer un número de serie en un laboratorio es fácil; leerlo en planta, sobre metal curvo, con marcado láser de bajo contraste y una pieza que no se detiene, no lo es. Ahí es donde los lectores fijos empiezan a fallar.",
             "Combinamos iluminación adecuada con modelos entrenados sobre tu tipografía y tu material para leer seriales, lotes, fechas de caducidad, códigos de barras y Data Matrix. La verificación (OCV) va un paso más allá: confirma que lo impreso es lo que debía imprimirse, según la orden de producción.",
@@ -49,6 +69,9 @@ const capabilities = [
     {
         id: "seguridad-epp",
         title: "Verificación de equipo de protección",
+        short: "Equipo de protección",
+        variant: "ppe" as const,
+        frameLabel: "Seguridad",
         body: [
             "En áreas de riesgo la supervisión visual del EPP depende de que alguien esté mirando en el momento correcto. Las cámaras que ya tienes instaladas pueden hacer esa verificación de forma continua, con un modelo entrenado específicamente para esto.",
             "Detecta casco, chaleco, lentes de seguridad, guantes y calzado de protección sobre cada persona en la zona, y reporta la falta del elemento, no solo su presencia. Configuramos qué exige cada área: en una zona pueden bastar casco y chaleco, y en otra pedirse el equipo completo. La retención de imágenes se ajusta a tu política de privacidad: para muchos clientes basta con el evento y el conteo, sin guardar video.",
@@ -78,32 +101,73 @@ const capabilities = [
             </p>
         </div>
 
-        <div class="flex flex-col gap-12" data-reveal="group">
-            {
-                capabilities.map((cap, i) => (
-                    <article
-                        id={cap.id}
-                        class="grid lg:grid-cols-[auto_1fr] gap-6 lg:gap-10 scroll-mt-24"
-                    >
-                        <div
-                            class="font-heading text-5xl font-black text-[#005EB8]/25 dark:text-[#4da6ff]/25 leading-none select-none"
-                            aria-hidden="true"
+        <div class="grid lg:grid-cols-[15rem_1fr] gap-10 lg:gap-16">
+            <!-- El índice solo se fija en escritorio: en móvil ocuparía media
+                 pantalla durante toda la sección. -->
+            <nav
+                class="hidden lg:block lg:sticky lg:top-28 lg:self-start"
+                aria-label="Capacidades"
+            >
+                <ol class="flex flex-col gap-1">
+                    {
+                        capabilities.map((cap, i) => (
+                            <li>
+                                <a
+                                    href={`#${cap.id}`}
+                                    data-index-link={cap.id}
+                                    class="index-link flex items-baseline gap-3 rounded-lg px-3 py-2 text-sm text-gray-500 transition-colors hover:text-[#005EB8] dark:text-gray-500 dark:hover:text-[#4da6ff]"
+                                >
+                                    <span class="font-mono text-xs tabular-nums opacity-60">
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+                                    <span class="font-medium">{cap.short}</span>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ol>
+            </nav>
+
+            <div class="flex flex-col gap-16 lg:gap-24" data-reveal="group">
+                {
+                    capabilities.map((cap, i) => (
+                        <article
+                            id={cap.id}
+                            data-capability={cap.id}
+                            class="scroll-mt-28 flex flex-col gap-6"
                         >
-                            {String(i + 1).padStart(2, "0")}
-                        </div>
-                        <div class="flex flex-col gap-4 max-w-3xl">
-                            <h3 class="text-2xl font-bold font-heading text-[#211915] dark:text-white">
-                                {cap.title}
-                            </h3>
-                            {cap.body.map((p) => (
-                                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    {p}
-                                </p>
-                            ))}
-                        </div>
-                    </article>
-                ))
-            }
+                            <DetectionFrame
+                                variant={cap.variant}
+                                label={cap.frameLabel}
+                                class="max-w-md"
+                            />
+                            <div class="flex max-w-2xl flex-col gap-4">
+                                <h3 class="flex items-baseline gap-3 text-2xl font-bold font-heading text-[#211915] dark:text-white">
+                                    <span
+                                        class="font-mono text-sm tabular-nums text-[#005EB8]/60 dark:text-[#4da6ff]/60"
+                                        aria-hidden="true"
+                                    >
+                                        {String(i + 1).padStart(2, "0")}
+                                    </span>
+                                    {cap.title}
+                                </h3>
+                                {cap.body.map((p) => (
+                                    <p class="leading-relaxed text-gray-600 dark:text-gray-400">
+                                        {p}
+                                    </p>
+                                ))}
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
         </div>
     </Container>
 </section>
+
+<style>
+    .index-link[data-active="true"] {
+        color: var(--primary);
+        background-color: rgb(0 94 184 / 0.07);
+    }
+</style>

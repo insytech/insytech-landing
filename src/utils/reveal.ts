@@ -20,12 +20,19 @@ export function initReveals(): void {
     if (document.documentElement.dataset.revealsReady === "true") return;
     document.documentElement.dataset.revealsReady = "true";
 
+    gsap.registerPlugin(ScrollTrigger);
+
+    // The sticky index runs before the reduced-motion gate on purpose:
+    // highlighting where you are is orientation, not decoration, and without it
+    // the pinned column is a list that never responds.
+    initCapabilityIndex();
+
     // Reduced motion: everything is already in its final state in the markup, so
     // doing nothing is the correct outcome, not a degraded one.
     if (prefersReducedMotion()) return;
 
     registerMotion();
-    gsap.registerPlugin(ScrollTrigger, SplitText);
+    gsap.registerPlugin(SplitText);
 
     // SplitText measures line boxes. Splitting before the webfont swaps means
     // measuring Raleway's fallback and baking in line breaks that are wrong once
@@ -36,6 +43,38 @@ export function initReveals(): void {
         revealGroups();
         initParallax();
         ScrollTrigger.refresh();
+    });
+}
+
+/**
+ * Marks the sticky capability index against whichever article is currently in
+ * the reading band. One trigger per article rather than a scroll listener, so it
+ * shares ScrollTrigger's single measured pass instead of adding a second one.
+ */
+function initCapabilityIndex(): void {
+    const articles = document.querySelectorAll<HTMLElement>("[data-capability]");
+    if (!articles.length) return;
+
+    const setActive = (id: string | null) => {
+        document
+            .querySelectorAll<HTMLElement>("[data-index-link]")
+            .forEach((link) => {
+                link.dataset.active = String(link.dataset.indexLink === id);
+            });
+    };
+
+    articles.forEach((article) => {
+        const id = article.dataset.capability!;
+        ScrollTrigger.create({
+            trigger: article,
+            // Band across the upper half: an article counts as "current" from
+            // the moment its top reaches the header down to when it leaves.
+            start: "top 40%",
+            end: "bottom 40%",
+            onToggle: (self) => {
+                if (self.isActive) setActive(id);
+            },
+        });
     });
 }
 
@@ -66,16 +105,28 @@ function revealGroups(): void {
     document
         .querySelectorAll<HTMLElement>('[data-reveal="group"]')
         .forEach((el) => {
-            const items = Array.from(el.children);
+            const items = Array.from(el.children) as HTMLElement[];
             if (!items.length) return;
 
-            gsap.from(items, {
-                y: MOTION.GROUP_Y,
-                autoAlpha: 0,
-                duration: MOTION.GROUP_DURATION,
-                stagger: MOTION.GROUP_STAGGER,
-                ease: MOTION.EASE,
-                scrollTrigger: { trigger: el, start: MOTION.START },
+            gsap.set(items, { y: MOTION.GROUP_Y, autoAlpha: 0 });
+
+            // One trigger per item, not one on the container. A row of cards is
+            // short enough that a container trigger works, but the capability
+            // list is thousands of pixels tall — there, a single trigger would
+            // finish animating the last three long before they are on screen.
+            // batch() keeps the stagger for whatever enters together.
+            ScrollTrigger.batch(items, {
+                start: MOTION.START,
+                once: true,
+                onEnter: (batch) =>
+                    gsap.to(batch, {
+                        y: 0,
+                        autoAlpha: 1,
+                        duration: MOTION.GROUP_DURATION,
+                        stagger: MOTION.GROUP_STAGGER,
+                        ease: MOTION.EASE,
+                        overwrite: true,
+                    }),
             });
         });
 }
