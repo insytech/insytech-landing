@@ -154,19 +154,14 @@ import Paragraph from "../shared/Paragraph.astro";
             const email = (fd.get("email") || "").toString().trim();
             const source = window.location.pathname;
             const payload = {
-                // Llave PÚBLICA de Web3Forms (segura en cliente, según su doc).
-                access_key: "6e179734-4555-4053-ab94-9b4413672e9c",
-                subject: `Nuevo lead desde ${source} — insytech.mx`,
-                from_name: "Sitio Insytech",
-                replyto: email,
+                name,
+                email,
+                company: (fd.get("company") || "").toString().trim(),
+                phone: (fd.get("phone") || "").toString().trim(),
+                message: (fd.get("message") || "").toString().trim(),
                 // honeypot: si el campo oculto "website" viene lleno, es bot.
-                botcheck: (fd.get("website") || "").toString().trim() !== "",
-                Nombre: name,
-                Empresa: (fd.get("company") || "").toString().trim(),
-                Email: email,
-                Teléfono: (fd.get("phone") || "").toString().trim(),
-                Mensaje: (fd.get("message") || "").toString().trim(),
-                "Página de origen": source,
+                website: (fd.get("website") || "").toString().trim(),
+                page: source,
             };
 
             if (!name && !email) {
@@ -192,7 +187,12 @@ import Paragraph from "../shared/Paragraph.astro";
             }
 
             try {
-                const res = await fetch("https://api.web3forms.com/submit", {
+                // Ruta serverless propia: guarda el secreto del CRM, que nunca
+                // puede vivir en el navegador. Ella manda el correo y luego el
+                // lead al CRM.
+                // La barra final es obligatoria: con trailingSlash 'always' la
+                // ruta se registra como /api/lead/ y sin ella hay un 308 de más.
+                const res = await fetch("/api/lead/", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
