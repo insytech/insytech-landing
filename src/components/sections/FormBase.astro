@@ -152,6 +152,10 @@ import Paragraph from "../shared/Paragraph.astro";
             const fd = new FormData(form as HTMLFormElement);
             const name = (fd.get("name") || "").toString().trim();
             const email = (fd.get("email") || "").toString().trim();
+            const company = (fd.get("company") || "").toString().trim();
+            const phone = (fd.get("phone") || "").toString().trim();
+            const message = (fd.get("message") || "").toString().trim();
+            const website = (fd.get("website") || "").toString().trim();
             const source = window.location.pathname;
             const payload = {
                 // Llave PÚBLICA de Web3Forms (segura en cliente, según su doc).
@@ -160,12 +164,12 @@ import Paragraph from "../shared/Paragraph.astro";
                 from_name: "Sitio Insytech",
                 replyto: email,
                 // honeypot: si el campo oculto "website" viene lleno, es bot.
-                botcheck: (fd.get("website") || "").toString().trim() !== "",
+                botcheck: website !== "",
                 Nombre: name,
-                Empresa: (fd.get("company") || "").toString().trim(),
+                Empresa: company,
                 Email: email,
-                Teléfono: (fd.get("phone") || "").toString().trim(),
-                Mensaje: (fd.get("message") || "").toString().trim(),
+                Teléfono: phone,
+                Mensaje: message,
                 "Página de origen": source,
             };
 
@@ -214,6 +218,25 @@ import Paragraph from "../shared/Paragraph.astro";
                         "dark:text-green-400",
                     );
                 }
+                // El correo ya salió: es la red de seguridad del lead. Recién
+                // entonces se avisa al CRM, a través de nuestra ruta serverless
+                // porque el secreto del CRM no puede vivir en el navegador.
+                // Deliberadamente sin await y con el error tragado: si el CRM
+                // está caído o mal configurado, el visitante no debe enterarse.
+                fetch("/api/lead/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        company,
+                        phone,
+                        message,
+                        website,
+                        page: source,
+                    }),
+                }).catch(() => {});
+
                 (form as HTMLFormElement).reset();
                 (window as any).gtag?.("event", "generate_lead", {
                     form_location: source,
