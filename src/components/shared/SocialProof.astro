@@ -1,0 +1,41 @@
+---
+// Prueba social reutilizable: los años de operación más la rejilla de logos.
+//
+// Se extrajo de vision/Trust.astro al necesitarla en /software/. El bloque no
+// es específico de un producto —los mismos clientes y los mismos años valen en
+// cualquier página de servicio—, así que lo que cambia entre páginas es solo la
+// superficie y, si hace falta, la línea de encabezado.
+import Container from "./Container.astro";
+import ClientLogos from "./ClientLogos.astro";
+
+interface Props {
+    /** Clases de superficie y ritmo vertical de la sección anfitriona. */
+    class?: string;
+    /** Segunda línea, sobre los logos. */
+    caption?: string;
+}
+
+const {
+    class: className = "",
+    caption = "Empresas que han confiado en nuestras soluciones",
+} = Astro.props;
+---
+
+<section id="trust" class={`relative overflow-clip py-12 lg:py-14 ${className}`}>
+    <Container className="relative z-10">
+        <div
+            class="flex flex-col items-center gap-3 text-center"
+            data-animate="fade-up"
+        >
+            <p class="text-lg text-[#211915] dark:text-gray-200">
+                Más de <strong class="font-bold">9 años</strong> optimizando
+                procesos industriales en México
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                {caption}
+            </p>
+        </div>
+
+        <ClientLogos class="mt-6" />
+    </Container>
+</section>

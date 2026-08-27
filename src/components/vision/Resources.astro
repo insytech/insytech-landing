@@ -1,12 +1,12 @@
 ---
-import Container from "../shared/Container.astro";
-import { HEADING, PAD, SURFACE } from "./typography";
+import RelatedPosts from "../shared/RelatedPosts.astro";
+import type { RelatedPost } from "../shared/RelatedPosts.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
 
-// Post -> service linking already existed; the return path did not. These four
-// posts outrank /vision/ for its own topic (pos. 2.7, 6.9 and 12.3 against 27.2),
-// so the service page groups them to consolidate topical authority instead of
-// competing against them.
-const resources = [
+// Estos cuatro posts rankean por encima de /vision/ para su propio tema
+// (pos. 2.7, 6.9 y 12.3 contra 27.2), así que la página de servicio los agrupa
+// en vez de competir contra ellos.
+const posts: readonly RelatedPost[] = [
     {
         title: "El mercado de sistemas de visión artificial en México",
         summary: "Tamaño, crecimiento y qué sectores están adoptando primero.",
@@ -30,55 +30,10 @@ const resources = [
 ];
 ---
 
-<section
-    id="resources"
-    class={`relative ${PAD.minor} overflow-clip ${SURFACE.base}`}
->
-    <Container className="relative z-10">
-        <div class="max-w-3xl mb-10" data-animate="fade-up">
-            <h2
-                data-reveal="heading"
-                class={`${HEADING.minor} mb-4`}
-            >
-                Antes de decidir, léete esto
-            </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400">
-                Escribimos sobre lo que nos preguntan en las juntas. Sin vender.
-            </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-5" data-reveal="group">
-            {
-                resources.map((r, i) => (
-                    <a
-                        href={r.href}
-                        class="group rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900/50 p-6 flex items-start justify-between gap-5 hover:border-[#005EB8]/40 dark:hover:border-[#4da6ff]/50 transition-colors"
-                    >
-                        <span class="flex flex-col gap-2">
-                            <span class="font-bold font-heading text-[#211915] dark:text-white group-hover:text-[#005EB8] dark:group-hover:text-[#4da6ff] transition-colors">
-                                {r.title}
-                            </span>
-                            <span class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                {r.summary}
-                            </span>
-                        </span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="flex-shrink-0 w-4 h-4 mt-1 text-[#005EB8] dark:text-[#4da6ff]"
-                            aria-hidden="true"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
-                        </svg>
-                    </a>
-                ))
-            }
-        </div>
-    </Container>
-</section>
+<RelatedPosts
+    posts={posts}
+    heading="Antes de decidir, léete esto"
+    intro="Escribimos sobre lo que nos preguntan en las juntas. Sin vender."
+    class={`${PAD.minor} ${SURFACE.base}`}
+    headingClass={HEADING.minor}
+/>

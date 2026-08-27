@@ -1,5 +1,10 @@
 /**
- * Escala tipográfica y ritmo vertical de /vision/.
+ * Escala tipográfica y ritmo vertical de las páginas de servicio.
+ *
+ * Nació en /vision/ y se movió aquí al necesitarla /software/. Los tres niveles
+ * son una escala, no un reparto fijo: cada página decide qué secciones son su
+ * argumento y cuáles su apoyo. Copiar la asignación de /vision/ tal cual es
+ * justamente el error que la escala existe para evitar.
  *
  * Antes de esto, diez de las once secciones usaban exactamente
  * `text-4xl md:text-5xl` y todas `py-20`: ninguna pesaba más que otra, así que
