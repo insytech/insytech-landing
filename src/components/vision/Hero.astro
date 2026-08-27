@@ -116,9 +116,13 @@ const indice = [
                             </svg>
                         </div>
                         <div>
-                            <h3 class="text-lg font-bold text-[#211915] dark:text-white mb-1">
+                            <!-- h2 y no h3: la tira de capacidades cuelga directo del h1 del hero, sin
+                                 un h2 intermedio, asi que un h3 dejaba la jerarquia saltando
+                                 h1 -> h3. El tamano lo da la clase, no la etiqueta, asi que el
+                                 cambio no mueve un pixel. -->
+                            <h2 class="text-lg font-bold text-[#211915] dark:text-white mb-1">
                                 {item.titulo}
-                            </h3>
+                            </h2>
                             <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                                 {item.texto}
                             </p>
