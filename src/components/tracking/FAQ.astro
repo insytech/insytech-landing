@@ -64,11 +64,7 @@ const faqSchema = {
             </div>
 
             <!-- FAQ Acordeón -->
-            <div
-                class="space-y-4"
-                data-animate="fade-up"
-                data-animate-delay=".1s"
-            >
+            <div class="space-y-4" data-reveal="group">
                 {
                     faqItems.map((item, index) => (
                         <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors">

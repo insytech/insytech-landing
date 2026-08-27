@@ -1,0 +1,44 @@
+---
+import RelatedPosts from "../shared/RelatedPosts.astro";
+import type { RelatedPost } from "../shared/RelatedPosts.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// /blog/trazabilidad-sistemas-mes-planta/ acumula 113 impresiones en la posición
+// 18.98 y dos clics, contra las 136 de esta página en la 23.18 con uno: el post
+// rankea mejor que la página de servicio para su propio tema. Agruparlos aquí
+// consolida el tema en vez de repartirlo, que es lo que se hizo en /vision/ por
+// la misma razón. El del costo ya se enlazaba desde el FAQ; aquí queda visible.
+const posts: readonly RelatedPost[] = [
+    {
+        title: "Trazabilidad industrial y sistemas MES",
+        summary:
+            "Qué resuelve un MES en piso de planta y qué necesita de su ERP.",
+        href: "/blog/trazabilidad-sistemas-mes-planta/",
+    },
+    {
+        title: "¿Cuánto cuesta un sistema de trazabilidad industrial?",
+        summary:
+            "Qué define el precio: puntos de captura, integraciones y alcance.",
+        href: "/blog/costo-sistema-trazabilidad-industrial/",
+    },
+    {
+        title: "Automatización industrial: guía de control de procesos",
+        summary: "De dónde salen los datos que un MES necesita para servir.",
+        href: "/blog/automatizacion-y-control-industrial-guia/",
+    },
+    {
+        title: "Desarrollo de software a la medida para la industria",
+        summary:
+            "Cuándo conviene un MES a la medida y cuándo un sistema de catálogo.",
+        href: "/blog/desarrollo-software-industrial-a-la-medida/",
+    },
+];
+---
+
+<RelatedPosts
+    posts={posts}
+    heading="Antes de elegir un MES, léete esto"
+    intro="Escribimos sobre lo que nos preguntan en las juntas. Sin vender."
+    class={`${PAD.minor} ${SURFACE.base}`}
+    headingClass={HEADING.minor}
+/>
