@@ -17,6 +17,16 @@ const faqItems = [
     },
     {
         question:
+            "¿Sobre qué plataformas SCADA integran? ¿Trabajan con Ignition?",
+        answer: "Sí. Integramos sobre Ignition, Aveva y WinCC, y elegimos la plataforma según lo que ya tenga instalado y con qué PLCs tiene que hablar, no según un acuerdo con un fabricante. Si su planta ya corre una de las tres, trabajamos sobre ella y aprovechamos las pantallas y las bases de datos existentes; si empieza de cero, le explicamos qué implica cada una en licenciamiento y en mantenimiento antes de decidir.",
+    },
+    {
+        question:
+            "¿Dan servicio de automatización en Monterrey y el área metropolitana?",
+        answer: "Sí. Estamos en Monterrey, y ahí hacemos el levantamiento en planta, la programación en sitio y la puesta en marcha, con soporte presencial en el área metropolitana. También atendemos plantas en Saltillo, Ramos Arizpe, Tamaulipas y el Bajío, donde el arranque se hace en sitio y el seguimiento posterior es remoto.",
+    },
+    {
+        question:
             "¿Cómo se justifica la inversión en automatización industrial?",
         answer: "El retorno típico viene de tres frentes: reducción de tiempos muertos gracias a la detección temprana de fallas, consistencia de calidad al eliminar variabilidad manual, y visibilidad en tiempo real para decisiones operativas. Cotizamos por proyecto tras un diagnóstico de tu línea, priorizando las automatizaciones de mayor impacto para que la inversión se recupere por etapas.",
     },
@@ -64,11 +74,7 @@ const faqSchema = {
             </div>
 
             <!-- FAQ Acordeón -->
-            <div
-                class="space-y-4"
-                data-animate="fade-up"
-                data-animate-delay=".1s"
-            >
+            <div class="space-y-4" data-reveal="group">
                 {
                     faqItems.map((item, index) => (
                         <div class="faq-item border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900/50 hover:border-[#005EB8]/30 dark:hover:border-[#005EB8]/50 transition-colors">

@@ -1,25 +1,37 @@
 ---
 import Layout from "@layouts/VisionLayout.astro";
 import Hero from "@components/control/Hero.astro";
+import SocialProof from "@components/shared/SocialProof.astro";
 import Services from "@components/control/Services.astro";
 import Performance from "@components/control/Performance.astro";
-import Projects from "@components/control/Projects.astro";
+import ProjectPhases from "@components/control/ProjectPhases.astro";
 import CTA from "@components/control/CTA.astro";
+import Resources from "@components/control/Resources.astro";
 import FAQ from "@components/control/FAQ.astro";
-import ContactForm from "@components/sections/ContactForm.astro";
 import ContactSection from "@components/sections/ContactSection.astro";
+import { SURFACE } from "@utils/typography";
 ---
 
 <Layout
     title="Automatización Industrial en Monterrey y todo México"
-    description="Automatización industrial con integración de PLC, SCADA e IoT para la manufactura inteligente. Integramos sistemas de control en todo México. Solicita tu cotización."
+    description="Automatización industrial en Monterrey: programación de PLC, integración de SCADA sobre Ignition, Aveva o WinCC, e IoT industrial. Cotice su proyecto."
 >
-    <main class="flex flex-col overflow-hidden">
+    <!-- overflow-clip y no overflow-hidden: hidden crea un contenedor de scroll
+         y rompería cualquier sticky o pin de ScrollTrigger de la página. -->
+    <main class="flex flex-col overflow-clip">
         <Hero />
+
+        <!-- Prueba social pegada al Hero. Sustituye a la sección de Proyectos,
+             que eran tres testimonios sin cliente identificable y con cifras sin
+             respaldo; el marcado sigue en la historia de git si algún día hay
+             casos reales con permiso del cliente. -->
+        <SocialProof class={SURFACE.base} />
+
         <Services />
         <Performance />
-        <Projects />
+        <ProjectPhases />
         <CTA />
+        <Resources />
         <FAQ />
 
         <ContactSection />

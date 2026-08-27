@@ -1,0 +1,87 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// Ocupa el hueco que dejó la sección de Proyectos, que eran tres testimonios sin
+// cliente identificable. El cluster de consultas de esta página es de intención
+// de proveedor —`integrador ignition monterrey`, `integrador scada mexico`,
+// `especialistas en automatizacion de procesos por proyecto`, `cómo elegir un
+// proveedor de automatización`—, así que quien llega aquí quiere saber cómo
+// trabajamos, no cuánto presumimos.
+//
+// Las cinco fases NO son inventadas: son las que el FAQ de esta misma página ya
+// describe al responder cómo se moderniza un sistema de control sin detener la
+// producción. Van SIN plazos a propósito: el único cronograma medido que
+// tenemos es de un proyecto de captura de datos, no de una migración de PLCs, y
+// extrapolarlo sería inventar un compromiso con apariencia de dato.
+const phases = [
+    {
+        number: "01",
+        title: "Levantamiento en planta",
+        body: "Vemos la línea corriendo, con qué PLCs habla, qué está documentado y qué solo lo sabe el técnico que lleva quince años ahí.",
+    },
+    {
+        number: "02",
+        title: "Documentar la lógica existente",
+        body: "Antes de tocar nada, la lógica que ya funciona queda escrita. Es el paso que casi nadie cobra y el que evita el paro caro.",
+    },
+    {
+        number: "03",
+        title: "Réplica y pruebas fuera de línea",
+        body: "La lógica se reconstruye y se prueba en la plataforma nueva, sin que la producción se entere.",
+    },
+    {
+        number: "04",
+        title: "Cambio línea por línea",
+        body: "El arranque se hace por fases, aprovechando paros programados y ventanas de mantenimiento. Nunca todo de golpe.",
+    },
+    {
+        number: "05",
+        title: "Puesta en marcha con soporte",
+        body: "Acompañamos el arranque con soporte 24/7 y dejamos la documentación para que su equipo pueda operar sin depender de nosotros.",
+    },
+];
+---
+
+<section id="project" class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mb-12">
+            <p
+                class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
+            >
+                Cómo trabajamos
+            </p>
+            <h2 data-reveal="heading" class={`${HEADING.section} mb-4`}>
+                Cómo es un proyecto de automatización industrial
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                Modernizar un sistema de control sin detener la producción no es
+                cuestión de trabajar de noche: es cuestión de orden. Este es el
+                nuestro.
+            </p>
+        </div>
+
+        <ol class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="group">
+            {
+                phases.map((phase) => (
+                    <li class="relative p-6 rounded-2xl bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-800 overflow-hidden">
+                        <div
+                            class="absolute -right-3 -top-6 text-7xl font-bold italic text-gray-50 dark:text-gray-900 pointer-events-none select-none"
+                            aria-hidden="true"
+                        >
+                            {phase.number}
+                        </div>
+                        <div class="relative z-10">
+                            <h3 class="text-lg font-bold text-[#211915] dark:text-white mb-2">
+                                {phase.title}
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                {phase.body}
+                            </p>
+                        </div>
+                    </li>
+                ))
+            }
+        </ol>
+    </Container>
+</section>
