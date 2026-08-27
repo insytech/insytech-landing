@@ -146,7 +146,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-html {
+/* `:not(.lenis)`: Lenis marca el <html> con la clase `lenis` en cuanto se
+   instancia y la mantiene mientras gobierna el scroll. Sin la exclusión, en
+   /vision/ y /software/ un salto por ancla o por teclado lo animan las dos a la
+   vez —CSS interpolando la posición nativa y Lenis interpolando la suya— sobre
+   el mismo scroll. El resto del sitio no monta Lenis, así que ahí la regla sigue
+   aplicando igual; y donde Lenis se abstiene por `prefers-reduced-motion`, la
+   clase no se añade y manda el bloque de reduced-motion de más abajo.
+   Ojo: NO sirve `.lenis-smooth`, que solo está puesta mientras hay scroll en
+   curso, así que en reposo no excluiría nada. */
+html:not(.lenis) {
   scroll-behavior: smooth;
 }
 
@@ -164,6 +173,61 @@ h2,
 h3,
 .font-heading {
   font-family: var(--font-heading);
+}
+
+/* Tipografía de contenido largo (blog y aviso de privacidad). Aplicar con
+   `class="content-typography"`.
+
+   Vivía duplicada, con las nueve reglas repetidas en el <style is:global> de
+   Layout.astro y de VisionLayout.astro. Los dos bloques eran idénticos salvo la
+   indentación, así que la duplicación no hacía nada excepto garantizar que un
+   día se editara uno y no el otro, y que el blog y el aviso de privacidad
+   acabaran con tipografías distintas. Aquí está una sola vez, y los tres layouts
+   ya importan este archivo.
+
+   La escala sigue siendo plana a propósito por ahora: 18 -> 20 -> 24px en el
+   extremo alto son ratios de 1.11 y 1.20, por debajo del 1.25 que pide una
+   jerarquía legible, así que en contenido largo el cuerpo y el h3 se distinguen
+   poco. Abrirla es un cambio visual del blog, no una limpieza, y va aparte. */
+.content-typography {
+  font-size: clamp(15px, 0.3vw + 14px, 18px);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+}
+.content-typography h2 {
+  font-size: clamp(20px, 0.6vw + 18px, 24px);
+  font-weight: 700;
+  color: rgb(var(--heading-2));
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  text-wrap: balance;
+}
+.content-typography h3 {
+  font-size: clamp(18px, 0.5vw + 16px, 20px);
+  font-weight: 600;
+  color: rgb(var(--heading-2));
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  text-wrap: balance;
+}
+.content-typography p {
+  margin: 0.75rem 0;
+  color: rgb(var(--heading-3));
+}
+.content-typography ul {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+}
+.content-typography li {
+  margin: 0.25rem 0;
+  color: rgb(var(--heading-3));
+}
+.content-typography a {
+  text-decoration: underline;
+  color: #005eb8;
+}
+.dark .content-typography a {
+  color: #00b5e2;
 }
 
 /* Accessibility — respect users who request reduced motion (WCAG 2.3.3).
