@@ -1,18 +1,19 @@
 ---
 import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
 
 const services = [
     {
         title: "Sistemas MES (Manufacturing Execution Systems)",
         description:
-            "Digitalice su piso de producción. Monitoreo en tiempo real, control de inventarios, órdenes de trabajo y <a href='/tracking' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>trazabilidad total de procesos</a>.",
+            "Digitalice su piso de producción. Monitoreo en tiempo real, control de inventarios, órdenes de trabajo y <a href='/tracking/' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>trazabilidad total de procesos</a>.",
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>`,
         gradient: "from-blue-500 to-cyan-500",
     },
     {
         title: "Dashboards e Inteligencia de Negocios",
         description:
-            "Transforme datos crudos en decisiones estratégicas. Visualizaciones dinámicas conectadas directamente a sus bases de datos y <a href='/control' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>PLCs</a>.",
+            "Transforme datos crudos en decisiones estratégicas. Visualizaciones dinámicas conectadas directamente a sus bases de datos y <a href='/control/' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>PLCs</a>.",
         icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>`,
         gradient: "from-purple-500 to-indigo-500",
     },
@@ -47,7 +48,7 @@ const services = [
 ];
 ---
 
-<section id="solutions" class="py-24 bg-white dark:bg-gray-950">
+<section id="solutions" class={`${PAD.display} ${SURFACE.base}`}>
     <Container>
         <div class="text-center max-w-3xl mx-auto mb-20">
             <p
@@ -55,10 +56,8 @@ const services = [
             >
                 Nuestros Servicios
             </p>
-            <h2
-                class="text-4xl sm:text-5xl font-bold text-[#211915] dark:text-white mb-6"
-            >
-                Soluciones digitales para desafíos complejos
+            <h2 data-reveal="heading" class={`${HEADING.display} mb-6`}>
+                Desarrollo de software industrial, proceso por proceso
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-400">
                 Combinamos nuestra experiencia en <a
@@ -70,22 +69,18 @@ const services = [
             </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-reveal="group">
             {
-                services.map((service, index) => (
-                    <div
-                        class="group p-8 rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/30 dark:hover:border-blue-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-[#005EB8]/5"
-                        data-animate="fade-up"
-                        data-animate-delay={`${index * 0.1}s`}
-                    >
+                services.map((service) => (
+                    <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/30 dark:hover:border-blue-500/30 transition-colors duration-300 hover:shadow-2xl hover:shadow-[#005EB8]/5">
                         <div
                             class={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300`}
                         >
                             <Fragment set:html={service.icon} />
                         </div>
-                        <h4 class="text-xl font-bold text-[#211915] dark:text-white mb-4 group-hover:text-[#005EB8] dark:group-hover:text-blue-400 transition-colors">
+                        <h3 class="text-xl font-bold text-[#211915] dark:text-white mb-4 group-hover:text-[#005EB8] dark:group-hover:text-blue-400 transition-colors">
                             {service.title}
-                        </h4>
+                        </h3>
                         <p
                             class="text-gray-600 dark:text-gray-400 leading-relaxed"
                             set:html={service.description}

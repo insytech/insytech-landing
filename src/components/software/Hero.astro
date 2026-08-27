@@ -1,6 +1,18 @@
 ---
 import Container from "../shared/Container.astro";
 import BtnLink from "../shared/BtnLink.astro";
+
+// Vendored from devicon (MIT) into public/logos/stack/. These were six requests
+// to cdn.jsdelivr.net inside the initial viewport: a third-party connection on
+// the critical path to render decoration at 40% opacity.
+const stack = [
+    { name: "React", file: "react" },
+    { name: "Node.js", file: "nodejs" },
+    { name: "TypeScript", file: "typescript" },
+    { name: "Python", file: "python" },
+    { name: "PostgreSQL", file: "postgresql" },
+    { name: "Docker", file: "docker" },
+] as const;
 ---
 
 <section
@@ -146,38 +158,21 @@ import BtnLink from "../shared/BtnLink.astro";
                         Con estándares de la industria
                     </p>
                     <div
-                        class="flex flex-wrap gap-8 opacity-40 grayscale hover:grayscale-0 transition-all"
+                        class="flex flex-wrap items-center gap-8 opacity-40 grayscale transition-[opacity,filter] duration-300 hover:opacity-100 hover:grayscale-0"
                     >
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg"
-                            class="h-6"
-                            alt="React"
-                        />
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg"
-                            class="h-6"
-                            alt="NodeJS"
-                        />
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg"
-                            class="h-6"
-                            alt="TypeScript"
-                        />
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
-                            class="h-6"
-                            alt="Python"
-                        />
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg"
-                            class="h-6"
-                            alt="PostgreSQL"
-                        />
-                        <img
-                            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg"
-                            class="h-6"
-                            alt="Docker"
-                        />
+                        {
+                            stack.map((tech) => (
+                                <img
+                                    src={`/logos/stack/${tech.file}.svg`}
+                                    alt={tech.name}
+                                    width="24"
+                                    height="24"
+                                    class="h-6 w-6"
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            ))
+                        }
                     </div>
                 </div>
             </div>
@@ -378,40 +373,6 @@ import BtnLink from "../shared/BtnLink.astro";
                     </div>
                 </div>
 
-                <div
-                    class="absolute -bottom-8 -right-8 z-30 bg-[#001489] text-white p-4 rounded-xl shadow-xl border border-white/10 scale-95 group-hover:translate-x-2 transition-transform duration-500"
-                >
-                    <div class="flex items-center gap-3">
-                        <div class="bg-white/10 p-2 rounded-lg">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                ><circle cx="12" cy="12" r="10"></circle><line
-                                    x1="2"
-                                    x2="22"
-                                    y1="12"
-                                    y2="12"></line><path
-                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                                ></path></svg
-                            >
-                        </div>
-                        <div>
-                            <p
-                                class="text-[10px] opacity-70 uppercase tracking-widest font-mono"
-                            >
-                                Presencia global
-                            </p>
-                            <!-- NOTE: "99.99%" is an unsubstantiated availability claim (audit R5) — business should confirm the real SLA or remove the figure -->
-                            <p class="text-sm font-bold">99.99% Disponibilidad</p>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- API Connectivity Lines -->
                 <div
                     class="absolute inset-x-0 top-1/2 -z-10 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
@@ -425,18 +386,3 @@ import BtnLink from "../shared/BtnLink.astro";
         </div>
     </Container>
 </section>
-
-<style>
-    /* Add subtle animation for background code lines */
-    @keyframes scroll {
-        from {
-            transform: translateY(0);
-        }
-        to {
-            transform: translateY(-50%);
-        }
-    }
-    .font-mono > div {
-        /* animation: scroll 60s linear infinite; */
-    }
-</style>

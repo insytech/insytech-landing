@@ -1,0 +1,42 @@
+---
+import RelatedPosts from "../shared/RelatedPosts.astro";
+import type { RelatedPost } from "../shared/RelatedPosts.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// /blog/desarrollo-software-industrial-a-la-medida/ acumula 76 impresiones en la
+// posición 10.63, contra las 72 de esta página en la 7.64: las dos compiten por
+// el mismo término y ninguna recibe clics. Enlazarlo desde aquí agrupa el tema en
+// vez de repartirlo. Los otros tres cubren las consultas vecinas del cluster.
+const posts: readonly RelatedPost[] = [
+    {
+        title: "Desarrollo de software a la medida para la industria",
+        summary:
+            "Qué pedir, qué exigir y cómo se ve un primer proyecto bien planteado.",
+        href: "/blog/desarrollo-software-industrial-a-la-medida/",
+    },
+    {
+        title: "Trazabilidad industrial y sistemas MES",
+        summary:
+            "Qué resuelve un MES en piso de planta y qué necesita de su ERP.",
+        href: "/blog/trazabilidad-sistemas-mes-planta/",
+    },
+    {
+        title: "Inteligencia artificial en la industria",
+        summary: "Casos reales de IA en manufactura, sin promesas de folleto.",
+        href: "/blog/inteligencia-artificial-industria-manufactura/",
+    },
+    {
+        title: "Cómo elegir un proveedor de automatización inteligente",
+        summary: "Diez preguntas que separan a un integrador de un vendedor.",
+        href: "/blog/como-elegir-proveedor-automatizacion-inteligente/",
+    },
+];
+---
+
+<RelatedPosts
+    posts={posts}
+    heading="Antes de contratar un desarrollo, léete esto"
+    intro="Escribimos sobre lo que nos preguntan en las juntas. Sin vender."
+    class={`${PAD.minor} ${SURFACE.base}`}
+    headingClass={HEADING.minor}
+/>
