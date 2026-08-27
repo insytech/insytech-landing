@@ -12,7 +12,7 @@ import ContactSection from "../components/sections/ContactSection.astro";
 	title="Ingeniería, Software y Automatización Industrial en México"
 	description="Expertos en soluciones integradas de ingeniería, software industrial, IA y automatización. Optimizamos procesos productivos en Monterrey y todo México."
 >
-	<main class="flex flex-col overflow-hidden">
+	<main class="flex flex-col overflow-clip">
 		<Hero />
 		<Services />
 		<!-- <AboutUs /> -->
@@ -21,3 +21,18 @@ import ContactSection from "../components/sections/ContactSection.astro";
 		<ContactSection />
 	</main>
 </Layout>
+
+<script>
+	// Mismo motor que /vision/ y /software/, montado desde la página y no desde
+	// Layout.astro a propósito: ese layout también sirve /blog, que hoy carga
+	// 0 KB de JS y no tiene un solo nodo con `data-reveal`. Meterlo ahí le
+	// costaría 147.7 KB en crudo (57.0 KB gzip) —el chunk de Lenis + SplitText
+	// más gsap y ScrollTrigger, que en el home ya venían por Hero/Services/
+	// Features— para no animar nada. Aquí el coste marginal es solo el primer
+	// chunk: 35.4 KB en crudo, 12.7 KB gzip.
+	import { initSmoothScroll } from "@utils/smoothScroll";
+	import { initReveals } from "@utils/reveal";
+
+	initSmoothScroll();
+	initReveals();
+</script>

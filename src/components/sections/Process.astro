@@ -50,20 +50,25 @@ import Paragraph from "../shared/Paragraph.astro";
             paso a paso
           </span>
         </h2>
-        <div
-          class="relative space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-10 text-left mt-12"
-        >
+        <div class="relative mt-12">
           <!-- Connector Line (Mobile Only) -->
+          {
+            /* Vive fuera del grupo a propósito: en un grupo de reveal los hijos
+               directos son lo que se anima, y al llevar la línea a autoAlpha 1
+               GSAP le escribiría `opacity: 1` inline, que gana a su clase
+               `opacity-20` y la dejaría a tope. */
+          }
           <div
             class="absolute left-6 top-4 bottom-4 w-0.5 bg-gradient-to-b from-[#00B5E2] via-[#005EB8] to-[#001489] opacity-20 md:hidden"
           >
           </div>
-
+          <div
+            class="space-y-10 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-12 md:gap-y-10 text-left"
+            data-reveal="group"
+          >
           <!-- Paso 1 -->
           <div
             class="relative flex items-center gap-6"
-            data-animate="fade-up"
-            data-animate-delay=".06s"
           >
             <div
               class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10"
@@ -97,8 +102,6 @@ import Paragraph from "../shared/Paragraph.astro";
           <!-- Paso 2 -->
           <div
             class="relative flex items-center gap-6"
-            data-animate="fade-up"
-            data-animate-delay=".12s"
           >
             <div
               class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10"
@@ -134,8 +137,6 @@ import Paragraph from "../shared/Paragraph.astro";
           <!-- Paso 3 -->
           <div
             class="relative flex items-center gap-6"
-            data-animate="fade-up"
-            data-animate-delay=".18s"
           >
             <div
               class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10"
@@ -165,8 +166,6 @@ import Paragraph from "../shared/Paragraph.astro";
           <!-- Paso 4 -->
           <div
             class="relative flex items-center gap-6"
-            data-animate="fade-up"
-            data-animate-delay=".24s"
           >
             <div
               class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10"
@@ -193,11 +192,11 @@ import Paragraph from "../shared/Paragraph.astro";
               </h3>
             </div>
           </div>
+          </div>
         </div>
         <div
           class="mx-auto max-w-md sm:max-w-xl pt-10"
           data-animate="fade"
-          data-animate-delay=".3s"
         >
           <BtnLink
             text="Solicita diagnóstico técnico"
