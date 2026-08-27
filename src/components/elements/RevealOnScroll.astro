@@ -1,0 +1,43 @@
+---
+// Reveal on scroll para [data-animate], el sistema ligero que anima por clase
+// CSS (`.in`) y no necesita GSAP.
+//
+// Vivía copiado literal en los tres layouts. Aquí está una sola vez, como
+// componente y no como módulo de `src/utils/`, por una razón medida: `/ai/` y
+// `/blog` cargan hoy CERO JavaScript externo, y convertir esto en un import
+// habría emitido un archivo aparte solo para ellos. Con `is:inline` el script
+// viaja dentro del HTML igual que antes, así que la desduplicación no cuesta ni
+// una petición.
+//
+// Los layouts que además montan Lenis y los reveals de GSAP siguen necesitando
+// esto: los dos sistemas conviven, y la regla es que ningún nodo lleve
+// `data-animate` y `data-reveal` a la vez.
+---
+
+<script is:inline>
+    (() => {
+        const els = Array.from(document.querySelectorAll("[data-animate]"));
+        if (!els.length) return;
+        if (!("IntersectionObserver" in window)) {
+            els.forEach((el) => el.classList.add("in"));
+            return;
+        }
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+                        if (el instanceof HTMLElement) {
+                            const d = el.getAttribute("data-animate-delay");
+                            if (d) el.style.setProperty("--delay", d);
+                            el.classList.add("in");
+                        }
+                        io.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.15, rootMargin: "0px 0px -5% 0px" }
+        );
+        els.forEach((el) => io.observe(el));
+    })();
+</script>

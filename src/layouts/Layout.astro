@@ -6,6 +6,7 @@ import CookieConsent from "../components/elements/CookieConsent.astro";
 import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
 import GoogleAnalytics from "../components/elements/GoogleAnalytics.astro";
 import SEO from "../components/elements/SEO.astro";
+import RevealOnScroll from "../components/elements/RevealOnScroll.astro";
 
 export interface Props {
   title?: string;
@@ -82,34 +83,7 @@ const {
     */
     }
     <WhatsappWidget />
-    <script>
-      // Reveal on scroll para [data-animate]
-      (() => {
-        const els = Array.from(document.querySelectorAll("[data-animate]"));
-        if (!els.length) return;
-        if (!("IntersectionObserver" in window)) {
-          els.forEach((el) => el.classList.add("in"));
-          return;
-        }
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                const el = entry.target;
-                if (el instanceof HTMLElement) {
-                  const d = el.getAttribute("data-animate-delay");
-                  if (d) el.style.setProperty("--delay", d);
-                  el.classList.add("in");
-                }
-                io.unobserve(entry.target);
-              }
-            });
-          },
-          { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
-        );
-        els.forEach((el) => io.observe(el));
-      })();
-    </script>
+    <RevealOnScroll />
   </body>
 </html>
 
