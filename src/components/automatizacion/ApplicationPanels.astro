@@ -389,10 +389,12 @@ const applications = [
                 //   rotateX positivo  -> hunde el borde inferior y lo aleja. Con
                 //                        el signo negativo se inclinaría hacia el
                 //                        visitante, que es el gesto contrario.
-                //   rotateZ pequeño   -> el ladeo. En el original vale unos 3
-                //                        grados (m12 +0.0418, m21 -0.0381 sobre
-                //                        una escala de 0.82) y es lo que hace que
-                //                        se lea como hoja y no como persiana.
+                //   rotateZ pequeño   -> el ladeo. Medido sobre el panel del
+                //                        original, m12 vale -0.0427 sobre una
+                //                        escala de 0.817, o sea unos -3 grados.
+                //                        Es lo que hace que se lea como hoja y no
+                //                        como persiana, y el signo decide hacia
+                //                        qué lado se ladea.
                 //   descenso          -> el desplazamiento hacia abajo mientras
                 //                        se va.
                 //
@@ -401,7 +403,7 @@ const applications = [
                 gsap.to(panel, {
                     scale: 0.86,
                     rotateX: 18,
-                    rotateZ: 3,
+                    rotateZ: -3,
                     yPercent: 8,
                     // Hasta 0 y no hasta 0.28: con un resto de opacidad los
                     // paneles que salen nunca desaparecen y se van acumulando,
