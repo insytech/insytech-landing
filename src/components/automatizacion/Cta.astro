@@ -1,6 +1,6 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
-import { Zap, Workflow, BadgeCheck } from "@lucide/astro";
+import { Zap, Brain, Workflow, LifeBuoy } from "@lucide/astro";
 ---
 
 <section id="cta" class="pt-10">
@@ -63,33 +63,82 @@ import { Zap, Workflow, BadgeCheck } from "@lucide/astro";
                     data-animate="fade-up"
                     data-animate-delay=".1s"
                 >
-                    Solicita una demo gratuita y descubre cómo la automatización
-                    inteligente puede ayudarte a crecer, optimizar procesos y
-                    reducir costos operativos.
+                    Así arranca un proyecto de IA en planta con nosotros.
                 </p>
 
-                <!-- Beneficios destacados -->
+                {
+                    /* Las mismas tejas circulares del bloque "Nuestro enfoque
+                       técnico, paso a paso" de la home: círculo blanco con borde
+                       Light Blue al 30% y sombra, en reja de dos por dos. Antes
+                       aquí había un párrafo largo sin iconos, que ni se leía
+                       rápido ni se parecía a nada del sitio.
+
+                       Los cuatro pasos salen del FAQ de esta página: se arranca
+                       por un punto, el modelo se entrena con datos del cliente,
+                       se integra con lo que ya corre en planta y se pone en
+                       marcha con la línea andando.
+
+                       El cuarto paso decía «Con soporte 24/7». Se cambió porque
+                       el CTA no es el lugar para comprometer un nivel de
+                       servicio que se negocia por contrato. */
+                }
                 <div
-                    class="mt-8 mb-10"
+                    class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mt-10 mb-10"
                     data-animate="fade-up"
                     data-animate-delay=".15s"
                 >
-                    {
-                        /* Antes había aquí tres insignias sueltas —
-                           "Implementación rápida", "Alcance acotado por etapas" y
-                           "Flujos activos 24/7"— que decían poco cada una y
-                           ninguna comprometía a nada. Una sola frase con lo que
-                           de verdad diferencia la conversación vale más, y es
-                           además lo que el FAQ de la página ya sostiene. */
-                    }
-                    <p
-                        class="mx-auto max-w-2xl text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-400"
-                    >
-                        Empezamos por un punto, con tus datos y tu criterio de
-                        aceptación, y se amplía cuando ese punto ya se sostiene
-                        solo. Si lo que falta es la captura del dato, lo decimos
-                        antes de cotizar.
-                    </p>
+                    <div class="flex items-center gap-4 text-left">
+                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                            <Zap width={22} height={22} />
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
+                                1. Arranque
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Por un punto de inspección
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-left">
+                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                            <Brain width={22} height={22} />
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
+                                2. Entrenamiento
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Con tus piezas y tus turnos
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-left">
+                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                            <Workflow width={22} height={22} />
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
+                                3. Integración
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Con lo que ya corre en planta
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-left">
+                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                            <LifeBuoy width={22} height={22} />
+                        </div>
+                        <div>
+                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
+                                4. Puesta en marcha
+                            </p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Con la línea andando
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Botón de acción -->
