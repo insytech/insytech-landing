@@ -1,0 +1,179 @@
+---
+import BandPanel from "../mocks/BandPanel.astro";
+import StationCard from "../mocks/StationCard.astro";
+import AndonLineDiagram from "../mocks/AndonLineDiagram.astro";
+import { STATUS, type Station } from "../mocks/status";
+import RadioChips from "./RadioChips.astro";
+
+/**
+ * Tablero de andon en grande: LAS DOS VISTAS DE LOS MISMOS DATOS. El conmutador
+ * Grid / Layout es la interacción que carga el argumento —el mismo turno de
+ * planta se ve como tarjetas o como el diagrama de línea— y por eso las dos
+ * vistas leen la misma lista de estaciones y no dos listas parecidas.
+ *
+ * Todo el estado es `:checked`: el conmutador es un grupo de radios y los
+ * filtros de estado son casillas. Cero JS.
+ *
+ * Sin ids: la marquesina de la banda 2 pinta esta pantalla dos veces y las dos
+ * copias tienen que llevar su estado por separado. `uid` separa el grupo de
+ * radios y los selectores van por `data-opt` / `data-filter`.
+ */
+export interface Props {
+    uid: string;
+}
+
+const { uid } = Astro.props;
+const stations: readonly (Station & { alert?: boolean })[] = [
+    { name: "Station 04", status: "working", operator: "Operator A", cycle: "01:42", done: 7, total: 12 },
+    { name: "Station 05", status: "idle", operator: "No operator", cycle: "--:--", done: 3, total: 9, alert: true },
+    { name: "Station 06", status: "working", operator: "Operator C", cycle: "02:05", done: 11, total: 12 },
+    { name: "Station 07", status: "offline", operator: "No operator", cycle: "--:--", done: 0, total: 8, alert: true },
+    { name: "Station 08", status: "working", operator: "Operator D", cycle: "01:08", done: 5, total: 10 },
+    { name: "Station 09", status: "idle", operator: "Operator E", cycle: "--:--", done: 2, total: 11 },
+];
+
+/** El diagrama es una serpentina de dos filas: el centro vertical de la fila de
+ *  arriba cae en 10.5% del lienzo y el de la de abajo en 68.5%, y de ahí salen
+ *  todas las aristas. */
+const nodes = stations.map((s, i) => ({
+    name: s.name,
+    status: s.status,
+    left: [2, 36, 70][i % 3],
+    top: i < 3 ? 6 : 64,
+}));
+
+const edges = [
+    "M 29 10.5 L 36 10.5",
+    "M 63 10.5 L 70 10.5",
+    "M 83.5 15 L 83.5 41 L 15.5 41 L 15.5 64",
+    "M 29 68.5 L 36 68.5",
+    "M 63 68.5 L 70 68.5",
+] as const;
+const heads = [
+    "M 32.5 7 L 36 10.5 L 32.5 14",
+    "M 66.5 7 L 70 10.5 L 66.5 14",
+    "M 12 60.5 L 15.5 64 L 19 60.5",
+    "M 32.5 65 L 36 68.5 L 32.5 72",
+    "M 66.5 65 L 70 68.5 L 66.5 72",
+] as const;
+
+const filters = [
+    { key: "working", label: STATUS.working.label, chip: STATUS.working.chip },
+    { key: "idle", label: STATUS.idle.label, chip: STATUS.idle.chip },
+    { key: "offline", label: STATUS.offline.label, chip: STATUS.offline.chip },
+    {
+        key: "alerts",
+        label: "Alerts",
+        chip: "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300",
+    },
+] as const;
+---
+
+<!-- La clase envuelve al panel COMPLETO: el conmutador Grid/Layout se pinta en
+     la cabecera (slot `actions`) y las reglas `:has()` de abajo tienen que verlo
+     desde el mismo ancestro que las dos vistas del cuerpo. -->
+<div class="mes-andon h-full">
+<BandPanel
+    title="Andon Dashboard"
+    tag="Live"
+    bodyClass="min-h-0 flex-1 p-2"
+>
+    <RadioChips
+        slot="actions"
+        name={`${uid}-andon-view`}
+        label="Board view"
+        options={[
+            { value: "grid", label: "Grid" },
+            { value: "layout", label: "Layout" },
+        ]}
+    />
+
+    <div class="flex h-full flex-col gap-2">
+        <div class="flex shrink-0 items-center justify-between gap-2">
+            <span class="text-[10px] text-gray-500 dark:text-gray-400">
+                Real-time production monitoring
+            </span>
+
+            <!-- Casillas y no radios: los filtros se combinan. Sin ninguna
+                 marcada se ven todas las estaciones. -->
+            <div
+                role="group"
+                aria-label="Status filter"
+                class="flex items-center gap-1.5"
+            >
+                {
+                    filters.map((f) => (
+                        <label
+                            class:list={[
+                                "cursor-pointer select-none rounded px-1.5 py-0.5 text-[9px] font-medium opacity-60 ring-1 ring-transparent has-[input:checked]:opacity-100 has-[input:checked]:ring-current has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-[#00B5E2]",
+                                f.chip,
+                            ]}
+                        >
+                            <input
+                                type="checkbox"
+                                data-filter={f.key}
+                                class="andon-filter sr-only"
+                            />
+                            {f.label}
+                        </label>
+                    ))
+                }
+            </div>
+        </div>
+
+        <!-- Las dos vistas ocupan el mismo hueco y el alto lo fija el flex del
+             contenedor: conmutar no redimensiona el panel ni mueve la banda. -->
+        <div class="min-h-0 flex-1">
+            <div
+                data-view="grid"
+                class="grid h-full grid-cols-3 grid-rows-2 gap-2"
+            >
+                {
+                    stations.map((s) => (
+                        <div data-status={s.status} data-alert={s.alert ? "true" : undefined}>
+                            <StationCard {...s} />
+                        </div>
+                    ))
+                }
+            </div>
+
+            <div data-view="layout" class="h-full">
+                <AndonLineDiagram nodes={nodes} edges={edges} heads={heads} />
+            </div>
+        </div>
+    </div>
+</BandPanel>
+</div>
+
+<style is:global>
+    .mes-andon [data-view] {
+        display: none;
+    }
+    .mes-andon:has(input[data-opt="grid"]:checked) [data-view="grid"] {
+        display: grid;
+    }
+    .mes-andon:has(input[data-opt="layout"]:checked) [data-view="layout"] {
+        display: block;
+    }
+
+    /* Con al menos un filtro marcado se esconden todas las tarjetas y cada
+       filtro devuelve las suyas. Así cualquier combinación sale de cinco
+       reglas y sin JS. El diagrama no se filtra: dejaría aristas colgando. */
+    .mes-andon:has(.andon-filter:checked) [data-view="grid"] [data-status] {
+        display: none;
+    }
+    .mes-andon:has(input[data-filter="working"]:checked)
+        [data-view="grid"]
+        [data-status="working"],
+    .mes-andon:has(input[data-filter="idle"]:checked)
+        [data-view="grid"]
+        [data-status="idle"],
+    .mes-andon:has(input[data-filter="offline"]:checked)
+        [data-view="grid"]
+        [data-status="offline"],
+    .mes-andon:has(input[data-filter="alerts"]:checked)
+        [data-view="grid"]
+        [data-alert] {
+        display: block;
+    }
+</style>

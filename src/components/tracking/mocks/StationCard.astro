@@ -1,0 +1,54 @@
+---
+import { STATUS, type Station } from "./status";
+
+/** Tarjeta de estación del andon. Salió de AndonGridMock para que el tablero
+ *  grande de la banda 2 no la copiara: es la misma tarjeta, no una parecida. */
+export interface Props extends Station {}
+
+const { name, status, operator, cycle, done, total } = Astro.props;
+const st = STATUS[status];
+---
+
+<!-- El énfasis de hover es solo color y borde: la tarjeta vive dentro de un
+     carril que se está trasladando, y sombra o blur ahí son la combinación cara.
+     Nada cambia de tamaño, así que la vecina no se mueve. -->
+<div
+    class="flex h-full flex-col justify-between rounded-lg border border-gray-100 bg-gray-50/60 p-2 transition-colors hover:border-[#005EB8]/50 hover:bg-white dark:border-gray-800 dark:bg-gray-800/30 dark:hover:border-[#00B5E2]/50 dark:hover:bg-gray-800/70"
+>
+    <div class="flex items-center justify-between gap-1">
+        <span class="text-[11px] font-semibold text-gray-900 dark:text-white">
+            {name}
+        </span>
+        <span class={`rounded px-1 py-0.5 text-[9px] font-medium ${st.chip}`}>
+            {st.label}
+        </span>
+    </div>
+    <div class="text-[10px] text-gray-500 dark:text-gray-400">{operator}</div>
+    <div
+        class="flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400"
+    >
+        <span>
+            Cycle{" "}
+            <span class="font-mono text-gray-700 dark:text-gray-300">
+                {cycle}
+            </span>
+        </span>
+        <span>
+            Steps{" "}
+            <span class="font-mono text-gray-700 dark:text-gray-300">
+                {done}/{total}
+            </span>
+        </span>
+    </div>
+    <!-- El ancho sale del contador de pasos: es geometría del propio dato, no
+         una cifra de desempeño. -->
+    <div
+        class="h-1.5 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700"
+    >
+        <div
+            class={`h-full rounded-full ${st.bar}`}
+            style={`width:${(done / total) * 100}%`}
+        >
+        </div>
+    </div>
+</div>

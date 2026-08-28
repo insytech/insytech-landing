@@ -2,59 +2,88 @@
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import { SURFACE } from "@utils/typography";
+import AndonGridMock from "./mocks/AndonGridMock.astro";
+import VisualAidMock from "./mocks/VisualAidMock.astro";
+import OeeGaugeMock from "./mocks/OeeGaugeMock.astro";
+import BomMock from "./mocks/BomMock.astro";
+import AndonFlowMock from "./mocks/AndonFlowMock.astro";
+import ArchitectureFlowMock from "./mocks/ArchitectureFlowMock.astro";
+import ScanPromptMock from "./mocks/ScanPromptMock.astro";
+import ShiftReportMock from "./mocks/ShiftReportMock.astro";
+import HmiTerminalScreen from "./screens/HmiTerminalScreen.astro";
+import AndonDashboardScreen from "./screens/AndonDashboardScreen.astro";
+import OeeDashboardScreen from "./screens/OeeDashboardScreen.astro";
+
+/** Dos bandas. La de arriba se desplaza y lleva paneles de un solo propósito.
+ *  La de abajo lleva pantallas COMPUESTAS del doble de área (700x420) y se
+ *  desplaza MUCHO más despacio (el carril mide 720px por hueco, o sea 700px de
+ *  pantalla más los 20 de separación): la diferencia de velocidad entre bandas
+ *  es lo que da profundidad, y a 12 px/s la pantalla grande se alcanza a leer
+ *  mientras pasa. Se para al pasar el ratón o al entrar el foco, que es lo que
+ *  la deja usable siendo interactiva.
+ *
+ *  Los paneles de un solo propósito que la banda 2 dejó libres pasaron a la
+ *  banda 1, y los tres paneles de diagrama van separados en el orden: pasando
+ *  uno al lado del otro se leerían como el mismo panel tres veces. */
+const bandMoving = [
+    ScanPromptMock,
+    VisualAidMock,
+    AndonFlowMock,
+    BomMock,
+    OeeGaugeMock,
+    AndonGridMock,
+    ShiftReportMock,
+    ArchitectureFlowMock,
+];
+/** Orden a propósito: el Operator Terminal va EN MEDIO para que caiga centrado
+ *  en el viewport al cargar (ver el margen del carril en el CSS de abajo). Es la
+ *  pantalla que mejor engancha a quien acaba de bajar del hero. */
+const bandStatic = [AndonDashboardScreen, HmiTerminalScreen, OeeDashboardScreen];
+
+const doubled = <T,>(row: readonly T[]): T[] => [...row, ...row];
 ---
 
 <section
-    class={`mes-scene relative min-h-screen flex items-center overflow-hidden ${SURFACE.base} pb-20`}
+    class={`mes-scene relative overflow-x-clip ${SURFACE.base} pt-28 pb-16 lg:pt-32`}
 >
-    <!-- Background Patterns -->
-    <div class="absolute inset-0 z-0">
-        <!-- Dot Pattern -->
+    <!-- Fondo: retícula de puntos y un resplandor estático. Nada de esto se
+         anima ni se transforma; la banda ya es todo el movimiento. -->
+    <div class="pointer-events-none absolute inset-0 z-0">
         <div
-            class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)] [background-size:20px_20px] opacity-70"
+            class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-70 dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]"
         >
         </div>
-
-        <!-- Single Color Glow -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div
-                class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[80%] h-[60%] rounded-full bg-cyan-200/10 blur-[120px]"
-            >
-            </div>
-        </div>
-
-        <!-- Subtle noise texture for realism -->
-        <div class="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
+        <div
+            class="absolute left-1/2 top-1/4 h-[50%] w-[80%] -translate-x-1/2 rounded-full bg-cyan-200/10 blur-[120px]"
+        >
         </div>
     </div>
 
     <Container className="relative z-10">
-        <div class="flex flex-col items-center text-center pt-24 lg:pt-28 pb-8">
-            <!-- Title -->
+        <div class="flex flex-col items-center text-center">
             <h1
-                class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 max-w-4xl"
+                class="mb-6 max-w-6xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
                 data-animate="fade-up"
                 data-animate-delay=".1s"
             >
                 {
-                    /* El {" "} es obligatorio: Astro 7 se come el espacio en
-                       blanco entre una palabra y un span contiguo, y sin él el
-                       H1 salía pegado. Va como comentario de JSX y no de HTML
-                       porque Astro emite los comentarios HTML al documento. */
+                    /* Los dos tramos van como `block`: así el corte cae SIEMPRE
+                       entre "industrial" y "y MES", a cualquier ancho, en vez de
+                       depender de que el max-width dé la cuenta justa. Antes iban
+                       en línea con un {" "} y un <br />, y a lg:text-6xl la
+                       primera línea todavía se partía sola en dos. */
                 }
-                <span class="text-gray-900 dark:text-white"
+                <span class="block text-gray-900 dark:text-white"
                     >Sistema de trazabilidad industrial</span
-                >{" "}
-                <br />
+                >
                 <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    class="block bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] bg-clip-text text-transparent dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
                     >y MES en tiempo real</span
                 >
             </h1>
 
-            <!-- Description -->
             <p
-                class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mb-10 leading-relaxed"
+                class="mb-10 max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-gray-400"
                 data-animate="fade-up"
                 data-animate-delay=".2s"
             >
@@ -63,378 +92,137 @@ import { SURFACE } from "@utils/typography";
                 qué pasó en su planta, cuándo y en qué máquina.
             </p>
 
-            <!-- CTAs -->
             <div
-                class="flex flex-wrap justify-center gap-4 mb-12"
+                class="mb-14 flex flex-wrap justify-center gap-4"
                 data-animate="fade-up"
                 data-animate-delay=".3s"
             >
                 <BtnLink
-                        href="#contact"
-                        text="Solicitar demo"
-                        variant="primary"
-                        className="px-8 py-4"
-                    />
+                    href="#contact"
+                    text="Solicitar demo"
+                    variant="primary"
+                    className="px-8 py-4"
+                />
                 <BtnLink
-                        href="#planner"
-                        text="Ver soluciones"
-                        variant="secondary"
-                        className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
-                    />
-            </div>
-
-<!-- Visual element - MES Dashboard illustration (Centered & Tilted) -->
-            <div
-                class="relative w-full max-w-5xl mx-auto perspective-1000"
-                data-animate="fade-up"
-                data-animate-delay=".5s"
-            >
-                <div
-                    class="relative transform rotate-x-12 hover:rotate-x-0 transition-transform duration-1000 ease-out preserve-3d"
-                >
-                    <!-- Main Dashboard card -->
-                    <div
-                        class="relative bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl shadow-2xl shadow-blue-500/10 dark:shadow-blue-900/30 p-2 sm:p-8 border border-gray-200 dark:border-gray-700"
-                    >
-                        <!-- Browser Bar Mockup -->
-                        <div
-                            class="flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-gray-700 pb-4"
-                        >
-                            <div class="flex gap-1.5">
-                                <div
-                                    class="w-2.5 h-2.5 rounded-full bg-red-400"
-                                >
-                                </div>
-                                <div
-                                    class="w-2.5 h-2.5 rounded-full bg-yellow-400"
-                                >
-                                </div>
-                                <div
-                                    class="w-2.5 h-2.5 rounded-full bg-green-400"
-                                >
-                                </div>
-                            </div>
-                            <div
-                                class="mx-auto bg-gray-100 dark:bg-gray-900 px-3 py-1 rounded-md text-xs text-gray-400 font-mono w-64 text-center"
-                            >
-                                mes.planta.local
-                            </div>
-                        </div>
-
-                        <!-- Header -->
-                        <div class="flex items-center justify-between mb-8">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#005EB8] to-[#00B5E2] flex items-center justify-center"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="2"
-                                        stroke="currentColor"
-                                        class="w-5 h-5 text-white"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div class="text-left">
-                                    <div
-                                        class="font-semibold text-gray-900 dark:text-white"
-                                    >
-                                        Panel de Control Global
-                                    </div>
-                                    <div
-                                        class="text-sm text-gray-500 dark:text-gray-400"
-                                    >
-                                        Planta Principal - Monterrey, NL
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-full"
-                            >
-                                <span
-                                    class="w-2 h-2 rounded-full bg-green-500 animate-pulse"
-                                ></span>
-                                <span
-                                    class="text-sm font-medium text-green-600 dark:text-green-400"
-                                    >Sistema Operativo</span
-                                >
-                            </div>
-                        </div>
-
-                        <!-- Metrics grid -->
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                            <div
-                                class="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-xl text-left border border-gray-200 dark:border-gray-700"
-                            >
-                                <div
-                                    class="flex items-center justify-between mb-2"
-                                >
-                                    <span
-                                        class="text-sm text-gray-500 dark:text-gray-400"
-                                        >OEE Global</span
-                                    >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-4 h-4 text-cyan-500"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div
-                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
-                                >
-                                </div>
-                                <div class="text-xs text-gray-400 mt-1">
-                                    por turno
-                                </div>
-                            </div>
-                            <div
-                                class="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-xl text-left border border-gray-200 dark:border-gray-700"
-                            >
-                                <div
-                                    class="flex items-center justify-between mb-2"
-                                >
-                                    <span
-                                        class="text-sm text-gray-500 dark:text-gray-400"
-                                        >Producción</span
-                                    >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-4 h-4 text-[#00B5E2]"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div
-                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
-                                >
-                                </div>
-                                <div class="text-xs text-gray-400 mt-1">
-                                    unidades/hora
-                                </div>
-                            </div>
-                            <div
-                                class="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-xl text-left border border-gray-200 dark:border-gray-700"
-                            >
-                                <div
-                                    class="flex items-center justify-between mb-2"
-                                >
-                                    <span
-                                        class="text-sm text-gray-500 dark:text-gray-400"
-                                        >Calidad</span
-                                    >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-4 h-4 text-[#00B5E2]"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div
-                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
-                                >
-                                </div>
-                                <div class="text-xs text-gray-400 mt-1">
-                                    por lote
-                                </div>
-                            </div>
-                            <div
-                                class="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-xl text-left border border-gray-200 dark:border-gray-700"
-                            >
-                                <div
-                                    class="flex items-center justify-between mb-2"
-                                >
-                                    <span
-                                        class="text-sm text-gray-500 dark:text-gray-400"
-                                        >Tiempo Ciclo</span
-                                    >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-4 h-4 text-[#00B5E2]"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                                        ></path>
-                                    </svg>
-                                </div>
-                                <div
-                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
-                                >
-                                </div>
-                                <div class="text-xs text-gray-400 mt-1">
-                                    promedio
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Production chart mock -->
-                        <div
-                            class="relative h-48 w-full bg-gray-50 dark:bg-gray-900/30 rounded-xl p-4 overflow-hidden"
-                        >
-                            <div class="flex h-full items-end gap-2 px-2">
-                                {
-                                    [
-                                        45, 72, 68, 85, 92, 88, 95, 82, 78, 90,
-                                        87, 93, 85, 70, 75, 80, 85, 90, 95, 100,
-                                    ].map((h, i) => (
-                                        <div
-                                            class="flex-1 bg-gradient-to-t from-[#005EB8] to-[#00B5E2] rounded-t opacity-80 hover:opacity-100 transition-opacity"
-                                            style={`height: ${h}%`}
-                                            title={`Hora ${i}: ${h}%`}
-                                        />
-                                    ))
-                                }
-                            </div>
-                            <!-- Chart Line Overlay (fake) -->
-                            <svg
-                                class="absolute inset-0 w-full h-full pointer-events-none p-4"
-                                preserveAspectRatio="none"
-                            >
-                                <path
-                                    d="M0,150 Q50,100 100,110 T200,80 T300,60 T400,90 T500,40 T600,50 T700,30 T800,20"
-                                    fill="none"
-                                    stroke="#00B5E2"
-                                    stroke-width="2"
-                                    class="opacity-50"></path>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- Floating decorative elements -->
-                    <div
-                        class="absolute -right-8 top-1/4 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700 animate-float"
-                        style="animation-delay: 1s;"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div
-                                    class="text-sm font-semibold text-gray-900 dark:text-white"
-                                >
-                                    Alerta de Calidad
-                                </div>
-                                <div class="text-xs text-gray-500">
-                                    Resuelto automáticamente
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div
-                        class="absolute -left-6 bottom-1/3 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 border border-gray-100 dark:border-gray-700 animate-float"
-                        style="animation-delay: 2.5s;"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="w-5 h-5 text-emerald-600 dark:text-emerald-400"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                    ></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div
-                                    class="text-sm font-semibold text-gray-900 dark:text-white"
-                                >
-                                    Lote #4521
-                                </div>
-                                <div class="text-xs text-gray-500">
-                                    Completado exitosamente
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    href="#planner"
+                    text="Ver soluciones"
+                    variant="secondary"
+                    className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
+                />
             </div>
         </div>
     </Container>
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div
-            class="w-6 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-start justify-center p-1"
-        >
-            <div
-                class="w-1 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"
-            >
-            </div>
-        </div>
+
+    <!-- Banda 1: marquesina. overflow-x-clip y no overflow-hidden: hidden
+         crearía un contenedor de scroll y rompería los sticky de la página. Sin
+         mask-image: el corte duro en los dos bordes es lo que dice "esto
+         continúa". El desplazamiento negativo corta también el borde izquierdo. -->
+    <div class="mes-band relative z-10 w-full overflow-x-clip">
+        <ul class="mes-track -ml-[90px] flex w-max list-none">
+            {
+                doubled(bandMoving).map((Panel) => (
+                    <li class="h-[290px] w-[280px] shrink-0 pr-5 md:w-[340px]">
+                        <Panel />
+                    </li>
+                ))
+            }
+        </ul>
     </div>
+
+    <!-- Banda 2: la misma marquesina que la de arriba pero cuatro veces más
+         lenta. overflow-x-clip y NO overflow-x-auto: un contenedor de scroll
+         sacaba una barra horizontal de verdad. El espaciado va en el padding del
+         carril y no en `gap` para que el 50% del keyframe caiga exacto.
+
+         Los controles de las pantallas siguen siendo tabulables —al contrario
+         que los paneles de la banda 1— porque entrar el foco para la banda. -->
+    <div class="mes-band2 relative z-10 mt-5 w-full overflow-x-clip">
+        <ul class="mes-track2 flex w-max list-none">
+            {
+                doubled(bandStatic).map((Screen, i) => (
+                    <li class="h-[420px] w-[720px] shrink-0 pr-5">
+                        {/* uid separa los grupos de radios de las dos copias de
+                            la marquesina: sin él, marcar una pestaña en una
+                            desmarcaría la de la otra. */}
+                        <Screen uid={`s${i}`} />
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+
 </section>
 
 <style>
-        33% {
-            transform: translate(30px, -50px) scale(1.1);
-        }
-        66% {
-            transform: translate(-20px, 20px) scale(0.9);
-        }
-        100% {
-            transform: translate(0px, 0px) scale(1);
+    /* El carril arranca ya en su sitio: nunca en opacity 0 ni width 0, así que
+       si la animación no corre nunca (sin JS, reduced-motion, fuera de
+       pantalla) la banda se ve completa y estática. */
+    .mes-track {
+        animation-name: mes-marquee;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-duration: 58s;
+        animation-play-state: paused;
+        will-change: transform;
+    }
+
+    /* `is-live` la conmuta el IntersectionObserver de la página sobre
+       `.mes-scene`: fuera de pantalla el carril no consume frames. */
+    .mes-scene.is-live .mes-track {
+        animation-play-state: running;
+    }
+
+    /* Banda 2: mismo keyframe, 180s. Seis huecos de 720px son 4320px de carril y
+       el -50% son 2160px: ~12 px/s frente a los ~47 px/s de la banda 1. */
+    .mes-track2 {
+        /* Centrado del Operator Terminal al cargar. Es el segundo hueco del
+           carril, así que su pantalla de 700px va de 720px a 1420px en
+           coordenadas del carril y su centro cae en 1070px. El margen se deriva
+           de 50vw y no de un px fijo: un px fijo centraría solo a un ancho.
+
+           Ojo: es una propiedad DEL MOMENTO DE CARGA. La banda se mueve a ~12
+           px/s, así que el centrado se va perdiendo despacio (±100px en ~17s). */
+        margin-left: calc(50vw - 1070px);
+        animation-name: mes-marquee;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-duration: 180s;
+        animation-play-state: paused;
+        will-change: transform;
+    }
+
+    .mes-scene.is-live .mes-track2 {
+        animation-play-state: running;
+    }
+
+    /* Se para al pasar el ratón y al entrar el foco. El `:focus-within` es la
+       mitad importante: es lo que deja las pestañas, el conmutador Grid/Layout y
+       el control de granularidad usables con el teclado. Van después y con más
+       especificidad que la regla de `is-live`, así que ganan; y fuera de
+       pantalla o con reduced-motion la banda sigue parada de todas formas. */
+    .mes-scene.is-live .mes-band2:hover .mes-track2,
+    .mes-scene.is-live .mes-band2:focus-within .mes-track2 {
+        animation-play-state: paused;
+    }
+
+    @keyframes mes-marquee {
+        to {
+            transform: translate3d(-50%, 0, 0);
         }
     }
 
+    /* En móvil la pasada es más lenta: los paneles son más anchos en relación a
+       la pantalla y a la velocidad de escritorio el barrido marea. */
+    @media (max-width: 767px) {
+        .mes-track {
+            animation-duration: 80s;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mes-track,
+        .mes-track2 {
+            animation: none;
+        }
+    }
 </style>

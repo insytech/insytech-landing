@@ -1,0 +1,84 @@
+---
+import { STATUS, type StatusKey } from "./status";
+
+/** Lienzo de layout libre del andon. Salió de AndonFlowMock porque el tablero
+ *  grande de la banda 2 muestra EL MISMO diagrama con más estaciones: si se
+ *  copiaba, cualquier arreglo de trazo se quedaría en una sola copia.
+ *
+ *  Las posiciones van en % del lienzo. El viewBox es 100x100 con
+ *  preserveAspectRatio="none", así que todo trazo lleva `vector-effect` para no
+ *  deformarse. */
+export interface Props {
+    nodes: readonly { name: string; status: StatusKey; left: number; top: number }[];
+    /** Aristas y puntas de flecha, ya en coordenadas del lienzo. */
+    edges: readonly string[];
+    heads: readonly string[];
+    /** Ancho de la caja de nodo, en % del lienzo. */
+    nodeWidth?: string;
+}
+
+const { nodes, edges, heads, nodeWidth = "27%" } = Astro.props;
+---
+
+<div
+    class="relative h-full min-h-0 w-full rounded-lg border border-gray-100 bg-gray-50/60 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:12px_12px] dark:border-gray-800 dark:bg-gray-800/30 dark:bg-[radial-gradient(#374151_1px,transparent_1px)]"
+>
+    <svg
+        class="absolute inset-0 h-full w-full text-gray-400 dark:text-gray-600"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+    >
+        {
+            [...edges, ...heads].map((d) => (
+                <path
+                    d={d}
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    vector-effect="non-scaling-stroke"
+                />
+            ))
+        }
+    </svg>
+
+    {
+        nodes.map((n) => (
+            <div
+                class="absolute rounded-md border border-gray-200 bg-white px-1.5 py-1 transition-colors hover:border-[#005EB8]/60 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-[#00B5E2]/60"
+                style={`left:${n.left}%;top:${n.top}%;width:${nodeWidth}`}
+            >
+                <div class="truncate text-[9px] font-semibold text-gray-900 dark:text-white">
+                    {n.name}
+                </div>
+                <span
+                    class={`mt-0.5 inline-block rounded px-1 py-px text-[8px] font-medium ${STATUS[n.status].chip}`}
+                >
+                    {STATUS[n.status].label}
+                </span>
+            </div>
+        ))
+    }
+
+    <span
+        class="absolute bottom-1.5 right-1.5 flex items-center gap-1 rounded border border-gray-200 bg-white/90 px-1.5 py-0.5 text-[8px] font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-900/90 dark:text-gray-400"
+    >
+        <svg
+            class="h-2.5 w-2.5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
+            ></path>
+        </svg>
+        Fullscreen
+    </span>
+</div>

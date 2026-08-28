@@ -1,0 +1,53 @@
+---
+/** Histograma del MES. Las alturas son fracciones del contenedor: son FORMAS de
+ *  un histograma, no cantidades, y por eso van como clase y no como número.
+ *
+ *  Solo lo usa ShiftReportMock: el reporte de turno del HMI real es el ÚNICO
+ *  sitio del producto con un gráfico de barras, así que aquí no se reutiliza en
+ *  ninguna otra pantalla a propósito. */
+export interface Props {
+    title?: string;
+    /** Clases de alto de Tailwind, una por barra. */
+    bars: readonly string[];
+    /** Índice de la barra destacada (la del periodo en curso), si hay. */
+    current?: number;
+    /** Etiquetas del eje, repartidas con justify-between. */
+    axis?: readonly string[];
+}
+
+const { title, bars, current = -1, axis = [] } = Astro.props;
+---
+
+<div class="flex min-h-0 flex-1 flex-col">
+    {
+        title && (
+            <div class="mb-1 text-[10px] font-semibold text-gray-700 dark:text-gray-300">
+                {title}
+            </div>
+        )
+    }
+    <div class="flex min-h-0 flex-1 items-end gap-1.5">
+        {
+            bars.map((h, i) => (
+                <div
+                    class:list={[
+                        "flex-1 rounded-t",
+                        h,
+                        i === current
+                            ? "bg-[#4338CA] dark:bg-[#818cf8]"
+                            : "bg-[#005EB8]/25 dark:bg-[#00B5E2]/25",
+                    ]}
+                />
+            ))
+        }
+    </div>
+    {
+        axis.length > 0 && (
+            <div class="mt-1 flex justify-between text-[8px] text-gray-400">
+                {axis.map((a) => (
+                    <span>{a}</span>
+                ))}
+            </div>
+        )
+    }
+</div>

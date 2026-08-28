@@ -1,0 +1,59 @@
+---
+import BandPanel from "./BandPanel.astro";
+import OeeRing from "./OeeRing.astro";
+import Histogram from "./Histogram.astro";
+
+/** Los aros no llevan número y PRODUCED/TARGET va con barras esqueleto: el arco
+ *  y la barra son formas, no afirman ninguna magnitud. */
+const gauges = [
+    { label: "Efficiency", offset: 96 },
+    { label: "Quality (OEE)", offset: 62 },
+] as const;
+
+const hours = ["h-1/3", "h-3/5", "h-2/5", "h-full", "h-4/5", "h-2/5", "h-1/2", "h-1/4"] as const;
+---
+
+<BandPanel title="Shift Report" tag="Shift 1">
+    <div class="flex h-full flex-col gap-2">
+        <div class="flex items-center gap-2">
+            {
+                gauges.map((g) => (
+                    <div class="flex flex-1 flex-col items-center gap-0.5">
+                        <OeeRing
+                            box={48}
+                            stroke={5}
+                            dash={132}
+                            offset={g.offset}
+                            class="h-14 w-14"
+                        />
+                        <span class="text-[9px] text-gray-500 dark:text-gray-400">
+                            {g.label}
+                        </span>
+                    </div>
+                ))
+            }
+
+            <div
+                class="flex flex-1 flex-col gap-1.5 rounded-lg bg-gray-50 p-2 dark:bg-gray-800/40"
+            >
+                {
+                    ["Produced", "Target"].map((l) => (
+                        <div>
+                            <div class="h-4 w-10 rounded bg-gray-200 dark:bg-gray-600" />
+                            <div class="mt-0.5 text-[8px] uppercase tracking-wide text-gray-400">
+                                {l}
+                            </div>
+                        </div>
+                    ))
+                }
+            </div>
+        </div>
+
+        <Histogram
+            title="Hourly Production"
+            bars={hours}
+            current={4}
+            axis={["8:00", "Current hour", "15:00"]}
+        />
+    </div>
+</BandPanel>

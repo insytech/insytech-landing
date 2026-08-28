@@ -1,0 +1,58 @@
+---
+import BandPanel from "./BandPanel.astro";
+
+/** Terminal de operador esperando lectura. Sin verde/ámbar/rojo: aquí no hay
+ *  estado de máquina, solo el azul de marca. Los halos `animate-ping` se
+ *  quitaron: la banda ya es todo el movimiento.
+ *
+ *  El campo de escaneo y las dos acciones toman estado de hover, que es toda la
+ *  interacción que lleva la banda 1: no se para, no se tabula y nada aquí es
+ *  enfocable. Solo color y borde, sin sombra ni blur, porque esto viaja dentro
+ *  de un carril que se traslada. */
+---
+
+<BandPanel title="Operator Terminal" tag="Station 04">
+    <div class="flex h-full flex-col items-center justify-center gap-3">
+        <div class="relative flex h-24 w-24 items-center justify-center">
+            <span
+                class="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#005EB8]/10 text-[#005EB8] dark:bg-[#00B5E2]/10 dark:text-[#00B5E2]"
+            >
+                <svg
+                    class="h-7 w-7"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3.75 4.75h3m-3 0v3m0-3L3.75 4.75m13.5 0h3m0 0v3m0-3L20.25 4.75M3.75 19.25h3m-3 0v-3m13.5 3h3m0 0v-3M3 12h18"
+                    ></path>
+                </svg>
+            </span>
+        </div>
+
+        <div class="text-center">
+            <div class="text-sm font-semibold text-gray-900 dark:text-white">
+                Ready to Scan
+            </div>
+            <span
+                class="mt-1.5 inline-block rounded-full border border-dashed border-[#005EB8]/40 px-2.5 py-0.5 text-[10px] text-[#005EB8] transition-colors hover:border-[#005EB8] hover:bg-[#005EB8]/5 dark:border-[#00B5E2]/40 dark:text-[#00B5E2] dark:hover:border-[#00B5E2] dark:hover:bg-[#00B5E2]/5"
+            >
+                Waiting for input…
+            </span>
+        </div>
+
+        <div class="flex gap-1.5">
+            {
+                ["Scan label", "Manual entry"].map((a) => (
+                    <span class="rounded border border-gray-200 px-2 py-0.5 text-[9px] text-gray-600 transition-colors hover:border-[#005EB8]/50 hover:text-[#005EB8] dark:border-gray-700 dark:text-gray-400 dark:hover:border-[#00B5E2]/50 dark:hover:text-[#00B5E2]">
+                        {a}
+                    </span>
+                ))
+            }
+        </div>
+    </div>
+</BandPanel>

@@ -1,0 +1,40 @@
+---
+import BandPanel from "./BandPanel.astro";
+import AndonLineDiagram from "./AndonLineDiagram.astro";
+
+/** Posiciones en % del lienzo, a distintas alturas a propósito: es un layout
+ *  libre guardado por el usuario, no una fila ordenada. */
+const nodes = [
+    { name: "Station 04", status: "working", left: 0, top: 8 },
+    { name: "Station 05", status: "idle", left: 37, top: 52 },
+    { name: "Station 06", status: "offline", left: 73, top: 18 },
+] as const;
+
+const edges = ["M 27 16 L 31 16 L 31 60 L 37 60", "M 64 60 L 68 60 L 68 26 L 73 26"] as const;
+const heads = ["M 32 54 L 37 60 L 32 66", "M 68 20 L 73 26 L 68 32"] as const;
+---
+
+<BandPanel title="Andon Layout" tag="Live">
+    <div class="flex h-full flex-col gap-2">
+        <div class="min-h-0 flex-1">
+            <AndonLineDiagram nodes={nodes} edges={edges} heads={heads} />
+        </div>
+
+        <div class="shrink-0">
+            <div
+                class="mb-1 text-[9px] font-semibold uppercase tracking-wide text-gray-400"
+            >
+                Not placed in layout
+            </div>
+            <div class="flex gap-1.5">
+                {
+                    ["Station 08", "Station 09"].map((s) => (
+                        <span class="rounded border border-dashed border-gray-300 px-1.5 py-0.5 text-[9px] text-gray-500 dark:border-gray-600 dark:text-gray-400">
+                            {s}
+                        </span>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+</BandPanel>

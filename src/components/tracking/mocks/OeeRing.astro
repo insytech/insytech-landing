@@ -1,0 +1,56 @@
+---
+/** Aro de OEE. Nunca lleva número: el arco es una forma y no afirma ninguna
+ *  magnitud (misma regla que ManagementMock). El contenido del centro entra por
+ *  slot, que es lo único que cambiaba entre las copias.
+ *
+ *  `dash` es la longitud total del trazo (2*pi*r) y `offset` cuánto queda sin
+ *  pintar; los dos son geometría del SVG. */
+export interface Props {
+    /** Lado del SVG, en unidades del viewBox. */
+    box: number;
+    stroke: number;
+    dash: number;
+    offset: number;
+    class?: string;
+    /** Clase de color del arco; por defecto el azul de marca. */
+    arcClass?: string;
+}
+
+const {
+    box,
+    stroke,
+    dash,
+    offset,
+    class: className = "",
+    arcClass = "text-[#005EB8] dark:text-[#00B5E2]",
+} = Astro.props;
+const c = box / 2;
+const r = c - stroke / 2 - 1;
+---
+
+<div class={`relative ${className}`}>
+    <svg class="h-full w-full -rotate-90" viewBox={`0 0 ${box} ${box}`}>
+        <circle
+            cx={c}
+            cy={c}
+            r={r}
+            stroke="currentColor"
+            stroke-width={stroke}
+            fill="none"
+            class="text-gray-100 dark:text-gray-800"></circle>
+        <circle
+            cx={c}
+            cy={c}
+            r={r}
+            stroke="currentColor"
+            stroke-width={stroke}
+            fill="none"
+            stroke-linecap="round"
+            stroke-dasharray={dash}
+            stroke-dashoffset={offset}
+            class={arcClass}></circle>
+    </svg>
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
+        <slot />
+    </div>
+</div>

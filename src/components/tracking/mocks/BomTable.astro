@@ -1,0 +1,67 @@
+---
+/** Lista de materiales. Los renglones llevan `min-h-0` para poder comprimirse:
+ *  la misma tabla vive en un panel de la banda 1 (holgado) y en la pestaña
+ *  "Product BOM" del terminal (apretada), y sin eso la tercera fila se cortaba.
+ *
+ *  Lista de materiales. Es la pestaña "Product BOM" del terminal y a la vez el
+ *  panel suelto de la banda 1, así que vive fuera de los dos.
+ *
+ *  Solo tres renglones y grandes: una tabla densa se encoge a renglones grises
+ *  ilegibles dentro de un panel de la banda. */
+const rows = [
+    { component: "Housing Frame", qty: 1, type: "Required" },
+    { component: "Sensor Bracket", qty: 2, type: "Required" },
+    { component: "Wiring Harness", qty: 1, type: "Variant" },
+] as const;
+---
+
+<div class="flex h-full w-full flex-col gap-2">
+    <div
+        class="flex items-center justify-between rounded-lg bg-gray-50 px-2.5 py-2 dark:bg-gray-800/40"
+    >
+        <div>
+            <div class="text-[11px] font-semibold text-gray-900 dark:text-white">
+                Assembly
+            </div>
+            <div class="text-[10px] text-gray-500 dark:text-gray-400">
+                Revision C
+            </div>
+        </div>
+        <span
+            class="rounded border border-[#005EB8]/30 px-1.5 py-0.5 font-mono text-[10px] text-[#005EB8] dark:border-[#00B5E2]/30 dark:text-[#00B5E2]"
+        >
+            PN-4820-A
+        </span>
+    </div>
+
+    <div
+        class="grid grid-cols-[1fr_auto_auto] gap-2 border-b border-gray-100 pb-1 text-[9px] font-semibold uppercase tracking-wide text-gray-400 dark:border-gray-800"
+    >
+        <span>Component</span>
+        <span>Qty</span>
+        <span>Type</span>
+    </div>
+
+    {
+        rows.map((r) => (
+            <div class="grid min-h-0 flex-1 grid-cols-[1fr_auto_auto] items-center gap-2 overflow-hidden rounded-lg border border-gray-100 px-2.5 py-1.5 transition-colors hover:border-[#005EB8]/40 hover:bg-gray-50 dark:border-gray-800 dark:hover:border-[#00B5E2]/40 dark:hover:bg-gray-800/40">
+                <span class="truncate text-[11px] font-medium text-gray-800 dark:text-gray-200">
+                    {r.component}
+                </span>
+                <span class="font-mono text-[11px] text-gray-600 dark:text-gray-400">
+                    {r.qty}
+                </span>
+                <span
+                    class:list={[
+                        "rounded px-1.5 py-0.5 text-[9px] font-medium",
+                        r.type === "Required"
+                            ? "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+                            : "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300",
+                    ]}
+                >
+                    {r.type}
+                </span>
+            </div>
+        ))
+    }
+</div>

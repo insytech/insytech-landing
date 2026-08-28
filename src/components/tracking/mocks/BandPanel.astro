@@ -1,0 +1,47 @@
+---
+export interface Props {
+    /** Etiqueta de la barra de título del panel. En inglés a propósito: la UI
+     *  real del MES está en inglés y el dueño eligió fidelidad al producto. */
+    title: string;
+    /** Chip secundario opcional a la derecha del título. */
+    tag?: string;
+    /** Alto del cuerpo: los paneles de la banda 1 llenan su carril, las
+     *  pantallas compuestas de la banda 2 traen su propio alto. */
+    bodyClass?: string;
+}
+
+const { title, tag, bodyClass = "min-h-0 flex-1 p-3" } = Astro.props;
+---
+
+<!-- Sin sombra, sin transform, sin blur y sin borde distinto para ninguno: los
+     paneles de una banda son PARES, y destacar uno no se lee como jerarquía sino
+     como "este está seleccionado o en error". Además en esta página el color ya
+     significa algo (verde/ámbar/rojo = working/idle/offline), así que un anillo
+     de color en los paneles de estado invitaría a leerlo como otro estado. El
+     efecto sale de que todos son iguales y la fila está cortada en los bordes. -->
+<article
+    class="flex h-full w-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900"
+>
+    <header
+        class="flex shrink-0 items-center justify-between gap-2 border-b border-gray-100 px-3 py-2 dark:border-gray-800"
+    >
+        <span class="text-xs font-semibold text-gray-900 dark:text-white">
+            {title}
+        </span>
+        <div class="flex shrink-0 items-center gap-2">
+        {
+            tag && (
+                <span class="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                    {tag}
+                </span>
+            )
+        }
+        <!-- Los controles interactivos de las pantallas de la banda 2 entran
+             por aquí; los paneles de la banda 1 dejan la ranura vacía. -->
+        <slot name="actions" />
+        </div>
+    </header>
+    <div class={bodyClass}>
+        <slot />
+    </div>
+</article>

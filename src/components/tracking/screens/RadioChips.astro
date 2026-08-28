@@ -1,0 +1,72 @@
+---
+/**
+ * Grupo de radios disfrazado de pestañas o de control segmentado. Es la
+ * MAQUINARIA de la interacción de las tres pantallas de la banda 2: el estado
+ * vive en el `:checked` del radio y el CSS de cada pantalla decide qué se ve.
+ *
+ * Radios y no botones a propósito: sin una línea de JS, con foco nativo, con
+ * flechas del teclado ya funcionando y con `label for` implícito. El input va
+ * DENTRO del label, así que el anillo de foco se pinta sobre el chip visible.
+ *
+ * NADA de `id`: la banda 2 pinta cada pantalla DOS VECES (marquesina con dos
+ * copias) y un id repetido rompería el documento. Las pantallas referencian el
+ * estado con `input[data-opt="…"]` y el `name` va prefijado por instancia, así
+ * que las dos copias son independientes.
+ */
+export interface Props {
+    /** Nombre del grupo de radios. Único por pantalla. */
+    name: string;
+    options: readonly { value: string; label: string }[];
+    /** Valor del que arranca marcado. Por defecto el primero. */
+    checked?: string;
+    variant?: "tab" | "segment";
+    /** Etiqueta accesible del grupo. */
+    label: string;
+    class?: string;
+}
+
+const {
+    name,
+    options,
+    checked,
+    variant = "segment",
+    label,
+    class: className = "",
+} = Astro.props;
+
+const active = checked ?? options[0]?.value;
+
+const GROUP = {
+    segment:
+        "inline-flex items-center gap-0.5 rounded-md bg-gray-100 p-0.5 dark:bg-gray-800",
+    tab: "flex items-center gap-1 border-b border-gray-100 dark:border-gray-800",
+} as const;
+
+const CHIP = {
+    segment:
+        "rounded px-2 py-0.5 text-gray-500 dark:text-gray-400 has-[input:checked]:bg-[#005EB8] has-[input:checked]:text-white dark:has-[input:checked]:bg-[#00B5E2] dark:has-[input:checked]:text-gray-900",
+    tab: "-mb-px border-b-2 border-transparent px-2 py-1 text-gray-500 dark:text-gray-400 has-[input:checked]:border-[#005EB8] has-[input:checked]:text-[#005EB8] dark:has-[input:checked]:border-[#00B5E2] dark:has-[input:checked]:text-[#00B5E2]",
+} as const;
+---
+
+<div role="radiogroup" aria-label={label} class:list={[GROUP[variant], className]}>
+    {
+        options.map((o) => (
+            <label
+                class:list={[
+                    "cursor-pointer select-none whitespace-nowrap text-[10px] font-medium has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-[#00B5E2] has-[input:focus-visible]:ring-offset-1 dark:has-[input:focus-visible]:ring-offset-gray-900",
+                    CHIP[variant],
+                ]}
+            >
+                <input
+                    type="radio"
+                    name={name}
+                    data-opt={o.value}
+                    class="sr-only"
+                    checked={o.value === active}
+                />
+                {o.label}
+            </label>
+        ))
+    }
+</div>

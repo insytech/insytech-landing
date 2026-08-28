@@ -1,0 +1,45 @@
+---
+import BandPanel from "./BandPanel.astro";
+import OeeRing from "./OeeRing.astro";
+
+/** Los aros no llevan número: el arco es una forma, igual que en
+ *  ManagementMock, y no afirma ninguna magnitud. */
+const rings = [
+    { label: "Availability", offset: 34 },
+    { label: "Performance", offset: 48 },
+    { label: "Quality", offset: 20 },
+] as const;
+---
+
+<BandPanel title="OEE Overview" tag="Live">
+    <div class="flex h-full flex-col items-center justify-center gap-3">
+        <OeeRing box={128} stroke={11} dash={339} offset={88} class="h-32 w-32">
+            <span
+                class="text-[11px] font-semibold uppercase tracking-wide text-gray-700 dark:text-gray-200"
+            >
+                Plant OEE
+            </span>
+            <span class="text-[10px] uppercase text-gray-400">live</span>
+        </OeeRing>
+
+        <div class="grid w-full grid-cols-3 gap-2">
+            {
+                rings.map((r) => (
+                    <div class="group flex flex-col items-center gap-1 rounded-lg py-1 transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/40">
+                        <OeeRing
+                            box={48}
+                            stroke={4}
+                            dash={138}
+                            offset={r.offset}
+                            class="h-11 w-11"
+                            arcClass="text-[#00B5E2]"
+                        />
+                        <span class="text-[9px] text-gray-500 transition-colors group-hover:text-[#005EB8] dark:text-gray-400 dark:group-hover:text-[#00B5E2]">
+                            {r.label}
+                        </span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</BandPanel>

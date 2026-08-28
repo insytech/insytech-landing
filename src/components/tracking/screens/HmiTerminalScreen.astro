@@ -1,0 +1,299 @@
+---
+import { Users, Ticket, TimerOff, Settings, FileText } from "@lucide/astro";
+import BandPanel from "../mocks/BandPanel.astro";
+import BomTable from "../mocks/BomTable.astro";
+import VisualAidBody from "../mocks/VisualAidBody.astro";
+import RadioChips from "./RadioChips.astro";
+
+/**
+ * Terminal completo del operador: la pantalla que el operador tiene delante en
+ * la estación, no un panel suelto. Vive en la banda 2 porque a este tamaño
+ * (~700x420) se puede leer y se puede tocar; la banda 1 solo pasa de largo.
+ *
+ * Interacción sin una línea de JS: las cuatro pestañas y el paso activo son dos
+ * grupos de radios, y el CSS de abajo enseña el panel del radio marcado. Las
+ * reglas van `is:global` porque tienen que alcanzar el markup de los hijos, y
+ * van ancladas a `.mes-hmi` en vez de a un id porque la marquesina de la banda 2
+ * pinta la pantalla dos veces: con id habría duplicados y las dos copias
+ * compartirían el estado.
+ *
+ * `uid` es lo que separa los grupos de radios de las dos copias.
+ */
+export interface Props {
+    uid: string;
+}
+
+const { uid } = Astro.props;
+const rail = [
+    { Icon: Users, label: "Users" },
+    { Icon: Ticket, label: "Ticket" },
+    { Icon: TimerOff, label: "Downtime" },
+    { Icon: Settings, label: "Settings" },
+] as const;
+
+/** Identificadores y tiempos mm:ss: no afirman desempeño, así que sí van. */
+const product = [
+    { label: "Serial Number", value: "SN-4820-00184" },
+    { label: "Part Number", value: "PN-4820-A" },
+    { label: "Product", value: "Housing Frame" },
+] as const;
+
+const timing = [
+    { label: "Cycle", value: "01:42" },
+    { label: "Target", value: "02:00" },
+    { label: "Overcycle", value: "00:00" },
+] as const;
+
+/** Produced / Target / Difference van con barra esqueleto: no hay cifra que
+ *  podamos respaldar, y una inventada más modesta sigue siendo inventada. */
+const goals = ["Produced", "Target", "Difference"] as const;
+
+const steps = [
+    { n: 1, name: "Load Housing", left: "00:48" },
+    { n: 2, name: "Fit Bracket", left: "01:12" },
+    { n: 3, name: "Torque Bolts", left: "01:35" },
+    { n: 4, name: "Route Harness", left: "00:52" },
+    { n: 5, name: "Final Check", left: "02:10" },
+] as const;
+
+const tabs = [
+    { value: "aid", label: "Visual Aid" },
+    { value: "bom", label: "Product BOM" },
+    { value: "history", label: "Product History" },
+    { value: "docs", label: "Documents" },
+] as const;
+
+const history = [
+    { at: "2026-08-27 14:02", event: "Step completed", who: "Operator A" },
+    { at: "2026-08-27 13:58", event: "Order started", who: "Operator A" },
+    { at: "2026-08-27 13:41", event: "Serial registered", who: "Station 04" },
+    { at: "2026-08-26 22:10", event: "Order released", who: "Planner" },
+] as const;
+
+const docs = [
+    "Work Instruction — Housing Frame",
+    "Torque Specification Sheet",
+    "Inspection Checklist",
+    "Packaging Guide",
+] as const;
+
+const CARD =
+    "flex flex-col gap-1 rounded-lg border border-gray-100 bg-gray-50/60 p-2 dark:border-gray-800 dark:bg-gray-800/30";
+const CARD_TITLE =
+    "text-[9px] font-semibold uppercase tracking-wide text-gray-400";
+---
+
+<BandPanel
+    title="Operator Terminal"
+    tag="Station 04"
+    bodyClass="min-h-0 flex-1 p-2"
+>
+    <div class="mes-hmi flex h-full gap-2">
+        <!-- Riel de iconos. Son adornos de la pantalla, no controles: van como
+             span con aria-hidden para no meter paradas de tabulador falsas. -->
+        <div
+            class="flex w-8 shrink-0 flex-col items-center gap-2 rounded-lg bg-gray-50 py-2 dark:bg-gray-800/40"
+        >
+            {
+                rail.map(({ Icon }) => (
+                    <span
+                        class="text-gray-400 dark:text-gray-500"
+                        aria-hidden="true"
+                    >
+                        <Icon class="h-4 w-4" />
+                    </span>
+                ))
+            }
+        </div>
+
+        <div class="flex min-w-0 flex-1 flex-col gap-2">
+            <div class="flex shrink-0 items-center gap-2">
+                <div
+                    class="flex h-7 min-w-0 flex-1 items-center gap-1.5 rounded-md border border-dashed border-[#005EB8]/40 bg-white px-2 text-[10px] text-gray-400 dark:border-[#00B5E2]/40 dark:bg-gray-900"
+                >
+                    <svg
+                        class="h-3 w-3 shrink-0 text-[#005EB8] dark:text-[#00B5E2]"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M3.75 4.75h3m-3 0v3m0-3m13.5 0h3m0 0v3M3.75 19.25h3m-3 0v-3m13.5 3h3m0 0v-3M3 12h18"
+                        ></path>
+                    </svg>
+                    Scan or enter product code…
+                </div>
+                <span
+                    class="shrink-0 rounded bg-[#005EB8]/10 px-2 py-0.5 text-[10px] font-semibold text-[#005EB8] dark:bg-[#00B5E2]/10 dark:text-[#00B5E2]"
+                >
+                    Station 04
+                </span>
+            </div>
+
+            <div class="grid shrink-0 grid-cols-3 gap-2">
+                <div class={CARD}>
+                    <span class={CARD_TITLE}>Product Information</span>
+                    {
+                        product.map((p) => (
+                            <div class="flex items-center justify-between gap-2 text-[9px]">
+                                <span class="text-gray-500 dark:text-gray-400">
+                                    {p.label}
+                                </span>
+                                <span class="truncate font-mono text-gray-800 dark:text-gray-200">
+                                    {p.value}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div class={CARD}>
+                    <div class="flex items-center justify-between gap-2">
+                        <span class={CARD_TITLE}>Status</span>
+                        <!-- Verde = Working, la única semántica permitida. -->
+                        <span class="flex items-center gap-1 text-[9px] font-medium text-green-700 dark:text-green-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-green-500"
+                            ></span>
+                            Working
+                        </span>
+                    </div>
+                    {
+                        timing.map((t) => (
+                            <div class="flex items-center justify-between gap-2 text-[9px]">
+                                <span class="text-gray-500 dark:text-gray-400">
+                                    {t.label}
+                                </span>
+                                <span class="font-mono text-gray-800 dark:text-gray-200">
+                                    {t.value}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div class={CARD}>
+                    <span class={CARD_TITLE}>Goals</span>
+                    {
+                        goals.map((g) => (
+                            <div class="flex items-center justify-between gap-2 text-[9px]">
+                                <span class="text-gray-500 dark:text-gray-400">
+                                    {g}
+                                </span>
+                                <div class="h-4 w-10 rounded bg-gray-200 dark:bg-gray-600" />
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div class="flex min-h-0 flex-1 gap-2">
+                <!-- Riel de pasos: grupo de radios, el paso marcado es el
+                     activo. Las flechas del teclado ya lo recorren. -->
+                <div
+                    role="radiogroup"
+                    aria-label="Work step"
+                    class="flex w-[150px] shrink-0 flex-col gap-1"
+                >
+                    <span class={CARD_TITLE}>Work Steps</span>
+                    {
+                        steps.map((s) => (
+                            <label class="flex cursor-pointer select-none items-center gap-1.5 rounded-md border border-gray-100 px-1.5 py-1 text-[9px] has-[input:checked]:border-[#005EB8]/40 has-[input:checked]:bg-[#005EB8]/5 has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-[#00B5E2] dark:border-gray-800 dark:has-[input:checked]:border-[#00B5E2]/40 dark:has-[input:checked]:bg-[#00B5E2]/5">
+                                <input
+                                    type="radio"
+                                    name={`${uid}-hmi-step`}
+                                    data-step={s.n}
+                                    class="sr-only"
+                                    checked={s.n === 3}
+                                />
+                                <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-gray-100 font-mono text-[8px] text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                                    {s.n}
+                                </span>
+                                <span class="min-w-0 flex-1 truncate font-medium text-gray-700 dark:text-gray-300">
+                                    {s.name}
+                                </span>
+                                <span class="shrink-0 font-mono text-[8px] text-gray-400">
+                                    Left {s.left}
+                                </span>
+                            </label>
+                        ))
+                    }
+                </div>
+
+                <div
+                    class="flex min-h-0 min-w-0 flex-1 flex-col rounded-lg border border-gray-100 p-2 dark:border-gray-800"
+                >
+                    <RadioChips
+                        name={`${uid}-hmi-tab`}
+                        variant="tab"
+                        label="Product detail"
+                        options={tabs}
+                        class="mb-2 shrink-0"
+                    />
+
+                    <!-- Los cuatro paneles ocupan el MISMO hueco: el alto está
+                         fijado por el flex del contenedor, así que cambiar de
+                         pestaña no mueve nada. -->
+                    <div class="min-h-0 flex-1">
+                        <div class="h-full" data-panel="aid">
+                            <VisualAidBody layout="split" />
+                        </div>
+                        <div class="h-full" data-panel="bom">
+                            <BomTable />
+                        </div>
+                        <div class="flex h-full flex-col gap-1" data-panel="history">
+                            {
+                                history.map((h) => (
+                                    <div class="flex items-center gap-2 rounded border border-gray-100 px-2 py-1 text-[9px] dark:border-gray-800">
+                                        <span class="shrink-0 font-mono text-gray-400">
+                                            {h.at}
+                                        </span>
+                                        <span class="min-w-0 flex-1 truncate font-medium text-gray-700 dark:text-gray-300">
+                                            {h.event}
+                                        </span>
+                                        <span class="shrink-0 text-gray-500 dark:text-gray-400">
+                                            {h.who}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div class="flex h-full flex-col gap-1" data-panel="docs">
+                            {
+                                docs.map((d) => (
+                                    <div class="flex items-center gap-2 rounded border border-gray-100 px-2 py-1 text-[9px] dark:border-gray-800">
+                                        <FileText class="h-3 w-3 shrink-0 text-[#005EB8] dark:text-[#00B5E2]" />
+                                        <span class="min-w-0 flex-1 truncate font-medium text-gray-700 dark:text-gray-300">
+                                            {d}
+                                        </span>
+                                        <span class="shrink-0 text-gray-400">
+                                            PDF
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</BandPanel>
+
+<!-- is:global porque el selector tiene que cruzar el límite de componente hasta
+     los paneles, que los pintan VisualAidBody y BomTable. Por clase y por
+     `data-opt` y no por id: la banda 2 pinta esta pantalla dos veces. -->
+<style is:global>
+    .mes-hmi [data-panel] {
+        display: none;
+    }
+    .mes-hmi:has(input[data-opt="aid"]:checked) [data-panel="aid"],
+    .mes-hmi:has(input[data-opt="bom"]:checked) [data-panel="bom"],
+    .mes-hmi:has(input[data-opt="history"]:checked) [data-panel="history"],
+    .mes-hmi:has(input[data-opt="docs"]:checked) [data-panel="docs"] {
+        display: flex;
+    }
+</style>

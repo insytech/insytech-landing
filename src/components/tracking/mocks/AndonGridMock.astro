@@ -1,0 +1,18 @@
+---
+import BandPanel from "./BandPanel.astro";
+import StationCard from "./StationCard.astro";
+import type { Station } from "./status";
+
+const stations: readonly Station[] = [
+    { name: "Station 04", status: "working", operator: "Operator A", cycle: "01:42", done: 7, total: 12 },
+    { name: "Station 05", status: "idle", operator: "No operator", cycle: "--:--", done: 3, total: 9 },
+    { name: "Station 06", status: "working", operator: "Operator C", cycle: "02:05", done: 11, total: 12 },
+    { name: "Station 07", status: "offline", operator: "No operator", cycle: "--:--", done: 0, total: 8 },
+];
+---
+
+<BandPanel title="Andon Board" tag="Live">
+    <div class="grid h-full grid-cols-2 grid-rows-2 gap-2">
+        {stations.map((s) => <StationCard {...s} />)}
+    </div>
+</BandPanel>

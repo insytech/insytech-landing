@@ -1,0 +1,105 @@
+---
+import BandPanel from "./BandPanel.astro";
+
+/** Jerarquía de planta del MES: unidad de negocio -> ubicación -> segmento de
+ *  producción -> estación. Escalonada de izquierda a derecha porque es como el
+ *  editor real dibuja el árbol, y así entran cuatro tarjetas en el panel. */
+const nodes = [
+    { type: "BusinessUnit", left: 0, top: 2 },
+    { type: "Location", left: 17, top: 27 },
+    { type: "ProductionSegment", left: 34, top: 52 },
+    { type: "Station", left: 51, top: 77 },
+] as const;
+
+/** Codos padre -> hijo. viewBox 100x100 con preserveAspectRatio="none", así que
+ *  el trazo va con vector-effect para no deformarse. */
+const edges = [
+    { d: "M 8 20 L 8 34 L 17 34" },
+    { d: "M 25 45 L 25 59 L 34 59" },
+    { d: "M 42 70 L 42 84 L 51 84" },
+] as const;
+---
+
+<BandPanel title="Plant Architecture" tag="Editor">
+    <div class="flex h-full flex-col gap-2">
+        <div
+            class="relative min-h-0 flex-1 rounded-lg border border-gray-100 bg-gray-50/60 bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:12px_12px] dark:border-gray-800 dark:bg-gray-800/30 dark:bg-[radial-gradient(#374151_1px,transparent_1px)]"
+        >
+            <svg
+                class="absolute inset-0 h-full w-full text-gray-300 dark:text-gray-600"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+            >
+                {
+                    edges.map((e) => (
+                        <path
+                            d={e.d}
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            vector-effect="non-scaling-stroke"
+                        />
+                    ))
+                }
+            </svg>
+
+            {
+                nodes.map((n) => (
+                    <div
+                        class="absolute flex w-[46%] items-center justify-between gap-1 rounded-md border border-gray-200 bg-white px-1.5 py-1 transition-colors hover:border-[#005EB8]/60 dark:border-gray-700 dark:bg-gray-900 dark:hover:border-[#00B5E2]/60"
+                        style={`left:${n.left}%;top:${n.top}%`}
+                    >
+                        <span class="truncate text-[9px] font-semibold text-gray-900 dark:text-white">
+                            {n.type}
+                        </span>
+                        <span class="shrink-0 rounded bg-[#005EB8]/10 px-1 py-px text-[8px] font-medium text-[#005EB8] dark:bg-[#00B5E2]/10 dark:text-[#00B5E2]">
+                            Active
+                        </span>
+                    </div>
+                ))
+            }
+
+            <!-- Minimapa: rectángulo del lienzo con el encuadre visible dentro y
+                 las cuatro marcas de nodo, para que no se lea como un switch. -->
+            <div
+                class="absolute right-1.5 top-1.5 h-7 w-11 rounded border border-gray-300 bg-white/80 dark:border-gray-600 dark:bg-gray-900/80"
+            >
+                <div
+                    class="absolute left-0.5 top-0.5 h-5 w-7 rounded-sm border border-[#005EB8]/40 dark:border-[#00B5E2]/40"
+                >
+                </div>
+                {
+                    [
+                        "left-1 top-1",
+                        "left-2.5 top-2.5",
+                        "left-4 top-4",
+                        "left-5.5 top-5",
+                    ].map((pos) => (
+                        <span
+                            class:list={[
+                                "absolute h-1 w-2 rounded-sm bg-gray-400 dark:bg-gray-500",
+                                pos,
+                            ]}
+                        />
+                    ))
+                }
+            </div>
+
+            <div class="absolute bottom-1.5 left-1.5 flex flex-col gap-1">
+                <span class="flex h-4 w-4 items-center justify-center rounded border border-gray-300 bg-white text-[10px] leading-none text-gray-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400">
+                    +
+                </span>
+                <span class="flex h-4 w-4 items-center justify-center rounded border border-gray-300 bg-white text-[10px] leading-none text-gray-500 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400">
+                    −
+                </span>
+            </div>
+        </div>
+
+        <div class="shrink-0 text-[9px] text-gray-500 dark:text-gray-400">
+            Hierarchy saved · Station 04 selected
+        </div>
+    </div>
+</BandPanel>

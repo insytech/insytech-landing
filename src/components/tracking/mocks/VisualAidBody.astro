@@ -1,0 +1,122 @@
+---
+/** Cuerpo de la instrucción de trabajo: es la pestaña "Visual Aid" del terminal
+ *  y a la vez el panel suelto de la banda 1, así que vive fuera de los dos.
+ *
+ *  Los dos sitios lo quieren con distinta forma, y de ahí el único prop:
+ *  - `stacked` (banda 1): la imagen arriba y el texto debajo, porque el panel
+ *    mide 280-340px de ancho y dos columnas ahí no caben.
+ *  - `split` (pestaña del terminal): la imagen a la DERECHA ocupando el alto
+ *    completo y el texto a la izquierda, que es como se ve una instrucción de
+ *    trabajo real. El `flex-row-reverse` es lo que la manda a la derecha
+ *    dejándola primera en el DOM, así el markup es uno solo y no dos copias.
+ *
+ *  La banda de severidad es el otro uso legítimo del ámbar y el rojo. */
+export interface Props {
+    layout?: "stacked" | "split";
+}
+
+const { layout = "stacked" } = Astro.props;
+const split = layout === "split";
+
+const severities = [
+    { label: "INFO", chip: "bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400" },
+    { label: "CAUTION", chip: "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400" },
+    { label: "DANGER", chip: "bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400" },
+] as const;
+
+const ppe = ["Gloves", "Goggles", "Ear Protection"] as const;
+const stepTypes = ["Manual", "Inspection", "Torque"] as const;
+---
+
+<div
+    class:list={[
+        "flex h-full w-full gap-2",
+        split ? "flex-row-reverse" : "flex-col",
+    ]}
+>
+    <!-- Área de imagen de instrucción: marcador, no una foto de planta. -->
+    <div
+        class:list={[
+            "flex min-h-0 items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/40",
+            split ? "w-[45%] shrink-0" : "flex-1",
+        ]}
+    >
+        <svg
+            class="h-7 w-7 text-gray-300 dark:text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 19.5h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm12-12h.008v.008h-.008V7.5z"
+            ></path>
+        </svg>
+    </div>
+
+    <div class:list={["flex min-w-0 flex-col gap-2", split && "flex-1 justify-between"]}>
+    <div class="flex gap-1.5">
+        {
+            severities.map((s) => (
+                <span
+                    class={`flex-1 rounded px-1 py-0.5 text-center text-[9px] font-semibold tracking-wide ${s.chip}`}
+                >
+                    {s.label}
+                </span>
+            ))
+        }
+    </div>
+
+    <div>
+        <div
+            class="mb-1 text-[10px] font-semibold text-gray-700 dark:text-gray-300"
+        >
+            Procedure Details
+        </div>
+        <div class="space-y-1">
+            <div class="h-2 w-full rounded bg-gray-200 dark:bg-gray-700"></div>
+            <div class="h-2 w-4/5 rounded bg-gray-200 dark:bg-gray-700"></div>
+        </div>
+    </div>
+
+    <div>
+        <div
+            class="mb-1 text-[10px] font-semibold text-gray-700 dark:text-gray-300"
+        >
+            PPE Requirements
+        </div>
+        <div class="flex flex-wrap gap-1">
+            {
+                ppe.map((p) => (
+                    <span class="rounded border border-gray-200 px-1.5 py-0.5 text-[9px] text-gray-600 dark:border-gray-700 dark:text-gray-400">
+                        {p}
+                    </span>
+                ))
+            }
+        </div>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+        <span class="text-[10px] text-gray-500 dark:text-gray-400">
+            Step Type
+        </span>
+        {
+            stepTypes.map((t, i) => (
+                <span
+                    class:list={[
+                        "rounded px-1.5 py-0.5 text-[9px] font-medium",
+                        "transition-colors",
+                        i === 0
+                            ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300"
+                            : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200",
+                    ]}
+                >
+                    {t}
+                </span>
+            ))
+        }
+    </div>
+    </div>
+</div>
