@@ -1,0 +1,41 @@
+---
+import RelatedPosts from "../shared/RelatedPosts.astro";
+import type { RelatedPost } from "../shared/RelatedPosts.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// /blog/inteligencia-artificial-industria-manufactura/ acumula 52 impresiones en
+// la posición 26.75, contra las 104 de esta página en la 29.88: las dos compiten
+// por el mismo tema y ninguna recibe clics. Los otros tres cubren las consultas
+// vecinas de proveedor y de aplicación concreta.
+const posts: readonly RelatedPost[] = [
+    {
+        title: "Inteligencia artificial en la industria",
+        summary: "Casos reales de IA en manufactura, sin promesas de folleto.",
+        href: "/blog/inteligencia-artificial-industria-manufactura/",
+    },
+    {
+        title: "Cómo elegir un proveedor de automatización inteligente",
+        summary: "Diez preguntas que separan a un integrador de un vendedor.",
+        href: "/blog/como-elegir-proveedor-automatizacion-inteligente/",
+    },
+    {
+        title: "Computer vision para empresas: guía práctica",
+        summary:
+            "La aplicación de IA industrial con el retorno más directo hoy.",
+        href: "/blog/computer-vision-empresas-guia/",
+    },
+    {
+        title: "Automatización industrial: guía de control de procesos",
+        summary: "De dónde salen los datos sobre los que la IA puede decidir.",
+        href: "/blog/automatizacion-y-control-industrial-guia/",
+    },
+];
+---
+
+<RelatedPosts
+    posts={posts}
+    heading="Antes de automatizar con IA, léete esto"
+    intro="Escribimos sobre lo que nos preguntan en las juntas. Sin vender."
+    class={`${PAD.minor} ${SURFACE.base}`}
+    headingClass={HEADING.minor}
+/>

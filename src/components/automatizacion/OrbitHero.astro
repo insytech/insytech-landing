@@ -1,0 +1,508 @@
+---
+import ShinyText from "../shared/ShinyText.astro";
+
+// Hero de /ai/: los módulos que ya operan en planta orbitan alrededor de un
+// botón que los enciende.
+//
+// La referencia es fourmula.ai, donde un anillo de fotos gira en torno a un
+// "upload or drop your assets". Aquí el centro no recibe archivos: es el CTA
+// «Empower with AI», y al pulsarlo los módulos pasan de apagados —grises, sin
+// etiqueta— a encendidos, con su nombre y el color de marca. La metáfora es
+// literal y es la tesis de la página: los procesos ya existen, la IA los
+// enciende.
+//
+// Antes aquí vivía una lista vertical de cinco etiquetas que no decía nada, y
+// antes de eso una cadena cámara -> modelo -> veredicto que era el flujo de
+// /vision/. Este visual evita las dos trampas: muestra amplitud y no compite con
+// ninguna otra página.
+//
+// Rendimiento: el anillo gira con UNA animación de `transform` sobre el
+// contenedor y una contraria por tarjeta para que la imagen no quede de cabeza.
+// Son transformaciones puras, que el compositor resuelve sin repintar. Nada de
+// `filter`, `backdrop-filter` ni `background-position` en bucle, que fue lo que
+// encareció el hero anterior.
+//
+// Colores: solo los tres azules oficiales del manual de identidad
+// (#001489 Reflex Blue, #005EB8 Blue, #00B5E2 Light Blue) más blanco y el negro
+// tipográfico #211915.
+const modules = [
+    { image: "/images/vision1.webp", label: "Inspección visual", alt: "Sistema de visión artificial inspeccionando piezas en una línea de producción" },
+    { image: "/images/control/scada.webp", label: "SCADA", alt: "Interfaz SCADA supervisando procesos de planta en tiempo real" },
+    { image: "/images/tracking1.webp", label: "Trazabilidad", alt: "Tablero de trazabilidad de producción con seguimiento por pieza" },
+    { image: "/images/control/plc.webp", label: "Control de línea", alt: "Tablero de control industrial con PLC programado" },
+    { image: "/images/software1.webp", label: "Software a la medida", alt: "Aplicación industrial a la medida en uso" },
+    { image: "/images/control/iot.webp", label: "IoT industrial", alt: "Sensores de IoT industrial conectados a maquinaria" },
+    { image: "/images/vision2.webp", label: "Detección de defectos", alt: "Detección automática de defectos sobre una pieza" },
+    { image: "/images/tracking2.webp", label: "OEE en vivo", alt: "Indicadores de OEE en tiempo real" },
+];
+
+const step = 360 / modules.length;
+---
+
+<section class="orbit-hero" data-orbit-hero>
+  <div class="orbit-inner">
+    <div class="orbit-stage">
+        <div class="orbit-ring" aria-hidden="true">
+            {
+                modules.map((mod, index) => (
+                    <figure
+                        class="orbit-card"
+                        style={`--angle: ${index * step}deg; --delay: ${index * 0.08}s;`}
+                    >
+                        <span class="orbit-card-inner">
+                            <img
+                                src={mod.image}
+                                alt={mod.alt}
+                                loading="eager"
+                                decoding="async"
+                            />
+                            <figcaption>{mod.label}</figcaption>
+                        </span>
+                    </figure>
+                ))
+            }
+        </div>
+
+        <button
+            type="button"
+            class="orbit-core"
+            data-empower
+            aria-pressed="false"
+        >
+            <span class="core-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5z" />
+                </svg>
+            </span>
+            <span class="core-label" data-core-label>Empower with AI</span>
+        </button>
+
+        {/* Lista accesible equivalente al anillo, que es aria-hidden por ser
+            decorativo en su disposición. Un lector de pantalla obtiene los ocho
+            módulos como texto y en orden. */}
+        <ul class="sr-only">
+            {modules.map((mod) => <li>{mod.label}</li>)}
+        </ul>
+    </div>
+
+    <div class="orbit-copy">
+        <h1>
+            Los procesos ya están en tu planta.<br />
+            <ShinyText
+                text="La IA los enciende"
+                color="#005EB8"
+                shineColor="#00B5E2"
+                speed={3}
+                class="leading-[1.12] pb-[0.06em]"
+            />
+        </h1>
+        <p>
+            Inspección visual, trazabilidad, control de línea y analítica ya
+            generan datos todos los turnos. La IA trabaja sobre eso.
+        </p>
+        <div class="orbit-actions">
+            <a class="orbit-cta-primary" href="#contact">Cuéntanos tu proceso</a>
+            <a class="orbit-cta-secondary" href="#industrial-ai">
+                Ver las cinco aplicaciones
+            </a>
+        </div>
+    </div>
+  </div>
+</section>
+
+<style>
+    /* Composición: copia a la izquierda, cúmulo a la derecha, las dos
+       centradas verticalmente dentro de una pantalla.
+
+       Antes esto superponía el cúmulo en posición absoluta con el titular
+       anclado abajo. En pantallas anchas y bajas —1850x1020, por ejemplo— el
+       titular caía en una columna estrecha, se partía en cinco líneas y la
+       última se salía del pliegue. Una reja de dos columnas no puede hacer eso.
+
+       El tamaño del cúmulo depende del ancho Y del alto: en una pantalla baja
+       manda `svh`, que es lo que evita que empuje al resto fuera. */
+    .orbit-hero {
+        --stage: min(36rem, 44vw, 70svh);
+
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 100svh;
+        padding: 6.5rem 1.5rem 3rem;
+        overflow: clip;
+    }
+
+    /* El ancho sube a 96rem y el aire lateral se reparte con `clamp`: a 1850px
+       el contenedor de 82rem dejaba 269px muertos a cada lado, que en un hero es
+       espacio desperdiciado y no respiración. */
+    .orbit-inner {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: minmax(20rem, 38rem) 1fr;
+        align-items: center;
+        gap: clamp(1.5rem, 3vw, 3.5rem);
+        width: min(96rem, 100%);
+    }
+
+    /* El orden del marcado pone el cúmulo primero para que en móvil quede
+       arriba; en escritorio las columnas se asignan explícitamente, o el cúmulo
+       acabaría a la izquierda y el texto a la derecha. */
+    .orbit-copy {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .orbit-stage {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    /* El resplandor de fondo es estático a propósito. Animarle la escala
+       obligaba a recalcular un desenfoque enorme en cada frame, que fue el
+       problema del hero anterior. */
+    .orbit-hero::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 68%;
+        width: calc(var(--stage) * 1.35);
+        aspect-ratio: 1;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(
+            circle,
+            rgb(0 181 226 / 0.16) 0%,
+            rgb(0 94 184 / 0.08) 45%,
+            transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .orbit-stage {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        justify-self: center;
+        width: var(--stage);
+        aspect-ratio: 1;
+    }
+
+    .orbit-ring {
+        position: absolute;
+        inset: 0;
+        animation: orbit-spin 48s linear infinite;
+    }
+
+    .orbit-card {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: calc(var(--stage) * 0.2);
+        height: calc(var(--stage) * 0.2);
+        margin: calc(var(--stage) * -0.1) 0 0 calc(var(--stage) * -0.1);
+        transform: rotate(var(--angle)) translateY(calc(var(--stage) / -2 + 2.9rem));
+    }
+
+    /* La tarjeta gira en sentido contrario al anillo para que la imagen se lea
+       siempre horizontal. Misma duración, dirección inversa. */
+    .orbit-card-inner {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transform: rotate(calc(var(--angle) * -1));
+        animation: orbit-spin-back 48s linear infinite;
+    }
+
+    .orbit-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 38% 62% 55% 45% / 45% 38% 62% 55%;
+        filter: grayscale(1);
+        opacity: 0.55;
+        transition:
+            filter 0.7s ease,
+            opacity 0.7s ease,
+            box-shadow 0.7s ease;
+        box-shadow: 0 0 0 1px rgb(33 25 21 / 0.06);
+    }
+
+    .orbit-card figcaption {
+        position: absolute;
+        left: 50%;
+        bottom: -1.55rem;
+        transform: translateX(-50%);
+        white-space: nowrap;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #005eb8;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    /* Estado encendido: se dispara al pulsar el centro. */
+    .orbit-hero[data-lit="true"] .orbit-card img {
+        filter: grayscale(0);
+        opacity: 1;
+        box-shadow:
+            0 0 0 2px rgb(0 181 226 / 0.55),
+            0 12px 30px rgb(0 20 137 / 0.18);
+    }
+
+    .orbit-hero[data-lit="true"] .orbit-card figcaption {
+        opacity: 1;
+        transition-delay: var(--delay);
+    }
+
+    .orbit-core {
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.55rem;
+        width: 9.5rem;
+        height: 9.5rem;
+        padding: 1rem;
+        border: 1px solid rgb(0 94 184 / 0.35);
+        border-radius: 1.4rem;
+        background: rgb(255 255 255 / 0.92);
+        color: #005eb8;
+        font-weight: 700;
+        cursor: pointer;
+        justify-content: center;
+        transition:
+            transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
+            border-color 0.35s ease,
+            box-shadow 0.35s ease,
+            background-color 0.35s ease;
+    }
+
+    .orbit-core:hover {
+        transform: scale(1.04);
+        box-shadow: 0 16px 40px rgb(0 20 137 / 0.14);
+    }
+
+    .orbit-core:focus-visible {
+        outline: 3px solid #00b5e2;
+        outline-offset: 3px;
+    }
+
+    .orbit-hero[data-lit="true"] .orbit-core {
+        border-color: #00b5e2;
+        background: #001489;
+        color: #ffffff;
+        box-shadow: 0 18px 44px rgb(0 20 137 / 0.3);
+    }
+
+    .core-glyph svg {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+    .core-label {
+        font-size: 0.86rem;
+        line-height: 1.25;
+        text-align: center;
+    }
+
+    .orbit-copy {
+        position: relative;
+        z-index: 3;
+        text-align: left;
+    }
+
+    .orbit-copy h1 {
+        /* El ancho en `ch` es lo que decide cuántas líneas hace el titular; sin
+           él, en una columna estrecha se partía en cinco. */
+        max-width: 16ch;
+        font-size: clamp(2rem, 3.6vw, 3.9rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+        color: #211915;
+        margin-bottom: 1.25rem;
+    }
+
+    :global(.dark) .orbit-copy h1 {
+        color: #ffffff;
+    }
+
+    .orbit-copy p {
+        font-size: clamp(1rem, 1.1vw, 1.15rem);
+        line-height: 1.65;
+        color: rgb(75 85 99);
+        margin: 0 0 1.75rem;
+        max-width: 30rem;
+    }
+
+    :global(.dark) .orbit-copy p {
+        color: rgb(156 163 175);
+    }
+
+    .orbit-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        justify-content: flex-start;
+    }
+
+    .orbit-cta-primary,
+    .orbit-cta-secondary {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.9rem 1.75rem;
+        border-radius: 999px;
+        font-weight: 600;
+        transition:
+            background-color 0.3s ease,
+            color 0.3s ease,
+            border-color 0.3s ease;
+    }
+
+    .orbit-cta-primary {
+        background: #005eb8;
+        color: #ffffff;
+    }
+
+    .orbit-cta-primary:hover {
+        background: #001489;
+    }
+
+    .orbit-cta-secondary {
+        border: 2px solid rgb(0 94 184 / 0.3);
+        color: #005eb8;
+    }
+
+    .orbit-cta-secondary:hover {
+        border-color: #005eb8;
+    }
+
+    :global(.dark) .orbit-core {
+        background: rgb(3 7 18 / 0.9);
+        color: #00b5e2;
+        border-color: rgb(0 181 226 / 0.4);
+    }
+
+    :global(.dark) .orbit-card img {
+        box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+    }
+
+    :global(.dark) .orbit-card figcaption {
+        color: #00b5e2;
+    }
+
+    :global(.dark) .orbit-cta-secondary {
+        color: #00b5e2;
+        border-color: rgb(0 181 226 / 0.35);
+    }
+
+    @keyframes orbit-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes orbit-spin-back {
+        to {
+            transform: rotate(calc(var(--angle) * -1 - 360deg));
+        }
+    }
+
+    @media (max-width: 1023px) {
+        /* Superponer titular y cúmulo solo funciona con ancho de sobra. Por
+           debajo de esto vuelven a apilarse, que es legible aunque menos
+           espectacular. */
+        .orbit-hero {
+            align-items: center;
+            gap: 2rem;
+            min-height: 0;
+            padding-top: 5.5rem;
+        }
+
+        .orbit-inner {
+            grid-template-columns: 1fr;
+            justify-items: center;
+        }
+
+        .orbit-copy,
+        .orbit-stage {
+            grid-column: 1;
+            grid-row: auto;
+        }
+
+        .orbit-stage {
+            --stage: min(24rem, 78vw);
+            order: -1;
+        }
+
+        .orbit-copy h1 {
+            max-width: 100%;
+        }
+
+        .orbit-copy {
+            padding-left: 1.5rem;
+            text-align: center;
+        }
+
+        .orbit-copy p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .orbit-actions {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 640px) {
+
+        .orbit-card {
+            width: 4.75rem;
+            height: 4.75rem;
+            margin: -2.375rem 0 0 -2.375rem;
+            transform: rotate(var(--angle))
+                translateY(calc(var(--stage) / -2 + 2.2rem));
+        }
+
+        .orbit-card figcaption {
+            font-size: 0.5rem;
+            bottom: -1.15rem;
+        }
+
+        .orbit-core {
+            width: 7rem;
+            height: 7rem;
+        }
+
+        .core-label {
+            font-size: 0.72rem;
+        }
+    }
+</style>
+
+<script>
+    // Encender los módulos. Es un `data-` en la sección y todo el cambio visual
+    // vive en CSS, así que aquí no hay animación que mantener sincronizada.
+    const hero = document.querySelector<HTMLElement>("[data-orbit-hero]");
+    const boton = hero?.querySelector<HTMLButtonElement>("[data-empower]");
+    const etiqueta = hero?.querySelector<HTMLElement>("[data-core-label]");
+
+    if (hero && boton && etiqueta) {
+        const textoApagado = etiqueta.textContent ?? "";
+        const textoEncendido = "AI encendida";
+
+        boton.addEventListener("click", () => {
+            const encendido = hero.dataset.lit === "true";
+            hero.dataset.lit = encendido ? "false" : "true";
+            boton.setAttribute("aria-pressed", encendido ? "false" : "true");
+            etiqueta.textContent = encendido ? textoApagado : textoEncendido;
+        });
+    }
+</script>

@@ -1,21 +1,36 @@
 ---
 import AILayout from "../../layouts/AutomatizacionLayout.astro";
-import Hero from "../../components/automatizacion/Hero.astro";
+import OrbitHero from "../../components/automatizacion/OrbitHero.astro";
+import SocialProof from "../../components/shared/SocialProof.astro";
 import About from "../../components/automatizacion/About.astro";
+import IndustrialAI from "../../components/automatizacion/IndustrialAI.astro";
 import Services from "../../components/automatizacion/Services.astro";
 import Cta from "../../components/automatizacion/Cta.astro";
+import Resources from "../../components/automatizacion/Resources.astro";
 import FAQ from "../../components/automatizacion/FAQ.astro";
 import AIContactSection from "../../components/automatizacion/AIContactSection.astro";
+import { SURFACE } from "@utils/typography";
 ---
 
 <AILayout
-    title="Inteligencia Artificial para la Industria: Chatbots y RPA"
-    description="Automatización inteligente con chatbots industriales y agentes de IA a la medida de tu manufactura para optimizar procesos y atención al cliente. Agenda una demo gratuita."
+    title="Inteligencia artificial para la industria en México"
+    description="IA aplicada a manufactura en Monterrey: inspección visual, analítica de producción, monitoreo predictivo, agentes sobre tu ERP y RPA. Cuéntanos tu proceso."
 >
-    <Hero />
+    <OrbitHero />
+
+    <!-- Prueba social pegada al Hero: la página no tenía ni un cliente ni un
+         año de operación. -->
+    <SocialProof class={SURFACE.base} />
+
+    <!-- Va antes de About y de Services: responde "¿dónde aplica la IA en mi
+         planta?", que es lo que busca quien llega aquí, y reparte hacia la
+         página que hace cada trabajo en vez de competir con ellas. -->
+    <IndustrialAI />
+
     <About />
     <Services />
     <Cta />
+    <Resources />
     <FAQ />
     <AIContactSection />
 </AILayout>

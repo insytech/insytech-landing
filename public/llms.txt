@@ -10,7 +10,7 @@ Contacto: ventas@insytech.mx · +52-81-2892-7509 · Parque España 249B, Buenos 
 - [Desarrollo de software industrial a la medida](https://insytech.mx/software/): Sistemas para manufactura, interfaces HMI e integraciones con ERP (SAP, Oracle, Dynamics) y piso de planta.
 - [Sistema MES — trazabilidad de producción y OEE](https://insytech.mx/tracking/): Trazabilidad, monitoreo en tiempo real, OEE, andon digital y control en piso de planta.
 - [Automatización industrial — PLC, SCADA e IoT](https://insytech.mx/control/): Integración de sistemas de control PLC, SCADA e IoT para la manufactura inteligente.
-- [Inteligencia artificial para la industria](https://insytech.mx/ai/): Chatbots industriales, agentes de IA a la medida y RPA para optimizar procesos y atención al cliente.
+- [Inteligencia artificial para la industria](https://insytech.mx/ai/): IA aplicada a manufactura: inspección visual, analítica de producción, monitoreo predictivo, agentes sobre ERP y CRM, y RPA para procesos repetitivos.
 
 ## Blog
 

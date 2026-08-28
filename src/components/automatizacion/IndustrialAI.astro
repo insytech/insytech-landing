@@ -1,0 +1,111 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// La razón de ser de esta sección: la página vendía chatbots, pero las consultas
+// que la encuentran son `ia en la industria` (13 impresiones, posición 41.62),
+// `inteligencia artificial en fabricacion` (9, 41.56) e `inteligencia artificial
+// industria` (3, 34.33), más varias con redacción de asistente preguntando por
+// proveedores. Faltaba la página que responde "¿dónde aplica la IA en mi
+// planta?", y las respuestas concretas ya existen repartidas en el sitio.
+//
+// Cada tarjeta enlaza a la página que de verdad hace ese trabajo, así que esta
+// sección orienta y no compite: /vision/ es la segunda página del sitio por
+// impresiones y canibalizarla sería el peor resultado posible.
+//
+// Ninguna capacidad nueva se afirma aquí. Las cinco son las que /vision/,
+// /tracking/, /control/ y esta misma página ya declaran.
+const applications = [
+    {
+        title: "Inspección visual automática",
+        body: "Un modelo mira cada pieza y dice si pasa o no, con la imagen guardada como evidencia. Es la aplicación de IA industrial con el retorno más directo, porque sustituye una inspección que hoy alguien hace a ojo.",
+        href: "/vision/",
+        cta: "Ver visión artificial",
+    },
+    {
+        title: "Analítica de producción y OEE",
+        body: "Cuando la planta ya registra sus paros y sus piezas, los datos sirven para explicar por qué cae el OEE y no solo para reportarlo. Requiere captura confiable antes que modelos.",
+        href: "/tracking/",
+        cta: "Ver trazabilidad y MES",
+    },
+    {
+        title: "Monitoreo remoto y análisis predictivo",
+        body: "Sensores y máquinas conectadas por OPC-UA o MQTT, con seguimiento de tendencias para anticipar la falla en lugar de reaccionar al paro.",
+        href: "/control/",
+        cta: "Ver automatización y control",
+    },
+    {
+        title: "Agentes que actúan sobre tus sistemas",
+        body: "Un agente que no solo conversa: consulta el estatus de un pedido en el ERP, registra el lead en el CRM y dispara el flujo interno que corresponda, por API.",
+        href: "#services",
+        cta: "Ver cómo funciona",
+    },
+    {
+        title: "RPA para el trabajo repetitivo",
+        body: "Los procesos internos que hoy alguien hace copiando de un sistema a otro. Es el caso menos vistoso y el que más rápido se paga.",
+        href: "#contact",
+        cta: "Contar tu caso",
+    },
+];
+---
+
+<section
+    id="industrial-ai"
+    class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}
+>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mb-12" data-animate="fade-up">
+            <p
+                class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
+            >
+                Dónde aplica
+            </p>
+            <h2 data-reveal="heading" class={`${HEADING.section} mb-4`}>
+                Inteligencia artificial en la industria: cinco aplicaciones
+                concretas
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                «IA para manufactura» no significa nada por sí solo. Estas son
+                las cinco formas en que la hemos aplicado en piso de planta, con
+                lo que hace falta para que cada una funcione.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="group">
+            {
+                applications.map((app) => (
+                    <a
+                        href={app.href}
+                        class="group flex flex-col justify-between gap-4 p-6 rounded-2xl bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/40 dark:hover:border-[#4da6ff]/50 transition-colors"
+                    >
+                        <div>
+                            <h3 class="text-lg font-bold text-[#211915] dark:text-white mb-2 group-hover:text-[#005EB8] dark:group-hover:text-[#4da6ff] transition-colors">
+                                {app.title}
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                                {app.body}
+                            </p>
+                        </div>
+                        <span class="inline-flex items-center gap-2 text-sm font-medium text-[#005EB8] dark:text-[#4da6ff]">
+                            {app.cta}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                class="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                                aria-hidden="true"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </span>
+                    </a>
+                ))
+            }
+        </div>
+    </Container>
+</section>

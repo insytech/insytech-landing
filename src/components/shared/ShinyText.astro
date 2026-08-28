@@ -1,0 +1,71 @@
+---
+// Palabra resaltada con barrido de brillo. Es el mismo efecto que el
+// `react-bits/ShinyText.tsx` que usa el H1 de /vision/, reimplementado sin
+// runtime.
+//
+// Por qué no reusar el de React: ese componente monta React más framer-motion y,
+// en cada frame, un `useAnimationFrame` escribe `background-position` sobre un
+// texto con `background-clip: text`. O sea que paga un runtime completo para
+// producir un barrido lineal que una @keyframes hace igual, y encima repinta el
+// texto desde JS. En /vision/ ya está pagado porque la página tiene islas; meterlo
+// en /ai/ habría añadido React entero por una palabra.
+//
+// El repintado por frame sigue existiendo —es inherente a mover un degradado
+// recortado a texto—, así que esto se usa en UNA palabra por página, nunca en un
+// titular completo. Bajo `prefers-reduced-motion` la regla global de global.css
+// colapsa la animación y queda el degradado quieto.
+interface Props {
+    /** La palabra o frase a resaltar. */
+    text: string;
+    /** Color base del texto. */
+    color?: string;
+    /** Color del brillo que barre. */
+    shineColor?: string;
+    /** Segundos que tarda un barrido completo. */
+    speed?: number;
+    /** Ángulo del degradado, en grados. */
+    spread?: number;
+    class?: string;
+}
+
+const {
+    text,
+    color = "#005EB8",
+    shineColor = "#00B5E2",
+    speed = 3,
+    spread = 120,
+    class: className = "",
+} = Astro.props;
+
+const gradient = `linear-gradient(${spread}deg, ${color} 0%, ${color} 35%, ${shineColor} 50%, ${color} 65%, ${color} 100%)`;
+---
+
+<span
+    class:list={["shiny-text", className]}
+    style={`background-image: ${gradient}; animation-duration: ${speed}s;`}
+>
+    {text}
+</span>
+
+<style>
+    .shiny-text {
+        display: inline-block;
+        background-size: 200% auto;
+        background-position: 150% center;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation-name: shine-sweep;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes shine-sweep {
+        from {
+            background-position: 150% center;
+        }
+        to {
+            background-position: -50% center;
+        }
+    }
+</style>
