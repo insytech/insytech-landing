@@ -2,34 +2,51 @@
 import Container from "../shared/Container.astro";
 import Paragraph from "../shared/Paragraph.astro";
 
+// Las cuatro tarjetas llevaban cada una una escena de Three.js con
+// post-proceso `UnrealBloomPass`. Medido con CDP sobre scroll continuo, esa
+// sección se comía el 64 % del hilo principal y 64 ms/s de script, contra el
+// 13 % del resto de la home, y descargaba 656 KB de `three.module.js`. Sobre
+// esa misma ventana, bloqueando el chunk, la cifra bajaba a 10 % y 9 ms/s.
+//
+// Y no se veía: los cuatro canvas pintaban un cuadrado vacío —el degradado CSS
+// de reserva— porque los alambres blancos y cian sobre fondo casi negro, con
+// bloom encima, no llegaban a contrastar. Se pagaba el precio entero por nada.
+//
+// Ahora cada sector tiene una escena en SVG y CSS, del mismo lenguaje que las
+// tarjetas de la baraja de arriba, y sobre todo se entiende qué muestra: una
+// línea con estaciones, una placa bajo punta de prueba, una báscula dinámica en
+// la cinta y un herramental que alinea. Ninguna posición es aleatoria —la
+// versión anterior sembraba los componentes de la placa con `Math.random()`, y
+// la escena salía distinta en cada carga—, y ninguna late fuera de pantalla.
+
 const sectors = [
     {
         id: "automotive",
         code: "AUTO-MES",
         title: "Sector Automotriz",
         description: "Implementación de sistemas MES y SCADA con integración total de PLCs y sensores mediante protocolos MODBUS para el monitoreo en tiempo real.",
-        visualId: "mes-hub"
+        scene: "line"
     },
     {
         id: "electronics",
         code: "ELEC-MOD",
         title: "Manufactura Electrónica",
         description: "Enfoque en sistemas de ensamble convencional y estaciones de prueba funcional con trazabilidad integrada para componentes críticos.",
-        visualId: "pcb-trace"
+        scene: "test"
     },
     {
         id: "logistics",
         code: "LOGI-SCALE",
         title: "Logística y Empaque",
         description: "Sistemas de reempaquetado automatizados con básculas dinámicas integradas para el control de peso y auditoría de envíos.",
-        visualId: "scale-flow"
+        scene: "scale"
     },
     {
         id: "metal",
         code: "META-INST",
         title: "Metal-mecánica",
         description: "Soporte en instalaciones electromecánicas de precisión y montaje técnico especializado de herramentales y periféricos industriales.",
-        visualId: "service-stack"
+        scene: "fixture"
     }
 ];
 ---
@@ -85,13 +102,146 @@ const sectors = [
                             {sector.title}
                         </h3>
                         
-                        <!-- Three.js Visual Area (Larger) -->
-                        <div class="flex-grow flex items-center justify-center -mx-4">
-                            <div class="w-full aspect-square relative feature-visual" data-visual={sector.visualId}>
-                                <canvas class="three-canvas w-full h-full"></canvas>
-                                <!-- Technical HUD element -->
-                                <div class="absolute inset-0 border border-[#00B5E2]/10 rounded-full scale-110 opacity-0 group-hover:opacity-100 transition-all duration-1000"></div>
-                                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 border border-[#00B5E2] rounded-full opacity-20 animate-ping"></div>
+                        {/* Una escena por sector, en SVG y CSS. Todas son
+                            decorativas: lo que se afirma está en el texto de
+                            abajo. */}
+                        <div class="flex-grow flex items-center justify-center">
+                            <div class="ft-scene" data-scene={sector.scene} aria-hidden="true">
+                                {sector.scene === "line" && (
+                                    <svg viewBox="0 0 200 200" fill="none">
+                                        {/* Cuatro estaciones sobre la línea; la
+                                            unidad avanza de una a otra y cada
+                                            estación reporta al pasar. */}
+                                        <rect class="ft-frame" x="14" y="30" width="172" height="48" rx="8" />
+                                        <text class="ft-read" x="26" y="52">MES</text>
+                                        {[0, 1, 2, 3].map((n) => (
+                                            <rect
+                                                class="ft-tile"
+                                                x={78 + n * 26}
+                                                y={40}
+                                                width="18"
+                                                height="28"
+                                                rx="3"
+                                                style={`--n:${n}`}
+                                            />
+                                        ))}
+                                        <path class="ft-rail" d="M14 150h172" stroke-width="2" />
+                                        {[0, 1, 2, 3].map((n) => (
+                                            <g style={`--n:${n}`}>
+                                                <path
+                                                    class="ft-post"
+                                                    d={`M${32 + n * 45} 150v-26`}
+                                                    stroke-width="2"
+                                                />
+                                                <circle class="ft-lamp" cx={32 + n * 45} cy="118" r="5" />
+                                            </g>
+                                        ))}
+                                        <rect class="ft-unit" x="14" y="158" width="34" height="20" rx="4" />
+                                    </svg>
+                                )}
+
+                                {sector.scene === "test" && (
+                                    <svg viewBox="0 0 200 200" fill="none">
+                                        {/* Placa con pistas y puntos de prueba;
+                                            la punta baja sobre cada uno y el
+                                            punto queda marcado. */}
+                                        <rect class="ft-frame" x="16" y="86" width="168" height="98" rx="8" />
+                                        <path
+                                            class="ft-trace"
+                                            d="M34 112h44v26h48M34 150h30v20h60M126 112v46h34"
+                                            stroke-width="1.5"
+                                        />
+                                        {[0, 1, 2, 3].map((n) => (
+                                            <rect
+                                                class="ft-chip"
+                                                x={38 + n * 36}
+                                                y={122}
+                                                width="22"
+                                                height="14"
+                                                rx="2"
+                                                style={`--n:${n}`}
+                                            />
+                                        ))}
+                                        {[0, 1, 2, 3].map((n) => (
+                                            <circle
+                                                class="ft-pad"
+                                                cx={49 + n * 36}
+                                                cy="166"
+                                                r="5"
+                                                style={`--n:${n}`}
+                                            />
+                                        ))}
+                                        <g class="ft-probe">
+                                            <path d="M0 14v42" stroke-width="2.5" />
+                                            <circle cx="0" cy="60" r="4" />
+                                        </g>
+                                    </svg>
+                                )}
+
+                                {sector.scene === "scale" && (
+                                    <svg viewBox="0 0 200 200" fill="none">
+                                        {/* Cinta con báscula dinámica: la caja
+                                            cruza, la plataforma acusa el peso y
+                                            la lectura salta al siguiente valor. */}
+                                        <defs>
+                                            {/* Sin este recorte se ven las tres
+                                                cifras a la vez y deja de leerse
+                                                como una lectura que cambia. */}
+                                            <clipPath id="ft-readout">
+                                                <rect x="52" y="28" width="96" height="42" rx="8" />
+                                            </clipPath>
+                                        </defs>
+                                        <rect class="ft-frame" x="52" y="28" width="96" height="42" rx="8" />
+                                        <text class="ft-read" x="66" y="54">kg</text>
+                                        <g class="ft-digits" clip-path="url(#ft-readout)">
+                                            <text x="140" y="54" text-anchor="end">18.4</text>
+                                            <text x="140" y="96" text-anchor="end">21.7</text>
+                                            <text x="140" y="138" text-anchor="end">17.2</text>
+                                        </g>
+                                        <path class="ft-rail" d="M12 158h176" stroke-width="2" />
+                                        {[0, 1, 2, 3, 4, 5].map((n) => (
+                                            <circle class="ft-roller" cx={22 + n * 31} cy="166" r="5" />
+                                        ))}
+                                        <rect class="ft-plate" x="76" y="146" width="48" height="8" rx="3" />
+                                        {[0, 1].map((n) => (
+                                            <rect
+                                                class="ft-box"
+                                                x="0"
+                                                y="112"
+                                                width="34"
+                                                height="34"
+                                                rx="4"
+                                                style={`--n:${n}`}
+                                            />
+                                        ))}
+                                    </svg>
+                                )}
+
+                                {sector.scene === "fixture" && (
+                                    <svg viewBox="0 0 200 200" fill="none">
+                                        {/* El herramental baja sobre la base y
+                                            encaja; las marcas se cierran sobre el
+                                            eje al asentar. */}
+                                        <path
+                                            class="ft-base"
+                                            d="M60 176h80l18-30-18-30H60l-18 30z"
+                                            stroke-width="2"
+                                        />
+                                        <path class="ft-axis" d="M100 20v156M32 146h136" stroke-width="1" />
+                                        <g class="ft-tool">
+                                            <rect x="70" y="18" width="60" height="44" rx="5" stroke-width="2" />
+                                            <path d="M64 66h72" stroke-width="2.5" />
+                                        </g>
+                                        {[-1, 1].map((d) => (
+                                            <path
+                                                class="ft-mark"
+                                                d={`M${100 + d * 46} 146h${d * 14}`}
+                                                stroke-width="2"
+                                                style={`--d:${d}`}
+                                            />
+                                        ))}
+                                    </svg>
+                                )}
                             </div>
                         </div>
 
@@ -100,10 +250,6 @@ const sectors = [
                             <p class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed text-lg sector-desc">
                                 {sector.description}
                             </p>
-                            <div class="flex items-center gap-4 text-[9px] font-black uppercase tracking-[0.5em] text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-700">
-                                <span>Status</span>
-                                <span class="text-emerald-500">Optimized</span>
-                            </div>
                         </div>
                     </div>
 
@@ -113,393 +259,419 @@ const sectors = [
             ))}
         </div>
 
-        <!-- Global Summary Section -->
+        {/* Aquí había cuatro contadores: «10 Años operando», «+100 Proyectos
+            entregados», «4 Sectores atendidos» y «24/7 Monitoreo proactivo».
+            Dos no se sostienen y uno se contradecía con el resto del sitio:
+
+            - Los años decían 10 aquí y 9 en las demás páginas. Se unifican en 9,
+              que es la cifra que viene del deck de ventas.
+            - «+100 proyectos entregados» es un conteo que nadie puede comprobar,
+              del mismo tipo que el «150+» que ya se retiró de /control/.
+            - «24/7 Monitoreo proactivo» promete un nivel de servicio que se
+              negocia por contrato y no se anuncia en el copy.
+
+            En su lugar van hechos ciertos por construcción: los años, los cuatro
+            sectores que la propia reja de arriba enumera, la cobertura que ya
+            declara /vision/ y el estándar bajo el que se programa, que /control/
+            explica en detalle. */}
         <div class="mt-32 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center features-footer border-t border-gray-100 dark:border-white/5 pt-16">
             <div class="lg:col-span-4 space-y-4">
-                <h4 class="text-3xl font-black text-[#002B49] dark:text-white leading-none tracking-tight uppercase">Nuestra <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#005EB8] to-[#00B5E2]">Trayectoria</span></h4>
+                <h4 class="text-3xl font-black text-[#002B49] dark:text-white leading-none tracking-tight uppercase">
+                    Nuestra <br /><span class="text-[#005EB8] dark:text-[#00B5E2]">Trayectoria</span>
+                </h4>
             </div>
             <div class="lg:col-span-8 grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                 <div class="space-y-3">
-                    <p class="text-5xl font-black text-[#002B49] dark:text-white tracking-tighter leading-none">10</p>
-                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Años <br/> operando</p>
+                    <p class="text-5xl font-black text-[#002B49] dark:text-white tracking-tighter leading-none">9</p>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Años <br /> operando</p>
                 </div>
                 <div class="space-y-3">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-xl font-bold text-[#00B5E2]">+</span>
-                        <p class="text-5xl font-black text-[#00B5E2] tracking-tighter leading-none">100</p>
-                    </div>
-                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Proyectos <br/> entregados</p>
+                    <p class="text-5xl font-black text-[#00B5E2] tracking-tighter leading-none">4</p>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Sectores <br /> atendidos</p>
                 </div>
                 <div class="space-y-3">
-                    <p class="text-5xl font-black text-[#002B49] dark:text-white tracking-tighter leading-none">4</p>
-                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Sectores <br/> atendidos</p>
+                    <p class="text-2xl font-black text-[#002B49] dark:text-white tracking-tight leading-none pt-4">Cobertura <br /> nacional</p>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Desde <br /> Monterrey</p>
                 </div>
                 <div class="space-y-3">
-                    <p class="text-5xl font-black text-[#00B5E2] tracking-tighter leading-none">24/7</p>
-                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Monitoreo <br/> proactivo</p>
+                    <p class="text-2xl font-black text-[#00B5E2] tracking-tight leading-none pt-4">IEC <br /> 61131-3</p>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Estándar <br /> de programación</p>
                 </div>
             </div>
         </div>
     </Container>
 
-    <style>
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(650px); }
+
+</section>
+
+<style>
+    @keyframes scan {
+        0% {
+            transform: translateY(-100%);
         }
+        100% {
+            transform: translateY(650px);
+        }
+    }
+
+    .animate-scan {
+        animation: scan 4s linear infinite;
+    }
+
+    /* --- Escenas por sector --------------------------------------------------
+       Sustituyen a cuatro contextos WebGL con post-proceso. Son SVG sobre CSS,
+       solo animan `transform` y `opacity`, y están paradas hasta que la tarjeta
+       entra en pantalla. */
+    .ft-scene {
+        width: 100%;
+        aspect-ratio: 1;
+        color: #00b5e2;
+    }
+
+    .ft-scene svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+
+    .ft-scene :is(path, rect, circle, g) {
+        stroke: currentColor;
+        vector-effect: non-scaling-stroke;
+    }
+
+    /* Marcos y guías: la estructura fija sobre la que pasa el movimiento. */
+    .ft-frame,
+    .ft-base,
+    .ft-rail,
+    .ft-plate,
+    .ft-roller {
+        fill: none;
+        opacity: 0.3;
+    }
+
+    .ft-frame,
+    .ft-plate {
+        stroke-width: 1.5;
+    }
+
+    .ft-roller {
+        stroke-width: 1.5;
+    }
+
+    .ft-trace,
+    .ft-axis {
+        fill: none;
+        opacity: 0.18;
+    }
+
+    .ft-read,
+    .ft-digits text {
+        fill: currentColor;
+        stroke: none;
+        font-family: var(--font-heading);
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+    }
+
+    .ft-read {
+        opacity: 0.55;
+    }
+
+    /* 1. Automotriz: la unidad recorre la línea y cada estación reporta al MES
+       cuando pasa por delante. */
+    .ft-unit {
+        fill: currentColor;
+        stroke: none;
+        opacity: 0.9;
+        animation: ft-advance 6s cubic-bezier(0.6, 0, 0.35, 1) infinite;
+    }
+
+    .ft-post {
+        fill: none;
+        opacity: 0.3;
+    }
+
+    .ft-lamp {
+        fill: currentColor;
+        stroke: none;
+        opacity: 0.15;
+        animation: ft-station 6s ease-out infinite;
+        animation-delay: calc(var(--n) * 1.2s);
+    }
+
+    .ft-tile {
+        fill: currentColor;
+        stroke: none;
+        opacity: 0.15;
+        animation: ft-station 6s ease-out infinite;
+        animation-delay: calc(0.25s + var(--n) * 1.2s);
+    }
+
+    @keyframes ft-advance {
+        0% {
+            transform: translateX(0);
+        }
+        88%,
+        100% {
+            transform: translateX(138px);
+        }
+    }
+
+    @keyframes ft-station {
+        0%,
+        14%,
+        100% {
+            opacity: 0.15;
+        }
+        4% {
+            opacity: 1;
+        }
+    }
+
+    /* 2. Electrónica: la punta va de un punto de prueba al siguiente, baja y
+       deja el punto marcado. */
+    .ft-chip {
+        fill: currentColor;
+        stroke: none;
+        opacity: 0.35;
+    }
+
+    .ft-pad {
+        fill: none;
+        stroke-width: 2;
+        opacity: 0.3;
+        animation: ft-tested 6s ease-out infinite;
+        animation-delay: calc(var(--n) * 1.4s + 0.5s);
+    }
+
+    .ft-probe {
+        fill: currentColor;
+        opacity: 0.9;
+        animation: ft-probe 6s cubic-bezier(0.5, 0, 0.3, 1) infinite;
+    }
+
+    .ft-probe path {
+        stroke-width: 2.5;
+    }
+
+    .ft-probe circle {
+        stroke: none;
+    }
+
+    @keyframes ft-tested {
+        0%,
+        100% {
+            opacity: 0.3;
+            fill: transparent;
+        }
+        6%,
+        88% {
+            opacity: 1;
+            fill: currentColor;
+        }
+    }
+
+    /* Cada tramo lleva la punta sobre un punto y la hunde: primero se desplaza,
+       después baja, y al final vuelve al principio. */
+    @keyframes ft-probe {
+        0% {
+            transform: translate(49px, 74px);
+        }
+        6% {
+            transform: translate(49px, 92px);
+        }
+        18% {
+            transform: translate(49px, 74px);
+        }
+        23% {
+            transform: translate(85px, 74px);
+        }
+        29% {
+            transform: translate(85px, 92px);
+        }
+        41% {
+            transform: translate(85px, 74px);
+        }
+        46% {
+            transform: translate(121px, 74px);
+        }
+        52% {
+            transform: translate(121px, 92px);
+        }
+        64% {
+            transform: translate(121px, 74px);
+        }
+        69% {
+            transform: translate(157px, 74px);
+        }
+        75% {
+            transform: translate(157px, 92px);
+        }
+        87% {
+            transform: translate(157px, 74px);
+        }
+        100% {
+            transform: translate(49px, 74px);
+        }
+    }
+
+    /* 3. Logística: las cajas cruzan la báscula y la lectura salta al valor
+       siguiente cuando cada una la pisa. La tira de cifras se desplaza dentro de
+       su marco, como un totalizador. */
+    .ft-box {
+        fill: currentColor;
+        stroke: none;
+        opacity: 0.85;
+        animation: ft-belt 5.4s linear infinite;
+        animation-delay: calc(var(--n) * -2.7s);
+    }
+
+    .ft-digits {
+        stroke: none;
+        animation: ft-digits 5.4s steps(1) infinite;
+    }
+
+    @keyframes ft-belt {
+        0% {
+            transform: translateX(-30px);
+        }
+        100% {
+            transform: translateX(200px);
+        }
+    }
+
+    @keyframes ft-digits {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-42px);
+        }
+        100% {
+            transform: translateY(-84px);
+        }
+    }
+
+    /* 4. Metal-mecánica: el herramental baja sobre la base y asienta; las marcas
+       se cierran sobre el eje justo al hacer contacto. */
+    .ft-tool {
+        fill: none;
+        opacity: 0.9;
+        animation: ft-descend 5s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+    }
+
+    .ft-mark {
+        fill: none;
+        opacity: 0.25;
+        animation: ft-align 5s cubic-bezier(0.5, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes ft-descend {
+        0%,
+        8% {
+            transform: translateY(-26px);
+        }
+        42%,
+        84% {
+            transform: translateY(58px);
+        }
+        100% {
+            transform: translateY(-26px);
+        }
+    }
+
+    @keyframes ft-align {
+        0%,
+        8% {
+            transform: translateX(calc(var(--d) * 16px));
+            opacity: 0.25;
+        }
+        42%,
+        84% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(calc(var(--d) * 16px));
+            opacity: 0.25;
+        }
+    }
+
+    /* Nada late fuera de pantalla, igual que en la baraja de soluciones. */
+    .ft-scene :is(.ft-unit, .ft-lamp, .ft-tile, .ft-pad, .ft-probe, .ft-box, .ft-digits, .ft-tool, .ft-mark) {
+        animation-play-state: paused;
+    }
+
+    .ft-scene.is-live :is(.ft-unit, .ft-lamp, .ft-tile, .ft-pad, .ft-probe, .ft-box, .ft-digits, .ft-tool, .ft-mark) {
+        animation-play-state: running;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ft-scene * {
+            animation: none !important;
+        }
+
         .animate-scan {
-            animation: scan 4s linear infinite;
+            animation: none;
         }
-        /* Static fallback matching the 3D scene's clear color; the opaque
-           WebGL render covers it whenever the 3D effects initialize. */
-        .three-canvas {
-            background:
-                radial-gradient(
-                    circle at 50% 45%,
-                    rgba(0, 181, 226, 0.16),
-                    transparent 65%
-                ),
-                #001133;
-        }
-    </style>
+    }
+</style>
 
-    <script>
-        import { gsap } from "gsap";
-        import { ScrollTrigger } from "gsap/ScrollTrigger";
-        import type {
-            BufferGeometry,
-            LineBasicMaterial,
-            Material,
-            Points,
-        } from "three";
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-        gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 
-        // --- Sophisticated Animations ---
-        document.addEventListener("DOMContentLoaded", () => {
-            setupThreeEffects();
-
-            // Progressive enhancement: content is visible without JS; under
-            // reduced motion keep it visible and skip entrance animations
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                return;
-            }
-
-            // Initial hidden state, applied only when animating
-            gsap.set(
-                ".features-header, .sector-card, .sector-title, .sector-desc, .features-footer",
-                { opacity: 0 },
+    const init = () => {
+        // Las escenas solo se mueven con su tarjeta en pantalla. Antes esto lo
+        // gobernaba un IntersectionObserver por canvas que arrancaba un bucle de
+        // requestAnimationFrame; ahora solo conmuta una clase.
+        const scenes = document.querySelectorAll(".ft-scene");
+        if (scenes.length) {
+            const io = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((e) =>
+                        e.target.classList.toggle("is-live", e.isIntersecting),
+                    );
+                },
+                { rootMargin: "10% 0px" },
             );
+            scenes.forEach((scene) => io.observe(scene));
+        }
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: ".features-header",
-                    start: "top 95%",
-                }
-            });
+        // Progressive enhancement: el contenido se ve sin JS, y sin movimiento se
+        // queda visible sin animar.
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-            // Floating "manchas" effect
-            gsap.to(".feature-mancha", {
-                x: "random(-30, 30)",
-                y: "random(-30, 30)",
-                scale: "random(0.95, 1.1)",
-                duration: "random(7, 12)",
-                repeat: -1,
-                yoyo: true,
-                ease: "sine.inOut"
-            });
-            
-            tl.to(".features-header", { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" })
-              .to(".sector-card", {
-                  opacity: 1,
-                  duration: 1,
-                  stagger: 0.1,
-                  ease: "power2.out"
-              }, "-=0.8")
-              .to(".sector-title", {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.8,
-                  stagger: 0.1
-              }, "-=1")
-              .to(".sector-desc", {
-                  opacity: 1,
-                  y: 0,
-                  duration: 0.8,
-                  stagger: 0.1
-              }, "-=0.8")
-              .to(".features-footer", {
-                  opacity: 1,
-                  y: 0,
-                  duration: 1.2
-              }, "-=0.5");
+        gsap.set(
+            ".features-header, .sector-card, .sector-title, .sector-desc, .features-footer",
+            { opacity: 0 },
+        );
+
+        const tl = gsap.timeline({
+            scrollTrigger: { trigger: ".features-header", start: "top 95%" },
         });
 
-        function setupThreeEffects() {
-            const containers = document.querySelectorAll('.feature-visual');
-            if (!containers.length) return;
-            // 3D is decorative: skip on small viewports and for reduced motion
-            if (!window.matchMedia('(min-width: 1024px)').matches) return;
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        gsap.to(".feature-mancha", {
+            x: "random(-30, 30)",
+            y: "random(-30, 30)",
+            scale: "random(0.95, 1.1)",
+            duration: "random(7, 12)",
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+        });
 
-            // Lazy-init: only load three.js once the cards approach the viewport
-            let started = false;
-            const startObserver = new IntersectionObserver((entries) => {
-                if (started || !entries.some((e) => e.isIntersecting)) return;
-                started = true;
-                startObserver.disconnect();
-                initThreeEffects(containers).catch(() => {});
-            }, { rootMargin: '200px' });
-            containers.forEach((el) => startObserver.observe(el));
-        }
+        tl.to(".features-header", { opacity: 1, y: 0, duration: 1.2, ease: "expo.out" })
+            .to(".sector-card", { opacity: 1, duration: 1, stagger: 0.1, ease: "power2.out" }, "-=0.8")
+            .to(".sector-title", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, "-=1")
+            .to(".sector-desc", { opacity: 1, y: 0, duration: 0.8, stagger: 0.1 }, "-=0.8")
+            .to(".features-footer", { opacity: 1, y: 0, duration: 1.2 }, "-=0.5");
+    };
 
-        async function initThreeEffects(containers: NodeListOf<Element>) {
-            const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }] =
-                await Promise.all([
-                    import('three'),
-                    import('three/examples/jsm/postprocessing/EffectComposer.js'),
-                    import('three/examples/jsm/postprocessing/RenderPass.js'),
-                    import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
-                ]);
-
-            // NOTA DE RENDIMIENTO: las cuatro tarjetas montan cada una su propio
-            // WebGLRenderer con EffectComposer y UnrealBloomPass, y este bucle las
-            // inicializa de golpe. Medido con la CPU a 1/4, eso deja ~1.2 s de
-            // bloqueo total del hilo principal y un frame peor de ~650 ms, justo
-            // mientras el visitante hace scroll (el disparador es un
-            // IntersectionObserver). Repartir el montaje una tarjeta por frame se
-            // probó y NO mejoró nada: el costo no está en la ráfaga sino en tener
-            // cuatro contextos WebGL con post-proceso. Lo que lo arreglaría es
-            // reducir el número de contextos o quitar el bloom, y eso es una
-            // decisión de diseño, no de tuning.
-            containers.forEach(el => {
-                const container = el as HTMLElement;
-                const canvas = container.querySelector('.three-canvas') as HTMLCanvasElement;
-                const type = container.dataset.visual;
-                
-                if (!canvas) return;
-
-                const scene = new THREE.Scene();
-                // Fog starts far to keep colors neon-bright
-                scene.fog = new THREE.Fog(0x001133, 12, 25);
-
-                const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
-                const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-                // Capado a 1.5: con UnrealBloomPass cada nivel de downsample se
-                // rasteriza a esta densidad, así que en una pantalla retina el dpr
-                // 2 multiplica el costo de todo el post-proceso para un detalle
-                // que en líneas neón difusas no se distingue.
-                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                renderer.setClearColor(0x001133, 1);
-                
-                // Technical Vantage Point (restored tilt)
-                camera.position.set(0, 2.4, 8);
-                camera.rotation.x = -0.30; 
-
-                // Post-processing: Master Bloom Glow
-                const renderScene = new RenderPass(scene, camera);
-                const bloomPass = new UnrealBloomPass(
-                    new THREE.Vector2(container.clientWidth, container.clientHeight),
-                    1.5, 0.4, 0.85
-                );
-                bloomPass.threshold = 0.1; 
-                bloomPass.strength = 1.8;
-                bloomPass.radius = 0.6;
-
-                const composer = new EffectComposer(renderer);
-                composer.addPass(renderScene);
-                composer.addPass(bloomPass);
-
-                const clock = new THREE.Clock();
-                const cyanMat = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.85 });
-                const whiteMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9 });
-                const faintMat = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.15 });
-
-                // Raycaster
-                const raycaster = new THREE.Raycaster();
-                const mouse = new THREE.Vector2(-1, -1);
-
-                const createEdges = (geo: BufferGeometry, mat: Material) => {
-                    return new THREE.LineSegments(new THREE.EdgesGeometry(geo), mat);
-                };
-
-                const createLabel = (text: string, x: number, y: number, z: number, size = 1.2) => {
-                    const canv = document.createElement('canvas'); const ctx = canv.getContext('2d')!;
-                    canv.width = 512; canv.height = 128;
-                    ctx.fillStyle = '#00ffff'; 
-                    ctx.font = 'bold 44px "JetBrains Mono", monospace';
-                    ctx.textAlign = 'center'; 
-                    ctx.fillText(`[ ${text} ]`, 256, 80);
-                    const tex = new THREE.CanvasTexture(canv);
-                    const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.95 }));
-                    spr.scale.set(size * 2, size * 0.5, 1); spr.position.set(x, y, z); return spr;
-                };
-
-                const root = new THREE.Group();
-                root.scale.setScalar(1.6); 
-                const baseY = -1; // Base position to sit objects at the bottom
-                root.position.y = baseY; 
-                scene.add(root);
-
-                // --- Visual Logic for each sector ---
-                if (type === 'mes-hub') {
-                    const mesh = new THREE.Group();
-                    mesh.add(createEdges(new THREE.BoxGeometry(2, 1.4, 1.8), whiteMat));
-                    const scada = new THREE.Group();
-                    scada.add(createEdges(new THREE.PlaneGeometry(1.4, 0.9), cyanMat));
-                    scada.rotation.x = -Math.PI/4; scada.position.set(0, 1.8, 0);
-                    mesh.add(scada, createLabel("SYSTEM_ACTIVE", 0, 2.2, 0));
-
-                    const pointsGeo = new THREE.BufferGeometry();
-                    const pCount = 35;
-                    const pPositions = new Float32Array(pCount * 3);
-                    const pSpeeds = new Float32Array(pCount);
-                    for(let i=0; i<pCount; i++) {
-                        pPositions[i*3] = (Math.random()-0.5)*1.9;
-                        pPositions[i*3+1] = -0.5;
-                        pPositions[i*3+2] = (Math.random()-0.5)*1.3;
-                        pSpeeds[i] = 0.012 + Math.random() * 0.04;
-                    }
-                    pointsGeo.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-                    const points = new THREE.Points(pointsGeo, new THREE.PointsMaterial({ color: 0x00ffff, size: 0.05 }));
-                    (points as any).speeds = pSpeeds;
-                    mesh.add(points);
-                    root.add(mesh);
-
-                } else if (type === 'pcb-trace') {
-                    const pcb = new THREE.Group();
-                    pcb.add(createEdges(new THREE.BoxGeometry(3.6, 0.1, 2.6), faintMat));
-                    for(let i=0; i<8; i++) {
-                        const comp = createEdges(new THREE.BoxGeometry(0.4, 0.2, 0.4), cyanMat);
-                        comp.position.set((Math.random()-0.5)*3.2, 0.15, (Math.random()-0.5)*2.2);
-                        pcb.add(comp);
-                    }
-                    pcb.rotation.x = Math.PI/10;
-                    
-                    // Ultra-subtle Laser Beam
-                    const beam = createEdges(new THREE.CylinderGeometry(0.01, 0.05, 10, 8, 1, true), faintMat);
-                    (beam.material as LineBasicMaterial).opacity = 0.05;
-                    beam.position.y = 5; 
-                    
-                    const probe = new THREE.Group();
-                    probe.add(createEdges(new THREE.CylinderGeometry(0.02, 0.02, 3), whiteMat));
-                    const tip = createEdges(new THREE.SphereGeometry(0.08, 8, 8), cyanMat);
-                    tip.position.y = -1.5; probe.add(tip);
-                    probe.position.y = 1.75; // Starting position
-                    
-                    pcb.add(beam, probe);
-                    root.add(pcb, createLabel("QC_TRACE_PASS", 0, 2.2, 0));
-
-                } else if (type === 'scale-flow') {
-                    const log = new THREE.Group();
-                    log.add(createEdges(new THREE.BoxGeometry(4.2, 0.15, 1.4), whiteMat));
-                    const scale = createEdges(new THREE.BoxGeometry(1.4, 0.2, 1.5), cyanMat);
-                    scale.position.set(0.6, -0.05, 0); log.add(scale);
-                    const box = createEdges(new THREE.BoxGeometry(0.8, 0.8, 0.8), whiteMat);
-                    box.position.set(-2.2, 0.5, 0); log.add(box);
-                    root.add(log, createLabel("BASCULA_DYN", 0.6, 2.2, 0));
-
-                } else if (type === 'service-stack') {
-                    const metal = new THREE.Group();
-                    metal.add(createEdges(new THREE.CylinderGeometry(1.6, 1.8, 0.7, 6), whiteMat));
-                    const fixture = new THREE.Group();
-                    fixture.add(createEdges(new THREE.BoxGeometry(1.5, 1.5, 1.5), cyanMat));
-                    fixture.add(createEdges(new THREE.BoxGeometry(1.7, 0.1, 1.7), whiteMat));
-                    fixture.position.y = 2.5; metal.add(fixture);
-                    root.add(metal, createLabel("ALIGN_0.001mm", 0, 2.2, 0));
-                }
-
-                container.addEventListener('mousemove', (e) => {
-                    const rect = container.getBoundingClientRect();
-                    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1; mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-                });
-
-                let rafId = 0;
-                let playing = false;
-
-                const animate = () => {
-                    rafId = requestAnimationFrame(animate);
-                    const time = clock.getElapsedTime();
-                    if (!root || !composer) return;
-
-                    root.position.y = baseY + Math.sin(time * 0.4) * 0.12;
-                    root.rotation.y = time * 0.12 + Math.sin(time * 0.2) * 0.06;
-
-                    raycaster.setFromCamera(mouse, camera);
-                    const intersects = raycaster.intersectObjects(root.children, true);
-                    root.traverse((obj: any) => { 
-                        if (obj.isLineSegments && obj.material) obj.material.opacity = 0.55; 
-                    });
-                    intersects.forEach((hit: any) => { 
-                        if (hit.object.isLineSegments && hit.object.material) hit.object.material.opacity = 1.0; 
-                    });
-
-                    // Specific View Animations with safety checks
-                    try {
-                        if (type === 'mes-hub' && root.children[0]?.children[3]) {
-                            const pts = root.children[0].children[3] as Points;
-                            const pos = pts.geometry.attributes.position.array as Float32Array;
-                            const speeds = (pts as any).speeds;
-                            if (speeds) {
-                                for(let i=0; i<speeds.length; i++) {
-                                    pos[i*3+1] += speeds[i]; if(pos[i*3+1] > 1.8) pos[i*3+1] = -0.6;
-                                }
-                                pts.geometry.attributes.position.needsUpdate = true;
-                            }
-                        } else if (type === 'pcb-trace' && root.children[0]?.children[10]) {
-                            const pcbGroup = root.children[0];
-                            const beam = pcbGroup.children[9];
-                            const probe = pcbGroup.children[10];
-                            
-                            // Navigation logic
-                            const compIdx = (Math.floor(time * 0.5) % 8) + 1;
-                            const target = pcbGroup.children[compIdx];
-                            if (target) {
-                                probe.position.x += (target.position.x - probe.position.x) * 0.08;
-                                probe.position.z += (target.position.z - probe.position.z) * 0.08;
-                                beam.position.x = probe.position.x;
-                                beam.position.z = probe.position.z;
-
-                                // Precise touch (Y=1.75 is the contact point for the tip)
-                                const offset = Math.abs(Math.cos(time * 1.5)) * 1.8;
-                                probe.position.y = 1.75 + offset;
-                                (beam as any).material.opacity = offset < 0.1 ? 0.35 : 0.05;
-                            }
-                        } else if (type === 'scale-flow' && root.children[0]?.children[2]) {
-                            const box = root.children[0].children[2];
-                            box.position.x += 0.025; if(box.position.x > 2.5) box.position.x = -2.5;
-                            box.rotation.y = time * 0.5;
-                        } else if (type === 'service-stack' && root.children[0]?.children[1]) {
-                            const fixture = root.children[0].children[1];
-                            const cycle = (Math.sin(time) + 1) / 2;
-                            fixture.position.y = 0.45 + (1 - Math.pow(cycle, 4)) * 2.5; // Snap effect
-                        }
-                    } catch (e) {
-                        // Silent fail for animation frame to avoid console spam
-                    }
-
-                    composer.render();
-                };
-
-                // Play/pause the render loop as the canvas enters/leaves view
-                const playObserver = new IntersectionObserver(([entry]) => {
-                    if (entry.isIntersecting && !playing) {
-                        playing = true;
-                        rafId = requestAnimationFrame(animate);
-                    } else if (!entry.isIntersecting && playing) {
-                        playing = false;
-                        cancelAnimationFrame(rafId);
-                    }
-                });
-                playObserver.observe(container);
-
-                window.addEventListener('resize', () => {
-                    if (!container) return;
-                    const w = container.clientWidth; const h = container.clientHeight;
-                    renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
-                });
-            });
-        }
-    </script>
-</section>
+    if (document.readyState === "loading")
+        document.addEventListener("DOMContentLoaded", init);
+    else init();
+</script>
