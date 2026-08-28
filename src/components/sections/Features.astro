@@ -262,6 +262,16 @@ const sectors = [
                     import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
                 ]);
 
+            // NOTA DE RENDIMIENTO: las cuatro tarjetas montan cada una su propio
+            // WebGLRenderer con EffectComposer y UnrealBloomPass, y este bucle las
+            // inicializa de golpe. Medido con la CPU a 1/4, eso deja ~1.2 s de
+            // bloqueo total del hilo principal y un frame peor de ~650 ms, justo
+            // mientras el visitante hace scroll (el disparador es un
+            // IntersectionObserver). Repartir el montaje una tarjeta por frame se
+            // probó y NO mejoró nada: el costo no está en la ráfaga sino en tener
+            // cuatro contextos WebGL con post-proceso. Lo que lo arreglaría es
+            // reducir el número de contextos o quitar el bloom, y eso es una
+            // decisión de diseño, no de tuning.
             containers.forEach(el => {
                 const container = el as HTMLElement;
                 const canvas = container.querySelector('.three-canvas') as HTMLCanvasElement;
@@ -275,7 +285,11 @@ const sectors = [
 
                 const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000);
                 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-                renderer.setPixelRatio(window.devicePixelRatio);
+                // Capado a 1.5: con UnrealBloomPass cada nivel de downsample se
+                // rasteriza a esta densidad, así que en una pantalla retina el dpr
+                // 2 multiplica el costo de todo el post-proceso para un detalle
+                // que en líneas neón difusas no se distingue.
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
                 renderer.setSize(container.clientWidth, container.clientHeight);
                 renderer.setClearColor(0x001133, 1);
                 

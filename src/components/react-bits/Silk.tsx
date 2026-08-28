@@ -141,9 +141,23 @@ const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', no
     }
     const el = wrapRef.current;
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setActive(entry.isIntersecting));
+
+    // Dos condiciones para renderizar: estar en viewport y que la pestaña esté
+    // visible. El IntersectionObserver por sí solo no se entera de que el
+    // usuario se cambió de pestaña, y el shader seguía consumiendo GPU en
+    // segundo plano.
+    let enViewport = true;
+    const aplicar = () => setActive(enViewport && !document.hidden);
+    const io = new IntersectionObserver(([entry]) => {
+      enViewport = entry.isIntersecting;
+      aplicar();
+    });
     io.observe(el);
-    return () => io.disconnect();
+    document.addEventListener("visibilitychange", aplicar);
+    return () => {
+      io.disconnect();
+      document.removeEventListener("visibilitychange", aplicar);
+    };
   }, []);
 
   const uniforms = useMemo<SilkUniforms>(
@@ -160,7 +174,7 @@ const Silk: React.FC<SilkProps> = ({ speed = 5, scale = 1, color = '#7B7481', no
 
   return (
     <div ref={wrapRef} style={{ width: '100%', height: '100%' }}>
-      <Canvas dpr={[1, 2]} frameloop={active ? 'always' : 'never'}>
+      <Canvas dpr={1} frameloop={active ? 'always' : 'never'}>
         <SilkPlane ref={meshRef} uniforms={uniforms} />
       </Canvas>
     </div>
