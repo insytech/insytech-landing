@@ -1,10 +1,11 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
+import { SURFACE } from "@utils/typography";
 ---
 
 <section
-    class="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-gray-950 pb-20"
+    class={`mes-scene relative min-h-screen flex items-center overflow-hidden ${SURFACE.base} pb-20`}
 >
     <!-- Background Patterns -->
     <div class="absolute inset-0 z-0">
@@ -116,7 +117,7 @@ import Container from "../shared/Container.astro";
                             <div
                                 class="mx-auto bg-gray-100 dark:bg-gray-900 px-3 py-1 rounded-md text-xs text-gray-400 font-mono w-64 text-center"
                             >
-                                insytech-mes.cloud
+                                mes.planta.local
                             </div>
                         </div>
 
@@ -195,12 +196,11 @@ import Container from "../shared/Container.astro";
                                     </svg>
                                 </div>
                                 <div
-                                    class="text-2xl font-bold text-gray-900 dark:text-white"
+                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
                                 >
-                                    87.3%
                                 </div>
-                                <div class="text-xs text-green-500 mt-1">
-                                    ↑ 2.1% vs ayer
+                                <div class="text-xs text-gray-400 mt-1">
+                                    por turno
                                 </div>
                             </div>
                             <div
@@ -229,9 +229,8 @@ import Container from "../shared/Container.astro";
                                     </svg>
                                 </div>
                                 <div
-                                    class="text-2xl font-bold text-gray-900 dark:text-white"
+                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
                                 >
-                                    1,247
                                 </div>
                                 <div class="text-xs text-gray-400 mt-1">
                                     unidades/hora
@@ -263,12 +262,11 @@ import Container from "../shared/Container.astro";
                                     </svg>
                                 </div>
                                 <div
-                                    class="text-2xl font-bold text-gray-900 dark:text-white"
+                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
                                 >
-                                    99.2%
                                 </div>
-                                <div class="text-xs text-green-500 mt-1">
-                                    Meta: 98%
+                                <div class="text-xs text-gray-400 mt-1">
+                                    por lote
                                 </div>
                             </div>
                             <div
@@ -297,9 +295,8 @@ import Container from "../shared/Container.astro";
                                     </svg>
                                 </div>
                                 <div
-                                    class="text-2xl font-bold text-gray-900 dark:text-white"
+                                    class="h-7 w-24 bg-gray-200 dark:bg-gray-700 rounded"
                                 >
-                                    2.8s
                                 </div>
                                 <div class="text-xs text-gray-400 mt-1">
                                     promedio
@@ -429,10 +426,6 @@ import Container from "../shared/Container.astro";
 </section>
 
 <style>
-    @keyframes blob {
-        0% {
-            transform: translate(0px, 0px) scale(1);
-        }
         33% {
             transform: translate(30px, -50px) scale(1.1);
         }
@@ -444,15 +437,4 @@ import Container from "../shared/Container.astro";
         }
     }
 
-    .animate-blob {
-        animation: blob 7s infinite;
-    }
-
-    .animation-delay-2000 {
-        animation-delay: 2s;
-    }
-
-    .animation-delay-4000 {
-        animation-delay: 4s;
-    }
 </style>

@@ -6,6 +6,7 @@ import MesPlanner from "../../components/tracking/MesPlanner.astro";
 import MesManagement from "../../components/tracking/MesManagement.astro";
 import MesHmi from "../../components/tracking/MesHmi.astro";
 import MesAndon from "../../components/tracking/MesAndon.astro";
+import Cta from "../../components/tracking/Cta.astro";
 import Resources from "../../components/tracking/Resources.astro";
 import FAQ from "../../components/tracking/FAQ.astro";
 import ContactSection from "../../components/sections/ContactSection.astro";
@@ -29,8 +30,49 @@ import { SURFACE } from "@utils/typography";
         <MesManagement />
         <MesHmi />
         <MesAndon />
+
+        <!-- Cierra la corrida de capacidades, como en /ai/: el CTA remata el
+             argumento en vez de quedar entre el FAQ y el contacto. -->
+        <Cta />
         <Resources />
         <FAQ />
         <ContactSection />
     </main>
 </Layout>
+
+<!-- Las animaciones infinitas de los mocks (pulsos del andon, ping del árbol de
+     planta, tarjetas flotantes del Hero) corrían también fuera de pantalla y con
+     reduced-motion. Se gatean con el mismo patrón que las escenas de sector del
+     home: el observer solo conmuta una clase y el CSS pausa la animación.
+     is:global porque la regla tiene que alcanzar el markup de los hijos, que
+     Astro aísla por componente. -->
+<style is:global>
+    .mes-scene :is(.animate-pulse, .animate-ping, .animate-float) {
+        animation-play-state: paused;
+    }
+
+    .mes-scene.is-live :is(.animate-pulse, .animate-ping, .animate-float) {
+        animation-play-state: running;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mes-scene :is(.animate-pulse, .animate-ping, .animate-float) {
+            animation: none !important;
+        }
+    }
+</style>
+
+<script>
+    const scenes = document.querySelectorAll(".mes-scene");
+    if (scenes.length) {
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) =>
+                    e.target.classList.toggle("is-live", e.isIntersecting),
+                );
+            },
+            { rootMargin: "10% 0px" },
+        );
+        scenes.forEach((scene) => io.observe(scene));
+    }
+</script>

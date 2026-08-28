@@ -1,0 +1,133 @@
+---
+import BtnLink from "../shared/BtnLink.astro";
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+import { MapPin, ClipboardCheck, Route, FileText } from "@lucide/astro";
+
+// Aquí NO se nombran los clientes: sus logos ya salen en SocialProof pegado al
+// Hero, y listarlos en la página de MES daría a entender que los seis son
+// clientes de trazabilidad, que es más de lo que se puede sostener.
+//
+// Las mismas tejas circulares del CTA de /ai/ (que venían de la home): sirven
+// para que los cuatro pasos se lean de un golpe. Aquí describen la visita de
+// diagnóstico, en el mismo orden en que ocurre.
+const steps = [
+    {
+        icon: MapPin,
+        title: "1. Visita",
+        detail: "Vemos tu línea andando",
+    },
+    {
+        icon: ClipboardCheck,
+        title: "2. Diagnóstico",
+        detail: "Qué ya se mide y qué falta",
+    },
+    {
+        icon: Route,
+        title: "3. Alcance",
+        detail: "Por dónde conviene arrancar",
+    },
+    {
+        icon: FileText,
+        title: "4. Propuesta",
+        detail: "Con la planta que ya tienes",
+    },
+] as const;
+---
+
+{
+    /* Cierra el capítulo gris de las cuatro capacidades: misma superficie
+       elevada que ellas y encabezado `minor`, porque este bloque cierra y no
+       abre. `overflow-clip` y no `overflow-hidden`: hidden crea un contenedor
+       de scroll y rompería los sticky de la página. */
+}
+<section id="cta" class={`${PAD.minor} ${SURFACE.raised} overflow-clip`}>
+    <Container>
+        <div
+            class="relative rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 dark:from-gray-950 dark:to-transparent px-6 md:px-8 py-10 overflow-clip"
+        >
+            <!-- Elementos decorativos: azul y cian de marca, con la cola
+                 índigo #4338CA que firma esta página. -->
+            <div class="absolute right-0 top-0 h-full w-full flex justify-end">
+                <div class="w-28 h-28 flex rounded-xl relative blur-2xl">
+                    <span
+                        class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#4338CA] rounded-md rotate-45"
+                    ></span>
+                </div>
+            </div>
+
+            <div class="mx-auto text-center max-w-xl md:max-w-2xl relative">
+                <h2 class={HEADING.minor} data-animate="fade-up">
+                    Recorre tu piso con nosotros{" "}
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#005EB8] via-[#00B5E2] to-[#4338CA] dark:from-[#00B5E2] dark:via-[#4da6ff] dark:to-[#818CF8] block"
+                    >
+                        y mira dónde se te va el turno
+                    </span>
+                </h2>
+
+                <p
+                    class="text-lg text-gray-600 dark:text-gray-300 mt-6 leading-relaxed"
+                    data-animate="fade-up"
+                    data-animate-delay=".1s"
+                >
+                    Somos un equipo de ingeniería en Monterrey con nueve años
+                    en piso de planta. Vamos a tu planta, vemos la línea como
+                    está hoy y te decimos qué se puede medir primero.
+                </p>
+
+                <div
+                    class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mt-10 mb-10"
+                    data-animate="fade-up"
+                    data-animate-delay=".15s"
+                >
+                    {
+                        steps.map((step) => (
+                            <div class="flex items-center gap-4 text-left">
+                                <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                                    <step.icon width={22} height={22} />
+                                </div>
+                                <div>
+                                    <p class="font-bold text-[#211915] dark:text-white leading-tight">
+                                        {step.title}
+                                    </p>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        {step.detail}
+                                    </p>
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div
+                    class="mx-auto max-w-md sm:max-w-xl"
+                    data-animate="fade"
+                    data-animate-delay=".2s"
+                >
+                    <BtnLink
+                        href="/contact/"
+                        text="Agenda una visita de diagnóstico"
+                        variant="primary"
+                        className="px-8 py-4 text-base"
+                    />
+                </div>
+
+                <p
+                    class="text-sm text-gray-500 dark:text-gray-400 mt-4"
+                    data-animate="fade-up"
+                    data-animate-delay=".25s"
+                >
+                    Sin compromiso • Vamos a tu planta • Ingeniería desde
+                    Monterrey
+                </p>
+            </div>
+        </div>
+    </Container>
+</section>
