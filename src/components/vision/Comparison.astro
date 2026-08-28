@@ -70,6 +70,12 @@ const afterMetrics = [
          completo en lugar de quedar contenido como una figura más. El alto se
          acota con clamp porque a 16/9 sobre 1920px serían 1080px de alto y la
          sección dejaría de caber en pantalla. -->
+    {/* Las dos imágenes de este comparador eran JPEG de 1024x1024 con extensión
+        `.webp`: 908 KB y 756 KB, 1,6 MB entre las dos para un solo componente.
+        Reconvertidas a webp real bajan a 157 KB y 111 KB, con PSNR de 37-38 dB,
+        que está por encima del umbral en que la diferencia deja de percibirse.
+        Se queda en `client:visible`: esta sección está muy abajo y la isla no
+        debe hidratarse si nadie llega hasta ella. */}
     <div class="relative z-10 mt-2" data-animate="fade-up" data-animate-delay=".1s">
         <ComparisonSlider
             beforeImage="/images/vision-before.webp"

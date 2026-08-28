@@ -2,7 +2,7 @@
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import ThreeHero from "@utils/threejs";
-import ShinyText from "../react-bits/ShinyText";
+import ShinyText from "../shared/ShinyText.astro";
 
 // Índice de capacidades: mismo contenido que las tarjetas anteriores, pero sin
 // caja propia — la jerarquía la dan el icono, la regla fina y el aire.
@@ -34,15 +34,20 @@ const indice = [
             <h1
                 class="lg:max-w-3xl text-4xl sm:text-5xl lg:text-[4.5rem] font-bold font-heading text-[#211915] dark:text-white leading-[0.98] tracking-tight text-balance"
             >
-                Sistemas de visión artificial para detección precisa con
+                Sistemas de visión artificial para detección precisa con{" "}
+                {/* La versión Astro del mismo efecto. La de `react-bits` que
+                    había aquí montaba React más framer-motion y escribía
+                    `background-position` desde un `useAnimationFrame` en cada
+                    frame — un runtime entero para un barrido lineal que una
+                    `@keyframes` hace igual. Iba además con `client:load`, así
+                    que ese trabajo bloqueaba la carga por un brillo decorativo
+                    del titular. */}
                 <ShinyText
                     text="Machine Learning"
-                    disabled={false}
                     speed={3}
                     color="#005EB8"
                     shineColor="#00B5E2"
-                    className="leading-[1.15] pb-[0.06em]"
-                    client:load
+                    class="leading-[1.15] pb-[0.06em]"
                 />
             </h1>
 
