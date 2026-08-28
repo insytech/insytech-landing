@@ -3,10 +3,12 @@ import RelatedPosts from "../shared/RelatedPosts.astro";
 import type { RelatedPost } from "../shared/RelatedPosts.astro";
 import { HEADING, PAD, SURFACE } from "@utils/typography";
 
-// /blog/desarrollo-software-industrial-a-la-medida/ acumula 76 impresiones en la
-// posición 10.63, contra las 72 de esta página en la 7.64: las dos compiten por
-// el mismo término y ninguna recibe clics. Enlazarlo desde aquí agrupa el tema en
-// vez de repartirlo. Los otros tres cubren las consultas vecinas del cluster.
+// Canibalización medida (GSC, 28 días a 2026-08-28): para «software industrial»
+// el post /blog/desarrollo-software-industrial-a-la-medida/ sale en la posición 8
+// y esta página en la 32, y Google sirve las dos. Enlazarlo desde aquí agrupa el
+// tema en vez de repartirlo. Los otros tres cubren las consultas vecinas.
+// El cluster completo son ~11 impresiones en 28 días, así que no justifica
+// consolidar ni redirigir: se deja enlazado y se mide.
 const posts: readonly RelatedPost[] = [
     {
         title: "Desarrollo de software a la medida para la industria",

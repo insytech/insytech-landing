@@ -28,8 +28,7 @@ let pusherFiredAt = -Infinity;
 const stats = {
     totalInspected: 0,
     okCount: 0,
-    defectCount: 0,
-    accuracy: 99.7
+    defectCount: 0
 };
 
 export default function ThreeHero() {

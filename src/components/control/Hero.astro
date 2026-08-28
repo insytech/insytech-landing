@@ -8,8 +8,7 @@ import Container from "../shared/Container.astro";
 const stats = [
     { value: "9 años", label: "En planta" },
     { value: "4", label: "Marcas de PLC" },
-    { value: "3", label: "Plataformas SCADA" },
-    { value: "24/7", label: "Soporte" },
+    { value: "4", label: "Plataformas SCADA" },
 ];
 ---
 
@@ -147,12 +146,12 @@ const stats = [
                      soporte los declara esta misma página más abajo y el FAQ.
                      Antes aquí vivía un conteo de proyectos y un porcentaje de
                      uptime que no decía uptime de qué, ninguno con respaldo. -->
-                <!-- Rejilla y no flex-wrap: con cuatro datos, el flex dejaba
-                     el cuarto solo en una segunda fila y un divisor colgando al
-                     final de la primera. Los separadores son bordes, así que
-                     solo existen donde hay vecino. -->
+                <!-- Rejilla y no flex-wrap: los separadores son bordes, así que
+                     solo existen donde hay vecino y no queda ninguno colgando al
+                     final de la fila. Tres columnas desde móvil: los tres valores
+                     son cortos y caben. -->
                 <div
-                    class="grid grid-cols-2 sm:grid-cols-4 gap-y-6"
+                    class="grid grid-cols-3 gap-y-6"
                     data-animate="fade-up"
                     data-animate-delay=".4s"
                 >
@@ -161,8 +160,7 @@ const stats = [
                             <div
                                 class:list={[
                                     "px-5 first:pl-0",
-                                    i % 2 === 1 && "border-l border-gray-200 dark:border-gray-700",
-                                    "sm:border-l sm:first:border-l-0",
+                                    "border-l border-gray-200 dark:border-gray-700 first:border-l-0",
                                 ]}
                             >
                                 <div class="text-3xl font-bold text-[#005EB8] dark:text-[#00B5E2]">
