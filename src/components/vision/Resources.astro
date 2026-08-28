@@ -28,6 +28,12 @@ const posts: readonly RelatedPost[] = [
         href: "/blog/vision-artificial-vs-sistemas-convencionales/",
     },
 ];
+
+// Blanco y no gris pese a ir en el capítulo de cierre: `ContactSection`, que va
+// justo debajo y es compartido por las seis páginas, dibuja una cuña blanca en
+// su borde superior que da por hecho que la sección anterior es blanca. En las
+// otras cinco páginas lo es (siempre el FAQ); dejar aquí un gris hacía que esa
+// diagonal se leyera como una forma suelta.
 ---
 
 <RelatedPosts

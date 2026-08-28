@@ -1,12 +1,21 @@
 ---
 import Container from "../shared/Container.astro";
-import { HEADING, PAD, SURFACE } from "@utils/typography";
+import { HEADING, PAD } from "@utils/typography";
 import DetectionFrame from "./DetectionFrame.astro";
 
-// The six MagicBento cards above give each capability ~20 words, which is why
-// /vision/ ranked 27.2 while its own blog posts ranked 2.7-12.3 for the same
-// topic. Each card now has a real subsection with a heading Google can index.
-// Anchors match the bento labels so the cards can link down to them.
+// Esta sección nació para arreglar un problema de contenido delgado: /vision/
+// rankeaba en la posición 27.2 mientras sus propios posts rankeaban entre 2.7 y
+// 12.3 para el mismo tema, porque las seis capacidades solo existían como
+// tarjetas de una reja con ~20 palabras cada una. Aquí cada una tiene una
+// subsección de verdad, con encabezado indexable.
+//
+// Esa reja —un `MagicBento` con su `TargetCursor`, encima de este bloque—
+// ya se retiró: listaba exactamente estas seis capacidades en este mismo orden,
+// así que era la misma información dos veces. Con ella se van dos islas de React
+// y unos 1 280 px de página.
+//
+// Se queda con `id="services"`, que era el de la reja, porque el enlace
+// «Soluciones» del nav compartido apunta a esa ancla en las seis páginas.
 //
 // Layout is a sticky index beside scrolling detail rather than six stacked
 // prose blocks: the page already carries 29 bordered cards, and six more walls
@@ -81,10 +90,35 @@ const capabilities = [
 ];
 ---
 
+{/* La losa oscura y el `dark` de la clase van juntos, y el truco está en el
+    segundo. `global.css` declara la variante como
+    `@custom-variant dark (&:where(.dark, .dark *))`, así que basta con marcar
+    esta sección para que TODO su interior —que ya tenía estilos de modo oscuro
+    completos, porque el sitio soporta los dos temas— se re-tematice solo: los
+    titulares, el índice, el visor y el cuerpo de texto. Sin eso habría que
+    duplicar a mano el color de cada elemento para el caso "claro sobre fondo
+    oscuro", que es la clase de trabajo que se pudre.
+
+    Por qué oscura: es la sección más larga de la página (unos 6 000 px) y la que
+    lleva el argumento, y estaba en medio de 9 700 px seguidos de blanco. Va con
+    márgenes y radio grande para que se lea como una pieza insertada, no como una
+    costura: contra el blanco de arriba y abajo no queda ningún borde recto. */}
 <section
-    id="capacidades"
-    class={`relative ${PAD.section} overflow-clip ${SURFACE.base}`}
+    id="services"
+    class={`dark relative ${PAD.section} capability-section`}
 >
+    {/* La losa no es el fondo de la sección: es una pieza `sticky` dentro de un
+        carril que ocupa el alto completo. Como fondo de sección, al recorrerla
+        su borde superior se iba por encima de la ventana y la losa acababa
+        pegada al borde de la pantalla, mientras a los lados seguía habiendo
+        margen; se veía raro justamente por esa asimetría.
+        Así, la losa mide una ventana menos los dos márgenes y se queda pegada
+        con el mismo hueco arriba que a los lados durante todo el recorrido, y
+        deja de estarlo sola al llegar al final del carril. */}
+    <div class="capability-slab-track" aria-hidden="true">
+        <div class="capability-slab"></div>
+    </div>
+
     <div data-capability-pin class="capability-pin">
     <Container className="relative z-10">
         <div class="max-w-3xl mb-10" data-animate="fade-up">
@@ -98,8 +132,8 @@ const capabilities = [
                 >
             </h2>
             <p class="text-lg text-gray-600 dark:text-gray-400">
-                Lo mismo de arriba, con el detalle que hace falta para saber si
-                aplica a tu proceso.
+                Seis capacidades, cada una con el detalle que hace falta para
+                saber si aplica a tu proceso.
             </p>
         </div>
 
@@ -175,6 +209,56 @@ const capabilities = [
 </section>
 
 <style>
+    /* El mismo hueco a los cuatro lados. `overflow-clip` no puede ir aquí: la
+       losa `sticky` necesita que la sección no sea un contenedor de recorte para
+       poder quedarse pegada. */
+    .capability-section {
+        --slab-gutter: 1rem;
+        position: relative;
+    }
+
+    @media (min-width: 640px) {
+        .capability-section {
+            --slab-gutter: 1.5rem;
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .capability-section {
+            --slab-gutter: 2rem;
+        }
+    }
+
+    /* El carril abarca la sección entera; la losa se pega dentro de él y se
+       suelta al llegar a su final, sin salirse por abajo. */
+    .capability-slab-track {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .capability-slab {
+        position: sticky;
+        top: var(--slab-gutter);
+        height: calc(100vh - var(--slab-gutter) * 2);
+        margin: 0 var(--slab-gutter);
+        border-radius: 2rem;
+        background: #020617;
+    }
+
+    @media (min-width: 1024px) {
+        .capability-slab {
+            border-radius: 3rem;
+        }
+    }
+
+    /* El contenido va por encima de la losa. */
+    .capability-pin {
+        position: relative;
+        z-index: 1;
+    }
+
     /* El indice y la superposicion de pasos solo existen cuando el stepper esta
        encendido, y JS solo lo enciende en escritorio y con movimiento
        permitido. Si no lo enciende (movil, reduced-motion, JS caido) el bloque
@@ -184,19 +268,18 @@ const capabilities = [
         display: none;
     }
 
-    /* Con los pasos encendidos el bloque ocupa la ventana completa y centra su
-       contenido: al fijarse, el titular se queda arriba y el aire sobrante se
-       reparte, en vez de acumularse debajo de un bloque corto. */
+    /* El bloque medía una ventana completa (`min-height: 100vh`) y centraba su
+       contenido dentro. Como el contenido real son unos 480 px, eso repartía
+       casi 600 px de aire sobrante: 327 px por encima del titular —el hueco
+       enorme que se veía entre este bloque y las tarjetas de arriba— y 271 px
+       por debajo.
+       Ahora el bloque mide lo que mide su contenido y el centrado lo hace el
+       propio pin, que engancha en `center center`: al fijarse queda centrado en
+       la ventana igual que antes, pero en el flujo normal no arrastra el hueco. */
     @media (min-width: 1024px) {
         .capability-pin[data-enabled="true"] {
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            /* El nav flotante cubre la franja superior, asi que centrar contra
-               la ventana completa deja el bloque montado arriba y con exceso de
-               aire abajo. Este relleno compensa esa altura. */
-            padding-top: 3.5rem;
         }
     }
 

@@ -148,10 +148,13 @@ function initCapabilityStepper(): void {
 
     const st = ScrollTrigger.create({
         trigger: pin,
-        // Se fija al tope, no al centro: el contenedor ya mide una ventana
-        // completa y centra su contenido, asi que anclar al centro dejaba media
-        // pantalla vacia antes de empezar.
-        start: "top top",
+        // Se fija al centro. Antes anclaba en "top top" porque el contenedor
+        // media una ventana completa y centraba su contenido por CSS; ese
+        // `min-height: 100vh` repartia casi 600 px de aire alrededor de un
+        // bloque de 480 px, y se veia como un hueco enorme antes del titular.
+        // Quitado el 100vh, el bloque mide lo suyo y es el pin el que lo deja
+        // centrado en la ventana al engancharse.
+        start: "center center",
         // One viewport of scroll per step. Less feels like the content is being
         // yanked past; more and the visitor wonders whether the page is stuck.
         end: () => "+=" + window.innerHeight * steps.length,
