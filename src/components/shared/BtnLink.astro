@@ -3,21 +3,37 @@ export interface Props {
     href: string;
     text: string;
     className?: string;
-    variant: "primary" | "secondary";
+    /** `inverse` es el mismo botón sobre superficie oscura: relleno blanco
+     *  sólido y texto Reflex Blue, con el mismo círculo que crece en hover. El
+     *  primario azul sería invisible sobre los paneles de /ai/, que van sobre
+     *  #001489, y el secundario deja el fondo transparente. */
+    variant: "primary" | "secondary" | "inverse";
 }
 
 const { href, text, className, variant } = Astro.props;
 
-const getThemeStyle = (variant: "primary" | "secondary") => {
+const getThemeStyle = (variant: "primary" | "secondary" | "inverse") => {
     if (variant === "primary") {
         return "bg-[#005EB8] border-transparent relative after:bg-[#172554] hover:border-[#172554]";
+    }
+    if (variant === "inverse") {
+        // Sin `after:bg-*` propio: la clase base ya fija el círculo en #172554 y
+        // gana por orden, así que intentar cambiarlo aquí no surtía efecto. El
+        // círculo oscuro es además el correcto, porque el texto pasa a blanco al
+        // entrar y así el contraste se mantiene en los dos estados.
+        return "bg-white border-transparent relative hover:border-[#172554]";
     }
     return "text-primary";
 };
 
-const getTextColor = (variant: "primary" | "secondary") => {
+const getTextColor = (variant: "primary" | "secondary" | "inverse") => {
     if (variant === "primary") {
         return "text-white";
+    }
+    if (variant === "inverse") {
+        // En reposo Reflex Blue sobre blanco; en hover el group-hover:text-white
+        // de la clase base lo lleva a blanco sobre el círculo oscuro.
+        return "text-[#001489]";
     }
     // text-primary = var(--primary): oficial Blue #005EB8 (light) / Light Blue #00B5E2 (dark).
     return "text-primary";

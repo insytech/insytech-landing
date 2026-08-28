@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import { HEADING, PAD, SURFACE } from "@utils/typography";
 
@@ -15,10 +16,17 @@ import { HEADING, PAD, SURFACE } from "@utils/typography";
 // y MES por API, los canales de WhatsApp, Messenger y web, y el escalamiento a
 // una persona.
 //
-// La presentación sigue el patrón de la sección `.ai` de fourmula.ai: un titular
-// grande y luego paneles amplios y redondeados, cada uno con una etiqueta en
-// monoespaciada con viñeta. Sustituye a las tarjetas pequeñas, que junto a los
-// paneles azules de arriba se leían como de otro sitio.
+// La forma —paneles amplios y redondeados— viene de la sección `.ai` de
+// fourmula.ai. La TIPOGRAFÍA no: es la de la casa.
+//
+// Primero puse el título de cada panel en monoespaciada, en mayúsculas y con un
+// número y un punto delante, copiado de la referencia. Estaba mal: en este sitio
+// la monoespaciada en mayúsculas con tracking ancho tiene un solo uso, la
+// etiqueta pequeña que encabeza la sección —«Contacto», 12 px—, y convertirla en
+// título de tarjeta la desgasta y crea una tercera tipografía que no existe en
+// ningún otro sitio. El nav, el FAQ, el CTA, el contacto y el footer son todos
+// Raleway en caja normal, con peso 600 para subtítulos y 700 para encabezados de
+// sección. Estas tarjetas ahora siguen esa misma regla.
 //
 // Sin imágenes a propósito: ninguna foto industrial ilustra "un agente consulta
 // el ERP" sin mentir.
@@ -26,26 +34,18 @@ const capabilities = [
     {
         title: "Consulta a tus sistemas",
         body: "Responde «¿dónde va la orden 4821?» leyendo el ERP y el MES, sin que nadie tenga que abrir el sistema ni interrumpir a producción.",
-        href: "#contact",
-        cta: "Contar tu caso",
     },
     {
         title: "Alta y seguimiento en el CRM",
         body: "Registra al interesado, le da seguimiento fuera de horario y avisa a la persona que corresponde en lugar de dejar el mensaje esperando al lunes.",
-        href: "#contact",
-        cta: "Contar tu caso",
     },
     {
         title: "Disparo de flujos internos",
         body: "Abre el ticket, notifica al turno y escala cuando la condición lo pide. Es el mismo procedimiento que hoy alguien ejecuta a mano, sin depender de que se acuerde.",
-        href: "#contact",
-        cta: "Contar tu caso",
     },
     {
         title: "Atención en el canal del cliente",
         body: "WhatsApp con API oficial, Messenger y el widget del sitio desde una sola configuración, con paso a una persona en cuanto la conversación lo requiere.",
-        href: "#contact",
-        cta: "Contar tu caso",
     },
 ];
 ---
@@ -76,30 +76,28 @@ const capabilities = [
 
         <div class="svc-grid" data-reveal="group">
             {
-                capabilities.map((cap, i) => (
+                capabilities.map((cap) => (
                     <article class="svc-panel">
-                        <p class="svc-label">
-                            <span class="svc-dot" aria-hidden="true" />
-                            {String(i + 1).padStart(2, "0")} · {cap.title}
-                        </p>
+                        <h3 class="svc-title">{cap.title}</h3>
                         <p class="svc-body">{cap.body}</p>
-                        <a class="svc-link-cta" href={cap.href}>
-                            {cap.cta}
-                            <svg
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                            >
-                                <path d="M5 12h14M13 6l6 6-6 6" />
-                            </svg>
-                        </a>
                     </article>
                 ))
             }
+        </div>
+
+        {
+            /* Un solo enlace para la sección. Antes cada panel llevaba su propio
+               «Contar tu caso» y los cuatro apuntaban al mismo sitio: cuatro
+               anclas idénticas al mismo destino no son navegación, son ruido, y
+               un lector de pantalla las anuncia una por una. */
+        }
+        <div class="svc-cta-wrap" data-animate="fade-up">
+            <BtnLink
+                href="#contact"
+                text="Cuéntanos qué proceso quieres automatizar"
+                variant="primary"
+                className="px-8 py-4"
+            />
         </div>
     </Container>
 </section>
@@ -135,67 +133,37 @@ const capabilities = [
         background: rgb(77 166 255 / 0.12);
     }
 
-    .svc-label {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
+    /* Peso 600 y caja normal, igual que las preguntas del FAQ y los títulos del
+       footer. Sin mayúsculas ni tracking: eso está reservado a la etiqueta de
+       sección. */
+    .svc-title {
         margin: 0;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.72rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: #005eb8;
+        font-family: var(--font-heading);
+        font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+        font-weight: 600;
+        line-height: 1.3;
+        color: #211915;
+        text-wrap: balance;
     }
 
-    :global(.dark) .svc-label {
-        color: #00b5e2;
-    }
-
-    .svc-dot {
-        width: 0.4rem;
-        height: 0.4rem;
-        border-radius: 999px;
-        background: currentColor;
-        flex-shrink: 0;
+    :global(.dark) .svc-title {
+        color: rgb(255 255 255);
     }
 
     .svc-body {
         margin: 0;
-        font-family: var(--font-heading);
-        font-size: clamp(1.2rem, 1.9vw, 1.65rem);
-        font-weight: 600;
-        line-height: 1.35;
-        letter-spacing: -0.01em;
-        color: #211915;
+        font-size: 1rem;
+        line-height: 1.65;
+        color: rgb(75 85 99);
         text-wrap: pretty;
     }
 
     :global(.dark) .svc-body {
-        color: rgb(255 255 255);
+        color: rgb(156 163 175);
     }
 
-    .svc-link-cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: auto;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #005eb8;
-    }
-
-    .svc-link-cta svg {
-        width: 0.95rem;
-        height: 0.95rem;
-        transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
-    }
-
-    .svc-link-cta:hover svg {
-        transform: translateX(3px);
-    }
-
-    :global(.dark) .svc-link-cta {
-        color: #00b5e2;
+    .svc-cta-wrap {
+        margin-top: 2rem;
     }
 
     .svc-link {

@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 
 // Réplica del bloque «How It Works» de fourmula.ai, leído de su DOM en vivo y no
@@ -39,7 +40,7 @@ const phrases = [
         <div class="marquee-grid">
             <div class="marquee-aside">
                 <p class="marquee-lead">IA que</p>
-                <a href="#contact" class="marquee-cta">Cuéntanos tu proceso</a>
+                <BtnLink href="#contact" text="Ver qué aplica a tu línea" variant="primary" />
             </div>
 
             <div class="marquee-viewport">
@@ -122,20 +123,6 @@ const phrases = [
 
     :global(.dark) .marquee-lead {
         color: rgb(255 255 255);
-    }
-
-    .marquee-cta {
-        align-self: flex-start;
-        padding: 0.8rem 1.6rem;
-        border-radius: 999px;
-        background: #005eb8;
-        color: #ffffff;
-        font-weight: 600;
-        transition: background-color 0.3s ease;
-    }
-
-    .marquee-cta:hover {
-        background: #001489;
     }
 
     /* La máscara es la diferencia con el original, que apaga cada renglón por

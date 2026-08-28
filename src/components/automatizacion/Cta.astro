@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import { Zap, Workflow, BadgeCheck } from "@lucide/astro";
 ---
 
@@ -97,24 +98,20 @@ import { Zap, Workflow, BadgeCheck } from "@lucide/astro";
                     data-animate="fade"
                     data-animate-delay=".2s"
                 >
-                    <a
+                    {
+                        /* El botón del sitio, no uno propio. Este llevaba un
+                           degradado, sombra y `hover:scale-105` con
+                           `transition-all`, que no existen en ningún otro CTA:
+                           el resto del sitio usa BtnLink, con el relleno
+                           circular que crece desde el centro y transiciones
+                           acotadas por propiedad. */
+                    }
+                    <BtnLink
                         href="#contact"
-                        class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#005EB8] to-[#001489] dark:from-[#00B5E2] dark:to-[#005EB8] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 hover:from-[#001489] hover:to-[#00B5E2] dark:hover:from-[#005EB8] dark:hover:to-[#71b5f5] transition-all duration-300 ease-in-out text-center w-full sm:w-auto"
-                    >
-                        Solicita tu demo gratuita
-                        <svg
-                            class="ml-2 w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
-                    </a>
+                        text="Solicita tu demo gratuita"
+                        variant="primary"
+                        className="px-8 py-4 text-base"
+                    />
                 </div>
 
                 <!-- Texto adicional -->

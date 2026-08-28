@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 // Las cinco aplicaciones como paneles a pantalla completa, al estilo de los
 // "four steps" de fourmula.ai.
 //
@@ -101,9 +102,9 @@ const applications = [
                     />
 
                     <div class="panel-top">
-                        <h3 class="panel-title" data-flash>
+                        <h2 class="panel-title" data-flash>
                             {app.title}
-                        </h3>
+                        </h2>
                         <p class="panel-tag">{app.tag}</p>
                         <p class="panel-number" data-flash>
                             {app.number}
@@ -122,9 +123,18 @@ const applications = [
 
                         <p class="panel-copy" data-flash>{app.copy}</p>
 
-                        <a class="panel-cta" href={app.href}>
-                            {app.cta}
-                        </a>
+                        {
+                            /* Variante `inverse` del botón del sitio: mismo
+                               componente y mismo círculo de hover que el resto,
+                               con relleno blanco porque el panel es Reflex Blue
+                               y un botón azul ahí sería invisible. */
+                        }
+                        <BtnLink
+                            href={app.href}
+                            text={app.cta}
+                            variant="inverse"
+                            className="panel-cta"
+                        />
                     </div>
                 </div>
             </section>
@@ -135,8 +145,13 @@ const applications = [
 <style>
     /* La perspectiva es lo que convierte el `rotateX` del panel que sale en
        profundidad y no en un aplastamiento. */
+    /* `overflow-clip` y no `hidden`: el ladeo del panel que sale saca su esquina
+       fuera del viewport y aparecían 72 px de scroll horizontal. `clip` recorta
+       sin crear contenedor de scroll, así que el `sticky` de los paneles sigue
+       funcionando. */
     .panels {
         position: relative;
+        overflow-x: clip;
         perspective: 1400px;
     }
 
@@ -288,23 +303,10 @@ const applications = [
         max-width: 34ch;
     }
 
-    .panel-cta {
+    .panel :global(.panel-cta) {
         grid-column: 1 / -1;
         justify-self: start;
         margin-top: 1rem;
-        padding: 0.85rem 1.8rem;
-        border-radius: 999px;
-        background: #ffffff;
-        color: #001489;
-        font-weight: 600;
-        transition:
-            background-color 0.3s ease,
-            color 0.3s ease;
-    }
-
-    .panel-cta:hover {
-        background: #00b5e2;
-        color: #001489;
     }
 
     /* Estado de reposo del resaltado. El script lo anima palabra por palabra con

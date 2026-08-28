@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import ShinyText from "../shared/ShinyText.astro";
 
 // Hero de /ai/: los módulos que ya operan en planta orbitan alrededor de un
@@ -102,11 +103,21 @@ const step = 360 / modules.length;
             Inspección visual, trazabilidad, control de línea y analítica ya
             generan datos todos los turnos. La IA trabaja sobre eso.
         </p>
+        {/* Los botones del sitio, no unos propios: el estilo de la home es el
+            que manda en todo el sitio por consistencia. */}
         <div class="orbit-actions">
-            <a class="orbit-cta-primary" href="#contact">Cuéntanos tu proceso</a>
-            <a class="orbit-cta-secondary" href="#industrial-ai">
-                Ver las cinco aplicaciones
-            </a>
+            <BtnLink
+                href="#contact"
+                text="Cuéntanos tu proceso"
+                variant="primary"
+                className="px-8 py-4"
+            />
+            <BtnLink
+                href="#industrial-ai"
+                text="Ver las cinco aplicaciones"
+                variant="secondary"
+                className="px-8 py-4 border-gray-300 dark:border-gray-600"
+            />
         </div>
     </div>
   </div>
@@ -417,37 +428,6 @@ const step = 360 / modules.length;
         justify-content: flex-start;
     }
 
-    .orbit-cta-primary,
-    .orbit-cta-secondary {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.9rem 1.75rem;
-        border-radius: 999px;
-        font-weight: 600;
-        transition:
-            background-color 0.3s ease,
-            color 0.3s ease,
-            border-color 0.3s ease;
-    }
-
-    .orbit-cta-primary {
-        background: #005eb8;
-        color: #ffffff;
-    }
-
-    .orbit-cta-primary:hover {
-        background: #001489;
-    }
-
-    .orbit-cta-secondary {
-        border: 2px solid rgb(0 94 184 / 0.3);
-        color: #005eb8;
-    }
-
-    .orbit-cta-secondary:hover {
-        border-color: #005eb8;
-    }
-
     :global(.dark) .orbit-core {
         background: rgb(3 7 18 / 0.9);
         color: #00b5e2;
@@ -460,11 +440,6 @@ const step = 360 / modules.length;
 
     :global(.dark) .orbit-card figcaption {
         color: #00b5e2;
-    }
-
-    :global(.dark) .orbit-cta-secondary {
-        color: #00b5e2;
-        border-color: rgb(0 181 226 / 0.35);
     }
 
     @keyframes orbit-spin {

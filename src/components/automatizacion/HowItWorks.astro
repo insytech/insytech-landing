@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 import { HEADING, PAD, SURFACE } from "@utils/typography";
 
@@ -52,7 +53,8 @@ const stages = [
 >
     <Container className="relative z-10">
         <div class="hiw-grid">
-            <div class="hiw-aside">
+            <div class="hiw-aside-cell">
+                <div class="hiw-aside">
                 <p
                     class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
                 >
@@ -79,20 +81,15 @@ const stages = [
                     decidir.
                 </p>
 
-                <a href="#contact" class="hiw-cta">
-                    Cuéntanos tu proceso
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                    >
-                        <path d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
-                </a>
+                {/* Texto distinto al del hero a propósito: los dos llevan a
+                    #contact, y dos anclas idénticas al mismo destino se anuncian
+                    como duplicadas y no dicen a qué se llega. */}
+                <BtnLink
+                    href="#contact"
+                    text="Empecemos por un punto"
+                    variant="primary"
+                />
+                </div>
             </div>
 
             <ol class="hiw-stages" data-reveal="group">
@@ -123,9 +120,20 @@ const stages = [
         align-items: start;
     }
 
+    /* La celda ocupa toda la altura de la fila y el `sticky` va dentro. Puesto
+       directamente sobre el ítem de la reja no se pegaba: con `align-items:
+       start` el ítem mide lo que su contenido y no le queda recorrido por el que
+       deslizarse.
+       El `top` no es el hueco bajo el nav: es dónde se queda parada la columna
+       mientras las etapas pasan al lado. Con 7rem se pegaba arriba del todo y
+       quedaba descolgada; a esta altura queda ópticamente centrada. */
+    .hiw-aside-cell {
+        align-self: stretch;
+    }
+
     .hiw-aside {
         position: sticky;
-        top: 7rem;
+        top: clamp(6rem, 22vh, 13rem);
     }
 
     .hiw-link {
@@ -142,32 +150,6 @@ const stages = [
 
     :global(.dark) .hiw-link {
         color: #00b5e2;
-    }
-
-    .hiw-cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 0.85rem 1.6rem;
-        border-radius: 999px;
-        background: #005eb8;
-        color: #ffffff;
-        font-weight: 600;
-        transition: background-color 0.3s ease;
-    }
-
-    .hiw-cta:hover {
-        background: #001489;
-    }
-
-    .hiw-cta svg {
-        width: 1rem;
-        height: 1rem;
-        transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
-    }
-
-    .hiw-cta:hover svg {
-        transform: translateX(3px);
     }
 
     .hiw-stages {
