@@ -4,7 +4,7 @@ import OrbitHero from "../../components/automatizacion/OrbitHero.astro";
 import SocialProof from "../../components/shared/SocialProof.astro";
 import HowItWorks from "../../components/automatizacion/HowItWorks.astro";
 import CapabilityMarquee from "../../components/automatizacion/CapabilityMarquee.astro";
-import IndustrialAI from "../../components/automatizacion/IndustrialAI.astro";
+import ApplicationPanels from "../../components/automatizacion/ApplicationPanels.astro";
 import Services from "../../components/automatizacion/Services.astro";
 import Cta from "../../components/automatizacion/Cta.astro";
 import Resources from "../../components/automatizacion/Resources.astro";
@@ -24,14 +24,14 @@ import { SURFACE } from "@utils/typography";
     <SocialProof class={SURFACE.base} />
 
     {/* Justo después de la prueba social y antes del detalle: dice en tres
-        palabras lo que IndustrialAI desarrolla en cinco tarjetas. Promesa
+        palabras lo que los paneles de aplicaciones desarrollan uno a uno. Promesa
         primero, detalle después. */}
     <CapabilityMarquee />
 
     <!-- Va antes que nada: responde "¿dónde aplica la IA en mi planta?", que es
          lo que busca quien llega aquí, y reparte hacia la página que hace cada
          trabajo en vez de competir con ellas. -->
-    <IndustrialAI />
+    <ApplicationPanels />
 
     <HowItWorks />
     <Services />

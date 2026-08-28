@@ -1,0 +1,427 @@
+---
+// Las cinco aplicaciones como paneles a pantalla completa, al estilo de los
+// "four steps" de fourmula.ai.
+//
+// Mecánica leída de su DOM en vivo:
+//   .list__main__content__wrap   → un panel de exactamente una pantalla
+//     h3 con cada palabra envuelta en <span class="flash-word">, y color y
+//        opacidad animados palabra por palabra desde JavaScript
+//     .list__main__h1            → el número gigante, también flash-word
+//     .list__main__info-tag      → viñeta cuadrada + dato corto
+//     .list__main__info-copy     → frase de apoyo con el mismo resaltado
+//
+// Dos desviaciones deliberadas:
+//
+//  1. Sin `pin`. El original fija el panel y hace pasar los pasos dentro. Pinar
+//     cinco paneles secuestra el scroll durante cinco pantallas y es justo lo
+//     que en /vision/ ya nos costó caro. Aquí cada panel es una sección normal
+//     de una pantalla y el resaltado se engancha al scroll con `scrub`: al
+//     recorrer la página se ve prácticamente igual, sin tomar el control.
+//  2. Naranja saturado fuera; el fondo es el Reflex Blue del manual de
+//     identidad, que es el azul más oscuro de la marca y aguanta texto blanco.
+//
+// El contenido es el mismo que tenían las tarjetas: ninguna capacidad nueva.
+const applications = [
+    {
+        number: "01",
+        tag: "(VIS)",
+        title: "Ve cada pieza que sale de la línea",
+        facts: ["Evidencia por pieza", "Veredicto al PLC"],
+        copy: "Un modelo mira cada pieza y guarda la imagen. Sustituye una revisión que hoy alguien hace a ojo, y por eso es la aplicación con el retorno más directo.",
+        image: "/images/vision1.webp",
+        alt: "Inspección visual en una línea de producción",
+        href: "/vision/",
+        cta: "Ver visión artificial",
+    },
+    {
+        number: "02",
+        tag: "(OEE)",
+        title: "Explica por qué cayó el OEE",
+        facts: ["Paros con causa", "Histórico por turno"],
+        copy: "Cuando la planta ya registra sus paros y sus piezas, los datos dejan de solo reportar y empiezan a explicar. Requiere captura confiable antes que modelos.",
+        image: "/images/control/performance.webp",
+        alt: "Tablero de indicadores de producción",
+        href: "/tracking/",
+        cta: "Ver trazabilidad y MES",
+    },
+    {
+        number: "03",
+        tag: "(PRE)",
+        title: "Anticipa la falla en vez de reaccionar",
+        facts: ["OPC-UA y MQTT", "Tendencias por equipo"],
+        copy: "Máquinas y sensores conectados, con seguimiento de tendencias. El objetivo no es predecir el futuro: es ver la desviación antes de que pare la línea.",
+        image: "/images/control/iot.webp",
+        alt: "Sensores industriales conectados",
+        href: "/control/",
+        cta: "Ver automatización y control",
+    },
+    {
+        number: "04",
+        tag: "(AGT)",
+        title: "Consulta y escribe en tus sistemas",
+        facts: ["ERP, CRM y MES", "Por API"],
+        copy: "Un agente que no solo conversa: consulta el estatus de un pedido, registra al interesado y dispara el flujo interno que corresponda.",
+        image: "/images/software1.webp",
+        alt: "Aplicación industrial integrada con sistemas de gestión",
+        href: "#services",
+        cta: "Ver cómo funciona",
+    },
+    {
+        number: "05",
+        tag: "(RPA)",
+        title: "Hace el trabajo repetitivo",
+        facts: ["Sin capturas dobles", "Procesos internos"],
+        copy: "Lo que hoy alguien hace copiando de un sistema a otro. Es el caso menos vistoso de todos y el que más rápido se paga.",
+        image: "/images/software2.webp",
+        alt: "Automatización de procesos repetitivos",
+        href: "#contact",
+        cta: "Contar tu caso",
+    },
+];
+---
+
+<div class="panels" id="industrial-ai">
+    {
+        applications.map((app) => (
+            <section class="panel">
+                <div class="panel-inner">
+                    {
+                        /* Marca de agua: la foto de la aplicación, muy apagada,
+                           entre el titular y el número. Aporta materia sin
+                           competir con el texto. `aria-hidden` porque es
+                           decorativa: lo que dice ya está escrito al lado. */
+                    }
+                    <img
+                        class="panel-media"
+                        src={app.image}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        decoding="async"
+                    />
+
+                    <div class="panel-top">
+                        <h3 class="panel-title" data-flash>
+                            {app.title}
+                        </h3>
+                        <p class="panel-tag">{app.tag}</p>
+                        <p class="panel-number" data-flash>
+                            {app.number}
+                        </p>
+                    </div>
+
+                    <div class="panel-info">
+                        <div class="panel-facts">
+                            {app.facts.map((fact) => (
+                                <p class="panel-fact">
+                                    <span class="panel-bullet" aria-hidden="true" />
+                                    {fact}
+                                </p>
+                            ))}
+                        </div>
+
+                        <p class="panel-copy" data-flash>{app.copy}</p>
+
+                        <a class="panel-cta" href={app.href}>
+                            {app.cta}
+                        </a>
+                    </div>
+                </div>
+            </section>
+        ))
+    }
+</div>
+
+<style>
+    /* La perspectiva es lo que convierte el `rotateX` del panel que sale en
+       profundidad y no en un aplastamiento. */
+    .panels {
+        position: relative;
+        perspective: 1400px;
+    }
+
+    /* Cada panel se pega arriba y el siguiente le pasa por encima. Es el apilado
+       que hace el original dentro de una zona fijada; aquí sale del propio
+       `sticky`, sin secuestrar el scroll. */
+    .panel {
+        position: sticky;
+        top: 0;
+        display: flex;
+        align-items: center;
+        min-height: 100svh;
+        padding: clamp(3rem, 8vh, 6rem) 0;
+        background: #001489;
+        color: #ffffff;
+        border-top: 1px solid rgb(255 255 255 / 0.12);
+        transform-origin: center top;
+        will-change: transform, opacity;
+    }
+
+    /* Titular arriba y datos abajo, con el aire en medio: es la distribución del
+       original y evita que el panel quede con el contenido apelotonado arriba y
+       un hueco muerto en la mitad inferior. */
+    .panel-inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: clamp(2rem, 8vh, 5rem);
+        width: min(96rem, 100%);
+        min-height: min(calc(100svh - 10rem), 42rem);
+        margin-inline: auto;
+        padding-inline: clamp(1.25rem, 5vw, 4rem);
+    }
+
+    /* Círculo con desvanecido radial en vez de rectángulo: el recorte recto se
+       veía como un parche pegado encima del panel. Con la máscara la imagen no
+       tiene borde en ninguna parte, se disuelve en el azul. */
+    .panel-media {
+        position: absolute;
+        top: 46%;
+        left: 58%;
+        width: min(32rem, 38%);
+        aspect-ratio: 1;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        border-radius: 50%;
+        opacity: 0.14;
+        filter: grayscale(1) contrast(1.05);
+        mask-image: radial-gradient(
+            circle at center,
+            #000 28%,
+            rgb(0 0 0 / 0.55) 52%,
+            transparent 74%
+        );
+        -webkit-mask-image: radial-gradient(
+            circle at center,
+            #000 28%,
+            rgb(0 0 0 / 0.55) 52%,
+            transparent 74%
+        );
+        pointer-events: none;
+        user-select: none;
+    }
+
+    @media (max-width: 767px) {
+        .panel-media {
+            width: 68%;
+            opacity: 0.11;
+        }
+    }
+
+    .panel-top {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        gap: 1.5rem;
+    }
+
+    .panel-title {
+        grid-column: 1;
+        max-width: 16ch;
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: clamp(2.1rem, 5vw, 4.4rem);
+        font-weight: 800;
+        line-height: 1.02;
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+    }
+
+    .panel-tag {
+        grid-column: 1;
+        margin-top: 1rem;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+        color: rgb(255 255 255 / 0.45);
+    }
+
+    .panel-number {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: clamp(3.5rem, 9vw, 8rem);
+        font-weight: 800;
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+        color: rgb(255 255 255 / 0.9);
+    }
+
+    .panel-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1.5rem, 4vw, 3.5rem);
+        align-items: start;
+        border-top: 1px solid rgb(255 255 255 / 0.18);
+        padding-top: 1.5rem;
+    }
+
+    .panel-facts {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .panel-fact {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: rgb(255 255 255 / 0.85);
+    }
+
+    .panel-bullet {
+        width: 0.45rem;
+        height: 0.45rem;
+        flex-shrink: 0;
+        background: #00b5e2;
+    }
+
+    .panel-copy {
+        margin: 0;
+        font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+        line-height: 1.55;
+        max-width: 34ch;
+    }
+
+    .panel-cta {
+        grid-column: 1 / -1;
+        justify-self: start;
+        margin-top: 1rem;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #001489;
+        font-weight: 600;
+        transition:
+            background-color 0.3s ease,
+            color 0.3s ease;
+    }
+
+    .panel-cta:hover {
+        background: #00b5e2;
+        color: #001489;
+    }
+
+    /* Estado de reposo del resaltado. El script lo anima palabra por palabra con
+       el scroll; si GSAP no llegara a cargar, esto deja el texto legible en vez
+       de dejarlo apagado para siempre. */
+    .panel :global(.flash-word) {
+        color: inherit;
+    }
+
+    @media (max-width: 767px) {
+        .panel-info {
+            grid-template-columns: 1fr;
+        }
+
+        .panel-number {
+            grid-row: 1;
+        }
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { SplitText } from "gsap/SplitText";
+    import { prefersReducedMotion } from "@utils/motion";
+
+    // Resaltado palabra por palabra atado al scroll, que es lo que hace el
+    // original: cada palabra es su propio span y se le anima color y opacidad.
+    // Aquí va con `scrub`, así que la posición del scroll manda y el usuario
+    // puede ir y volver.
+    const init = () => {
+        if (prefersReducedMotion()) return;
+
+        gsap.registerPlugin(ScrollTrigger, SplitText);
+
+        const objetivos =
+            document.querySelectorAll<HTMLElement>(".panel [data-flash]");
+        if (!objetivos.length) return;
+
+        // SplitText mide cajas de línea, así que hay que esperar a la webfont o
+        // se reparte sobre la métrica de la fuente de reserva.
+        const listo = document.fonts?.ready ?? Promise.resolve();
+
+        listo.then(() => {
+            objetivos.forEach((el) => {
+                const split = SplitText.create(el, {
+                    type: "words",
+                    wordsClass: "flash-word",
+                });
+
+                gsap.fromTo(
+                    split.words,
+                    { opacity: 0.28 },
+                    {
+                        opacity: 1,
+                        stagger: 0.12,
+                        ease: "none",
+                        scrollTrigger: {
+                            trigger: el.closest(".panel"),
+                            start: "top 72%",
+                            end: "center 45%",
+                            scrub: true,
+                        },
+                    }
+                );
+            });
+
+            // La transición entre paneles. Medida en el original: el que sale
+            // encoge de 0.97 a 0.70 con un rotateX creciente y se apaga a 0.29
+            // antes de desaparecer. Aquí es el mismo gesto atado al scroll, y el
+            // apilado lo da el `position: sticky` en vez de una zona fijada.
+            const paneles =
+                document.querySelectorAll<HTMLElement>(".panels .panel");
+
+            paneles.forEach((panel, i) => {
+                // El último no sale por arriba: debajo no hay nada que lo tape.
+                if (i === paneles.length - 1) return;
+
+                // El panel cae hacia atrás y baja, como una hoja. Son tres
+                // cosas a la vez, y las tres están en la matrix3d del original:
+                //
+                //   rotateX positivo  -> hunde el borde inferior y lo aleja. Con
+                //                        el signo negativo se inclinaría hacia el
+                //                        visitante, que es el gesto contrario.
+                //   rotateZ pequeño   -> el ladeo. En el original vale unos 3
+                //                        grados (m12 +0.0418, m21 -0.0381 sobre
+                //                        una escala de 0.82) y es lo que hace que
+                //                        se lea como hoja y no como persiana.
+                //   descenso          -> el desplazamiento hacia abajo mientras
+                //                        se va.
+                //
+                // El original llega a 24 grados y escala 0.70; aquí 18 y 0.86,
+                // el mismo movimiento algo menos extremo.
+                gsap.to(panel, {
+                    scale: 0.86,
+                    rotateX: 18,
+                    rotateZ: 3,
+                    yPercent: 8,
+                    // Hasta 0 y no hasta 0.28: con un resto de opacidad los
+                    // paneles que salen nunca desaparecen y se van acumulando,
+                    // así que al caer el tercero todavía se veían el primero y
+                    // el segundo por detrás. Es lo que el original resuelve
+                    // poniendo `visibility: hidden` al terminar el paso.
+                    opacity: 0,
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: panel,
+                        start: "top top",
+                        end: "bottom top",
+                        scrub: true,
+                    },
+                });
+            });
+
+            ScrollTrigger.refresh();
+        });
+    };
+
+    init();
+</script>
