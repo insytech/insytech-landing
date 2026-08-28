@@ -24,6 +24,9 @@ Contacto: ventas@insytech.mx · +52-81-2892-7509 · Parque España 249B, Buenos 
 - [Inteligencia artificial en la industria: casos reales en manufactura](https://insytech.mx/blog/inteligencia-artificial-industria-manufactura/)
 - [Trazabilidad industrial y sistemas MES: guía para tu planta](https://insytech.mx/blog/trazabilidad-sistemas-mes-planta/)
 - [¿Cuánto cuesta un sistema de trazabilidad industrial?](https://insytech.mx/blog/costo-sistema-trazabilidad-industrial/)
+- [Sistema MES en Monterrey: trazabilidad para plantas de Nuevo León](https://insytech.mx/blog/sistema-mes-monterrey/)
+- [Sistema SCADA en Monterrey: cómo elegir plataforma e integrador](https://insytech.mx/blog/sistema-scada-monterrey/)
+- [Automatización industrial en Monterrey: qué se automatiza y cómo se ejecuta por proyecto](https://insytech.mx/blog/automatizacion-industrial-monterrey/)
 
 ## Más
 
