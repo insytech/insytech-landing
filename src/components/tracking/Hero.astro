@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 ---
 
@@ -67,31 +68,18 @@ import Container from "../shared/Container.astro";
                 data-animate="fade-up"
                 data-animate-delay=".3s"
             >
-                <a
-                    href="#contact"
-                    class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-blue-500/25 transition-all group"
-                >
-                    <span>Solicitar demo</span>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"></path>
-                    </svg>
-                </a>
-                <a
-                    href="#planner"
-                    class="inline-flex items-center gap-3 px-8 py-4 border-2 border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white font-semibold rounded-full hover:border-blue-600 dark:hover:border-cyan-400 hover:text-blue-600 dark:hover:text-cyan-400 hover:bg-blue-50 dark:hover:bg-cyan-500/10 transition-all"
-                >
-                    Ver soluciones
-                </a>
+                <BtnLink
+                        href="#contact"
+                        text="Solicitar demo"
+                        variant="primary"
+                        className="px-8 py-4"
+                    />
+                <BtnLink
+                        href="#planner"
+                        text="Ver soluciones"
+                        variant="secondary"
+                        className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
+                    />
             </div>
 
 <!-- Visual element - MES Dashboard illustration (Centered & Tilted) -->

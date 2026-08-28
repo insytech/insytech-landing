@@ -1,4 +1,5 @@
 ---
+import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 
 // Datos ciertos por construcción: los nueve años vienen del deck de ventas, y
@@ -127,32 +128,18 @@ const stats = [
                     data-animate="fade-up"
                     data-animate-delay=".3s"
                 >
-                    <a
+                    <BtnLink
                         href="#contact"
-                        class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#005EB8] to-[#00B5E2] text-white font-semibold rounded-full hover:shadow-lg hover:shadow-[#005EB8]/25 transition-all group"
-                    >
-                        <span>Solicitar cotización</span>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
-                            class="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                            ></path>
-                        </svg>
-                    </a>
-                    <a
+                        text="Solicitar cotización"
+                        variant="primary"
+                        className="px-8 py-4"
+                    />
+                    <BtnLink
                         href="#services"
-                        class="inline-flex items-center gap-3 px-8 py-4 border-2 border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white font-semibold rounded-full hover:border-[#005EB8] dark:hover:border-[#00B5E2] hover:text-[#005EB8] dark:hover:text-[#00B5E2] hover:bg-[#005EB8]/5 dark:hover:bg-[#00B5E2]/10 transition-all"
-                    >
-                        Ver soluciones
-                    </a>
+                        text="Ver soluciones"
+                        variant="secondary"
+                        className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
+                    />
                 </div>
 
                 <!-- Cuatro datos verificables, no cifras de folleto: los años
