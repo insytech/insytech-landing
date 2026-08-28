@@ -1,6 +1,5 @@
 ---
 import Container from "../shared/Container.astro";
-import MediaCard from "../shared/MediaCard.astro";
 import { HEADING, PAD, SURFACE } from "@utils/typography";
 
 // Era el último bloque de chatbots que quedaba en pie: cuatro tarjetas de
@@ -16,9 +15,13 @@ import { HEADING, PAD, SURFACE } from "@utils/typography";
 // y MES por API, los canales de WhatsApp, Messenger y web, y el escalamiento a
 // una persona.
 //
+// La presentación sigue el patrón de la sección `.ai` de fourmula.ai: un titular
+// grande y luego paneles amplios y redondeados, cada uno con una etiqueta en
+// monoespaciada con viñeta. Sustituye a las tarjetas pequeñas, que junto a los
+// paneles azules de arriba se leían como de otro sitio.
+//
 // Sin imágenes a propósito: ninguna foto industrial ilustra "un agente consulta
-// el ERP" sin mentir, y en la referencia conviven tarjetas con foto y de solo
-// texto en la misma reja.
+// el ERP" sin mentir.
 const capabilities = [
     {
         title: "Consulta a tus sistemas",
@@ -73,13 +76,28 @@ const capabilities = [
 
         <div class="svc-grid" data-reveal="group">
             {
-                capabilities.map((cap) => (
-                    <MediaCard
-                        title={cap.title}
-                        body={cap.body}
-                        href={cap.href}
-                        cta={cap.cta}
-                    />
+                capabilities.map((cap, i) => (
+                    <article class="svc-panel">
+                        <p class="svc-label">
+                            <span class="svc-dot" aria-hidden="true" />
+                            {String(i + 1).padStart(2, "0")} · {cap.title}
+                        </p>
+                        <p class="svc-body">{cap.body}</p>
+                        <a class="svc-link-cta" href={cap.href}>
+                            {cap.cta}
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M5 12h14M13 6l6 6-6 6" />
+                            </svg>
+                        </a>
+                    </article>
                 ))
             }
         </div>
@@ -89,8 +107,95 @@ const capabilities = [
 <style>
     .svc-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 1.25rem;
+    }
+
+    /* Paneles amplios y muy redondeados, como los de la referencia: el contraste
+       con los paneles azules de arriba lo da la superficie, no un borde duro. */
+    .svc-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: clamp(1.75rem, 3vw, 2.75rem);
+        border-radius: 2rem;
+        background: rgb(0 94 184 / 0.05);
+        transition: background-color 0.35s ease;
+    }
+
+    .svc-panel:hover {
+        background: rgb(0 94 184 / 0.09);
+    }
+
+    :global(.dark) .svc-panel {
+        background: rgb(77 166 255 / 0.07);
+    }
+
+    :global(.dark) .svc-panel:hover {
+        background: rgb(77 166 255 / 0.12);
+    }
+
+    .svc-label {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #005eb8;
+    }
+
+    :global(.dark) .svc-label {
+        color: #00b5e2;
+    }
+
+    .svc-dot {
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 999px;
+        background: currentColor;
+        flex-shrink: 0;
+    }
+
+    .svc-body {
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: clamp(1.2rem, 1.9vw, 1.65rem);
+        font-weight: 600;
+        line-height: 1.35;
+        letter-spacing: -0.01em;
+        color: #211915;
+        text-wrap: pretty;
+    }
+
+    :global(.dark) .svc-body {
+        color: rgb(255 255 255);
+    }
+
+    .svc-link-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: auto;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #005eb8;
+    }
+
+    .svc-link-cta svg {
+        width: 0.95rem;
+        height: 0.95rem;
+        transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+
+    .svc-link-cta:hover svg {
+        transform: translateX(3px);
+    }
+
+    :global(.dark) .svc-link-cta {
+        color: #00b5e2;
     }
 
     .svc-link {
@@ -104,13 +209,7 @@ const capabilities = [
         color: #00b5e2;
     }
 
-    @media (max-width: 1023px) {
-        .svc-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 640px) {
+    @media (max-width: 767px) {
         .svc-grid {
             grid-template-columns: 1fr;
         }

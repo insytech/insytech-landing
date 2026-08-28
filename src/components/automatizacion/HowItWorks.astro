@@ -18,6 +18,12 @@ import { HEADING, PAD, SURFACE } from "@utils/typography";
 // `position: sticky` sobrevive aquí porque la sección usa `overflow-clip` y no
 // `overflow-hidden`, que sí habría creado un contenedor de scroll y lo habría
 // roto.
+//
+// La presentación se alineó con el resto de /ai/: las etapas eran tarjetas
+// blancas con borde y sombra, que al lado de los paneles azules y de los paneles
+// redondeados de agentes se leían como de otra plantilla. Ahora son filas
+// separadas por filetes, con el número en grande como en los paneles y sin caja
+// alrededor.
 const stages = [
     {
         number: "01",
@@ -93,7 +99,9 @@ const stages = [
                 {
                     stages.map((stage) => (
                         <li class="hiw-stage">
-                            <span class="hiw-number">{stage.number}</span>
+                            <span class="hiw-number" aria-hidden="true">
+                                {stage.number}
+                            </span>
                             <div class="hiw-content">
                                 <h3 class="hiw-title">{stage.title}</h3>
                                 <p class="hiw-body">{stage.body}</p>
@@ -165,42 +173,43 @@ const stages = [
     .hiw-stages {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
         margin: 0;
         padding: 0;
         list-style: none;
     }
 
+    /* Filas con filete en vez de tarjetas: mismo recurso que los paneles de
+       arriba, donde la separación la marca una línea de un píxel y no una caja. */
     .hiw-stage {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: 1.5rem;
-        padding: 1.75rem;
-        border: 1px solid rgb(229 231 235);
-        border-radius: 1rem;
-        background: rgb(255 255 255);
-        transition:
-            border-color 0.35s ease,
-            box-shadow 0.35s ease;
+        gap: clamp(1.25rem, 3vw, 2.5rem);
+        padding: clamp(1.75rem, 3vw, 2.5rem) 0;
+        border-top: 1px solid rgb(229 231 235);
     }
 
-    .hiw-stage:hover {
-        border-color: rgb(0 94 184 / 0.35);
-        box-shadow: 0 14px 36px rgb(0 20 137 / 0.08);
+    .hiw-stage:last-child {
+        border-bottom: 1px solid rgb(229 231 235);
     }
 
-    :global(.dark) .hiw-stage {
+    :global(.dark) .hiw-stage,
+    :global(.dark) .hiw-stage:last-child {
         border-color: rgb(31 41 55);
-        background: rgb(3 7 18);
     }
 
+    /* El número en grande, como en los paneles azules: es lo que hace que las dos
+       secciones se lean como el mismo sistema. */
     .hiw-number {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.12em;
-        color: #005eb8;
-        padding-top: 0.2rem;
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 4vw, 3.25rem);
+        font-weight: 800;
+        line-height: 0.95;
+        letter-spacing: -0.03em;
+        color: rgb(0 94 184 / 0.28);
+    }
+
+    :global(.dark) .hiw-number {
+        color: rgb(0 181 226 / 0.32);
     }
 
     :global(.dark) .hiw-number {
@@ -209,7 +218,7 @@ const stages = [
 
     .hiw-title {
         font-family: var(--font-heading);
-        font-size: 1.25rem;
+        font-size: clamp(1.25rem, 2vw, 1.6rem);
         font-weight: 700;
         color: #211915;
         margin-bottom: 0.6rem;
