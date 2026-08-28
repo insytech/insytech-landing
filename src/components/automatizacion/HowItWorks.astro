@@ -1,0 +1,258 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// Sustituye a About.astro, que era el bloque «¿Por qué elegir nuestros
+// chatbots?»: un robot animado con partículas flotando y cuatro insignias —24/7
+// Disponible, IA Avanzada, Personalizable, Integración Fácil— que no dicen nada
+// verificable y que además hablaban de atender clientes, no de planta.
+//
+// Lo que va en su lugar responde la objeción real de un comprador industrial,
+// que no es "¿por qué IA?" sino "¿qué necesito de mi lado y cómo empieza esto?".
+// Los tres bloques no son inventados: salen de las respuestas del FAQ de esta
+// misma página sobre por dónde se empieza y qué hace falta tener antes.
+//
+// La columna izquierda es `sticky` y las tres etapas pasan a su lado. Es el
+// mismo recurso que el índice fijo de /vision/ pero sin pinning: no secuestra el
+// scroll ni consume pantallas de más, y no necesita una línea de JavaScript.
+// `position: sticky` sobrevive aquí porque la sección usa `overflow-clip` y no
+// `overflow-hidden`, que sí habría creado un contenedor de scroll y lo habría
+// roto.
+const stages = [
+    {
+        number: "01",
+        title: "Lo que pones tú",
+        body: "El proceso descrito con detalle suficiente para saber qué se va a decidir, el dato disponible de forma confiable —imágenes, señales del PLC, registros de producción— y alguien de planta que valide los resultados durante el arranque.",
+        note: "Si el dato todavía se captura en papel, el primer proyecto no es de IA sino de captura.",
+    },
+    {
+        number: "02",
+        title: "Lo que ponemos nosotros",
+        body: "El levantamiento en sitio, el modelo entrenado con tus propias piezas y tus propios turnos, la integración con lo que ya corre en planta por OPC-UA, MQTT o API, y la puesta en marcha con la línea andando.",
+        note: "Nada de modelos genéricos entrenados con imágenes de otra fábrica.",
+    },
+    {
+        number: "03",
+        title: "Cómo se sabe que funciona",
+        body: "Se compara contra el criterio que la planta usa hoy, no contra una métrica de laboratorio. Cada decisión deja evidencia —la imagen, el registro, el evento— y con los casos que falla se ajusta antes de ampliar el alcance.",
+        note: "Primero un punto de inspección, y se extiende cuando ese punto ya se sostiene solo.",
+    },
+];
+---
+
+<section
+    id="how-it-works"
+    class={`relative overflow-clip ${PAD.section} ${SURFACE.base}`}
+>
+    <Container className="relative z-10">
+        <div class="hiw-grid">
+            <div class="hiw-aside">
+                <p
+                    class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
+                >
+                    Cómo trabajamos
+                </p>
+
+                <h2 data-reveal="heading" class={`${HEADING.section} mb-5`}>
+                    Qué hace falta para que la IA sirva en tu planta
+                </h2>
+
+                <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
+                    La IA no sustituye a la instrumentación: se apoya en ella. Se
+                    conecta a tu{" "}
+                    <a href="/control/" class="hiw-link">
+                        automatización y control
+                    </a>, a tu{" "}
+                    <a href="/tracking/" class="hiw-link">
+                        trazabilidad de producción
+                    </a>{" "}
+                    y a tu{" "}
+                    <a href="/software/" class="hiw-link">
+                        software industrial
+                    </a>, que son los que generan el dato sobre el que puede
+                    decidir.
+                </p>
+
+                <a href="#contact" class="hiw-cta">
+                    Cuéntanos tu proceso
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                </a>
+            </div>
+
+            <ol class="hiw-stages" data-reveal="group">
+                {
+                    stages.map((stage) => (
+                        <li class="hiw-stage">
+                            <span class="hiw-number">{stage.number}</span>
+                            <div class="hiw-content">
+                                <h3 class="hiw-title">{stage.title}</h3>
+                                <p class="hiw-body">{stage.body}</p>
+                                <p class="hiw-note">{stage.note}</p>
+                            </div>
+                        </li>
+                    ))
+                }
+            </ol>
+        </div>
+    </Container>
+</section>
+
+<style>
+    .hiw-grid {
+        display: grid;
+        grid-template-columns: minmax(18rem, 26rem) 1fr;
+        gap: clamp(2rem, 5vw, 5rem);
+        align-items: start;
+    }
+
+    .hiw-aside {
+        position: sticky;
+        top: 7rem;
+    }
+
+    .hiw-link {
+        font-weight: 500;
+        color: #005eb8;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        transition: color 0.25s ease;
+    }
+
+    .hiw-link:hover {
+        color: #001489;
+    }
+
+    :global(.dark) .hiw-link {
+        color: #00b5e2;
+    }
+
+    .hiw-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.85rem 1.6rem;
+        border-radius: 999px;
+        background: #005eb8;
+        color: #ffffff;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .hiw-cta:hover {
+        background: #001489;
+    }
+
+    .hiw-cta svg {
+        width: 1rem;
+        height: 1rem;
+        transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+
+    .hiw-cta:hover svg {
+        transform: translateX(3px);
+    }
+
+    .hiw-stages {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .hiw-stage {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 1.5rem;
+        padding: 1.75rem;
+        border: 1px solid rgb(229 231 235);
+        border-radius: 1rem;
+        background: rgb(255 255 255);
+        transition:
+            border-color 0.35s ease,
+            box-shadow 0.35s ease;
+    }
+
+    .hiw-stage:hover {
+        border-color: rgb(0 94 184 / 0.35);
+        box-shadow: 0 14px 36px rgb(0 20 137 / 0.08);
+    }
+
+    :global(.dark) .hiw-stage {
+        border-color: rgb(31 41 55);
+        background: rgb(3 7 18);
+    }
+
+    .hiw-number {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        color: #005eb8;
+        padding-top: 0.2rem;
+    }
+
+    :global(.dark) .hiw-number {
+        color: #00b5e2;
+    }
+
+    .hiw-title {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #211915;
+        margin-bottom: 0.6rem;
+    }
+
+    :global(.dark) .hiw-title {
+        color: rgb(255 255 255);
+    }
+
+    .hiw-body {
+        color: rgb(75 85 99);
+        line-height: 1.7;
+        margin-bottom: 0.75rem;
+    }
+
+    :global(.dark) .hiw-body {
+        color: rgb(156 163 175);
+    }
+
+    /* La línea que aterriza cada etapa. Va en cursiva y no en color para que se
+       lea como una aclaración honesta y no como otro argumento de venta. */
+    .hiw-note {
+        font-size: 0.9rem;
+        font-style: italic;
+        line-height: 1.6;
+        color: rgb(107 114 128);
+        padding-left: 0.9rem;
+        border-left: 2px solid rgb(0 94 184 / 0.25);
+    }
+
+    :global(.dark) .hiw-note {
+        color: rgb(107 114 128);
+        border-left-color: rgb(0 181 226 / 0.3);
+    }
+
+    @media (max-width: 1023px) {
+        .hiw-grid {
+            grid-template-columns: 1fr;
+        }
+
+        /* Sin columna al lado, fijar el encabezado no aporta nada y estorba. */
+        .hiw-aside {
+            position: static;
+        }
+    }
+</style>
