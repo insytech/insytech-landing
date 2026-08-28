@@ -22,28 +22,24 @@ import Paragraph from "../shared/Paragraph.astro";
 const sectors = [
     {
         id: "automotive",
-        code: "AUTO-MES",
         title: "Sector Automotriz",
-        description: "Implementación de sistemas MES y SCADA con integración total de PLCs y sensores mediante protocolos MODBUS para el monitoreo en tiempo real.",
+        description: "Sistemas MES y SCADA integrados con los PLCs y sensores de la línea por Modbus, para monitorearla en tiempo real.",
         scene: "line"
     },
     {
         id: "electronics",
-        code: "ELEC-MOD",
         title: "Manufactura Electrónica",
         description: "Enfoque en sistemas de ensamble convencional y estaciones de prueba funcional con trazabilidad integrada para componentes críticos.",
         scene: "test"
     },
     {
         id: "logistics",
-        code: "LOGI-SCALE",
         title: "Logística y Empaque",
         description: "Sistemas de reempaquetado automatizados con básculas dinámicas integradas para el control de peso y auditoría de envíos.",
         scene: "scale"
     },
     {
         id: "metal",
-        code: "META-INST",
         title: "Metal-mecánica",
         description: "Soporte en instalaciones electromecánicas de precisión y montaje técnico especializado de herramentales y periféricos industriales.",
         scene: "fixture"
@@ -93,10 +89,6 @@ const sectors = [
                     <div class="absolute inset-0 opacity-[0.02] dark:opacity-[0.05] pointer-events-none mix-blend-overlay bg-noise"></div>
 
                     <div class="relative z-10 h-full flex flex-col">
-                        <div class="flex justify-between items-start mb-16">
-                            <span class="text-[11px] font-mono font-black text-[#005EB8] dark:text-[#00B5E2] tracking-widest">{sector.code}</span>
-                            <div class="h-10 w-[1px] bg-gray-200 dark:bg-white/10"></div>
-                        </div>
 
                         <h3 class="text-3xl lg:text-4xl font-black text-[#002B49] dark:text-white leading-tight tracking-tight uppercase mb-8 sector-title">
                             {sector.title}
@@ -105,7 +97,12 @@ const sectors = [
                         {/* Una escena por sector, en SVG y CSS. Todas son
                             decorativas: lo que se afirma está en el texto de
                             abajo. */}
-                        <div class="flex-grow flex items-center justify-center">
+                        {/* Sin `flex-grow`: si la escena se lleva el espacio
+                            sobrante y además se centra en él, una descripción de
+                            una línea más la desplaza media línea hacia arriba, y
+                            las cuatro dejan de alinearse. La holgura la absorbe
+                            el bloque de abajo, que ya la reclama con `mt-auto`. */}
+                        <div class="flex items-center justify-center">
                             <div class="ft-scene" data-scene={sector.scene} aria-hidden="true">
                                 {sector.scene === "line" && (
                                     <svg viewBox="0 0 200 200" fill="none">
@@ -193,10 +190,18 @@ const sectors = [
                                         </defs>
                                         <rect class="ft-frame" x="52" y="28" width="96" height="42" rx="8" />
                                         <text class="ft-read" x="66" y="54">kg</text>
-                                        <g class="ft-digits" clip-path="url(#ft-readout)">
-                                            <text x="140" y="54" text-anchor="end">18.4</text>
-                                            <text x="140" y="96" text-anchor="end">21.7</text>
-                                            <text x="140" y="138" text-anchor="end">17.2</text>
+                                        {/* El recorte va en un grupo que no se
+                                            mueve, con la tira dentro: puesto
+                                            sobre el mismo grupo que se
+                                            transforma, el recorte viaja con las
+                                            cifras y estas asoman por encima del
+                                            marco al cambiar de pieza. */}
+                                        <g clip-path="url(#ft-readout)">
+                                            <g class="ft-digits">
+                                                <text x="140" y="54" text-anchor="end">18.4</text>
+                                                <text x="140" y="96" text-anchor="end">21.7</text>
+                                                <text x="140" y="138" text-anchor="end">17.2</text>
+                                            </g>
                                         </g>
                                         <path class="ft-rail" d="M12 158h176" stroke-width="2" />
                                         {[0, 1, 2, 3, 4, 5].map((n) => (
@@ -318,14 +323,34 @@ const sectors = [
         animation: scan 4s linear infinite;
     }
 
+    /* Los títulos ocupan dos líneas en pantallas anchas y tres a partir de
+       cierto punto, y como la escena va justo debajo, el que rompe a tres bajaba
+       su escena y desalineaba la fila. Reservando las tres líneas siempre,
+       las cuatro escenas empiezan a la misma altura a cualquier ancho. */
+    @media (min-width: 1024px) {
+        .sector-title {
+            /* Tres líneas exactas: el interlineado es 1.25em. Con menos, «Logística
+               y Empaque» rompe a la tercera y baja su escena 16 px. */
+            min-height: 3.75em;
+        }
+    }
+
     /* --- Escenas por sector --------------------------------------------------
        Sustituyen a cuatro contextos WebGL con post-proceso. Son SVG sobre CSS,
        solo animan `transform` y `opacity`, y están paradas hasta que la tarjeta
        entra en pantalla. */
+    /* Toda la escena hereda un solo color y de ahí salen trazos, rellenos y
+       opacidades. En claro es el Reflex Blue de marca, que es el azul más
+       oscuro de la paleta y el que aguanta el fondo blanco; en oscuro se pasa al
+       Light Blue, que es el que se ve sobre el fondo casi negro. */
     .ft-scene {
         width: 100%;
         aspect-ratio: 1;
-        color: #00b5e2;
+        color: #001489;
+    }
+
+    :global(.dark) .ft-scene {
+        color: #7bddf3;
     }
 
     .ft-scene svg {
