@@ -235,7 +235,11 @@ h3,
    desplazamientos y los bucles decorativos, pero las transiciones de color y
    opacidad se conservan (acortadas) para no perder señales de estado. */
 @media (prefers-reduced-motion: reduce) {
-  html {
+  /* El selector tiene que igualar la especificidad de `html:not(.lenis)` de más
+     arriba, o pierde: `html` sola vale menos que `html:not(.lenis)` y el smooth
+     seguía aplicando bajo reduced-motion en las páginas sin Lenis. Con la misma
+     especificidad gana esta, por venir después en el archivo. */
+  html:not(.lenis) {
     scroll-behavior: auto;
   }
 
