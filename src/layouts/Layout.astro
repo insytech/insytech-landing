@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css"; // NUEVO: garantiza estilos globales en todas las rutas
-import Footer from "../components/elements/Footer.astro";
+import FooterReveal from "../components/elements/FooterReveal.astro";
 import Navbar from "../components/elements/Navbar.astro";
 import CookieConsent from "../components/elements/CookieConsent.astro";
 import WhatsappWidget from "../components/elements/WhatsappWidget.astro";
@@ -71,10 +71,12 @@ const {
     />
     <!-- NOTE: add apple-touch-icon once a 180x180 PNG asset exists -->
     <meta name="generator" content={Astro.generator} />
-  </head><body class="overflow-hidden overflow-y-auto bg-body">
-    <Navbar />
-    <slot />
-    <Footer />
+  </head><body class="overflow-hidden overflow-y-auto">
+    <div class="page-shell">
+      <Navbar />
+      <slot />
+    </div>
+    <FooterReveal />
     <CookieConsent />
     {
       /*
@@ -88,9 +90,11 @@ const {
 </html>
 
 <style is:global>
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Aquí había una tercera copia de `scroll-behavior: smooth`, que se me pasó al
+     acotar la de global.css con `html:not(.lenis)`: como este layout ahora sirve
+     una home que sí monta Lenis, esta regla volvía a poner las dos animaciones
+     sobre la misma posición justo donde se había quitado. La única copia vive en
+     global.css. */
   body {
     font-family: "Raleway", sans-serif;
   }

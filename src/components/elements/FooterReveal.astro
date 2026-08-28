@@ -1,0 +1,136 @@
+---
+import Footer from "./Footer.astro";
+
+// Footer que se descubre: el contenido de la página se desliza por encima y lo
+// deja a la vista al final del scroll.
+//
+// La técnica está extraída de boa-concept.com, midiendo su DOM en vivo. Allí el
+// bloque del footer es `position: fixed; bottom: 0; z-index: -1`: no se mueve
+// nunca, y lo que se aparta es la página, que es opaca. Encima le aplican un
+// asentamiento por progreso de scroll, de `scale(0.95) translateY(144px)` a
+// `scale(1) translateY(0)`, que es lo que da la sensación de que el footer
+// "sube y se acomoda".
+//
+// Aquí se replica con dos diferencias deliberadas:
+//
+//  1. Nada de `z-index: -1`. El <body> del sitio lleva `bg-body` opaco, así que
+//     un índice negativo dejaría el footer detrás del fondo del propio body y
+//     no se vería nunca. En su lugar el footer se queda en z-index 0 y es el
+//     contenido el que sube a z-index 1 con su propio fondo opaco.
+//  2. El asentamiento se hace con `animation-timeline: view()` cuando el
+//     navegador lo soporta, y si no, no se hace nada: el descubrimiento —que es
+//     el efecto— funciona sin una sola línea de JavaScript.
+//
+// El hueco por el que se ve el footer lo abre un separador con la altura real
+// del footer, medida por ResizeObserver, porque esa altura cambia con el ancho
+// y con la longitud de los menús.
+---
+
+<div class="footer-spacer" data-footer-spacer aria-hidden="true"></div>
+
+<div class="footer-reveal" data-footer-reveal>
+    <div class="footer-reveal-inner">
+        <Footer />
+    </div>
+</div>
+
+<style is:global>
+    /* El contenido de la página necesita fondo propio y quedar por encima: es lo
+       que tapa al footer hasta el final. Sin esto se vería el footer por detrás
+       de todo el documento. */
+    body > .page-shell {
+        position: relative;
+        z-index: 1;
+        background-color: rgb(var(--color-bg));
+    }
+
+    .footer-reveal {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+    }
+
+    .footer-spacer {
+        position: relative;
+        z-index: 1;
+        height: var(--footer-h, 0px);
+        pointer-events: none;
+    }
+
+    /* El asentamiento: el footer entra desenfocado y algo reducido, y termina
+       nítido y a tamaño completo cuando el scroll llega al fondo.
+
+       La línea de tiempo se toma del SEPARADOR, no del propio footer. Primer
+       intento fue `animation-timeline: view()` sobre el footer y no animaba
+       nada: el footer es `position: fixed`, así que no se mueve respecto al
+       viewport y su progreso de vista es constante. El separador sí se desplaza,
+       mide exactamente lo que el footer, y su entrada en pantalla es justo el
+       tramo en que el footer se va descubriendo. `timeline-scope` en el body es
+       lo que permite que un elemento consuma la línea de tiempo de otro.
+
+       Donde el navegador no soporta líneas de tiempo de scroll (hoy Firefox y
+       Safari) no se anima nada y el footer aparece nítido y quieto, que es el
+       efecto principal igual. */
+    body {
+        timeline-scope: --footer-reveal;
+    }
+
+    .footer-spacer {
+        view-timeline-name: --footer-reveal;
+        view-timeline-axis: block;
+    }
+
+    @supports (animation-timeline: --x) {
+        @media (prefers-reduced-motion: no-preference) {
+            /* Propiedades largas y no el atajo `animation`: el minificador
+               plegaba `animation-timeline` dentro del atajo, y esa propiedad no
+               forma parte de él, así que la declaración salía inválida y la
+               animación no se aplicaba nunca. Se veía como `animation-name:
+               none` en el navegador pese a que el @supports daba verdadero. */
+            .footer-reveal-inner {
+                animation-name: footer-settle;
+                animation-duration: 1ms;
+                animation-timing-function: linear;
+                animation-fill-mode: both;
+                animation-timeline: --footer-reveal;
+                animation-range: entry 0% entry 100%;
+                will-change: transform, filter;
+            }
+
+            @keyframes footer-settle {
+                from {
+                    transform: translateY(4rem) scale(0.92);
+                    filter: blur(14px);
+                    opacity: 0.65;
+                }
+                to {
+                    transform: translateY(0) scale(1);
+                    filter: blur(0px);
+                    opacity: 1;
+                }
+            }
+        }
+    }
+</style>
+
+<script>
+    // La altura real del footer manda sobre el separador. Cambia con el ancho de
+    // la ventana y con lo que crezcan los menús, así que se observa en vez de
+    // fijarse a un número.
+    const separador = document.querySelector<HTMLElement>("[data-footer-spacer]");
+    const revelado = document.querySelector<HTMLElement>("[data-footer-reveal]");
+
+    if (separador && revelado) {
+        const medir = () => {
+            const alto = revelado.getBoundingClientRect().height;
+            document.documentElement.style.setProperty("--footer-h", `${Math.round(alto)}px`);
+        };
+
+        medir();
+        new ResizeObserver(medir).observe(revelado);
+        // Las fuentes web cambian la altura del footer al cargar.
+        document.fonts?.ready.then(medir);
+    }
+</script>
