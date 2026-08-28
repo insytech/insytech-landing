@@ -77,6 +77,7 @@ const step = 360 / modules.length;
             <span class="core-label" data-core-label>Empower with AI</span>
         </button>
 
+
         {/* Lista accesible equivalente al anillo, que es aria-hidden por ser
             decorativo en su disposición. Un lector de pantalla obtiene los ocho
             módulos como texto y en orden. */}
@@ -87,14 +88,15 @@ const step = 360 / modules.length;
 
     <div class="orbit-copy">
         <h1>
-            Los procesos ya están en tu planta.<br />
-            <ShinyText
+            <span class="line"><span class="line-in">Los procesos ya están en tu planta.</span></span>
+            <span class="line"><span class="line-in">
+<ShinyText
                 text="La IA los enciende"
                 color="#005EB8"
                 shineColor="#00B5E2"
                 speed={3}
                 class="leading-[1.12] pb-[0.06em]"
-            />
+            /></span></span>
         </h1>
         <p>
             Inspección visual, trazabilidad, control de línea y analítica ya
@@ -246,17 +248,76 @@ const step = 360 / modules.length;
     }
 
     /* Estado encendido: se dispara al pulsar el centro. */
+    /* La señal recorre el anillo en vez de encenderlo de golpe: el `--delay` lo
+       pone el índice de cada tarjeta desde el marcado. */
     .orbit-hero[data-lit="true"] .orbit-card img {
         filter: grayscale(0);
         opacity: 1;
         box-shadow:
             0 0 0 2px rgb(0 181 226 / 0.55),
             0 12px 30px rgb(0 20 137 / 0.18);
+        transition-delay: var(--delay);
     }
 
     .orbit-hero[data-lit="true"] .orbit-card figcaption {
         opacity: 1;
         transition-delay: var(--delay);
+    }
+
+    /* Latido en reposo: nada indicaba que el centro fuera pulsable. Se apaga en
+       cuanto se enciende, para no competir con el estado encendido. */
+    .orbit-core::after {
+        content: "";
+        position: absolute;
+        inset: -0.5rem;
+        border: 1px solid rgb(0 181 226 / 0.5);
+        border-radius: 1.7rem;
+        animation: core-pulse 2.8s ease-out infinite;
+        pointer-events: none;
+    }
+
+    .orbit-hero[data-lit="true"] .orbit-core::after {
+        animation: none;
+        opacity: 0;
+    }
+
+    @keyframes core-pulse {
+        0% {
+            transform: scale(0.96);
+            opacity: 0.7;
+        }
+        70% {
+            transform: scale(1.08);
+            opacity: 0;
+        }
+        100% {
+            transform: scale(1.08);
+            opacity: 0;
+        }
+    }
+
+    /* Revelado del titular por líneas: cada una sube desde detrás de su propia
+       máscara. No se usa SplitText porque el ShinyText del segundo renglón se
+       rompería al repartirse en líneas. */
+    .orbit-copy h1 .line {
+        display: block;
+        overflow: hidden;
+    }
+
+    .orbit-copy h1 .line-in {
+        display: block;
+        transform: translateY(110%);
+        animation: line-rise 0.9s cubic-bezier(0.16, 0.84, 0.24, 1) forwards;
+    }
+
+    .orbit-copy h1 .line:nth-child(2) .line-in {
+        animation-delay: 0.09s;
+    }
+
+    @keyframes line-rise {
+        to {
+            transform: translateY(0);
+        }
     }
 
     .orbit-core {

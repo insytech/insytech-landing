@@ -1,5 +1,6 @@
 ---
 import Container from "../shared/Container.astro";
+import MediaCard from "../shared/MediaCard.astro";
 import { HEADING, PAD, SURFACE } from "@utils/typography";
 
 // La razón de ser de esta sección: la página vendía chatbots, pero las consultas
@@ -16,11 +17,10 @@ import { HEADING, PAD, SURFACE } from "@utils/typography";
 // Ninguna capacidad nueva se afirma aquí. Las cinco son las que /vision/,
 // /tracking/, /control/ y esta misma página ya declaran.
 //
-// El patrón de tarjeta —imagen, título en mayúsculas, una línea y flecha— viene
-// de boa-concept.com, la referencia que trajo el usuario. De ahí se toma la
-// estructura y nada más: color y tipografía son los del proyecto. La reja es
-// asimétrica a propósito, dos tarjetas anchas arriba y tres estrechas abajo,
-// para que las dos primeras aplicaciones pesen más que el resto.
+// La tarjeta vive en shared/MediaCard.astro desde que la sección de agentes
+// necesitó el mismo patrón. Aquí solo queda la reja, que es asimétrica a
+// propósito: dos tarjetas anchas arriba y tres estrechas abajo, para que las dos
+// primeras aplicaciones pesen más que el resto.
 const applications = [
     {
         title: "Inspección visual",
@@ -95,41 +95,16 @@ const applications = [
         <div class="app-grid" data-reveal="group">
             {
                 applications.map((app) => (
-                    <a
+                    <MediaCard
+                        title={app.title}
+                        body={app.body}
                         href={app.href}
-                        class:list={["app-card", `app-card--${app.span}`]}
-                    >
-                        <span class="app-media">
-                            <img
-                                src={app.image}
-                                alt={app.alt}
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </span>
-
-                        <span class="app-body">
-                            <span class="app-text">
-                                <span class="app-title">{app.title}</span>
-                                <span class="app-desc">{app.body}</span>
-                            </span>
-
-                            <span class="app-arrow" aria-hidden="true">
-                                <svg
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <path d="M5 12h14M13 6l6 6-6 6" />
-                                </svg>
-                            </span>
-                        </span>
-
-                        <span class="sr-only">{app.cta}</span>
-                    </a>
+                        cta={app.cta}
+                        image={app.image}
+                        alt={app.alt}
+                        ratio={app.span === "wide" ? "16 / 9" : "4 / 3"}
+                        class={`app-card--${app.span}`}
+                    />
                 ))
             }
         </div>
@@ -138,151 +113,19 @@ const applications = [
 
 <style>
     /* Seis columnas para repartir 3+3 arriba y 2+2+2 abajo con una sola reja,
-       sin filas anidadas. */
+       sin filas anidadas. Los estilos de la tarjeta viven en MediaCard. */
     .app-grid {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
         gap: 1.25rem;
     }
 
-    .app-card {
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        border: 1px solid rgb(229 231 235);
-        border-radius: 1rem;
-        background: rgb(255 255 255);
-        transition:
-            border-color 0.35s ease,
-            box-shadow 0.35s ease,
-            transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
-    }
-
-    .app-card--wide {
+    .app-grid :global(.app-card--wide) {
         grid-column: span 3;
     }
 
-    .app-card--narrow {
+    .app-grid :global(.app-card--narrow) {
         grid-column: span 2;
-    }
-
-    .app-card:hover {
-        border-color: rgb(0 94 184 / 0.4);
-        box-shadow: 0 18px 44px rgb(0 20 137 / 0.12);
-        transform: translateY(-3px);
-    }
-
-    .app-media {
-        display: block;
-        overflow: hidden;
-        aspect-ratio: 16 / 9;
-        background: rgb(0 94 184 / 0.06);
-    }
-
-    .app-card--narrow .app-media {
-        aspect-ratio: 4 / 3;
-    }
-
-    .app-media img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
-    }
-
-    .app-card:hover .app-media img {
-        transform: scale(1.05);
-    }
-
-    .app-body {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 1rem;
-        flex: 1;
-        padding: 1.35rem 1.4rem 1.5rem;
-    }
-
-    .app-text {
-        display: flex;
-        flex-direction: column;
-        gap: 0.55rem;
-        min-width: 0;
-    }
-
-    .app-title {
-        font-family: var(--font-heading);
-        font-size: 1.05rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        color: #211915;
-        line-height: 1.2;
-    }
-
-    .app-desc {
-        font-size: 0.92rem;
-        line-height: 1.6;
-        color: rgb(75 85 99);
-    }
-
-    /* La flecha es un círculo que se desplaza al pasar el ratón, como en la
-       referencia. Va con `transform` para no disparar relayout. */
-    .app-arrow {
-        display: grid;
-        place-items: center;
-        flex-shrink: 0;
-        width: 2.1rem;
-        height: 2.1rem;
-        border: 1px solid rgb(0 94 184 / 0.25);
-        border-radius: 999px;
-        color: #005eb8;
-        transition:
-            transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
-            background-color 0.35s ease,
-            border-color 0.35s ease,
-            color 0.35s ease;
-    }
-
-    .app-arrow svg {
-        width: 0.95rem;
-        height: 0.95rem;
-    }
-
-    .app-card:hover .app-arrow {
-        transform: translateX(3px);
-        border-color: #005eb8;
-        background: #005eb8;
-        color: #ffffff;
-    }
-
-    :global(.dark) .app-card {
-        border-color: rgb(31 41 55);
-        background: rgb(3 7 18);
-    }
-
-    :global(.dark) .app-card:hover {
-        border-color: rgb(0 181 226 / 0.45);
-        box-shadow: 0 18px 44px rgb(0 0 0 / 0.5);
-    }
-
-    :global(.dark) .app-title {
-        color: rgb(255 255 255);
-    }
-
-    :global(.dark) .app-desc {
-        color: rgb(156 163 175);
-    }
-
-    :global(.dark) .app-arrow {
-        color: #00b5e2;
-        border-color: rgb(0 181 226 / 0.3);
-    }
-
-    :global(.dark) .app-card:hover .app-arrow {
-        background: #00b5e2;
-        border-color: #00b5e2;
-        color: #021018;
     }
 
     /* Dos columnas: las anchas ocupan la fila entera y las estrechas se emparejan,
@@ -292,20 +135,16 @@ const applications = [
             grid-template-columns: repeat(2, 1fr);
         }
 
-        .app-card--wide {
+        .app-grid :global(.app-card--wide) {
             grid-column: span 2;
         }
 
-        .app-card--narrow {
+        .app-grid :global(.app-card--narrow) {
             grid-column: span 1;
         }
 
-        .app-card--narrow:last-child {
+        .app-grid :global(.app-card--narrow:last-child) {
             grid-column: span 2;
-        }
-
-        .app-card--narrow:last-child .app-media {
-            aspect-ratio: 16 / 9;
         }
     }
 
@@ -314,14 +153,10 @@ const applications = [
             grid-template-columns: 1fr;
         }
 
-        .app-card--wide,
-        .app-card--narrow,
-        .app-card--narrow:last-child {
+        .app-grid :global(.app-card--wide),
+        .app-grid :global(.app-card--narrow),
+        .app-grid :global(.app-card--narrow:last-child) {
             grid-column: span 1;
-        }
-
-        .app-card--narrow .app-media {
-            aspect-ratio: 16 / 9;
         }
     }
 </style>

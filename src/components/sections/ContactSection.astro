@@ -16,12 +16,11 @@ import Container from "../shared/Container.astro";
     </div>
 
     <Container className="relative z-10">
-        {/* Esta sección la comparten cinco páginas y NO se migra a data-reveal.
-            initReveals() corre en las que usan VisionLayout (/software/,
-            /control/, /tracking/) y en la home, que lo monta desde su propia
-            página, pero /ai/ va con AutomatizacionLayout y ahí no corre en
-            ninguna parte: un data-reveal la dejaría sin animación de entrada.
-            El observer de data-animate es el único que funciona en las cinco. */}
+        {/* Esta sección la comparten las cinco páginas de servicio y la home, y
+            se queda en el observer de data-animate. Hoy initReveals() sí corre en
+            todas ellas, pero el observer ligero basta para un fundido de dos
+            columnas y evita que un componente compartido dependa de que cada
+            layout monte GSAP. */}
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div data-animate="fade-up">
                 <p

@@ -69,65 +69,26 @@ import { Zap, Workflow, BadgeCheck } from "@lucide/astro";
 
                 <!-- Beneficios destacados -->
                 <div
-                    class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mt-8 mb-10"
+                    class="mt-8 mb-10"
                     data-animate="fade-up"
                     data-animate-delay=".15s"
                 >
-                    <!-- Beneficio 1 -->
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 flex items-center justify-center rounded-full bg-[#00B5E2]/10 dark:bg-[#00B5E2]/20 text-[#005EB8] dark:text-[#00B5E2] shadow-md"
-                        >
-                            <Zap />
-                        </div>
-                        <div>
-                            <h3
-                                class="font-semibold text-gray-800 dark:text-gray-200 text-sm"
-                            >
-                                Implementación rápida
-                            </h3>
-                        </div>
-                    </div>
-
-                    <!-- Beneficio 2 -->
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 flex items-center justify-center rounded-full bg-[#005EB8]/10 dark:bg-[#005EB8]/20 text-[#001489] dark:text-[#005EB8] shadow-md"
-                        >
-                            <BadgeCheck />
-                        </div>
-                        <div>
-                            <h3
-                                class="font-semibold text-gray-800 dark:text-gray-200 text-sm"
-                            >
-                                {
-                                    /* Aquí y en el pie de esta sección se
-                                       prometía un retorno asegurado. Una promesa
-                                       de resultado compromete más que cualquier
-                                       cifra optimista y no había nada detrás. Lo
-                                       que sí es cierto es que el alcance se acota
-                                       por etapas antes de cotizar. */
-                                }
-                                Alcance acotado por etapas
-                            </h3>
-                        </div>
-                    </div>
-
-                    <!-- Beneficio 3 -->
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 flex items-center justify-center rounded-full bg-[#001489]/10 dark:bg-[#001489]/20 text-[#00B5E2] dark:text-[#71b5f5] shadow-md"
-                        >
-                            <Workflow />
-                        </div>
-                        <div>
-                            <h3
-                                class="font-semibold text-gray-800 dark:text-gray-200 text-sm"
-                            >
-                                Flujos activos 24/7
-                            </h3>
-                        </div>
-                    </div>
+                    {
+                        /* Antes había aquí tres insignias sueltas —
+                           "Implementación rápida", "Alcance acotado por etapas" y
+                           "Flujos activos 24/7"— que decían poco cada una y
+                           ninguna comprometía a nada. Una sola frase con lo que
+                           de verdad diferencia la conversación vale más, y es
+                           además lo que el FAQ de la página ya sostiene. */
+                    }
+                    <p
+                        class="mx-auto max-w-2xl text-base sm:text-lg leading-relaxed text-gray-600 dark:text-gray-400"
+                    >
+                        Empezamos por un punto, con tus datos y tu criterio de
+                        aceptación, y se amplía cuando ese punto ya se sostiene
+                        solo. Si lo que falta es la captura del dato, lo decimos
+                        antes de cotizar.
+                    </p>
                 </div>
 
                 <!-- Botón de acción -->
