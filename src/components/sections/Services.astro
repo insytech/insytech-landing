@@ -13,11 +13,88 @@ type ServicesProps = {
     imageSecondary: string;
     features: string[];
 };
+
+// Las cinco soluciones, en la versión corta que pide una tarjeta apilada: el
+// desarrollo largo de cada una sigue estando en la reja de abajo. Se declaran
+// aquí y no en `data.ts` porque `data.ts` solo tiene cuatro y su copy está
+// escrito para la reja.
+//
+// El orden es el del menú «Soluciones» del nav, no el de `data.ts`: quien llega
+// por el menú y quien baja por la home tienen que encontrarse la misma
+// secuencia. Los tonos se asignan por POSICIÓN para que no queden dos tarjetas
+// oscuras seguidas, así que reordenar esta lista obliga a revisarlos.
+const solutions = [
+    {
+        eyebrow: "Control",
+        title: "Automatización y control de procesos",
+        body: "Control determinista bajo IEC 61131-3, con los protocolos industriales que ya corren en tu planta y migraciones sin parar la línea.",
+        features: [
+            "Arquitecturas bajo IEC 61131-3",
+            "Profinet, EtherNet/IP y Modbus TCP",
+            "Migración de sistemas legacy",
+        ],
+        href: "/control/",
+        scene: "plc",
+        tone: "light",
+    },
+    {
+        eyebrow: "Trazabilidad",
+        title: "Trazabilidad y monitoreo de producción",
+        body: "El dato de planta en tiempo real: qué se produjo, con qué material y en qué turno, visible para quien tiene que decidir.",
+        features: [
+            "Sistemas MES, ANDON y OEE",
+            "Tableros por área operativa",
+            "Integración con PLC, sensores e IoT",
+        ],
+        href: "/tracking/",
+        scene: "signals",
+        tone: "blue",
+    },
+    {
+        eyebrow: "Visión",
+        title: "Visión artificial para inspección",
+        body: "Inspección automática de calidad con modelos entrenados con tus propias piezas, no con imágenes de otra fábrica.",
+        features: [
+            "Inspección de calidad en línea",
+            "Reconocimiento de patrones y objetos",
+            "Modelos entrenados a medida",
+        ],
+        href: "/vision/",
+        scene: "inspection",
+        tone: "light",
+    },
+    {
+        eyebrow: "Inteligencia artificial",
+        title: "IA aplicada a la operación",
+        body: "La IA se apoya en la instrumentación que ya tienes: decide sobre el dato que generan tu control, tu trazabilidad y tu software.",
+        features: [
+            "Se arranca por un punto de inspección",
+            "Integración por OPC-UA, MQTT o API",
+            "Cada decisión deja evidencia",
+        ],
+        href: "/ai/",
+        scene: "graph",
+        tone: "deep",
+    },
+    {
+        eyebrow: "Software",
+        title: "Desarrollo de software y automatización",
+        body: "Digitalizamos procesos, automatizamos flujos entre sistemas y ponemos en marcha las plataformas que sostienen la operación.",
+        features: [
+            "Aplicaciones web, móviles y de escritorio",
+            "Integración por API entre sistemas",
+            "CRM, ERP y comercio electrónico",
+        ],
+        href: "/software/",
+        scene: "terminal",
+        tone: "light",
+    },
+] as const;
 ---
 
 <section
     id="services"
-    class="relative pt-20 pb-16 overflow-hidden bg-white dark:bg-[#020308]"
+    class="relative pt-20 pb-16 overflow-clip bg-white dark:bg-[#020308]"
 >
     <!-- Architectural Grid - The Infrastructure -->
     <div
@@ -32,7 +109,7 @@ type ServicesProps = {
 
     <Container className="relative z-10">
         <!-- Header: Refined Editorial -->
-        <div class="mb-24 relative">
+        <div class="mb-16 relative">
             <div class="flex items-center gap-4 mb-8 services-reveal">
                 <div class="h-[2px] w-12 bg-[#005EB8]"></div>
                 <span
@@ -62,6 +139,339 @@ type ServicesProps = {
                 precedentes.
             </Paragraph>
         </div>
+
+
+        {/* --- Baraja apilada de soluciones ---------------------------------
+            La forma viene de la sección «Optimized for Scalable Outcomes» de
+            nmore.com, medida en vivo con el método del skill `distiller`. De ahí
+            se toma LA MECÁNICA, no la marca: tipografía, color y copy son los de
+            Insytech, y las tarjetas van sin fotografía.
+
+            Lo medido en la referencia: cinco tarjetas que se fijan a la misma
+            altura, de forma que la siguiente sube y tapa a la anterior; mientras
+            queda tapada, la de abajo encoge de escala 1 a 0.90 con `scrub` y la
+            opacidad no cambia nunca; al terminar la sección todas se sueltan a
+            la vez y la baraja se va como un bloque.
+
+            El apilado NO usa el `pin` de ScrollTrigger. `pin: true` con
+            `pinSpacing: false` y todos los `end` en el mismo punto es,
+            literalmente, lo que hace `position: sticky` de forma nativa: sin JS
+            de pinning, sin reservar espacio y sin depender de `position: fixed`,
+            que el `overflow-clip` del `<main>` podría recortar. GSAP se queda
+            solo con el tween de escala.
+
+            El recorrido por tarjeta no es una constante libre: al no reservarse
+            espacio lo marca la maquetación (alto de la tarjeta + hueco), y sale
+            de unos 480 px frente a los 700 px de la referencia. Es la versión
+            compacta a propósito. */}
+        <div class="deck">
+            {
+                solutions.map((s, i) => (
+                    <a
+                        href={s.href}
+                        class="deck-card"
+                        data-deck-card
+                        data-tone={s.tone}
+                        style={`z-index: ${i + 1}`}
+                    >
+                        <div class="deck-body">
+                            <span class="deck-eyebrow">{s.eyebrow}</span>
+                            <h3 class="deck-title">{s.title}</h3>
+                            <p class="deck-text">{s.body}</p>
+                        </div>
+
+                        <div class="deck-side">
+                            <ul class="deck-features">
+                                {s.features.map((f) => (
+                                    <li>{f}</li>
+                                ))}
+                            </ul>
+                            <span class="deck-cta">
+                                Ver solución
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M7 17 17 7M9 7h8v8" />
+                                </svg>
+                            </span>
+                        </div>
+
+                        {/* La mitad derecha de cada tarjeta de la referencia es
+                            una escena construida —un mock de interfaz, un mosaico
+                            de iconos de red, píldoras con cursores— y es lo que
+                            justifica que midan 600 px. Aquí cada solución tiene la
+                            suya, hecha con el vocabulario que ya usaba la reja de
+                            abajo: la terminal, el ecualizador y los LEDs de PLC
+                            salen de ahí. Todas son decorativas: el argumento está
+                            entero en el texto. */}
+                        <div class="deck-scene" data-scene={s.scene} aria-hidden="true">
+                            {s.scene === "terminal" && (
+                                <div class="sc-ide">
+                                    {/* Un editor completo —barra de repositorio,
+                                        árbol con carpetas, ruta y numeración de
+                                        líneas— y no un panel de consola: es lo
+                                        que hace que se lea "escribimos
+                                        software". Va con su propio cromo oscuro
+                                        aunque la tarjeta sea clara, porque un
+                                        editor real no cambia de tema con la
+                                        página, y sobresale por la derecha para
+                                        que se lea como una ventana que sigue
+                                        más allá del borde.
+
+                                        El código va en inglés, como el de
+                                        cualquier repositorio de la casa, y el
+                                        dominio es el de planta: OEE, línea,
+                                        turno. */}
+                                    <div class="sc-ide-chrome">
+                                        <span class="is-active">Code</span>
+                                        <span>Pull requests</span>
+                                        <span>Actions</span>
+                                        <span>Insights</span>
+                                    </div>
+
+                                    <div class="sc-ide-body">
+                                        <aside class="sc-ide-tree">
+                                            <p class="sc-ide-branch">main</p>
+                                            <ul>
+                                                <li data-kind="folder">src</li>
+                                                <li data-kind="folder" class="sc-d1">
+                                                    line
+                                                </li>
+                                                <li
+                                                    data-kind="file"
+                                                    class="sc-d2 is-active"
+                                                >
+                                                    oee.ts
+                                                </li>
+                                                <li data-kind="file" class="sc-d2">
+                                                    shift.ts
+                                                </li>
+                                                <li data-kind="folder" class="sc-d1">
+                                                    api
+                                                </li>
+                                                <li data-kind="file" class="sc-d2">
+                                                    client.ts
+                                                </li>
+                                                <li data-kind="file">README.md</li>
+                                            </ul>
+                                        </aside>
+
+                                        <div class="sc-ide-main">
+                                            <p class="sc-ide-path">
+                                                src / line / <b>oee.ts</b>
+                                            </p>
+
+                                            {/* Las líneas van con `set:html`
+                                                porque escritas como marcado JSX
+                                                los espacios entre etiquetas se
+                                                colapsan y el código sale pegado
+                                                ("exportasyncfunction").
+
+                                                Sigue habiendo código por debajo
+                                                de la línea que se está
+                                                escribiendo: un editor con el
+                                                cursor en la última línea del
+                                                archivo parece un archivo vacío,
+                                                no un proyecto en marcha. */}
+                                            <ol class="sc-ide-code">
+                                                <li set:html={'<b>import</b> { getLine } <b>from</b> <em>"./line"</em>'} />
+                                                <li set:html={'<b>import</b> { notifyShift } <b>from</b> <em>"./shift"</em>'} />
+                                                <li set:html={'&nbsp;'} />
+                                                <li set:html={'<b>export</b> <b>async</b> <b>function</b> <u>checkLine</u>(id) {'} />
+                                                <li class="sc-d1" set:html={'<b>const</b> line = <b>await</b> <u>getLine</u>(id)'} />
+                                                <li class="sc-d1" set:html={'<b>if</b> (line.oee &lt; target) {'} />
+                                                <li class="sc-d2" set:html={'<b>await</b> <u>notifyShift</u>(line.shift)'} />
+                                                <li class="sc-d1" set:html={'}'} />
+                                                <li class="sc-d1 sc-typed">
+                                                    <span set:html={'<b>return</b> <u>recordMetrics</u>(line)'} />
+                                                    <i class="sc-caret" />
+                                                </li>
+                                                <li set:html={'}'} />
+                                                <li set:html={'&nbsp;'} />
+                                                <li set:html={'<i>// runs on every shift change</i>'} />
+                                                <li set:html={'<b>export</b> <b>function</b> <u>onShiftChange</u>(shift) {'} />
+                                                <li class="sc-d1" set:html={'<b>return</b> shift.lines.<u>map</u>(<u>checkLine</u>)'} />
+                                                <li set:html={'}'} />
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {s.scene === "signals" && (
+                                <div class="sc-panel">
+                                    <div class="sc-live">
+                                        <i />
+                                        En línea
+                                    </div>
+                                    <div class="sc-bars">
+                                        {Array.from({ length: 14 }).map((_, n) => (
+                                            <i style={`--n:${n}`} />
+                                        ))}
+                                    </div>
+                                    <div class="sc-legend">
+                                        <span>OEE</span>
+                                        <span>ANDON</span>
+                                        <span>MES</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {s.scene === "plc" && (
+                                <div class="sc-panel sc-rack">
+                                    {Array.from({ length: 3 }).map((_, m) => (
+                                        <div class="sc-module">
+                                            <div class="sc-leds">
+                                                {Array.from({ length: 6 }).map(
+                                                    (_, n) => (
+                                                        <i
+                                                            style={`--n:${m * 6 + n}`}
+                                                        />
+                                                    ),
+                                                )}
+                                            </div>
+                                            <div class="sc-load">
+                                                <i style={`--n:${m}`} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {s.scene === "inspection" && (
+                                <div class="sc-panel sc-inspect">
+                                    <div class="sc-parts">
+                                        {[
+                                            "ok",
+                                            "ok",
+                                            "nok",
+                                            "ok",
+                                            "ok",
+                                            "ok",
+                                            "nok",
+                                            "ok",
+                                            "ok",
+                                        ].map((verdict, n) => (
+                                            <i
+                                                class="sc-part"
+                                                data-verdict={verdict}
+                                                style={`--row:${Math.floor(n / 3)}; --col:${n % 3}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div class="sc-scan" />
+                                    <div class="sc-verdicts">
+                                        <span data-verdict="ok">OK</span>
+                                        <span data-verdict="nok">NOK</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {s.scene === "graph" && (
+                                <div class="sc-panel sc-graph">
+                                    <svg
+                                        viewBox="0 0 260 150"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                    >
+                                        {/* Tres entradas, una decisión, dos
+                                            salidas: es literalmente lo que dice
+                                            el texto de la tarjeta. */}
+                                        {[
+                                            { y: 30, label: "Control" },
+                                            { y: 75, label: "Trazabilidad" },
+                                            { y: 120, label: "Software" },
+                                        ].map((row, n) => (
+                                            <>
+                                                <text
+                                                    class="sc-label"
+                                                    x="4"
+                                                    y={row.y + 2.5}
+                                                >
+                                                    {row.label}
+                                                </text>
+                                                <circle
+                                                    class="sc-in"
+                                                    cx="70"
+                                                    cy={row.y}
+                                                    r="3.5"
+                                                    style={`--n:${n}`}
+                                                />
+                                            </>
+                                        ))}
+
+                                        <path
+                                            class="sc-rail"
+                                            d="M76 30C104 30 108 75 134 75M76 75h58M76 120C104 120 108 75 134 75M158 75c22 0 18-30 42-30M158 75c22 0 18 30 42 30"
+                                        />
+
+                                        {[
+                                            { d: "M76 30C104 30 108 75 134 75", n: 0 },
+                                            { d: "M76 75h58", n: 1 },
+                                            { d: "M76 120C104 120 108 75 134 75", n: 2 },
+                                        ].map((edge) => (
+                                            <path
+                                                class="sc-pulse"
+                                                d={edge.d}
+                                                pathLength="100"
+                                                style={`--n:${edge.n}`}
+                                            />
+                                        ))}
+
+                                        <circle class="sc-hub-ring" cx="146" cy="75" r="12" />
+                                        <circle class="sc-hub" cx="146" cy="75" r="12" />
+
+                                        {[
+                                            { d: "M158 75c22 0 18-30 42-30", n: 0 },
+                                            { d: "M158 75c22 0 18 30 42 30", n: 1 },
+                                        ].map((edge) => (
+                                            <path
+                                                class="sc-pulse sc-pulse--out"
+                                                d={edge.d}
+                                                pathLength="100"
+                                                style={`--n:${edge.n}`}
+                                            />
+                                        ))}
+
+                                        {[
+                                            { y: 45, label: "Acción", n: 0 },
+                                            { y: 105, label: "Evidencia", n: 1 },
+                                        ].map((row) => (
+                                            <>
+                                                <circle
+                                                    class="sc-out"
+                                                    cx="204"
+                                                    cy={row.y}
+                                                    r="3.5"
+                                                    style={`--n:${row.n}`}
+                                                />
+                                                <text
+                                                    class="sc-label"
+                                                    x="214"
+                                                    y={row.y + 2.5}
+                                                >
+                                                    {row.label}
+                                                </text>
+                                            </>
+                                        ))}
+                                    </svg>
+                                </div>
+                            )}
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+
+        {/* La reja de abajo cuenta las mismas cinco soluciones con el detalle
+            que la baraja deja fuera: es el desarrollo, no una repetición. */}
+        <p class="deck-bridge">En detalle</p>
 
         <!-- Ultra-Modern Bento Grid -->
         <div
@@ -784,3 +1194,1070 @@ type ServicesProps = {
         </div>
     </Container>
 </section>
+
+<style>
+    .deck {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+
+    /* El apilado entero vive en estas dos declaraciones. Cada tarjeta se pega a
+       la misma altura, así que la siguiente sube y la tapa; todas se despegan
+       cuando termina `.deck`, y por eso la baraja sale de pantalla como un solo
+       bloque. */
+    .deck-card {
+        position: sticky;
+        top: clamp(5.5rem, 12vh, 7.5rem);
+
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        gap: clamp(1.5rem, 4vw, 3.5rem);
+        min-height: clamp(26rem, 50vh, 31rem);
+        grid-template-rows: auto 1fr;
+        align-items: stretch;
+        padding: clamp(1.75rem, 4vw, 3.25rem);
+        border-radius: 2.5rem;
+        /* Recorta la ventana del editor de la primera escena, que sale a
+           propósito por el borde derecho. */
+        overflow: hidden;
+        text-decoration: none;
+        /* Origen en el centro, como en la referencia, para que la tarjeta tapada
+           se hunda hacia dentro en vez de encogerse desde una esquina. */
+        transform-origin: center center;
+        will-change: transform;
+    }
+
+    .deck-card[data-tone="light"] {
+        background: rgb(249 250 251);
+        border: 1px solid rgb(229 231 235);
+        --deck-fg: #002b49;
+        --deck-muted: rgb(75 85 99);
+        --deck-accent: #005eb8;
+        --deck-chip-bg: rgb(255 255 255);
+        --deck-chip-border: rgb(229 231 235);
+    }
+
+    :global(.dark) .deck-card[data-tone="light"] {
+        background: #0a0f1e;
+        border-color: rgb(255 255 255 / 0.07);
+        --deck-fg: #ffffff;
+        --deck-muted: rgb(156 163 175);
+        --deck-accent: #00b5e2;
+        --deck-chip-bg: rgb(255 255 255 / 0.05);
+        --deck-chip-border: rgb(255 255 255 / 0.1);
+    }
+
+    .deck-card[data-tone="blue"] {
+        background: #001489;
+        border: 1px solid rgb(255 255 255 / 0.08);
+        --deck-fg: #ffffff;
+        --deck-muted: rgb(255 255 255 / 0.66);
+        --deck-accent: #00b5e2;
+        --deck-chip-bg: rgb(255 255 255 / 0.08);
+        --deck-chip-border: rgb(255 255 255 / 0.16);
+    }
+
+    .deck-card[data-tone="deep"] {
+        background: #020617;
+        border: 1px solid rgb(0 181 226 / 0.18);
+        --deck-fg: #ffffff;
+        --deck-muted: rgb(255 255 255 / 0.64);
+        --deck-accent: #00b5e2;
+        --deck-chip-bg: rgb(0 181 226 / 0.08);
+        --deck-chip-border: rgb(0 181 226 / 0.22);
+    }
+
+    .deck-body {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 0;
+    }
+
+    /* Texto arriba, etiquetas y enlace abajo: la columna izquierda es una sola
+       pieza aunque en el marcado sean dos, para que el enlace caiga al pie de la
+       tarjeta y no flote a media altura. */
+    .deck-card > .deck-body {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: start;
+    }
+
+    .deck-card > .deck-side {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: end;
+    }
+
+    .deck-card > .deck-scene {
+        grid-column: 2;
+        grid-row: 1 / -1;
+    }
+
+    .deck-eyebrow {
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: var(--deck-accent);
+    }
+
+    .deck-title {
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--deck-fg);
+        text-wrap: balance;
+    }
+
+    .deck-text {
+        margin: 0;
+        max-width: 46ch;
+        font-size: clamp(1rem, 1.2vw, 1.1rem);
+        line-height: 1.65;
+        color: var(--deck-muted);
+        text-wrap: pretty;
+    }
+
+    /* El enlace se va al pie de la tarjeta en vez de quedar pegado a las
+       etiquetas: sin fotografía, ese hueco es lo único que le da respiro. */
+    .deck-side {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.25rem;
+        align-items: flex-start;
+        min-width: 0;
+    }
+
+    .deck-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .deck-features li {
+        padding: 0.45rem 0.9rem;
+        border-radius: 999px;
+        background: var(--deck-chip-bg);
+        border: 1px solid var(--deck-chip-border);
+        font-size: 0.8rem;
+        font-weight: 600;
+        line-height: 1.25;
+        color: var(--deck-muted);
+    }
+
+    .deck-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: auto;
+        font-weight: 700;
+        color: var(--deck-fg);
+    }
+
+    .deck-cta svg {
+        width: 1.05rem;
+        height: 1.05rem;
+        transition: transform 0.35s ease;
+    }
+
+    .deck-card:hover .deck-cta svg,
+    .deck-card:focus-visible .deck-cta svg {
+        transform: translate(3px, -3px);
+    }
+
+    .deck-card:focus-visible {
+        outline: 2px solid var(--deck-accent);
+        outline-offset: 4px;
+    }
+
+    /* --- Escenas ------------------------------------------------------------
+       Una por solución, con el vocabulario que ya tenía la reja de abajo. Son
+       CSS puro: ni una imagen ni un frame de JavaScript. Solo se animan
+       `transform` y `opacity`, y solo cuando la sección está en pantalla — el
+       script les pone `.is-live` con un IntersectionObserver, porque cinco
+       escenas latiendo a la vez fuera de vista es exactamente el tipo de coste
+       que no se nota hasta que la página va a tirones. */
+    .deck-scene {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+        color: var(--deck-accent);
+    }
+
+    .sc-panel {
+        position: relative;
+        width: 100%;
+        max-width: 22rem;
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+        background: var(--deck-chip-bg);
+        border: 1px solid var(--deck-chip-border);
+        overflow: hidden;
+    }
+
+    .deck-scene :is(i, span, p) {
+        display: block;
+    }
+
+    /* Todo lo que late queda quieto hasta que la sección entra en pantalla. */
+    .deck-scene :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-part::after, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
+        animation-play-state: paused;
+    }
+
+    .deck-scene.is-live :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-part::after, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
+        animation-play-state: running;
+    }
+
+    /* 1. Software: un editor de verdad. Tres cosas lo separan de un panel de
+       código cualquiera, y las tres vienen de medir la referencia: cromo propio
+       oscuro aunque la tarjeta sea clara —un editor no cambia de tema con la
+       página—, numeración de líneas, y que la ventana SOBRESALGA por la derecha
+       en vez de caber entera. Ese recorte es la mitad del efecto: sugiere que
+       hay proyecto más allá del borde.
+
+       Los colores del editor son fijos y no salen de los tokens de la tarjeta,
+       porque aquí el cromo no es superficie de marca: es un objeto que se
+       muestra. */
+    .deck-scene[data-scene="terminal"] {
+        justify-content: flex-end;
+        align-items: stretch;
+    }
+
+    .sc-ide {
+        --ide-bg: #0b1220;
+        --ide-panel: #0e1729;
+        --ide-line: #1e293b;
+        --ide-text: #94a3b8;
+        --ide-strong: #e2e8f0;
+        --ide-key: #38bdf8;
+        --ide-fn: #c4b5fd;
+        --ide-str: #7dd3a0;
+
+        width: 34rem;
+        max-width: none;
+        /* Ocupa todo el alto de la tarjeta, como en la referencia: un editor
+           bajito parece un recorte de código, no una ventana. */
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        /* Sobresale del padding de la tarjeta: el recorte lo hace el
+           `overflow: hidden` de `.deck-card`. */
+        margin-right: clamp(-3.25rem, -4vw, -1.75rem);
+        border-radius: 0.9rem 0 0 0.9rem;
+        overflow: hidden;
+        background: var(--ide-bg);
+        border: 1px solid var(--ide-line);
+        border-right: 0;
+        font-family: ui-monospace, "SFMono-Regular", "Menlo", monospace;
+        font-size: 0.6rem;
+        line-height: 1.85;
+        box-shadow: 0 24px 60px -30px rgb(2 6 23 / 0.55);
+    }
+
+    .sc-ide-chrome {
+        display: flex;
+        gap: 1.1rem;
+        padding: 0.55rem 0.9rem;
+        border-bottom: 1px solid var(--ide-line);
+        color: var(--ide-text);
+    }
+
+    .sc-ide-chrome span {
+        opacity: 0.65;
+        white-space: nowrap;
+    }
+
+    .sc-ide-chrome .is-active {
+        opacity: 1;
+        color: var(--ide-strong);
+        box-shadow: inset 0 -2px 0 var(--ide-key);
+    }
+
+    .sc-ide-body {
+        display: grid;
+        grid-template-columns: 8.5rem 1fr;
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Las últimas líneas se pierden por abajo en vez de cortarse en seco: el
+       archivo sigue más allá del borde inferior, igual que sigue por la derecha. */
+    .sc-ide-main {
+        overflow: hidden;
+        mask-image: linear-gradient(to bottom, #000 78%, transparent);
+    }
+
+    .sc-ide-tree {
+        padding: 0.7rem 0.75rem;
+        border-right: 1px solid var(--ide-line);
+        background: var(--ide-panel);
+        color: var(--ide-text);
+    }
+
+    .sc-ide-branch {
+        margin: 0 0 0.55rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.35rem;
+        border: 1px solid var(--ide-line);
+        color: var(--ide-strong);
+    }
+
+    .sc-ide-tree ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .sc-ide-tree li {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        white-space: nowrap;
+        opacity: 0.7;
+    }
+
+    /* Carpeta y archivo se distinguen por la forma del marcador, no por un icono
+       importado: dos reglas de CSS frente a un SVG por fila. */
+    .sc-ide-tree li::before {
+        content: "";
+        flex: none;
+        width: 0.45rem;
+        height: 0.45rem;
+        border: 1px solid currentColor;
+    }
+
+    .sc-ide-tree li[data-kind="folder"]::before {
+        border-radius: 0.1rem;
+        background: currentColor;
+        opacity: 0.5;
+    }
+
+    .sc-ide-tree li[data-kind="file"]::before {
+        border-radius: 0.1rem;
+    }
+
+    .sc-ide-tree .sc-d1 {
+        padding-left: 0.6rem;
+    }
+
+    .sc-ide-tree .sc-d2 {
+        padding-left: 1.2rem;
+    }
+
+    .sc-ide-tree .is-active {
+        opacity: 1;
+        color: var(--ide-strong);
+    }
+
+    .sc-ide-path {
+        margin: 0;
+        padding: 0.5rem 0.9rem;
+        border-bottom: 1px solid var(--ide-line);
+        color: var(--ide-text);
+    }
+
+    .sc-ide-path b {
+        font-weight: 600;
+        color: var(--ide-strong);
+    }
+
+    /* La numeración sale de un contador, no de una columna de nodos repetidos. */
+    .sc-ide-code {
+        counter-reset: ln;
+        margin: 0;
+        padding: 0.6rem 0;
+        list-style: none;
+        color: var(--ide-text);
+    }
+
+    /* Nada de `display: flex` aquí: un contenedor flex descarta los nodos de
+       texto que solo contienen espacios, y el código se renderizaba pegado
+       ("exportasyncfunction"). La numeración va con un `::before` absoluto, así
+       que la fila puede seguir siendo un bloque normal. */
+    .sc-ide-code li {
+        position: relative;
+        padding-left: 2.4rem;
+        white-space: nowrap;
+    }
+
+    .sc-ide-code li::before {
+        counter-increment: ln;
+        content: counter(ln);
+        position: absolute;
+        left: 0;
+        width: 1.7rem;
+        text-align: right;
+        opacity: 0.35;
+    }
+
+    /* Con `:global` porque el marcado de `set:html` no recibe el atributo de
+       ámbito que Astro añade al resto de la plantilla. */
+    .sc-ide-code :global(b) {
+        font-weight: 400;
+        color: var(--ide-key);
+    }
+
+    .sc-ide-code :global(u) {
+        text-decoration: none;
+        color: var(--ide-fn);
+    }
+
+    .sc-ide-code :global(em) {
+        font-style: normal;
+        color: var(--ide-str);
+    }
+
+    .sc-ide-code :global(i) {
+        font-style: normal;
+        opacity: 0.5;
+    }
+
+    .sc-ide-code .sc-d1 {
+        padding-left: 3.3rem;
+    }
+
+    .sc-ide-code .sc-d2 {
+        padding-left: 4.2rem;
+    }
+
+    /* La línea se escribe recortando su propio ancho por pasos: un carácter por
+       paso, sin medir nada en JavaScript. */
+    .sc-ide-code .sc-typed {
+        display: flex;
+        align-items: center;
+    }
+
+    .sc-typed span {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 26ch;
+        animation: sc-typing 6s steps(26) infinite;
+    }
+
+    .deck-scene .sc-caret {
+        display: inline-block;
+        flex: none;
+        width: 0.4rem;
+        height: 0.8rem;
+        background: var(--ide-strong);
+        animation: sc-blink 1.1s steps(1) infinite;
+    }
+
+    @keyframes sc-typing {
+        0%,
+        5% {
+            width: 0;
+        }
+        50%,
+        92% {
+            width: 26ch;
+        }
+        100% {
+            width: 0;
+        }
+    }
+
+    @keyframes sc-blink {
+        0%,
+        50% {
+            opacity: 1;
+        }
+        51%,
+        100% {
+            opacity: 0;
+        }
+    }
+
+    /* 2. Trazabilidad: el ecualizador de la reja, con alturas fijas en vez de
+       aleatorias para que no cambie en cada carga. */
+    .sc-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-bottom: 1rem;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--deck-accent);
+    }
+
+    .sc-live i {
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 999px;
+        background: currentColor;
+        animation: sc-pulse 1.8s ease-in-out infinite;
+    }
+
+    .sc-bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.3rem;
+        height: 6.5rem;
+    }
+
+    .sc-bars i {
+        flex: 1;
+        border-radius: 999px 999px 0 0;
+        background: currentColor;
+        opacity: 0.55;
+        height: 30%;
+        transform-origin: bottom center;
+        animation: sc-wave 2.6s ease-in-out infinite;
+        animation-delay: calc(var(--n) * -0.16s);
+    }
+
+    .sc-legend {
+        display: flex;
+        gap: 0.9rem;
+        margin-top: 0.9rem;
+        font-size: 0.62rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        color: var(--deck-muted);
+    }
+
+    @keyframes sc-pulse {
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.35;
+            transform: scale(0.7);
+        }
+    }
+
+    @keyframes sc-wave {
+        0%,
+        100% {
+            transform: scaleY(0.6);
+        }
+        50% {
+            transform: scaleY(2.4);
+        }
+    }
+
+    /* 3. Control: el rack de LEDs del bento. Los módulos disparan por turnos,
+       igual que allí, pero con un retardo fijo en vez de un temporizador. */
+    .sc-rack {
+        display: flex;
+        flex-direction: column;
+        gap: 0.9rem;
+    }
+
+    .sc-module {
+        padding: 0.7rem 0.8rem;
+        border-radius: 0.8rem;
+        background: var(--deck-chip-bg);
+        border: 1px solid var(--deck-chip-border);
+    }
+
+    .sc-leds {
+        display: flex;
+        gap: 0.4rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .sc-leds i {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 999px;
+        background: currentColor;
+        opacity: 0.2;
+        animation: sc-led 2.4s ease-in-out infinite;
+        animation-delay: calc(var(--n) * -0.13s);
+    }
+
+    .sc-load {
+        height: 0.3rem;
+        border-radius: 999px;
+        background: var(--deck-chip-border);
+        overflow: hidden;
+    }
+
+    .sc-load i {
+        height: 100%;
+        border-radius: inherit;
+        background: currentColor;
+        opacity: 0.7;
+        transform-origin: left center;
+        animation: sc-load 3.2s ease-in-out infinite;
+        animation-delay: calc(var(--n) * -0.9s);
+    }
+
+    @keyframes sc-led {
+        0%,
+        70%,
+        100% {
+            opacity: 0.18;
+        }
+        35% {
+            opacity: 1;
+        }
+    }
+
+    @keyframes sc-load {
+        0%,
+        100% {
+            transform: scaleX(0.3);
+        }
+        50% {
+            transform: scaleX(0.85);
+        }
+    }
+
+    /* 4. Visión: nueve piezas y una línea que las recorre. Cada pieza dictamina
+       justo cuando la línea pasa por encima —verde OK, rojo NOK— y el ciclo se
+       reinicia al terminar la pasada. El veredicto va fijo en el marcado y no al
+       azar: siempre fallan las mismas dos, para que la escena se lea igual en
+       cada carga y no parezca que la inspección es una lotería.
+
+       El verde y el rojo son los dos únicos colores fuera de la paleta de la
+       marca en toda la sección, y están justificados: son un dictamen de
+       pasa/no pasa, la convención que la propia planta ya usa. */
+    .sc-inspect {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .sc-parts {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.6rem;
+    }
+
+    .sc-part {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 0.55rem;
+        border: 1.5px solid currentColor;
+        opacity: 0.22;
+        /* El retardo sigue a la línea: primero la fila de arriba, y dentro de
+           cada fila de izquierda a derecha. */
+        animation: sc-verdict 5s ease-in-out infinite;
+        animation-delay: calc(var(--row) * 0.82s + var(--col) * 0.1s);
+    }
+
+    .sc-part[data-verdict="ok"] {
+        --verdict: #16a34a;
+    }
+
+    .sc-part[data-verdict="nok"] {
+        --verdict: #dc2626;
+    }
+
+    :global(.dark) .sc-part[data-verdict="ok"] {
+        --verdict: #4ade80;
+    }
+
+    :global(.dark) .sc-part[data-verdict="nok"] {
+        --verdict: #f87171;
+    }
+
+    .sc-part::after {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 0.55rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: var(--verdict);
+        opacity: 0;
+        animation: sc-verdict-glyph 5s ease-in-out infinite;
+        /* Toma el valor calculado del padre para que el dictamen y el rótulo
+           entren en el mismo fotograma. */
+        animation-delay: inherit;
+    }
+
+    .sc-part[data-verdict="ok"]::after {
+        content: "OK";
+    }
+
+    .sc-part[data-verdict="nok"]::after {
+        content: "NOK";
+    }
+
+    .sc-scan {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: currentColor;
+        box-shadow: 0 0 14px 2px currentColor;
+        animation: sc-sweep 5s ease-in-out infinite;
+    }
+
+    .sc-verdicts {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.9rem;
+        font-size: 0.6rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+    }
+
+    .sc-verdicts span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        color: var(--deck-muted);
+    }
+
+    .sc-verdicts span::before {
+        content: "";
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 999px;
+        background: var(--verdict);
+    }
+
+    .sc-verdicts span[data-verdict="ok"] {
+        --verdict: #16a34a;
+    }
+
+    .sc-verdicts span[data-verdict="nok"] {
+        --verdict: #dc2626;
+    }
+
+    :global(.dark) .sc-verdicts span[data-verdict="ok"] {
+        --verdict: #4ade80;
+    }
+
+    :global(.dark) .sc-verdicts span[data-verdict="nok"] {
+        --verdict: #f87171;
+    }
+
+    @keyframes sc-verdict {
+        0%,
+        6% {
+            opacity: 0.22;
+            border-color: currentColor;
+            background: transparent;
+        }
+        14%,
+        72% {
+            opacity: 1;
+            border-color: var(--verdict);
+            background: color-mix(in srgb, var(--verdict) 20%, transparent);
+        }
+        82%,
+        100% {
+            opacity: 0.22;
+            border-color: currentColor;
+            background: transparent;
+        }
+    }
+
+    @keyframes sc-verdict-glyph {
+        0%,
+        8% {
+            opacity: 0;
+        }
+        16%,
+        72% {
+            opacity: 1;
+        }
+        80%,
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @keyframes sc-sweep {
+        0% {
+            top: 6%;
+            opacity: 0;
+        }
+        8% {
+            opacity: 0.9;
+        }
+        58% {
+            top: 88%;
+            opacity: 0.9;
+        }
+        70%,
+        100% {
+            top: 88%;
+            opacity: 0;
+        }
+    }
+
+    /* 5. IA: un diagrama, no un adorno. Tres entradas —control, trazabilidad y
+       software—, una decisión y dos salidas: es literalmente lo que dice el
+       texto de la tarjeta, así que la escena lo demuestra en vez de sugerir
+       "algo de IA" con nodos sueltos.
+
+       El pulso viaja por la arista con `stroke-dashoffset` sobre un guion corto,
+       que es la forma barata de recorrer un trazo: `pathLength="100"` normaliza
+       cada curva para que las tres tarden lo mismo aunque midan distinto. */
+    .sc-graph {
+        max-width: 27rem;
+        padding: 1.5rem 1.25rem;
+    }
+
+    .sc-graph svg {
+        width: 100%;
+        height: auto;
+        color: var(--deck-accent);
+    }
+
+    .sc-label {
+        font-family: var(--font-body, inherit);
+        font-size: 7.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        fill: var(--deck-muted);
+    }
+
+    .sc-rail {
+        stroke: currentColor;
+        stroke-width: 1.25;
+        opacity: 0.22;
+    }
+
+    .sc-pulse {
+        stroke: currentColor;
+        stroke-width: 2.25;
+        stroke-dasharray: 9 200;
+        animation: sc-travel 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+        animation-delay: calc(var(--n) * 0.14s);
+    }
+
+    /* Las salidas arrancan cuando el pulso ya llegó al centro. */
+    .sc-pulse--out {
+        animation-delay: calc(1.5s + var(--n) * 0.12s);
+    }
+
+    .sc-in,
+    .sc-out {
+        fill: currentColor;
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    .sc-in {
+        opacity: 0.3;
+        animation: sc-blip 3.6s ease-out infinite;
+        animation-delay: calc(var(--n) * 0.14s);
+    }
+
+    .sc-out {
+        opacity: 0.3;
+        animation: sc-blip 3.6s ease-out infinite;
+        animation-delay: calc(1.95s + var(--n) * 0.12s);
+    }
+
+    .sc-hub {
+        fill: currentColor;
+        opacity: 0.16;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: sc-hub 3.6s ease-out infinite;
+        animation-delay: 1.25s;
+    }
+
+    /* El anillo que sale del centro al decidir. Va detrás del nodo para que no
+       le tape el borde. */
+    .sc-hub-ring {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.5;
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: sc-ring 3.6s ease-out infinite;
+        animation-delay: 1.25s;
+    }
+
+    @keyframes sc-travel {
+        0% {
+            stroke-dashoffset: 9;
+            opacity: 0;
+        }
+        6% {
+            opacity: 1;
+        }
+        36% {
+            stroke-dashoffset: -100;
+            opacity: 1;
+        }
+        42%,
+        100% {
+            stroke-dashoffset: -100;
+            opacity: 0;
+        }
+    }
+
+    @keyframes sc-blip {
+        0%,
+        100% {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+        10% {
+            opacity: 1;
+            transform: scale(1.5);
+        }
+        40% {
+            opacity: 0.3;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes sc-hub {
+        0%,
+        100% {
+            opacity: 0.16;
+            transform: scale(1);
+        }
+        12% {
+            opacity: 0.5;
+            transform: scale(1.1);
+        }
+        40% {
+            opacity: 0.16;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes sc-ring {
+        0% {
+            opacity: 0.55;
+            transform: scale(1);
+        }
+        45%,
+        100% {
+            opacity: 0;
+            transform: scale(2.1);
+        }
+    }
+
+    /* Separa la baraja de la reja para que la segunda se lea como el desarrollo
+       de la primera y no como una repetición. */
+    .deck-bridge {
+        margin: 6rem 0 2rem;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        color: #005eb8;
+    }
+
+    :global(.dark) .deck-bridge {
+        color: #00b5e2;
+    }
+
+    @media (max-width: 900px) {
+        .deck-card {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            gap: 1.25rem;
+        }
+
+        .deck-card > .deck-side {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        /* Con una sola columna la escena empujaría el texto fuera de la tarjeta
+           pegada, y la tarjeta pegada es toda la sección. */
+        .deck-card > .deck-scene {
+            display: none;
+        }
+    }
+
+    /* Sin movimiento la baraja no tiene sentido: se deshace en una lista normal
+       y se lee entera. */
+    @media (prefers-reduced-motion: reduce) {
+        .deck-card {
+            position: static;
+            transform: none !important;
+        }
+
+        .deck-scene * {
+            animation: none !important;
+        }
+    }
+</style>
+
+<script>
+    import { gsap as deckGsap } from "gsap";
+    import { ScrollTrigger as DeckScrollTrigger } from "gsap/ScrollTrigger";
+
+    deckGsap.registerPlugin(DeckScrollTrigger);
+
+    const initDeck = () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+            return;
+
+        const cards =
+            deckGsap.utils.toArray<HTMLElement>("[data-deck-card]");
+        if (!cards.length) return;
+
+        // Las escenas solo laten con la sección en pantalla: cinco animando a
+        // la vez fuera de vista es coste puro.
+        const scenes = document.querySelectorAll(".deck-scene");
+        if (scenes.length) {
+            const io = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((e) =>
+                        e.target.classList.toggle("is-live", e.isIntersecting),
+                    );
+                },
+                { rootMargin: "10% 0px" },
+            );
+            scenes.forEach((scene) => io.observe(scene));
+        }
+
+        cards.forEach((card, i) => {
+            const next = cards[i + 1];
+
+            deckGsap.from(card, {
+                y: 48,
+                opacity: 0,
+                duration: 0.7,
+                ease: "power3.out",
+                scrollTrigger: { trigger: card, start: "top 88%" },
+            });
+
+            // La última no encoge: nadie la tapa. Es lo que hace la referencia.
+            if (!next) return;
+
+            // El recorrido lo marca la maquetación, no una constante: es la
+            // distancia real hasta la tarjeta que la va a cubrir, recalculada en
+            // cada refresh para que resista un cambio de ancho.
+            deckGsap.to(card, {
+                scale: 0.9,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 12%",
+                    end: () => "+=" + (next.offsetTop - card.offsetTop),
+                    scrub: 1,
+                    invalidateOnRefresh: true,
+                },
+            });
+        });
+    };
+
+    if (document.readyState === "loading")
+        document.addEventListener("DOMContentLoaded", initDeck);
+    else initDeck();
+</script>
