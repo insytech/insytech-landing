@@ -2,10 +2,7 @@
 import Layout from "../../layouts/VisionLayout.astro";
 import Hero from "../../components/tracking/Hero.astro";
 import SocialProof from "../../components/shared/SocialProof.astro";
-import MesPlanner from "../../components/tracking/MesPlanner.astro";
-import MesManagement from "../../components/tracking/MesManagement.astro";
-import MesHmi from "../../components/tracking/MesHmi.astro";
-import MesAndon from "../../components/tracking/MesAndon.astro";
+import Capabilities from "../../components/tracking/Capabilities.astro";
 import Cta from "../../components/tracking/Cta.astro";
 import Resources from "../../components/tracking/Resources.astro";
 import FAQ from "../../components/tracking/FAQ.astro";
@@ -26,10 +23,7 @@ import { SURFACE } from "@utils/typography";
              pesa más que las cuatro capacidades que siguen. -->
         <SocialProof class={SURFACE.base} />
 
-        <MesPlanner />
-        <MesManagement />
-        <MesHmi />
-        <MesAndon />
+        <Capabilities />
 
         <!-- Cierra la corrida de capacidades, como en /ai/: el CTA remata el
              argumento en vez de quedar entre el FAQ y el contacto. -->
@@ -38,7 +32,6 @@ import { SURFACE } from "@utils/typography";
         <FAQ />
         <ContactSection />
     </main>
-</Layout>
 
 <!-- Las animaciones infinitas de los mocks (pulsos del andon, ping del árbol de
      planta, tarjetas flotantes del Hero) corrían también fuera de pantalla y con
@@ -76,3 +69,171 @@ import { SURFACE } from "@utils/typography";
         scenes.forEach((scene) => io.observe(scene));
     }
 </script>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { MOTION, registerMotion, prefersReducedMotion } from "@utils/motion";
+
+    /**
+     * Entrada de una sola pasada para el interior de cada mock: al entrar en
+     * pantalla, el dispositivo se enciende. No va atado al progreso del scroll —
+     * escrubar el interior de un mock se lee como temblor, no como vida.
+     *
+     * Todo el estado "from" se fija aquí, en JS, y nunca en el CSS: sin JS, con
+     * GSAP caído o con reduced-motion, el markup ya está en su estado final y no
+     * hacer nada es el resultado correcto.
+     *
+     * Se usa `from()` a propósito en vez de `set()` + `to()`: GSAP toma como
+     * valor final el que ya tiene el elemento, así que los pasos atenuados del
+     * HMI (opacity-60 / opacity-40) vuelven a SU opacidad y no a 1, y las barras
+     * del Gantt vuelven a su ancho en % de la clase.
+     *
+     * Nada de esto anima un número hacia un valor: crecen barras y barre un aro,
+     * que son formas y no afirman ninguna magnitud.
+     */
+    const initMockEntrances = () => {
+        if (prefersReducedMotion()) return;
+
+        const mocks = document.querySelectorAll<HTMLElement>("[data-mock]");
+        if (!mocks.length) return;
+
+        gsap.registerPlugin(ScrollTrigger);
+        registerMotion();
+
+        mocks.forEach((mock) => {
+            // El alcance es el envoltorio del mock, no el mock: en el panel HMI
+            // la tarjeta flotante de eficiencia es hermana de la pantalla.
+            const scope = mock.parentElement ?? mock;
+            const q = (sel: string) =>
+                Array.from(scope.querySelectorAll<HTMLElement>(sel));
+
+            const rows = q("[data-mock-row]");
+            const bars = q("[data-mock-bar]");
+            const laneBars = q("[data-mock-lane-bar]");
+            const rings = q("[data-mock-ring]");
+            const phone = scope.querySelector<HTMLElement>("[data-mock-phone]");
+            const phoneRows = q("[data-mock-phone-row]");
+
+            // Las barras del Gantt entran de izquierda a derecha por posición
+            // real, no por orden en el DOM: están repartidas en tres carriles.
+            laneBars.sort(
+                (a, b) =>
+                    a.getBoundingClientRect().left -
+                    b.getBoundingClientRect().left,
+            );
+
+            const tl = gsap.timeline({
+                paused: true,
+                defaults: {
+                    duration: MOTION.GROUP_DURATION,
+                    ease: MOTION.EASE,
+                },
+            });
+
+            if (rows.length) {
+                tl.from(
+                    rows,
+                    {
+                        y: 16,
+                        opacity: 0,
+                        stagger: MOTION.GROUP_STAGGER,
+                        clearProps: "opacity,transform",
+                    },
+                    0,
+                );
+            }
+
+            if (rings.length) {
+                // Barrido del aro de OEE desde vacío hasta su reposo. El valor de
+                // partida sale del propio dasharray, para no duplicar el número.
+                tl.from(
+                    rings,
+                    {
+                        strokeDashoffset: (_i: number, t: Element) =>
+                            t.getAttribute("stroke-dasharray"),
+                        duration: 1.2,
+                        clearProps: "strokeDashoffset",
+                    },
+                    0,
+                );
+            }
+
+            if (bars.length) {
+                // scaleX y no width: son barras vacías, así crecen sin recalcular
+                // layout en cada frame.
+                gsap.set(bars, { transformOrigin: "left center" });
+                tl.from(
+                    bars,
+                    {
+                        scaleX: 0,
+                        stagger: MOTION.GROUP_STAGGER,
+                        clearProps: "transform,transformOrigin",
+                    },
+                    0.15,
+                );
+            }
+
+            if (laneBars.length) {
+                // Aquí sí `width`: la barra lleva texto dentro y un scaleX lo
+                // aplastaría. `clearProps` devuelve el ancho en % de la clase,
+                // que es lo que la deja responsiva otra vez.
+                tl.from(
+                    laneBars,
+                    {
+                        width: 0,
+                        stagger: MOTION.GROUP_STAGGER,
+                        clearProps: "width",
+                    },
+                    0.15,
+                );
+            }
+
+            if (phone) {
+                // La notificación llega después del tablero, como si la alerta se
+                // hubiera propagado al teléfono.
+                //
+                // El teléfono trae `transition-all duration-500` para su hover, y
+                // esa transición amortiguaría cada frame que escribe GSAP. Se
+                // apaga durante la entrada y se devuelve al terminar.
+                const restore = () => phone.style.removeProperty("transition-property");
+                phone.style.transitionProperty = "none";
+                tl.from(
+                    phone,
+                    {
+                        x: 48,
+                        opacity: 0,
+                        clearProps: "opacity,transform",
+                        onComplete: restore,
+                    },
+                    0.35,
+                );
+            }
+
+            if (phoneRows.length) {
+                tl.from(
+                    phoneRows,
+                    {
+                        y: 12,
+                        opacity: 0,
+                        stagger: MOTION.GROUP_STAGGER,
+                        clearProps: "opacity,transform",
+                    },
+                    0.7,
+                );
+            }
+
+            if (!tl.duration()) return;
+
+            ScrollTrigger.create({
+                trigger: mock,
+                start: MOTION.START,
+                once: true,
+                onEnter: () => tl.play(),
+            });
+        });
+    };
+
+    initMockEntrances();
+</script>
+</Layout>

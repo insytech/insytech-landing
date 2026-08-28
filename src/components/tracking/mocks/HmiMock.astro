@@ -1,0 +1,173 @@
+                <div
+                    data-mock="hmi"
+                    class="relative bg-gray-900 border-[8px] border-gray-800 rounded-xl shadow-2xl overflow-hidden transform rotate-y-6 hover:rotate-y-0 transition-transform duration-700 p-1"
+                >
+                    <!-- Este mock es un panel táctil de planta: conserva su
+                         aspecto oscuro en ambos temas, como una foto del hardware. -->
+                    <!-- Status Bar -->
+                    <div
+                        class="bg-gray-800 px-4 py-2 flex items-center justify-between border-b border-gray-700"
+                    >
+                        <div class="flex items-center gap-4">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-[10px] text-gray-400 uppercase tracking-wider font-bold"
+                                    >Orden de Producción</span
+                                >
+                                <span class="text-white font-mono text-sm"
+                                    >OP-2024-885</span
+                                >
+                            </div>
+                            <div class="h-6 w-px bg-gray-600"></div>
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-[10px] text-gray-400 uppercase tracking-wider font-bold"
+                                    >Estación</span
+                                >
+                                <span class="text-white font-mono text-sm"
+                                    >ENS-04</span
+                                >
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="bg-green-500/20 text-green-400 px-2 py-0.5 rounded text-xs font-bold border border-green-500/30 animate-pulse"
+                            >
+                                RUNNING
+                            </div>
+                            <div class="text-gray-400 text-xs">10:42 AM</div>
+                        </div>
+                    </div>
+
+                    <!-- Main HMI Content -->
+                    <div
+                        class="bg-gray-900/50 p-4 h-64 flex gap-4"
+                    >
+                        <!-- Left: Steps -->
+                        <div class="w-1/3 space-y-2">
+                            <div
+                                data-mock-row class="bg-blue-600 text-white p-3 rounded-lg shadow-lg transform scale-105 border-l-4 border-white"
+                            >
+                                <div
+                                    class="text-[10px] opacity-80 uppercase font-bold text-blue-100"
+                                >
+                                    Paso 3/12
+                                </div>
+                                <div class="text-sm font-bold">
+                                    Instalar Sensor A
+                                </div>
+                            </div>
+                            <div
+                                data-mock-row class="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700 opacity-60"
+                            >
+                                <div
+                                    class="text-[10px] text-gray-400 uppercase font-bold"
+                                >
+                                    Paso 4
+                                </div>
+                                <div
+                                    class="text-sm text-gray-400 font-medium"
+                                >
+                                    Conectar Cableado
+                                </div>
+                            </div>
+                            <div
+                                data-mock-row class="bg-gray-800 p-3 rounded-lg shadow-sm border border-gray-700 opacity-40"
+                            >
+                                <div
+                                    class="text-[10px] text-gray-400 uppercase font-bold"
+                                >
+                                    Paso 5
+                                </div>
+                                <div
+                                    class="text-sm text-gray-400 font-medium"
+                                >
+                                    Verificar Tensión
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Visual Instruction -->
+                        <div
+                            class="flex-1 bg-gray-800 rounded-lg border border-gray-700 p-2 relative flex flex-col"
+                        >
+                            <div
+                                class="flex-1 bg-gray-900/50 rounded flex items-center justify-center relative overflow-hidden group"
+                            >
+                                <!-- Grid pattern bg -->
+                                <div
+                                    class="absolute inset-0"
+                                    style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; opacity: 0.2"
+                                >
+                                </div>
+
+                                <div
+                                    class="w-24 h-24 border-2 border-dashed border-blue-400 rounded-full flex items-center justify-center relative"
+                                >
+                                    <div
+                                        class="absolute -top-2 -right-2 w-6 h-6 bg-blue-500 rounded-full text-white text-xs flex items-center justify-center font-bold shadow-lg"
+                                    >
+                                        1
+                                    </div>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-12 w-12 text-gray-500 group-hover:text-blue-500 transition-colors duration-300"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                                        ></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="mt-2 flex gap-2">
+                                <button
+                                    class="flex-1 bg-red-900/20 hover:bg-red-900/30 text-red-400 text-xs py-2 rounded font-bold transition-colors"
+                                    >NO OK</button
+                                >
+                                <button
+                                    class="flex-1 bg-green-500 hover:bg-green-600 text-white text-xs py-2 rounded font-bold shadow-lg shadow-green-500/20 transition-all"
+                                    >CONFIRMAR</button
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Stats Card -->
+                <div
+                    class="absolute -right-6 top-10 bg-gray-800 rounded-xl shadow-xl p-4 border border-gray-700 w-40 z-10"
+                >
+                    <div
+                        class="text-xs text-gray-400 uppercase tracking-wide font-bold mb-2"
+                    >
+                        Eficiencia
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <span
+                            class="h-7 w-16 bg-gray-600 rounded"
+                        >
+                        </span>
+                    </div>
+                    <div
+                        class="w-full bg-gray-700 h-1.5 rounded-full mt-2 overflow-hidden"
+                    >
+                        <div
+                            data-mock-bar
+                            class="bg-green-500 h-full rounded-full"
+                            style="width: 94%"
+                        >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glow Effect -->
+                <div
+                    class="absolute -z-10 bottom-0 left-1/2 transform -translate-x-1/2 w-[90%] h-32 bg-green-500/10 rounded-full blur-3xl"
+                >
+                </div>

@@ -1,0 +1,176 @@
+                <div data-mock="andon" class="relative">
+                    <!-- Large TV Screen Mockup -->
+                <!-- Este mock es un dispositivo físico de planta: conserva su
+                     aspecto oscuro en ambos temas, como una foto del hardware.
+                     La tipografía va en cqw para que la pantalla escale con su
+                     columna y nunca recorte el contenido. -->
+                    <div
+                        class="relative bg-black rounded-xl p-3 shadow-2xl border-b-4 border-gray-800 transform rotate-y-6 transition-transform duration-700 hover:rotate-y-0"
+                    >
+                        <!-- Screen Content -->
+                        <div
+                            class="@container bg-gray-900 aspect-video rounded-lg overflow-hidden flex flex-col relative group"
+                        >
+                            <!-- Glitch effect overlay (optional) -->
+                            <div
+                                class="absolute inset-0 bg-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10"
+                            >
+                            </div>
+
+                            <div
+                                class="bg-red-600 p-[2.7cqw] flex items-center justify-between z-20 shadow-md"
+                            >
+                                <div
+                                    class="text-white text-[4.1cqw] leading-none font-bold uppercase tracking-widest flex items-center gap-[1cqw]"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-[1.2em] w-[1.2em] animate-pulse"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                                        ></path>
+                                    </svg>
+                                    ALERTA DE LÍNEA
+                                </div>
+                                <div
+                                    class="text-white text-[2.7cqw] font-mono bg-red-700/50 px-[1.6cqw] py-[0.5cqw] rounded"
+                                >
+                                    LÍNEA 02
+                                </div>
+                            </div>
+                            <div
+                                class="flex-1 flex items-center justify-center flex-col p-[4.3cqw] relative z-0"
+                            >
+                                <div
+                                    class="absolute inset-0 opacity-20"
+                                >
+                                </div>
+                                <div
+                                    data-mock-row class="text-red-500 font-bold text-[9.8cqw] leading-none mb-[2.2cqw] tracking-tighter drop-shadow-sm"
+                                >
+                                    PARO TOTAL
+                                </div>
+                                <div
+                                    class="text-white text-[3.3cqw] mb-[5.4cqw] font-light"
+                                >
+                                    Falla en <span class="font-semibold"
+                                        >Estación de Soldadura</span>
+                                </div>
+                                <div
+                                    class="grid grid-cols-2 gap-[4.3cqw] w-full max-w-2xl"
+                                >
+                                    <div
+                                        data-mock-row class="bg-gray-800/80 backdrop-blur-sm p-[2.2cqw] rounded-xl border border-gray-700/50 text-center"
+                                    >
+                                        <div
+                                            class="text-gray-400 text-[1.9cqw] uppercase tracking-wide mb-[0.5cqw]"
+                                        >
+                                            Tiempo Transcurrido
+                                        </div>
+                                        <div
+                                            class="text-white text-[4.9cqw] leading-tight font-mono animate-pulse"
+                                        >
+                                            00:04:12
+                                        </div>
+                                    </div>
+                                    <div
+                                        data-mock-row class="bg-gray-800/80 backdrop-blur-sm p-[2.2cqw] rounded-xl border border-gray-700/50 text-center"
+                                    >
+                                        <div
+                                            class="text-gray-400 text-[1.9cqw] uppercase tracking-wide mb-[0.5cqw]"
+                                        >
+                                            Personal Notificado
+                                        </div>
+                                        <div
+                                            class="text-white text-[2.7cqw] leading-tight font-medium"
+                                        >
+                                            Mantenimiento, Calidad
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Mobile Phone Notification -->
+                    <div
+                        data-mock-phone
+                        class="absolute -bottom-10 -right-4 w-64 bg-gray-900 rounded-[2.5rem] border-[6px] border-gray-900 shadow-xl p-4 transform rotate-[-5deg] hover:rotate-0 transition-all duration-500 z-30"
+                    >
+                        <div
+                            class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-5 bg-gray-900 rounded-b-xl z-20"
+                        >
+                        </div>
+                        <div class="mt-4 mb-2 flex justify-center">
+                            <div
+                                class="w-10 h-1 bg-gray-700 rounded-full"
+                            >
+                            </div>
+                        </div>
+
+                        <!-- Notification Card -->
+                        <div
+                            class="bg-gray-800 rounded-2xl p-3 shadow-lg mb-3 border-l-4 border-red-500 transform transition-transform hover:scale-105 cursor-pointer"
+                        >
+                            <div class="flex justify-between items-start mb-2">
+                                <div class="flex items-center gap-1.5">
+                                    <div
+                                        class="w-4 h-4 rounded bg-blue-500 flex items-center justify-center text-[8px] text-white font-bold"
+                                    >
+                                        A
+                                    </div>
+                                    <span
+                                        class="text-xs font-bold text-white"
+                                        >AndonBot</span
+                                    >
+                                </div>
+                                <span class="text-[9px] text-gray-400"
+                                    >Ahora</span
+                                >
+                            </div>
+                            <div
+                                class="text-[11px] font-medium text-gray-200 mb-1"
+                            >
+                                🛑 Paro en Línea 2
+                            </div>
+                            <p
+                                class="text-[10px] text-gray-400 leading-tight"
+                            >
+                                Falla crítica detectada. Técnico asignado
+                                automáticamente.
+                            </p>
+                        </div>
+
+                        <!-- Fake Skeleton List -->
+                        <div class="space-y-2 opacity-30 blur-[1px]">
+                            <div
+                                data-mock-phone-row
+                                class="bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                            <div
+                                data-mock-phone-row
+                                class="bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                            <div
+                                data-mock-phone-row
+                                class="bg-gray-800 h-12 rounded-xl"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glow/Pulse behind -->
+                <div
+                    class="absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-red-500/10 rounded-full blur-3xl animate-pulse"
+                >
+                </div>
