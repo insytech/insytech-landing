@@ -1,0 +1,221 @@
+---
+import Container from "../shared/Container.astro";
+
+// Réplica del bloque «How It Works» de fourmula.ai, leído de su DOM en vivo y no
+// deducido de una captura. Lo que hace, exactamente:
+//
+//  - Hay DOS `.how__column` con las mismas frases dentro. La duplicación es lo
+//    que permite que el bucle no tenga costura.
+//  - Cada columna anima `translateY(0% -> -100%)` en 24 s, `linear`, infinito.
+//    Es `transform` puro; no hay filtros ni repintados.
+//  - El contenedor está en `overflow: hidden`.
+//  - Cada renglón tiene su propia opacidad —medí 0.2, 0.59 y 0.89 en el mismo
+//    instante—, o sea que la desvanecen por posición con JavaScript.
+//
+// Aquí ese último punto se resuelve con una máscara de degradado sobre el
+// contenedor: el resultado visual es el mismo —los renglones se apagan al
+// alejarse del centro— y no cuesta ni una línea de JavaScript ni un cálculo por
+// frame. Es la única desviación deliberada respecto al original.
+//
+// Las frases no son eslóganes: cada una es una de las cinco aplicaciones que la
+// página ya sostiene, dicha en tres palabras.
+const phrases = [
+    "Ve cada pieza",
+    "Explica la caída del OEE",
+    "Anticipa la falla",
+    "Consulta tu ERP",
+    "Hace lo repetitivo",
+];
+---
+
+<section id="capabilities" class="marquee-section">
+    {/* La BANDA es de ancho completo —fondo y líneas cruzan la pantalla, que es
+        lo que le da el golpe—, pero el contenido va en el Container del sitio.
+        Con padding propio quedaba 36 px desalineado del resto de las secciones,
+        que se lee como error de maquetación y no como decisión. */}
+    <Container className="relative z-10">
+        <p class="marquee-eyebrow">Cómo trabaja</p>
+
+        <div class="marquee-grid">
+            <div class="marquee-aside">
+                <p class="marquee-lead">IA que</p>
+                <a href="#contact" class="marquee-cta">Cuéntanos tu proceso</a>
+            </div>
+
+            <div class="marquee-viewport">
+                {
+                    /* Dos copias idénticas: la segunda entra por abajo justo
+                       cuando la primera termina de salir, y ahí está la costura
+                       invisible. La segunda es `aria-hidden` para que un lector
+                       de pantalla no lea la lista dos veces. */
+                }
+                <div class="marquee-track">
+                    <ul class="marquee-column">
+                        {phrases.map((p) => <li>{p}</li>)}
+                    </ul>
+                    <ul class="marquee-column" aria-hidden="true">
+                        {phrases.map((p) => <li>{p}</li>)}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </Container>
+</section>
+
+<style>
+    .marquee-section {
+        position: relative;
+        overflow: clip;
+        padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+        background: rgb(255 255 255);
+        border-top: 1px solid rgb(229 231 235);
+        border-bottom: 1px solid rgb(229 231 235);
+    }
+
+    :global(.dark) .marquee-section {
+        background: rgb(2 3 8);
+        border-color: rgb(31 41 55);
+    }
+
+    .marquee-eyebrow {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        color: #005eb8;
+        margin-bottom: 2rem;
+    }
+
+    :global(.dark) .marquee-eyebrow {
+        color: #00b5e2;
+    }
+
+    .marquee-grid {
+        display: grid;
+        grid-template-columns: minmax(12rem, 22rem) 1fr;
+        gap: clamp(1.5rem, 4vw, 4rem);
+        align-items: start;
+    }
+
+    .marquee-aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 2rem;
+        height: 100%;
+        border-right: 1px solid rgb(229 231 235);
+        padding-right: clamp(1rem, 3vw, 3rem);
+    }
+
+    :global(.dark) .marquee-aside {
+        border-color: rgb(31 41 55);
+    }
+
+    .marquee-lead {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: #211915;
+    }
+
+    :global(.dark) .marquee-lead {
+        color: rgb(255 255 255);
+    }
+
+    .marquee-cta {
+        align-self: flex-start;
+        padding: 0.8rem 1.6rem;
+        border-radius: 999px;
+        background: #005eb8;
+        color: #ffffff;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .marquee-cta:hover {
+        background: #001489;
+    }
+
+    /* La máscara es la diferencia con el original, que apaga cada renglón por
+       separado desde JavaScript. Aquí el degradado hace lo mismo por posición y
+       sin coste por frame. */
+    .marquee-viewport {
+        --row: clamp(3.6rem, 7vw, 6.4rem);
+
+        position: relative;
+        height: calc(var(--row) * 3);
+        overflow: hidden;
+        mask-image: linear-gradient(
+            to bottom,
+            transparent 0%,
+            #000 26%,
+            #000 74%,
+            transparent 100%
+        );
+        -webkit-mask-image: linear-gradient(
+            to bottom,
+            transparent 0%,
+            #000 26%,
+            #000 74%,
+            transparent 100%
+        );
+    }
+
+    .marquee-track {
+        animation: marquee-rise 24s linear infinite;
+    }
+
+    .marquee-column {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .marquee-column li {
+        display: flex;
+        align-items: center;
+        height: var(--row);
+        border-top: 1px solid rgb(229 231 235);
+        font-family: var(--font-heading);
+        font-size: clamp(1.9rem, 4.6vw, 4.2rem);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        color: #211915;
+        white-space: nowrap;
+    }
+
+    :global(.dark) .marquee-column li {
+        border-color: rgb(31 41 55);
+        color: rgb(255 255 255);
+    }
+
+    /* -50% y no -100%: la pista contiene las dos copias, así que media pista es
+       exactamente una lista completa. Con -100% saltaría dos listas por ciclo. */
+    @keyframes marquee-rise {
+        to {
+            transform: translateY(-50%);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .marquee-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .marquee-aside {
+            border-right: none;
+            border-bottom: 1px solid rgb(229 231 235);
+            padding: 0 0 1.5rem;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        :global(.dark) .marquee-aside {
+            border-color: rgb(31 41 55);
+        }
+    }
+</style>

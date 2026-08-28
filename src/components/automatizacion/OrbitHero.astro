@@ -171,10 +171,13 @@ const step = 360 / modules.length;
         width: calc(var(--stage) * 1.35);
         aspect-ratio: 1;
         transform: translate(-50%, -50%);
+        /* Muy tenue a propósito: antes era 0.16/0.08 y se leía como una mancha
+           de color detrás del anillo, que rompe el minimalismo del hero. A este
+           nivel solo despega el centro del fondo. */
         background: radial-gradient(
             circle,
-            rgb(0 181 226 / 0.16) 0%,
-            rgb(0 94 184 / 0.08) 45%,
+            rgb(0 181 226 / 0.05) 0%,
+            rgb(0 94 184 / 0.025) 45%,
             transparent 70%
         );
         pointer-events: none;
