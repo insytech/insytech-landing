@@ -4,105 +4,65 @@
 // afinados para el Hero de la home, y copiar el grid habría dejado dos listas
 // de clientes que se desincronizan. Aqui vive la lista; quien la usa decide el
 // encabezado y el aire.
+//
+// La animación de entrada se hace con el observer de [data-animate] y ya NO con
+// GSAP. Dos razones, las dos medidas:
+//
+//  1. El salto. Los logos llevan `transition-all`, así que la transición de CSS
+//     cubría `opacity` y `transform`; GSAP escribía esas mismas propiedades
+//     inline en cada frame y la transición intentaba interpolar hacia cada valor
+//     nuevo con su propia curva. Dos animaciones peleando por la misma propiedad
+//     es exactamente el tirón que se veía. El observer solo añade una clase y
+//     deja que el CSS anime una vez.
+//  2. El peso. Este componente importaba `gsap` y `ScrollTrigger`, y al usarlo en
+//     /ai/ —la única página del sitio sin GSAP— le metía 110 KB en crudo solo
+//     para atenuar seis logos.
+//
+// El `data-animate` va en el span envolvente y no en la imagen: la regla
+// `[data-animate].in` termina en `opacity: 1` con `animation-fill-mode: both`,
+// así que marcar la imagen le habría pisado para siempre su `opacity-70` de
+// reposo, que es lo que hace que el hover se note.
 interface Props {
     class?: string;
 }
 const { class: className = "" } = Astro.props;
+
+const logos = [
+    { file: "navistar", alt: "Navistar", width: 214, height: 27 },
+    { file: "nasa", alt: "NASA Nacional de Acero", width: 386, height: 130 },
+    { file: "polaris", alt: "Polaris", width: 480, height: 54 },
+    { file: "pentair", alt: "Pentair", width: 1536, height: 389 },
+    {
+        file: "franklin-electric",
+        alt: "Franklin Electric",
+        width: 720,
+        height: 254,
+    },
+    { file: "tempel-group", alt: "Tempel Group", width: 120, height: 40 },
+] as const;
 ---
 
 <div class={className}>
     <div
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-4 px-2 overflow-hidden"
     >
-        <img
-    src="/logos/navistar.webp"
-    alt="Navistar"
-    width="214"
-    height="27"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
-        <img
-    src="/logos/nasa.webp"
-    alt="NASA Nacional de Acero"
-    width="386"
-    height="130"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
-        <img
-    src="/logos/polaris.webp"
-    alt="Polaris"
-    width="480"
-    height="54"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
-        <img
-    src="/logos/pentair.webp"
-    alt="Pentair"
-    width="1536"
-    height="389"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
-        <img
-    src="/logos/franklin-electric.webp"
-    alt="Franklin Electric"
-    width="720"
-    height="254"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
-        <img
-    src="/logos/tempel-group.webp"
-    alt="Tempel Group"
-    width="120"
-    height="40"
-    class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-50 opacity-70 hover:grayscale-0 hover:opacity-100 transition-all"
-    loading="lazy"
-        />
+        {
+            logos.map((logo, index) => (
+                <span
+                    class="flex items-center justify-center"
+                    data-animate="fade-up"
+                    data-animate-delay={`${0.06 * index}s`}
+                >
+                    <img
+                        src={`/logos/${logo.file}.webp`}
+                        alt={logo.alt}
+                        width={logo.width}
+                        height={logo.height}
+                        class="brand-logo h-15 w-32 object-contain grayscale dark:grayscale-0 opacity-70 hover:grayscale-0 hover:opacity-100 transition-[opacity,filter] duration-300"
+                        loading="lazy"
+                    />
+                </span>
+            ))
+        }
     </div>
 </div>
-
-<script>
-    import { gsap } from "gsap";
-    import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    const initBrands = () => {
-        // Progressive enhancement: logos are visible without JS; under
-        // reduced motion keep them visible and skip the entrance animation
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            return;
-        }
-
-        // Initial hidden state, applied only when animating
-        gsap.set(".brand-logo", { opacity: 0, y: 20 });
-
-        gsap.to(".brand-logo", {
-            opacity: 0.7,
-            y: 0,
-            x: 0,
-            duration: 1,
-            stagger: 0.1,
-            ease: "power2.out",
-            // Borra el opacity inline al terminar: si no, gana sobre la clase
-            // hover:opacity-100 y el hover de los logos queda muerto.
-            clearProps: "opacity",
-            scrollTrigger: {
-                trigger: ".brand-logo",
-                start: "top 95%",
-            },
-        });
-    };
-
-    document.addEventListener("DOMContentLoaded", initBrands);
-</script>
-
-<style>
-    .brand-logo {
-        will-change: transform, opacity;
-    }
-</style>
