@@ -18,10 +18,16 @@ const getThemeStyle = (variant: "primary" | "secondary" | "inverse") => {
     }
     if (variant === "inverse") {
         // Sin `after:bg-*` propio: la clase base ya fija el círculo en #172554 y
-        // gana por orden, así que intentar cambiarlo aquí no surtía efecto. El
-        // círculo oscuro es además el correcto, porque el texto pasa a blanco al
-        // entrar y así el contraste se mantiene en los dos estados.
-        return "bg-white border-transparent relative hover:border-[#172554]";
+        // gana por orden. El círculo oscuro es además el correcto, porque el
+        // texto pasa a blanco al entrar y el contraste se mantiene en los dos
+        // estados.
+        //
+        // `hover:bg-[#172554]` no es decorativo: el círculo es un cuadrado
+        // redondeado que crece desde el centro y no cubre del todo las esquinas
+        // del botón, así que sobre relleno blanco quedaba un halo claro en el
+        // borde. En el primario no se nota porque debajo hay azul; aquí el fondo
+        // vira al mismo color que el círculo y el borde desaparece.
+        return "bg-white border-transparent relative hover:bg-[#172554] hover:border-[#172554]";
     }
     return "text-primary";
 };
