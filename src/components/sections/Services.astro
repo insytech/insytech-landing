@@ -364,8 +364,8 @@ const solutions = [
                                                 style={`--row:${Math.floor(n / 3)}; --col:${n % 3}`}
                                             />
                                         ))}
+                                        <div class="sc-scan" />
                                     </div>
-                                    <div class="sc-scan" />
                                     <div class="sc-verdicts">
                                         <span data-verdict="ok">OK</span>
                                         <span data-verdict="nok">NOK</span>
@@ -1225,7 +1225,10 @@ const solutions = [
         /* Origen en el centro, como en la referencia, para que la tarjeta tapada
            se hunda hacia dentro en vez de encogerse desde una esquina. */
         transform-origin: center center;
-        will-change: transform;
+        /* Sin `will-change` fijo: cinco tarjetas de ~600k px² con capa de
+           compositor permanente son decenas de MB de memoria de GPU retenidos
+           todo el rato. GSAP levanta y suelta la capa por su cuenta mientras el
+           tween corre, que es justo cuando hace falta. */
     }
 
     .deck-card[data-tone="light"] {
@@ -1411,11 +1414,23 @@ const solutions = [
     }
 
     /* Todo lo que late queda quieto hasta que la sección entra en pantalla. */
-    .deck-scene :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-part::after, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
+    .deck-scene :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
         animation-play-state: paused;
     }
 
-    .deck-scene.is-live :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-part::after, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
+    .deck-scene.is-live :is(.sc-caret, .sc-typed span, .sc-live i, .sc-bars i, .sc-leds i, .sc-load i, .sc-scan, .sc-part, .sc-pulse, .sc-in, .sc-out, .sc-hub, .sc-hub-ring) {
+        animation-play-state: running;
+    }
+
+    /* Aparte, y no dentro del `:is()` de arriba: `:is()` es indulgente y
+       descarta en silencio los selectores que no acepta, y un pseudo-elemento es
+       uno de ellos. Metido ahí, los nueve rótulos OK/NOK seguían animando con la
+       sección fuera de pantalla. */
+    .deck-scene .sc-part::after {
+        animation-play-state: paused;
+    }
+
+    .deck-scene.is-live .sc-part::after {
         animation-play-state: running;
     }
 
@@ -1835,6 +1850,7 @@ const solutions = [
     }
 
     .sc-parts {
+        position: relative;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 0.6rem;
@@ -1892,14 +1908,30 @@ const solutions = [
         content: "NOK";
     }
 
+    /* La línea se desplaza con `transform` y no con `top`: animar `top` obliga
+       al navegador a rehacer el layout en cada frame, y era la única propiedad
+       cara de toda la sección.
+       El truco para que el recorrido sea exacto sin medir nada: el elemento
+       cubre la reja entera y la línea es su `::after`, así que un
+       `translateY(100%)` —que en CSS es el 100% de la altura del propio
+       elemento— equivale justo a recorrer la reja, sea cual sea su tamaño. */
     .sc-scan {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        will-change: transform;
+        animation: sc-sweep 5s ease-in-out infinite;
+    }
+
+    .sc-scan::after {
+        content: "";
         position: absolute;
         left: 0;
         right: 0;
+        top: 0;
         height: 2px;
         background: currentColor;
         box-shadow: 0 0 14px 2px currentColor;
-        animation: sc-sweep 5s ease-in-out infinite;
     }
 
     .sc-verdicts {
@@ -1980,19 +2012,19 @@ const solutions = [
 
     @keyframes sc-sweep {
         0% {
-            top: 6%;
+            transform: translateY(0);
             opacity: 0;
         }
         8% {
             opacity: 0.9;
         }
         58% {
-            top: 88%;
+            transform: translateY(100%);
             opacity: 0.9;
         }
         70%,
         100% {
-            top: 88%;
+            transform: translateY(100%);
             opacity: 0;
         }
     }
