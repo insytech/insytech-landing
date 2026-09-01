@@ -53,7 +53,7 @@ La contraparte honesta es que el modelo por proyecto exige un buen diagnóstico 
 
 **Contexto operativo compartido.** Turnos, rotación, requisitos de los OEM de la región y realidades de mantenimiento local determinan si tu personal adopta el sistema o lo puentea al tercer mes.
 
-En Insytech trabajamos justo ahí: somos un equipo de ingeniería con base en Monterrey, con nueve años de operación, que diseña e integra [automatización y control industrial](/control/) para plantas de la región y del resto del país. Hemos ejecutado proyectos con Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
+En Insytech trabajamos justo ahí: somos un equipo de ingeniería con base en Monterrey, con ocho años de operación, que diseña e integra [automatización y control industrial](/control/) para plantas de la región y del resto del país. Hemos ejecutado proyectos con Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
 
 ## Empieza con un diagnóstico en tu planta
 

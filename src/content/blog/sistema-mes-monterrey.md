@@ -55,7 +55,7 @@ Una licencia se compra en cualquier parte. Los proyectos de MES no fallan por la
 
 **Un solo responsable de la cadena completa.** Cuando el mismo equipo hace la visión, el control y la trazabilidad, no hay frontera donde repartir culpas entre el proveedor del lector, el del PLC y el del software.
 
-En Insytech somos un equipo de ingeniería con base en Monterrey y nueve años integrando piso de planta, con proyectos en clientes como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel. Esa cercanía es la misma razón por la que la [visión artificial en Monterrey](/blog/vision-artificial-monterrey/) se implementa distinto cuando el proveedor es local.
+En Insytech somos un equipo de ingeniería con base en Monterrey y ocho años integrando piso de planta, con proyectos en clientes como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel. Esa cercanía es la misma razón por la que la [visión artificial en Monterrey](/blog/vision-artificial-monterrey/) se implementa distinto cuando el proveedor es local.
 
 ## Empieza con un diagnóstico en tu propia planta
 

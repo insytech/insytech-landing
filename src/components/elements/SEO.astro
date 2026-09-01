@@ -20,37 +20,26 @@ const {
 const fullTitle = title.includes(siteName) ? title : `${title} | ${siteName}`;
 
 // Datos Estructurados (JSONLD)
+// Una sola entidad para la empresa: Organization y LocalBusiness eran dos nodos
+// sin relacionar, y solo el segundo llevaba la dirección. Los motores de
+// respuesta leían el proveedor sin ciudad y suplian la que quisieran.
 const organizationSchema = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "LocalBusiness"],
+    "@id": "https://insytech.mx/#organization",
     name: "Insytech",
     url: "https://insytech.mx",
+    foundingDate: "2018",
     logo: "https://insytech.mx/images/Versiones%20de%20logotipo-01.webp",
+    image: "https://insytech.mx/images/Versiones%20de%20logotipo-01.webp",
+    hasMap: "https://www.google.com/maps?cid=992849829641673724",
+    telephone: "+52-81-2892-7509",
+    email: "ventas@insytech.mx",
     sameAs: [
         "https://www.linkedin.com/company/insytech/posts/?feedView=all",
         "https://www.facebook.com/insytech",
         "https://www.google.com/maps?cid=992849829641673724",
     ],
-    contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+52-81-2892-7509",
-        contactType: "sales",
-        email: "ventas@insytech.mx",
-        areaServed: "MX",
-        availableLanguage: ["Spanish", "English"],
-    },
-};
-
-const localBusinessSchema = {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    name: "Insytech",
-    image: "https://insytech.mx/images/Versiones%20de%20logotipo-01.webp",
-    "@id": "https://insytech.mx",
-    url: "https://insytech.mx",
-    hasMap: "https://www.google.com/maps?cid=992849829641673724",
-    telephone: "+52-81-2892-7509",
-    email: "ventas@insytech.mx",
     address: {
         "@type": "PostalAddress",
         streetAddress: "Parque España 249B, Buenos Aires",
@@ -63,6 +52,19 @@ const localBusinessSchema = {
         "@type": "GeoCoordinates",
         latitude: 25.6701,
         longitude: -100.2833,
+    },
+    areaServed: [
+        { "@type": "City", name: "Monterrey" },
+        { "@type": "State", name: "Nuevo León" },
+        { "@type": "Country", name: "México" },
+    ],
+    contactPoint: {
+        "@type": "ContactPoint",
+        telephone: "+52-81-2892-7509",
+        contactType: "sales",
+        email: "ventas@insytech.mx",
+        areaServed: "MX",
+        availableLanguage: ["Spanish", "English"],
     },
     openingHoursSpecification: {
         "@type": "OpeningHoursSpecification",
@@ -116,11 +118,6 @@ const websiteSchema = {
     type="application/ld+json"
     is:inline
     set:html={JSON.stringify(organizationSchema)}
-/>
-<script
-    type="application/ld+json"
-    is:inline
-    set:html={JSON.stringify(localBusinessSchema)}
 />
 <script
     type="application/ld+json"

@@ -47,7 +47,7 @@ Un SCADA no se compra: se implementa. Y los proyectos rara vez fallan por la pla
 
 **Continuidad y traspaso de conocimiento.** El sistema tiene que quedar en manos de tu gente: código documentado, estándares de nomenclatura, capacitación al personal de mantenimiento.
 
-En Insytech llevamos nueve años haciendo exactamente esto como equipo de ingeniería con base en Monterrey, con proyectos de [automatización, control y SCADA](/control/) para plantas como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
+En Insytech llevamos ocho años haciendo exactamente esto como equipo de ingeniería con base en Monterrey, con proyectos de [automatización, control y SCADA](/control/) para plantas como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
 
 ## Empieza con un diagnóstico de tu arquitectura
 

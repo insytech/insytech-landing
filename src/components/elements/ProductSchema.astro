@@ -18,15 +18,14 @@ const serviceSchema = {
     description,
     url: pageUrl,
     serviceType: serviceName,
-    provider: {
-        "@type": "Organization",
-        name: "Insytech",
-        url: "https://insytech.mx",
-    },
-    areaServed: {
-        "@type": "Country",
-        name: "México",
-    },
+    // Referencia a la entidad única de SEO.astro en vez de duplicar una
+    // Organization sin dirección: asi el proveedor del servicio lleva ciudad.
+    provider: { "@id": "https://insytech.mx/#organization" },
+    areaServed: [
+        { "@type": "City", name: "Monterrey" },
+        { "@type": "State", name: "Nuevo León" },
+        { "@type": "Country", name: "México" },
+    ],
 };
 
 const breadcrumbSchema = {
