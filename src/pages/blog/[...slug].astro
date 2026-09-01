@@ -4,7 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
 import Title from "../../components/shared/Title.astro";
 import PostCTA from "../../components/blog/PostCTA.astro";
-import { authors } from "../../utils/authors";
+import { authors, authorUrl } from "../../utils/authors";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -49,6 +49,10 @@ const articleSchema = {
     },
     author: {
         "@type": "Person",
+        // Mismo @id que la ficha de /nosotros/: una sola entidad para las trece
+        // firmas, en vez de una Person suelta por artículo.
+        "@id": authorUrl(post.data.author),
+        url: authorUrl(post.data.author),
         name: author.name,
         ...(author.jobTitle && { jobTitle: author.jobTitle }),
         ...(author.linkedin && { sameAs: [author.linkedin] }),
@@ -107,9 +111,11 @@ const breadcrumbSchema = {
                     </nav>
                     <Title>{post.data.title}</Title>
                     <p class="text-sm text-heading-3">
-                        Por <span class="font-medium">{author.name}</span>{
-                            author.jobTitle && `, ${author.jobTitle}`
-                        } ·
+                        Por <a
+                            href={`/nosotros/#${post.data.author}`}
+                            class="font-medium text-[#005EB8] dark:text-[#71b5f5] hover:underline"
+                            >{author.name}</a
+                        >{author.jobTitle && `, ${author.jobTitle}`} ·
                         <time datetime={pubDateISO}>{formattedDate}</time>
                         {
                             formattedUpdated && (

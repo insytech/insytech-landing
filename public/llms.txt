@@ -30,5 +30,6 @@ Contacto: ventas@insytech.mx · +52-81-2892-7509 · Parque España 249B, Buenos 
 
 ## Más
 
+- [Quiénes somos](https://insytech.mx/nosotros/): El equipo de Insytech — Edgar Olivan (ingeniero de software) y René Andrade (ingeniero mecatrónico y responsable comercial), los autores que firman el blog. Empresa fundada en 2018 en Monterrey, Nuevo León.
 - [Contacto](https://insytech.mx/contact/)
 - [Blog](https://insytech.mx/blog/)
