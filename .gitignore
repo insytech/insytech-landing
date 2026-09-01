@@ -39,6 +39,9 @@ Makefile
 # Índice de skills que la herramienta regenera sola: depende de qué haya
 # instalado en cada máquina, así que en el repo solo produce conflictos.
 .atl/
+# Config del servidor MCP de Search Console: apunta a una credencial que vive
+# fuera del repo, así que cada quien la suya.
+.mcp.json
 # Planes de trabajo locales (no se commitean)
 plans/
 .impeccable/
