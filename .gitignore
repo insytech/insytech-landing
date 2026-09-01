@@ -36,6 +36,9 @@ pnpm-debug.log*
 CLAUDE.md
 Makefile
 .vanskills.lock
+# Índice de skills que la herramienta regenera sola: depende de qué haya
+# instalado en cada máquina, así que en el repo solo produce conflictos.
+.atl/
 # Planes de trabajo locales (no se commitean)
 plans/
 .impeccable/
