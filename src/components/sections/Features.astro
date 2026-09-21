@@ -268,8 +268,11 @@ const sectors = [
             entregados», «4 Sectores atendidos» y «24/7 Monitoreo proactivo».
             Dos no se sostienen y uno se contradecía con el resto del sitio:
 
-            - Los años decían 10 aquí y 9 en las demás páginas. Se unifican en 9,
-              que es la cifra que viene del deck de ventas.
+            - Los años decían 10 aquí y 9 en las demás páginas. El cliente
+              confirmó que la fundación fue en 2018, así que la cifra correcta
+              son 8 años (2026), no 9. El 9 venía del deck de ventas y
+              contradecía al JSON-LD (foundingDate 2018), a /nosotros/
+              («se fundó en 2018») y a /control/ («Desde 2018»).
             - «+100 proyectos entregados» es un conteo que nadie puede comprobar,
               del mismo tipo que el «150+» que ya se retiró de /control/.
             - «24/7 Monitoreo proactivo» promete un nivel de servicio que se
@@ -287,7 +290,7 @@ const sectors = [
             </div>
             <div class="lg:col-span-8 grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
                 <div class="space-y-3">
-                    <p class="text-5xl font-black text-[#002B49] dark:text-white tracking-tighter leading-none">9</p>
+                    <p class="text-5xl font-black text-[#002B49] dark:text-white tracking-tighter leading-none">8</p>
                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-tight">Años <br /> operando</p>
                 </div>
                 <div class="space-y-3">
