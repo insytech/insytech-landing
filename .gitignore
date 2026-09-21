@@ -42,8 +42,9 @@ Makefile
 # Config del servidor MCP de Search Console: apunta a una credencial que vive
 # fuera del repo, así que cada quien la suya.
 .mcp.json
-# Planes de trabajo locales (no se commitean)
+# Planes de trabajo locales y seguimiento de tareas (no se commitean)
 plans/
+odd/
 .impeccable/
 
 # Working files for design canvases (the canvas itself lives in the Artifact)
