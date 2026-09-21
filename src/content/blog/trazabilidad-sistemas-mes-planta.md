@@ -27,7 +27,7 @@ La confusión sale cara: forzar al ERP a hacer monitoreo de producción en tiemp
 
 ## ¿Cómo se captura el dato en piso (códigos, DataMatrix, OCR, sensores)?
 
-Una plataforma de [trazabilidad y sistemas MES](/tracking/) vale lo que vale su captura: si el dato entra tarde, incompleto o a mano, todo lo demás es decoración. Las fuentes reales:
+Una plataforma de trazabilidad y MES vale lo que vale su captura: si el dato entra tarde, incompleto o a mano, todo lo demás es decoración. Montarla es trabajo de [un integrador de trazabilidad y MES](/tracking/). Las fuentes reales:
 
 - **Identificación de la pieza:** código de barras 1D para casos simples y **DataMatrix** cuando el espacio de marcado es mínimo o la pieza es metálica (marcado láser DPM). La lectura confiable de esos códigos, y el **OCR** de números de serie, es un problema de [visión artificial](/vision/) más que de software de gestión.
 - **Captura desde la máquina:** el dato más confiable no lo teclea nadie; lo entrega el equipo. La integración con el [PLC de la línea](/control/) vía OPC-UA, EtherNet/IP o Modbus TCP registra ciclos, paros, parámetros y conteos sin que nadie teclee.
@@ -49,7 +49,7 @@ Si vas a implementarlo con un tercero, nuestras [10 preguntas clave para elegir 
 
 ## ¿Cómo se mide el retorno (scrap, recalls y OEE)?
 
-El retorno de la [trazabilidad y sistemas MES](/tracking/) se construye con números que tu planta ya lleva:
+Quien monta la trazabilidad y MES es [un integrador de trazabilidad y MES](/tracking/), y el retorno se construye con números que tu planta ya lleva:
 
 - **Scrap y retrabajo:** detectar la desviación en la estación donde ocurre, no al final de la línea, corta el desperdicio acumulado.
 - **Recalls y reclamaciones:** con genealogía unitaria, un retiro se acota a las piezas afectadas en lugar de a producciones completas; la diferencia en costo y reputación es enorme.

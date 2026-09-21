@@ -33,17 +33,17 @@ Los requisitos rara vez llegan con el nombre "MES". Llegan como cláusulas en el
 
 ## ¿Qué equipos para trazabilidad industrial se necesitan en piso?
 
-Los [sistemas de trazabilidad industrial](/tracking/) no viven en un servidor: viven en la estación donde se genera el dato. El equipamiento típico de una línea en la región combina cuatro capas.
+Los sistemas de trazabilidad industrial no viven en un servidor: viven en la estación donde se genera el dato, y montarlos es trabajo de [un integrador de trazabilidad y MES](/tracking/). El equipamiento típico de una línea en la región combina cuatro capas.
 
 **Identificación y lectura.** Escáneres fijos para código de barras y DataMatrix, marcadores láser o impresoras de etiqueta según el proceso, y cámaras cuando la lectura es difícil: pieza metálica, marca de bajo contraste, superficie curva o números grabados que exigen [visión artificial con OCR](/vision/) más que un lector convencional.
 
-**El PLC como fuente de verdad.** El dato más confiable no lo teclea nadie: lo entrega el equipo. La conexión al [control de la línea](/control/) —PLCs Allen-Bradley, Siemens, Omron o Mitsubishi, sobre OPC-UA, EtherNet/IP o Modbus TCP— registra ciclos, paros, parámetros y conteos sin intervención humana. Si tu planta ya opera SCADA en Ignition, Aveva o WinCC, buena parte del camino de comunicación está hecho.
+**El PLC como fuente de verdad.** El dato más confiable no lo teclea nadie: lo entrega el equipo. La conexión al control de la línea —PLCs Allen-Bradley, Siemens, Omron o Mitsubishi, sobre OPC-UA, EtherNet/IP o Modbus TCP— registra ciclos, paros, parámetros y conteos sin intervención humana. La monta [un integrador de control](/control/). Si tu planta ya opera SCADA en Ignition, Aveva o WinCC, buena parte del camino de comunicación está hecho.
 
 **Sensores e instrumentación de respaldo.** Máquinas antiguas sin protocolo abierto no obligan a reemplazarlas: se instrumentan con sensores de presencia, básculas, celdas de torque o medición de temperatura que reportan al mismo sistema.
 
 **Terminales de operador.** Pantallas en estación para lo que sí requiere criterio humano, diseñadas con una regla simple: registrar tiene que ser más rápido que el atajo, o el piso encontrará cómo evadirlo.
 
-Sobre esas cuatro capas se monta la plataforma de [trazabilidad y MES](/tracking/), y en plantas con maquinaria heterogénea —lo normal en Monterrey— el puente hacia el ERP suele requerir [software industrial a la medida](/software/) capaz de hablar el idioma de ambos extremos.
+Sobre esas cuatro capas se monta la plataforma de trazabilidad y MES. Es trabajo de [un integrador de trazabilidad y MES](/tracking/), y en plantas con maquinaria heterogénea —lo normal en Monterrey— el puente hacia el ERP suele requerir [software industrial a la medida](/software/) capaz de hablar el idioma de ambos extremos.
 
 ## ¿Qué ventaja ofrece un integrador de sistemas MES local?
 

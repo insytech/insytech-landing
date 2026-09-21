@@ -19,7 +19,7 @@ En las plantas de la región, lo que un SCADA bien implementado resuelve suele c
 
 **Históricos y tendencias.** Registrar variables de proceso con estampa de tiempo permite responder preguntas que a mano son imposibles: qué pasó con la temperatura los quince minutos antes del paro, si el ciclo se está degradando turno a turno, en qué producto se concentra el scrap.
 
-**La base para las capas de arriba.** El SCADA es el punto natural de conexión hacia [trazabilidad y sistemas MES](/tracking/) y hacia los indicadores de OEE. Muchos proyectos que arrancan como "queremos ver la línea" terminan siendo el cimiento de la [trazabilidad pieza por pieza](/blog/trazabilidad-sistemas-mes-planta/) que exige el cliente OEM.
+**La base para las capas de arriba.** El SCADA es el punto natural de conexión hacia la capa de trazabilidad y MES y hacia los indicadores de OEE. Montarla es trabajo de [un integrador de trazabilidad y MES](/tracking/). Muchos proyectos que arrancan como "queremos ver la línea" terminan siendo el cimiento de la [trazabilidad pieza por pieza](/blog/trazabilidad-sistemas-mes-planta/) que exige el cliente OEM.
 
 ## ¿Ignition, AVEVA o WinCC: cuál conviene para tu planta?
 
@@ -43,11 +43,11 @@ Un SCADA no se compra: se implementa. Y los proyectos rara vez fallan por la pla
 
 **La puesta en marcha se afina en piso.** El arranque siempre revela lo que el diseño no vio: una alarma que se dispara en cada cambio de producto, una pantalla que el operador no usa como se esperaba, una red que se satura en el turno de máxima carga. Corregirlo con el ingeniero presente es cuestión de horas; a distancia se convierte en semanas de correos.
 
-**Se integra con todo lo demás.** El valor del SCADA aparece cuando se conecta hacia arriba y hacia los lados: [control industrial](/control/) en la base, MES y trazabilidad encima, [software industrial a la medida](/software/) para la lógica que ninguna plataforma trae de fábrica, e inspección de calidad cuando hace falta —como describimos al hablar de [visión artificial en la industria regia](/blog/vision-artificial-monterrey/). Un integrador que domina todas esas capas no te deja con islas conectadas a medias.
+**Se integra con todo lo demás.** El valor del SCADA aparece cuando se conecta hacia arriba y hacia los lados: [integración de control industrial](/control/) en la base, MES y trazabilidad encima, [software industrial a la medida](/software/) para la lógica que ninguna plataforma trae de fábrica, e inspección de calidad cuando hace falta —como describimos al hablar de [visión artificial en la industria regia](/blog/vision-artificial-monterrey/). Un integrador que domina todas esas capas no te deja con islas conectadas a medias.
 
 **Continuidad y traspaso de conocimiento.** El sistema tiene que quedar en manos de tu gente: código documentado, estándares de nomenclatura, capacitación al personal de mantenimiento.
 
-En Insytech llevamos ocho años haciendo exactamente esto como equipo de ingeniería con base en Monterrey, con proyectos de [automatización, control y SCADA](/control/) para plantas como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
+En Insytech llevamos ocho años haciendo exactamente esto como equipo de ingeniería con base en Monterrey, y como [integrador de automatización y control](/control/) para plantas como Navistar, NASA Nacional de Acero, Polaris, Pentair, Franklin Electric y Tempel.
 
 ## Empieza con un diagnóstico de tu arquitectura
 
