@@ -62,7 +62,7 @@ const doubled = <T,>(row: readonly T[]): T[] => [...row, ...row];
     <Container className="relative z-10">
         <div class="flex flex-col items-center text-center">
             <h1
-                class="mb-6 max-w-6xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl"
+                class="mb-6 max-w-6xl text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl"
                 data-animate="fade-up"
                 data-animate-delay=".1s"
             >
@@ -71,11 +71,13 @@ const doubled = <T,>(row: readonly T[]): T[] => [...row, ...row];
                        entre "industrial" y "y MES", a cualquier ancho, en vez de
                        depender de que el max-width dé la cuenta justa. Antes iban
                        en línea con un {" "} y un <br />, y a lg:text-6xl la
-                       primera línea todavía se partía sola en dos. */
+                       primera línea todavía se partía sola en dos. El {" "}
+                       entre los spans sigue siendo necesario: Astro 7 se come
+                       el espacio y el nombre accesible salía "industrialy". */
                 }
                 <span class="block text-gray-900 dark:text-white"
                     >Sistema de trazabilidad industrial</span
-                >
+                >{" "}
                 <span
                     class="block bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] bg-clip-text text-transparent dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
                     >y MES en tiempo real</span
