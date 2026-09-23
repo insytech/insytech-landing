@@ -151,7 +151,7 @@ import { SURFACE } from "@utils/typography";
                     rings,
                     {
                         strokeDashoffset: (_i: number, t: Element) =>
-                            t.getAttribute("stroke-dasharray"),
+                            Number(t.getAttribute("stroke-dasharray")) || 0,
                         duration: 1.2,
                         clearProps: "strokeDashoffset",
                     },
