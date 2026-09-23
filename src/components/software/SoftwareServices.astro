@@ -328,7 +328,7 @@ const productTints = [
                 <div class="svc-pane-vis" data-pane-vis>
                     <PhoneFrame class="svc-phone-crop">
                         <div class="svc-phone-screen">
-                            <div class="hero-screen-top svc-phone-top">
+                            <div class="svc-phone-top">
                                 <div><small>Ruta de hoy</small><b>6 visitas</b></div>
                                 <span class="svc-avatar"></span>
                             </div>
@@ -745,14 +745,16 @@ const productTints = [
             ),
             #13284a;
     }
-    .svc-pane-vis > * {
+    /* :global(*) because the device roots belong to the frame components and
+       do not carry this component's scope attribute. */
+    .svc-pane-vis > :global(*) {
         translate: calc(var(--px, 0) * -6px) calc(var(--py, 0) * -6px);
         transition: translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .svc-pane-vis > .svc-float {
         translate: calc(var(--px, 0) * 14px) calc(var(--py, 0) * 14px);
     }
-    .svc-pane-enter .svc-pane-vis > * {
+    .svc-pane-enter .svc-pane-vis > :global(*) {
         animation: svc-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
     }
     .svc-pane-enter .svc-pane-vis > .svc-float {
@@ -1082,7 +1084,9 @@ const productTints = [
     }
 
     /* ---------- mobile pane extras ---------- */
-    .svc-phone-crop {
+    /* PhoneFrame's root does not carry this component's scope attribute, so
+       the class passed to it must be matched with :global(). */
+    .svc-pane-vis :global(.svc-phone-crop) {
         position: absolute;
         left: 50%;
         bottom: -120px;
@@ -1097,8 +1101,22 @@ const productTints = [
         flex-direction: column;
         gap: 12px;
     }
+    /* Local copy of the hero's screen header: Hero's scoped styles never
+       reach elements rendered here. */
     .svc-phone-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         color: #211915;
+    }
+    .svc-phone-top b {
+        font-size: 0.95rem;
+    }
+    .svc-phone-top small {
+        display: block;
+        font-size: 0.68rem;
+        color: #6c7788;
+        font-weight: 600;
     }
     :global(.dark) .svc-phone-top {
         color: #f4f7fc;
@@ -1168,10 +1186,10 @@ const productTints = [
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .svc-pane-vis > * {
+        .svc-pane-vis > :global(*) {
             transition: none;
         }
-        .svc-pane-enter .svc-pane-vis > * {
+        .svc-pane-enter .svc-pane-vis > :global(*) {
             animation: none;
         }
     }
