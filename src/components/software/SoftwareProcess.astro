@@ -1,160 +1,191 @@
 ---
-import Container from "../shared/Container.astro";
-import { HEADING, PAD, SURFACE } from "@utils/typography";
-
-// Los plazos salen del cronograma real de un proyecto pequeño de cuatro módulos
-// (cotización S01076): 10 semanas de arranque a entrega, más 10 días hábiles de
-// pruebas del cliente. Los bloques funcionales corren de 15 a 20 días hábiles
-// cada uno y las tareas internas en tramos de 5 o 10 días. Son aproximados a
-// propósito y así se dicen en la página: es un rango observado en un proyecto,
-// no un compromiso contractual.
-//
-// El paso 01 va SIN plazo deliberadamente. El cronograma arranca ya con los
-// requerimientos definidos, así que no hay ni un dato sobre cuánto dura el
-// levantamiento; ponerle semanas sería inventarlo.
+// Dark methodology panel with a blurred cyan light arc, ported from the
+// approved mockup. Each step is a single `.proc-row` element — title and
+// description live in a plain `.proc-row-body` block, never nested inside the
+// same grid cell as the row itself (that's the bug the earlier mockup had).
 const steps = [
     {
         number: "01",
-        title: "Análisis y Descubrimiento",
-        duration: null,
-        description:
-            "Entendemos sus procesos actuales, identificamos cuellos de botella y definimos los requerimientos técnicos y funcionales del proyecto.",
+        title: "Descubrimiento",
+        description: "Alcance y requerimientos por escrito.",
+        active: true,
     },
     {
         number: "02",
-        title: "Arquitectura y entorno en pie",
-        duration: "Semanas 1-2",
-        description:
-            "Servidor, base de datos, certificados y despliegue continuo funcionando, más el control de accesos por rol. Al cerrar la segunda semana ya hay una plataforma donde entrar.",
+        title: "Diseño y arquitectura",
+        description: "Pantallas, flujo y base técnica.",
+        active: false,
     },
     {
         number: "03",
-        title: "Desarrollo por bloques funcionales",
-        duration: "3 a 4 semanas por bloque",
-        description:
-            "Cada bloque se entrega funcionando y se valida antes de abrir el siguiente. Los bloques se traslapan, así que su equipo ve avance útil cada quincena y no un único entregable al final.",
+        title: "Desarrollo por bloques",
+        description: "Cada bloque se valida con usted.",
+        active: false,
     },
     {
         number: "04",
-        title: "Puesta en marcha y pruebas",
-        duration: "1 semana por bloque, más 2 de pruebas suyas",
-        description:
-            "Cada bloque cierra con una semana de pruebas de integración y ajuste en sitio. Tras la entrega quedan dos semanas para que su gente pruebe el sistema con producción real.",
+        title: "Publicación y mantenimiento",
+        description: "A producción o a las tiendas de apps.",
+        active: false,
     },
-];
+] as const;
 ---
 
-<section id="process" class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}>
-    <!-- Decorative elements -->
-    <div
-        class="absolute top-0 right-0 w-1/3 h-full bg-[#005EB8]/5 skew-x-12 transform origin-top pointer-events-none"
-    >
-    </div>
-
-    <Container className="relative z-10">
-        <div class="grid lg:grid-cols-2 gap-20 items-center">
+<div class="mx-2 mt-28">
+    <section class="proc relative overflow-clip rounded-[28px] sm:rounded-[44px]">
+        <div class="proc-arc" aria-hidden="true"></div>
+        <div class="relative grid gap-10 lg:grid-cols-2 items-center px-6 sm:px-10 lg:px-14 py-12 sm:py-14 lg:py-18">
             <div>
-                <p
-                    class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
+                <p class="proc-eyebrow" data-animate="fade-up">Cómo trabajamos</p>
+                <h2
+                    class="proc-h2 mt-4 mb-5 text-4xl sm:text-5xl lg:text-6xl"
+                    data-reveal="heading"
                 >
-                    Metodología
-                </p>
-                <h2 data-reveal="heading" class={`${HEADING.section} mb-8`}>
-                    Cómo desarrollamos software a la medida por industria
+                    No adapte su negocio a una plantilla
                 </h2>
-                <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">
-                    Nuestra metodología combina las mejores prácticas de
-                    ingeniería de software con un profundo conocimiento del
-                    entorno industrial, asegurando soluciones robustas, seguras
-                    y fáciles de usar.
+                <p
+                    class="proc-body mb-7 max-w-[30rem]"
+                    data-animate="fade-up"
+                    data-animate-delay="0.1s"
+                >
+                    Entregas por bloques que usted prueba antes de abrir el
+                    siguiente. Siempre sabe qué está funcionando y qué
+                    falta.
                 </p>
-                <p class="text-lg text-gray-600 dark:text-gray-400 mb-10">
-                    Como referencia: un sistema pequeño de cuatro módulos nos
-                    tomó <strong class="font-semibold text-[#211915] dark:text-white"
-                        >10 semanas</strong
-                    > del arranque a la entrega, más dos semanas de pruebas del
-                    cliente. Los plazos de abajo son aproximados y salen de ese
-                    proyecto: el suyo se estima sobre su alcance.
-                </p>
-
-                <div class="space-y-4">
-                    <div
-                        class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm"
-                    >
-                        <div
-                            class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><polyline points="20 6 9 17 4 12"
-                                ></polyline></svg
-                            >
-                        </div>
-                        <span
-                            class="font-semibold text-[#211915] dark:text-white"
-                            >Seguridad de Datos de Grado Industrial</span
-                        >
-                    </div>
-                    <div
-                        class="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm"
-                    >
-                        <div
-                            class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2.5"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                ><polyline points="20 6 9 17 4 12"
-                                ></polyline></svg
-                            >
-                        </div>
-                        <span
-                            class="font-semibold text-[#211915] dark:text-white"
-                            >Arquitecturas Escalables en la Nube o Local</span
-                        >
-                    </div>
-                </div>
+                <a
+                    href="#contact"
+                    class="proc-cta"
+                    data-animate="fade-up"
+                    data-animate-delay="0.15s"
+                >
+                    Cotizar mi proyecto
+                </a>
             </div>
 
-            <div class="grid gap-6" data-reveal="group">
+            <div class="proc-flow" data-reveal="group">
                 {
                     steps.map((step) => (
-                        <div class="relative p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow group overflow-hidden">
-                            <div class="absolute -right-4 -top-8 text-8xl font-bold text-gray-50 dark:text-gray-800/50 group-hover:text-blue-50 dark:group-hover:text-blue-900/20 transition-colors pointer-events-none italic">
-                                {step.number}
-                            </div>
-                            <div class="relative z-10">
-                                {step.duration && (
-                                    <p class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-widest mb-2">
-                                        {step.duration}
-                                    </p>
-                                )}
-                                <h3 class="text-xl font-bold text-[#211915] dark:text-white mb-2">
-                                    {step.title}
-                                </h3>
-                                <p class="text-gray-600 dark:text-gray-400">
-                                    {step.description}
-                                </p>
+                        <div class:list={["proc-row", { "proc-row-on": step.active }]}>
+                            <span class="proc-n">{step.number}</span>
+                            <div class="proc-row-body">
+                                <b>{step.title}</b>
+                                <small>{step.description}</small>
                             </div>
                         </div>
                     ))
                 }
             </div>
         </div>
-    </Container>
-</section>
+    </section>
+</div>
+
+<style>
+    .proc {
+        background: #0b1228;
+        color: #f4f7fc;
+    }
+    .proc-arc {
+        position: absolute;
+        inset: -40% -10% auto 30%;
+        height: 90%;
+        border-radius: 50%;
+        border: 36px solid transparent;
+        border-top-color: rgba(0, 181, 226, 0.55);
+        filter: blur(28px);
+        transform: rotate(-8deg);
+        pointer-events: none;
+    }
+
+    .proc-eyebrow {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-weight: 800;
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6dd6f5;
+    }
+
+    .proc-h2 {
+        position: relative;
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        /* data-reveal masks each line in an overflow box; tighter than
+           1.15 clips the FieldworkGeo descenders (g, p). */
+        line-height: 1.15;
+        text-wrap: balance;
+    }
+
+    .proc-body {
+        position: relative;
+        color: #b7c1d6;
+    }
+
+    .proc-cta {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 14px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        background: #fff;
+        color: #0d1530;
+    }
+    .proc-cta:focus-visible {
+        outline: 2px solid #00b5e2;
+        outline-offset: 3px;
+    }
+
+    .proc-flow {
+        position: relative;
+        display: grid;
+        gap: 10px;
+    }
+
+    .proc-row {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .proc-row-on {
+        background: rgba(0, 181, 226, 0.12);
+        border-color: rgba(0, 181, 226, 0.4);
+    }
+
+    .proc-n {
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.8rem;
+        color: #6dd6f5;
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        background: rgba(0, 181, 226, 0.12);
+    }
+
+    .proc-row-body {
+        display: block;
+        min-width: 0;
+    }
+    .proc-row-body b {
+        display: block;
+        font-size: 1rem;
+    }
+    .proc-row-body small {
+        display: block;
+        color: #9aa6bf;
+        font-size: 0.82rem;
+    }
+</style>

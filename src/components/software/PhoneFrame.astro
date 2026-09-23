@@ -1,0 +1,131 @@
+---
+// Realistic phone device chrome: bezel, dynamic island, status bar, glare and
+// home bar. Reused by the hero (cycling screens) and the "Apps móviles" tab
+// pane (single static screen). Screens are passed through the default slot —
+// this component only owns the hardware frame, not the on-screen content.
+interface Props {
+    class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["phone-frame", className]}>
+    <div class="phone-screen-shell">
+        <div class="phone-island" aria-hidden="true"></div>
+        <div class="phone-status" aria-hidden="true">
+            <span>9:41</span>
+            <i></i>
+        </div>
+        <slot />
+        <div class="phone-home-bar" aria-hidden="true"></div>
+        <div class="phone-glare" aria-hidden="true"></div>
+    </div>
+</div>
+
+<style>
+    .phone-frame {
+        position: relative;
+        width: 272px;
+        aspect-ratio: 9 / 19.3;
+        border-radius: 50px;
+        padding: 11px;
+        background: linear-gradient(
+            145deg,
+            #3a3f48,
+            #121418 40%,
+            #2a2e35 70%,
+            #0c0e11
+        );
+        box-shadow:
+            0 40px 80px -24px rgba(0, 20, 137, 0.35),
+            0 12px 24px -12px rgba(0, 20, 137, 0.18),
+            inset 0 0 0 1.5px rgba(255, 255, 255, 0.18),
+            inset 0 0 0 4px #0b0c0f;
+    }
+    :global(.dark) .phone-frame {
+        box-shadow:
+            0 40px 80px -24px rgba(0, 0, 0, 0.7),
+            0 12px 24px -12px rgba(0, 0, 0, 0.5),
+            inset 0 0 0 1.5px rgba(255, 255, 255, 0.18),
+            inset 0 0 0 4px #0b0c0f;
+    }
+
+    .phone-screen-shell {
+        position: relative;
+        height: 100%;
+        border-radius: 40px;
+        overflow: clip;
+        background: #ffffff;
+    }
+    :global(.dark) .phone-screen-shell {
+        background: #0f172b;
+    }
+
+    .phone-island {
+        position: absolute;
+        z-index: 5;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92px;
+        height: 26px;
+        border-radius: 20px;
+        background: #000;
+    }
+
+    .phone-status {
+        position: absolute;
+        z-index: 4;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 26px 0;
+        font: 700 0.72rem "Raleway", sans-serif;
+        color: #211915;
+    }
+    :global(.dark) .phone-status {
+        color: #f4f7fc;
+    }
+    .phone-status i {
+        display: inline-block;
+        width: 16px;
+        height: 8px;
+        border-radius: 2px;
+        border: 1.5px solid currentColor;
+        opacity: 0.8;
+    }
+
+    .phone-home-bar {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 110px;
+        height: 4px;
+        border-radius: 3px;
+        background: #211915;
+        opacity: 0.7;
+        z-index: 4;
+    }
+    :global(.dark) .phone-home-bar {
+        background: #f4f7fc;
+    }
+
+    .phone-glare {
+        position: absolute;
+        inset: 0;
+        border-radius: 40px;
+        pointer-events: none;
+        background: linear-gradient(
+            115deg,
+            rgba(255, 255, 255, 0.14),
+            transparent 35%
+        );
+        z-index: 6;
+    }
+</style>

@@ -1,18 +1,17 @@
 ---
 import Layout from "@layouts/VisionLayout.astro";
 import Hero from "@components/software/Hero.astro";
-import SocialProof from "@components/shared/SocialProof.astro";
 import SoftwareServices from "@components/software/SoftwareServices.astro";
 import SoftwareProcess from "@components/software/SoftwareProcess.astro";
-import Resources from "@components/software/Resources.astro";
 import FAQ from "@components/software/FAQ.astro";
+import SocialProof from "@components/shared/SocialProof.astro";
 import ContactSection from "@components/sections/ContactSection.astro";
 import { SURFACE } from "@utils/typography";
 ---
 
 <Layout
-    title="Software industrial a la medida en Monterrey"
-    description="Desarrollamos software industrial a la medida en Monterrey: MES, HMI e integración con su ERP y PLCs. Más de 8 años en planta. Cuéntenos su proceso."
+    title="Desarrollo de software a la medida en Monterrey"
+    description="Desarrollamos e-commerce, aplicaciones web, landing pages, apps de escritorio y móviles a la medida en Monterrey. Cuéntenos su proyecto."
 >
     <!-- overflow-clip y no overflow-hidden: hidden crea un contenedor de scroll
          y rompería cualquier position:sticky o pin de ScrollTrigger de la
@@ -20,15 +19,17 @@ import { SURFACE } from "@utils/typography";
     <main class="flex flex-col overflow-clip">
         <Hero />
 
-        <!-- La prueba social va pegada al Hero a propósito: para un comprador
-             industrial pesa más que la lista de capacidades que sigue. -->
-        <SocialProof class={SURFACE.base} />
+        <!-- Prueba social compartida con las demás páginas de servicio. La
+             línea por defecto habla de procesos industriales, así que aquí
+             va una propia de desarrollo de software. -->
+        <SocialProof
+            class={SURFACE.base}
+            headline="Más de 8 años desarrollando soluciones para empresas en México"
+        />
 
         <SoftwareServices />
 
         <SoftwareProcess />
-
-        <Resources />
 
         <FAQ />
 

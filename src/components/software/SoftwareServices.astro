@@ -1,93 +1,1178 @@
 ---
-import Container from "../shared/Container.astro";
-import { HEADING, PAD, SURFACE } from "@utils/typography";
+// Folder-tab services section, ported from the approved grassfeld-inspired
+// mockup (odd/tasks/software-repositioning.md, T4). Five panes (E-commerce,
+// Aplicaciones web, Landing pages, Escritorio, Apps móviles), each with a
+// device mockup and floating cards, plus a 7s autoplay that stops on any user
+// interaction and a pointer-parallax effect on the device stage.
+import BrowserFrame from "./BrowserFrame.astro";
+import DesktopFrame from "./DesktopFrame.astro";
+import PhoneFrame from "./PhoneFrame.astro";
+import FloatIcon from "./FloatIcon.astro";
+import IntegrationHighlights from "./IntegrationHighlights.astro";
 
-const services = [
+const tabs = [
     {
-        title: "Sistemas MES (Manufacturing Execution Systems)",
-        description:
-            "Digitalice su piso de producción. Monitoreo en tiempo real, control de inventarios, órdenes de trabajo y <a href='/tracking/' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>trazabilidad total de procesos</a>.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>`,
-        gradient: "from-blue-500 to-cyan-500",
+        id: "ecom",
+        label: "E-commerce",
+        icon: `<path d="M3 4h2l2.4 11h11L21 7H6.2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>`,
     },
     {
-        title: "Dashboards e Inteligencia de Negocios",
-        description:
-            "Transforme datos crudos en decisiones estratégicas. Visualizaciones dinámicas conectadas directamente a sus bases de datos y <a href='/control/' class='text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors'>PLCs</a>.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>`,
-        gradient: "from-purple-500 to-indigo-500",
+        id: "web",
+        label: "Aplicaciones web",
+        icon: `<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/>`,
     },
     {
-        title: "Interfaces HMI Personalizadas",
-        description:
-            "Diseñamos interfaces de usuario amigables para operadores, optimizadas para pantallas industriales y tablets, integradas con Ignition o .NET.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
-        gradient: "from-emerald-500 to-teal-500",
+        id: "lp",
+        label: "Landing pages",
+        icon: `<path d="M4 5h16v6H4zM4 15h7v4H4zM14 15h6v4h-6z"/>`,
     },
     {
-        title: "Integración de Sistemas y APIs",
-        description:
-            "Conectamos su ERP (SAP, Oracle, Microsoft Dynamics) con el piso de producción, eliminando islas de información y procesos manuales.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`,
-        gradient: "from-orange-500 to-amber-500",
+        id: "desk",
+        label: "Escritorio",
+        icon: `<rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/>`,
     },
     {
-        title: "Software Web, Móvil, E-commerce y de Escritorio",
-        description:
-            "No solo software industrial: desarrollamos e-commerce y tiendas en línea, aplicaciones web, landing pages, aplicaciones de escritorio y apps móviles a la medida de su operación.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>`,
-        gradient: "from-rose-500 to-pink-500",
+        id: "mob",
+        label: "Apps móviles",
+        icon: `<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>`,
     },
-    {
-        title: "Mantenimiento y Soporte de Software",
-        description:
-            "Soporte preventivo y correctivo para sus aplicaciones críticas, con el alcance y los tiempos de respuesta que se definen en el contrato de servicio.",
-        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>`,
-        gradient: "from-cyan-500 to-sky-500",
-    },
-];
+] as const;
+
+const productTints = [
+    "linear-gradient(135deg,#cfe6fb,#7fb7ec)",
+    "linear-gradient(135deg,#c9f1fb,#5fd3ef)",
+    "linear-gradient(135deg,#d3e9fa,#5aa7e6)",
+    "linear-gradient(135deg,#dff0fb,#9cd6f2)",
+] as const;
 ---
 
-<section id="solutions" class={`${PAD.display} ${SURFACE.base}`}>
-    <Container>
-        <div class="text-center max-w-3xl mx-auto mb-20">
-            <p
-                class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
-            >
-                Nuestros Servicios
-            </p>
-            <h2 data-reveal="heading" class={`${HEADING.display} mb-6`}>
-                Desarrollo de software industrial, proceso por proceso
-            </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400">
-                Combinamos nuestra experiencia en <a
-                    href="/control/"
-                    class="text-[#005EB8] dark:text-blue-400 underline decoration-1 underline-offset-2 hover:text-[#00B5E2] transition-colors"
-                    >automatización de procesos</a
-                > con el desarrollo de software de vanguardia para crear
-                herramientas que realmente agregan valor a su industria.
-            </p>
-        </div>
+<section id="solutions" class="svc relative overflow-clip pt-24 pb-10 lg:pt-32" data-software-services>
+    <div class="svc-head mx-auto max-w-3xl px-4 text-center">
+        <h2 class="svc-h2 text-4xl md:text-5xl lg:text-6xl" data-reveal="heading">
+            Un equipo para todo el software de su empresa
+        </h2>
+        <p class="mt-5 max-w-xl mx-auto text-lg text-[#4a5566] dark:text-gray-400">
+            Diseñamos, programamos, publicamos y le damos mantenimiento.
+            Cada proyecto arranca de lo que su negocio necesita resolver,
+            no de una plantilla.
+        </p>
+    </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-reveal="group">
-            {
-                services.map((service) => (
-                    <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/30 dark:hover:border-blue-500/30 transition-colors duration-300 hover:shadow-2xl hover:shadow-[#005EB8]/5">
-                        <div
-                            class={`w-14 h-14 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center text-white mb-6 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300`}
-                        >
-                            <Fragment set:html={service.icon} />
-                        </div>
-                        <h3 class="text-xl font-bold text-[#211915] dark:text-white mb-4 group-hover:text-[#005EB8] dark:group-hover:text-blue-400 transition-colors">
-                            {service.title}
-                        </h3>
-                        <p
-                            class="text-gray-600 dark:text-gray-400 leading-relaxed"
-                            set:html={service.description}
-                        />
+    <div
+        class="svc-tabs svc-tabs-auto mt-9 flex justify-center gap-1 flex-wrap px-4"
+        role="tablist"
+        aria-label="Servicios"
+        data-tablist
+    >
+        {
+            tabs.map((tab, index) => (
+                <button
+                    type="button"
+                    class="svc-tab"
+                    role="tab"
+                    id={`t-${tab.id}`}
+                    aria-controls={`p-${tab.id}`}
+                    aria-selected={index === 0 ? "true" : "false"}
+                    tabindex={index === 0 ? 0 : -1}
+                    data-tab
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        set:html={tab.icon}
+                    />
+                    {tab.label}
+                    <span class="svc-prog" aria-hidden="true" data-prog />
+                </button>
+            ))
+        }
+    </div>
+
+    <div class="px-2">
+        <div class="svc-tabwrap" data-tabwrap>
+            <!-- E-commerce -->
+            <div class="svc-pane" role="tabpanel" id="p-ecom" aria-labelledby="t-ecom" data-pane>
+                <div class="svc-pane-txt">
+                    <span class="svc-pane-ic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 4h2l2.4 11h11L21 7H6.2"></path>
+                            <circle cx="9" cy="20" r="1.4"></circle>
+                            <circle cx="18" cy="20" r="1.4"></circle>
+                        </svg>
+                    </span>
+                    <h3>Tiendas en línea propias</h3>
+                    <p>
+                        Tiendas propias con catálogo, carrito, pagos en
+                        línea y panel para administrar pedidos e
+                        inventario.
+                    </p>
+                    <ul class="svc-feats">
+                        <li>Pasarelas de pago</li>
+                        <li>Envíos</li>
+                        <li>Facturación o ERP</li>
+                        <li>Panel de pedidos</li>
+                    </ul>
+                    <div>
+                        <a href="#contact" class="svc-cta">Cotizar mi tienda</a>
                     </div>
-                ))
-            }
+                </div>
+                <div class="svc-pane-vis" data-pane-vis>
+                    <BrowserFrame url="tienda.suempresa.mx">
+                        <div class="svc-shop-nav">
+                            Su marca
+                            <span><em>Catálogo</em><em>Ofertas</em><em>Carrito · 2</em></span>
+                        </div>
+                        <div class="svc-shop-hero">
+                            <div>
+                                <small>Temporada nueva</small>
+                                <b>Todo el catálogo, a un clic</b>
+                            </div>
+                            <span class="svc-pill-w">Comprar</span>
+                        </div>
+                        <div class="svc-grid4">
+                            {
+                                productTints.map((tint) => (
+                                    <div class="svc-prod">
+                                        <div class="svc-prod-ph" style={{ background: tint }} />
+                                        <div class="svc-prod-l" />
+                                        <div class="svc-prod-l svc-prod-l-s" />
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </BrowserFrame>
+                    <div class="svc-float svc-float-r">
+                        <span class="svc-float-ic"><FloatIcon name="check" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Pedido confirmado</b><small>#1042 · correo enviado al cliente</small></div>
+                    </div>
+                    <div class="svc-float svc-float-l">
+                        <span class="svc-float-ic svc-float-ic-blue"><FloatIcon name="refresh" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Inventario actualizado</b><small>Sincronizado con su ERP</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web apps -->
+            <div class="svc-pane" role="tabpanel" id="p-web" aria-labelledby="t-web" data-pane hidden>
+                <div class="svc-pane-txt">
+                    <span class="svc-pane-ic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+                            <path d="M3 9h18M8 14h4"></path>
+                        </svg>
+                    </span>
+                    <h3>Sistemas web para operar su empresa</h3>
+                    <p>
+                        Portales de clientes, sistemas internos y
+                        plataformas con usuarios, roles y reportes, que se
+                        usan desde cualquier navegador.
+                    </p>
+                    <ul class="svc-feats">
+                        <li>Accesos por rol</li>
+                        <li>Reportes</li>
+                        <li>Integración por API</li>
+                        <li>Nube o servidor propio</li>
+                    </ul>
+                    <div>
+                        <a href="#contact" class="svc-cta">Cotizar mi sistema</a>
+                    </div>
+                </div>
+                <div class="svc-pane-vis" data-pane-vis>
+                    <BrowserFrame url="portal.suempresa.mx">
+                        <div class="svc-shop-nav">
+                            Portal de clientes
+                            <span><em>Solicitudes</em><em>Reportes</em><em>Usuarios</em></span>
+                        </div>
+                        <div class="svc-kpis">
+                            <div><small>Solicitudes abiertas</small><i style="width:70%"></i></div>
+                            <div><small>En revisión</small><i style="width:45%"></i></div>
+                            <div><small>Resueltas</small><i style="width:85%"></i></div>
+                        </div>
+                        <div class="svc-table">
+                            <div><span>Cliente</span><span>Rol</span><span>Estado</span></div>
+                            <div><span>Comercial del Norte</span><span>Administrador</span><span class="svc-tag">Activo</span></div>
+                            <div><span>Distribuidora Sur</span><span>Consulta</span><span class="svc-tag svc-tag-c">Invitado</span></div>
+                            <div><span>Grupo Regio</span><span>Compras</span><span class="svc-tag">Activo</span></div>
+                        </div>
+                    </BrowserFrame>
+                    <div class="svc-float svc-float-r">
+                        <span class="svc-float-ic"><FloatIcon name="role" class="w-[16px] h-[16px]" /></span>
+                        <div><b>Rol: Supervisor</b><small>Ve reportes, no edita precios</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Landing -->
+            <div class="svc-pane" role="tabpanel" id="p-lp" aria-labelledby="t-lp" data-pane hidden>
+                <div class="svc-pane-txt">
+                    <span class="svc-pane-ic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 5h16v6H4zM4 15h7v4H4zM14 15h6v4h-6z"></path>
+                        </svg>
+                    </span>
+                    <h3>Landing pages para sus campañas</h3>
+                    <p>
+                        Páginas de campaña y sitios corporativos rápidos,
+                        optimizados para buscadores y con formularios
+                        conectados a su CRM.
+                    </p>
+                    <ul class="svc-feats">
+                        <li>SEO técnico</li>
+                        <li>Medición de conversiones</li>
+                        <li>Formularios a su CRM</li>
+                        <li>Carga rápida</li>
+                    </ul>
+                    <div>
+                        <a href="#contact" class="svc-cta">Cotizar mi landing</a>
+                    </div>
+                </div>
+                <div class="svc-pane-vis" data-pane-vis>
+                    <BrowserFrame url="suempresa.mx/campana">
+                        <div class="svc-lp">
+                            <b>Su propuesta de valor, en una línea</b>
+                            <span class="svc-lp-l"></span>
+                            <span class="svc-lp-l svc-lp-l-s"></span>
+                            <span class="svc-lp-cta">Solicitar información</span>
+                        </div>
+                        <div class="svc-lp-form"><span></span><span></span><span></span></div>
+                    </BrowserFrame>
+                    <div class="svc-float svc-float-r">
+                        <span class="svc-float-ic"><FloatIcon name="arrow-right" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Nuevo prospecto</b><small>Enviado a su CRM</small></div>
+                    </div>
+                    <div class="svc-float svc-float-l">
+                        <span class="svc-float-ic svc-float-ic-blue"><FloatIcon name="arrow-up-right" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Conversión registrada</b><small>Campaña de otoño</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop -->
+            <div class="svc-pane" role="tabpanel" id="p-desk" aria-labelledby="t-desk" data-pane hidden>
+                <div class="svc-pane-txt">
+                    <span class="svc-pane-ic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+                            <path d="M8 21h8M12 17v4"></path>
+                        </svg>
+                    </span>
+                    <h3>Aplicaciones de escritorio para trabajo intensivo</h3>
+                    <p>
+                        Software que se instala en las computadoras de su
+                        equipo, para trabajo intensivo, con archivos
+                        locales o sin depender de internet.
+                    </p>
+                    <ul class="svc-feats">
+                        <li>Sin conexión</li>
+                        <li>Sincroniza después</li>
+                        <li>Archivos locales</li>
+                        <li>Actualizaciones controladas</li>
+                    </ul>
+                    <div>
+                        <a href="#contact" class="svc-cta">Cotizar mi aplicación</a>
+                    </div>
+                </div>
+                <div class="svc-pane-vis" data-pane-vis>
+                    <DesktopFrame title="Inventario — Almacén central">
+                        <Fragment slot="sidebar">
+                            <span class="svc-side-on">Existencias</span>
+                            <span>Entradas</span>
+                            <span>Salidas</span>
+                            <span>Reportes</span>
+                        </Fragment>
+                        <div class="svc-tools"><span></span><span></span><span></span></div>
+                        <div class="svc-table">
+                            <div><span>Artículo</span><span>Ubicación</span><span>Estado</span></div>
+                            <div><span>Caja de cartón M</span><span>Pasillo 4</span><span class="svc-tag">Disponible</span></div>
+                            <div><span>Cinta de embalaje</span><span>Pasillo 2</span><span class="svc-tag svc-tag-c">Por surtir</span></div>
+                            <div><span>Etiqueta térmica</span><span>Pasillo 7</span><span class="svc-tag">Disponible</span></div>
+                        </div>
+                    </DesktopFrame>
+                    <div class="svc-float svc-float-r">
+                        <span class="svc-float-ic"><FloatIcon name="sync" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Sin conexión</b><small>Los cambios se sincronizan al volver</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile -->
+            <div class="svc-pane" role="tabpanel" id="p-mob" aria-labelledby="t-mob" data-pane hidden>
+                <div class="svc-pane-txt">
+                    <span class="svc-pane-ic">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="7" y="2" width="10" height="20" rx="2"></rect>
+                            <path d="M11 18h2"></path>
+                        </svg>
+                    </span>
+                    <h3>Apps móviles para sus clientes o su equipo</h3>
+                    <p>
+                        Aplicaciones para iOS y Android para sus clientes o
+                        para su equipo en campo, conectadas al mismo
+                        sistema que el resto de su operación.
+                    </p>
+                    <ul class="svc-feats">
+                        <li>iOS y Android</li>
+                        <li>Notificaciones</li>
+                        <li>Modo sin conexión</li>
+                        <li>Publicación en tiendas</li>
+                    </ul>
+                    <div>
+                        <a href="#contact" class="svc-cta">Cotizar mi app</a>
+                    </div>
+                </div>
+                <div class="svc-pane-vis" data-pane-vis>
+                    <PhoneFrame class="svc-phone-crop">
+                        <div class="svc-phone-screen">
+                            <div class="hero-screen-top svc-phone-top">
+                                <div><small>Ruta de hoy</small><b>6 visitas</b></div>
+                                <span class="svc-avatar"></span>
+                            </div>
+                            <div class="svc-hero-card">
+                                <small>Siguiente visita</small>
+                                <b>Comercial del Norte · 11:30</b>
+                            </div>
+                            <div class="svc-steps">
+                                <div class="svc-step svc-step-ok"><span></span>Distribuidora Sur</div>
+                                <div class="svc-step svc-step-now"><span></span>Comercial del Norte</div>
+                                <div class="svc-step"><span></span>Grupo Regio</div>
+                            </div>
+                        </div>
+                    </PhoneFrame>
+                    <div class="svc-float svc-float-rt">
+                        <span class="svc-float-ic"><FloatIcon name="bell" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Nueva orden asignada</b><small>Hace un momento</small></div>
+                    </div>
+                    <div class="svc-float svc-float-l">
+                        <span class="svc-float-ic svc-float-ic-blue"><FloatIcon name="check" class="w-[18px] h-[18px]" /></span>
+                        <div><b>Visita registrada</b><small>Se sube al tener señal</small></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </Container>
+    </div>
+
+    <IntegrationHighlights />
 </section>
+
+<script>
+    // Accessible folder tabs with a 7s autoplay that stops on any user
+    // interaction, and a pointer-parallax effect on each device stage.
+    // Scoped to [data-software-services] so it never touches another
+    // tablist on the page.
+    (function () {
+        const root = document.querySelector("[data-software-services]");
+        if (!root) return;
+
+        const reduce = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+        ).matches;
+        const tablistEl = root.querySelector<HTMLElement>("[data-tablist]");
+        const tabwrapEl = root.querySelector<HTMLElement>("[data-tabwrap]");
+        const tabs = Array.from(
+            root.querySelectorAll<HTMLButtonElement>("[data-tab]"),
+        );
+        if (!tablistEl || !tabwrapEl || tabs.length === 0) return;
+        // Re-bind as non-nullable consts: TS doesn't carry the null check
+        // above into the nested function declarations below.
+        const tablist = tablistEl;
+        const tabwrap = tabwrapEl;
+
+        function select(target: HTMLButtonElement) {
+            tabs.forEach((tab) => {
+                const on = tab === target;
+                tab.setAttribute("aria-selected", String(on));
+                tab.tabIndex = on ? 0 : -1;
+                const pane = document.getElementById(
+                    tab.getAttribute("aria-controls") ?? "",
+                );
+                if (!pane) return;
+                pane.hidden = !on;
+                pane.classList.remove("svc-pane-enter");
+                if (on && !reduce) {
+                    // Force reflow so the enter animation replays.
+                    void pane.offsetWidth;
+                    pane.classList.add("svc-pane-enter");
+                }
+            });
+        }
+
+        function stopAuto() {
+            tablist.classList.remove("svc-tabs-auto");
+        }
+        if (reduce) stopAuto();
+
+        tablist.addEventListener("animationend", (event) => {
+            if (
+                !tablist.classList.contains("svc-tabs-auto") ||
+                !(event.target as HTMLElement).classList.contains(
+                    "svc-prog",
+                )
+            ) {
+                return;
+            }
+            const currentIndex = tabs.findIndex(
+                (tab) => tab.getAttribute("aria-selected") === "true",
+            );
+            select(tabs[(currentIndex + 1) % tabs.length]);
+        });
+
+        function pause(on: boolean) {
+            tablist.classList.toggle("svc-tabs-paused", on);
+        }
+        [tablist, tabwrap].forEach((el) => {
+            el.addEventListener("pointerenter", () => pause(true));
+            el.addEventListener("pointerleave", () => pause(false));
+        });
+
+        if ("IntersectionObserver" in window) {
+            new IntersectionObserver(
+                (entries) => pause(!entries[0].isIntersecting),
+                { threshold: 0.35 },
+            ).observe(tabwrap);
+        }
+
+        if (!reduce) {
+            root.querySelectorAll<HTMLElement>("[data-pane-vis]").forEach(
+                (vis) => {
+                    vis.addEventListener("pointermove", (event) => {
+                        const rect = vis.getBoundingClientRect();
+                        const px = (
+                            (event.clientX - rect.left) / rect.width -
+                            0.5
+                        ).toFixed(3);
+                        const py = (
+                            (event.clientY - rect.top) / rect.height -
+                            0.5
+                        ).toFixed(3);
+                        vis.style.setProperty("--px", px);
+                        vis.style.setProperty("--py", py);
+                    });
+                    vis.addEventListener("pointerleave", () => {
+                        vis.style.setProperty("--px", "0");
+                        vis.style.setProperty("--py", "0");
+                    });
+                },
+            );
+        }
+
+        tabs.forEach((tab, index) => {
+            tab.addEventListener("click", () => {
+                stopAuto();
+                select(tab);
+            });
+            tab.addEventListener("keydown", (event) => {
+                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                    return;
+                }
+                event.preventDefault();
+                const next =
+                    tabs[
+                        (index +
+                            (event.key === "ArrowRight" ? 1 : tabs.length - 1)) %
+                            tabs.length
+                    ];
+                stopAuto();
+                select(next);
+                next.focus();
+            });
+        });
+    })();
+</script>
+
+<style>
+    .svc-h2 {
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        /* data-reveal masks each line in an overflow box; tighter than
+           1.15 clips the FieldworkGeo descenders (g, p). */
+        line-height: 1.15;
+        color: #211915;
+        text-wrap: balance;
+    }
+    :global(.dark) .svc-h2 {
+        color: #ffffff;
+    }
+
+    /* ---------- tabs ---------- */
+    .svc-tab {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #6c7788;
+        background: #f2f5fa;
+        border: 0;
+        padding: 13px 22px 14px;
+        border-radius: 18px 18px 0 0;
+        cursor: pointer;
+        overflow: clip;
+        transition:
+            background 0.25s,
+            color 0.25s;
+    }
+    :global(.dark) .svc-tab {
+        color: #8893a6;
+        background: #111a31;
+    }
+    .svc-tab svg {
+        width: 17px;
+        height: 17px;
+        flex: none;
+        opacity: 0.7;
+        transition:
+            opacity 0.25s,
+            color 0.25s;
+    }
+    .svc-tab:hover {
+        color: #211915;
+    }
+    :global(.dark) .svc-tab:hover {
+        color: #f4f7fc;
+    }
+    .svc-tab[aria-selected="true"] {
+        background: #dcecf9;
+        color: #211915;
+    }
+    :global(.dark) .svc-tab[aria-selected="true"] {
+        background: #14294a;
+        color: #f4f7fc;
+    }
+    .svc-tab[aria-selected="true"] svg {
+        opacity: 1;
+        color: #005eb8;
+    }
+    .svc-tab:focus-visible {
+        outline: 2px solid #00b5e2;
+        outline-offset: 3px;
+    }
+
+    .svc-prog {
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 6px;
+        height: 2px;
+        border-radius: 2px;
+        background: #e2e8f1;
+        transform-origin: left;
+        transform: scaleX(0);
+        opacity: 0;
+    }
+    :global(.svc-tabs-auto)
+        .svc-tab[aria-selected="true"]
+        .svc-prog {
+        opacity: 1;
+        background: linear-gradient(90deg, #005eb8, #00b5e2);
+        animation: svc-fill 7s linear forwards;
+    }
+    :global(.svc-tabs-auto.svc-tabs-paused)
+        .svc-tab[aria-selected="true"]
+        .svc-prog {
+        animation-play-state: paused;
+    }
+    @keyframes svc-fill {
+        to {
+            transform: scaleX(1);
+        }
+    }
+
+    .svc-tabwrap {
+        background: #dcecf9;
+        border-radius: 44px;
+        padding: 8px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    :global(.dark) .svc-tabwrap {
+        background: #14294a;
+    }
+
+    @media (max-width: 640px) {
+        .svc-tabwrap {
+            border-radius: 28px;
+        }
+        .svc-tabs {
+            justify-content: flex-start;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+        }
+        .svc-tab {
+            flex: none;
+        }
+    }
+
+    /* ---------- panes ---------- */
+    .svc-pane {
+        display: grid;
+        gap: 24px;
+        align-items: stretch;
+    }
+    @media (min-width: 960px) {
+        .svc-pane {
+            grid-template-columns: 0.9fr 1.1fr;
+            min-height: 500px;
+        }
+    }
+    .svc-pane[hidden] {
+        display: none !important;
+    }
+
+    .svc-pane-txt {
+        /* Anchored to the top (not centered) and a fixed pane height on
+           .svc-pane-vis below: the icon and h3 must land at the same offset
+           on every tab so switching tabs never makes the layout jump. */
+        padding: 56px 36px 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+    .svc-pane-ic {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #001489, #005eb8 55%, #00b5e2);
+        color: #fff;
+        margin-bottom: 26px;
+    }
+    .svc-pane-ic svg {
+        width: 24px;
+        height: 24px;
+    }
+    .svc-pane-txt h3 {
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-size: clamp(1.7rem, 3vw, 2.4rem);
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.08;
+        color: #211915;
+    }
+    :global(.dark) .svc-pane-txt h3 {
+        color: #ffffff;
+    }
+    .svc-pane-txt p {
+        color: #4a5566;
+        margin: 14px 0 24px;
+        max-width: 30rem;
+    }
+    :global(.dark) .svc-pane-txt p {
+        color: #a9b3c4;
+    }
+
+    .svc-feats {
+        margin: 0 0 30px;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 20px;
+        list-style: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+        max-width: 28rem;
+        color: #211915;
+    }
+    :global(.dark) .svc-feats {
+        color: #f4f7fc;
+    }
+    .svc-feats li {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    .svc-feats li::before {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        flex: none;
+        background:
+            rgba(0, 181, 226, 0.16)
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23005EB8' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E")
+            center / 12px no-repeat;
+    }
+
+    .svc-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 14px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        background: #211915;
+        color: #fff;
+    }
+    :global(.dark) .svc-cta {
+        background: #ffffff;
+        color: #0d1530;
+    }
+    .svc-cta:focus-visible {
+        outline: 2px solid #00b5e2;
+        outline-offset: 3px;
+    }
+
+    .svc-pane-vis {
+        position: relative;
+        height: 500px;
+        border-radius: 34px;
+        overflow: clip;
+        background:
+            radial-gradient(
+                70% 60% at 50% 110%,
+                rgba(0, 181, 226, 0.28),
+                transparent 70%
+            ),
+            #e6f1fb;
+    }
+    :global(.dark) .svc-pane-vis {
+        background:
+            radial-gradient(
+                70% 60% at 50% 110%,
+                rgba(0, 181, 226, 0.22),
+                transparent 70%
+            ),
+            #13284a;
+    }
+    .svc-pane-vis > * {
+        translate: calc(var(--px, 0) * -6px) calc(var(--py, 0) * -6px);
+        transition: translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .svc-pane-vis > .svc-float {
+        translate: calc(var(--px, 0) * 14px) calc(var(--py, 0) * 14px);
+    }
+    .svc-pane-enter .svc-pane-vis > * {
+        animation: svc-rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    }
+    .svc-pane-enter .svc-pane-vis > .svc-float {
+        animation-delay: 0.15s;
+    }
+    .svc-pane-enter .svc-pane-vis > .svc-float + .svc-float {
+        animation-delay: 0.28s;
+    }
+    @keyframes svc-rise {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+    }
+
+    /* ---------- floating cards ---------- */
+    .svc-float {
+        position: absolute;
+        z-index: 3;
+        width: 230px;
+        background: #ffffff;
+        color: #211915;
+        border-radius: 18px;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 20, 137, 0.28),
+            0 2px 6px rgba(0, 20, 137, 0.06);
+        padding: 12px 14px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.82rem;
+    }
+    :global(.dark) .svc-float {
+        background: #141d33;
+        color: #f4f7fc;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 0, 0, 0.6),
+            0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .svc-float b {
+        display: block;
+        font-size: 0.86rem;
+    }
+    .svc-float small {
+        color: #6c7788;
+        font-size: 0.72rem;
+    }
+    :global(.dark) .svc-float small {
+        color: #8893a6;
+    }
+    .svc-float-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: rgba(0, 181, 226, 0.14);
+        color: #005eb8;
+    }
+    .svc-float-ic-blue {
+        background: rgba(0, 94, 184, 0.12);
+    }
+    .svc-float-l {
+        left: 3%;
+        bottom: 150px;
+        transform: rotate(-3deg);
+    }
+    .svc-float-r {
+        right: 3%;
+        bottom: 56px;
+    }
+    .svc-float-rt {
+        right: 3%;
+        top: 96px;
+    }
+
+    @media (max-width: 640px) {
+        .svc-float {
+            width: 200px;
+        }
+    }
+
+    /* ---------- e-commerce / web / landing shared browser body ---------- */
+    .svc-shop-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 800;
+        font-size: 0.9rem;
+        color: #211915;
+    }
+    :global(.dark) .svc-shop-nav {
+        color: #f4f7fc;
+    }
+    .svc-shop-nav span {
+        display: flex;
+        gap: 14px;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: #6c7788;
+    }
+    :global(.dark) .svc-shop-nav span {
+        color: #8893a6;
+    }
+    .svc-shop-hero {
+        border-radius: 14px;
+        padding: 18px;
+        background: linear-gradient(120deg, #001489, #005eb8 60%, #00b5e2);
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+    }
+    .svc-shop-hero b {
+        font-size: 1.15rem;
+        line-height: 1.15;
+        max-width: 12rem;
+        display: block;
+    }
+    .svc-shop-hero small {
+        font-size: 0.7rem;
+        opacity: 0.85;
+    }
+    .svc-pill-w {
+        background: #fff;
+        color: #001489;
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 6px 12px;
+        border-radius: 999px;
+    }
+    .svc-grid4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    .svc-prod {
+        border-radius: 14px;
+        background: #f3f6fb;
+        padding: 7px;
+    }
+    :global(.dark) .svc-prod {
+        background: #16213a;
+    }
+    .svc-prod-ph {
+        aspect-ratio: 1;
+        border-radius: 10px;
+        margin-bottom: 6px;
+    }
+    .svc-prod-l {
+        height: 6px;
+        border-radius: 3px;
+        background: #e7ecf3;
+        margin-bottom: 4px;
+    }
+    :global(.dark) .svc-prod-l {
+        background: #22304d;
+    }
+    .svc-prod-l-s {
+        width: 55%;
+    }
+
+    .svc-kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .svc-kpis div {
+        border-radius: 12px;
+        background: #f3f6fb;
+        padding: 10px 12px;
+    }
+    :global(.dark) .svc-kpis div {
+        background: #16213a;
+    }
+    .svc-kpis small {
+        font-size: 0.64rem;
+        color: #6c7788;
+        font-weight: 700;
+    }
+    :global(.dark) .svc-kpis small {
+        color: #8893a6;
+    }
+    .svc-kpis i {
+        display: block;
+        height: 8px;
+        border-radius: 4px;
+        margin-top: 8px;
+        background: linear-gradient(90deg, #005eb8, #00b5e2);
+    }
+
+    .svc-table {
+        border: 1px solid #e7ecf3;
+        border-radius: 12px;
+        overflow: clip;
+        font-size: 0.74rem;
+    }
+    :global(.dark) .svc-table {
+        border-color: #22304d;
+    }
+    .svc-table div {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 0.8fr;
+        padding: 9px 12px;
+        border-top: 1px solid #e7ecf3;
+        align-items: center;
+        color: #211915;
+    }
+    :global(.dark) .svc-table div {
+        border-top-color: #22304d;
+        color: #f4f7fc;
+    }
+    .svc-table div:first-child {
+        border-top: 0;
+        background: #f3f6fb;
+        font-weight: 700;
+        color: #6c7788;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+    :global(.dark) .svc-table div:first-child {
+        background: #16213a;
+        color: #8893a6;
+    }
+    .svc-tag {
+        justify-self: start;
+        font-size: 0.64rem;
+        font-weight: 800;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(0, 94, 184, 0.12);
+        color: #005eb8;
+    }
+    .svc-tag-c {
+        background: rgba(0, 181, 226, 0.16);
+        color: #0088aa;
+    }
+
+    .svc-lp {
+        text-align: center;
+        padding: 26px 20px;
+        display: grid;
+        gap: 10px;
+        justify-items: center;
+    }
+    .svc-lp b {
+        font-size: 1.35rem;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        max-width: 18rem;
+        color: #211915;
+    }
+    :global(.dark) .svc-lp b {
+        color: #f4f7fc;
+    }
+    .svc-lp-l {
+        height: 7px;
+        width: 70%;
+        border-radius: 4px;
+        background: #e7ecf3;
+    }
+    :global(.dark) .svc-lp-l {
+        background: #22304d;
+    }
+    .svc-lp-l-s {
+        width: 50%;
+    }
+    .svc-lp-cta {
+        margin-top: 6px;
+        background: #005eb8;
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 800;
+        padding: 9px 18px;
+        border-radius: 10px;
+    }
+    .svc-lp-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 8px;
+        padding: 0 20px 20px;
+    }
+    .svc-lp-form span {
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #e7ecf3;
+    }
+    :global(.dark) .svc-lp-form span {
+        border-color: #22304d;
+    }
+    .svc-lp-form span:last-child {
+        width: 90px;
+        background: #211915;
+        border: 0;
+    }
+    :global(.dark) .svc-lp-form span:last-child {
+        background: #f4f7fc;
+    }
+
+    /* ---------- desktop pane extras ---------- */
+    .svc-side-on {
+        background: rgba(0, 94, 184, 0.12);
+        color: #005eb8;
+        font-weight: 800;
+    }
+    .svc-tools {
+        display: flex;
+        gap: 8px;
+    }
+    .svc-tools span {
+        height: 28px;
+        border-radius: 8px;
+        border: 1px solid #e7ecf3;
+        flex: 1;
+    }
+    :global(.dark) .svc-tools span {
+        border-color: #22304d;
+    }
+    .svc-tools span:last-child {
+        flex: none;
+        width: 96px;
+        background: #005eb8;
+        border: 0;
+    }
+
+    /* ---------- mobile pane extras ---------- */
+    .svc-phone-crop {
+        position: absolute;
+        left: 50%;
+        bottom: -120px;
+        transform: translateX(-50%);
+        width: 250px;
+    }
+    .svc-phone-screen {
+        position: absolute;
+        inset: 0;
+        padding: 52px 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    .svc-phone-top {
+        color: #211915;
+    }
+    :global(.dark) .svc-phone-top {
+        color: #f4f7fc;
+    }
+    .svc-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #005eb8, #00b5e2);
+    }
+    .svc-hero-card {
+        border-radius: 16px;
+        padding: 14px;
+        background: linear-gradient(135deg, #001489, #005eb8 60%, #00b5e2);
+        color: #fff;
+    }
+    .svc-hero-card small {
+        font-size: 0.62rem;
+        opacity: 0.85;
+        font-weight: 600;
+    }
+    .svc-hero-card b {
+        display: block;
+        font-size: 1rem;
+        margin-top: 2px;
+    }
+    .svc-steps {
+        display: grid;
+        gap: 10px;
+    }
+    .svc-step {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #6c7788;
+    }
+    :global(.dark) .svc-step {
+        color: #8893a6;
+    }
+    .svc-step span {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #e7ecf3;
+    }
+    :global(.dark) .svc-step span {
+        border-color: #22304d;
+    }
+    .svc-step-ok span {
+        background: #005eb8;
+        border-color: #005eb8;
+    }
+    .svc-step-now span {
+        border-color: #00b5e2;
+        box-shadow: 0 0 0 4px rgba(0, 181, 226, 0.2);
+    }
+    .svc-step-ok,
+    .svc-step-now {
+        color: #211915;
+    }
+    :global(.dark) .svc-step-ok,
+    :global(.dark) .svc-step-now {
+        color: #f4f7fc;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .svc-pane-vis > * {
+            transition: none;
+        }
+        .svc-pane-enter .svc-pane-vis > * {
+            animation: none;
+        }
+    }
+</style>

@@ -7,7 +7,7 @@ Contacto: ventas@insytech.mx · +52-81-2892-7509 · Parque España 249B, Buenos 
 ## Servicios
 
 - [Visión artificial (computer vision)](https://insytech.mx/vision/): Automatización de inspección de calidad y detección de defectos con IA. Cámaras industriales Basler, FLIR, Cognex, Keyence; integración nativa con PLCs Allen-Bradley, Siemens, Omron, Mitsubishi.
-- [Desarrollo de software industrial a la medida](https://insytech.mx/software/): Sistemas para manufactura, interfaces HMI e integraciones con ERP (SAP, Oracle, Dynamics) y piso de planta.
+- [Desarrollo de software a la medida](https://insytech.mx/software/): E-commerce y tiendas en línea, aplicaciones web, landing pages, aplicaciones de escritorio y apps móviles a la medida.
 - [Sistema MES — trazabilidad de producción y OEE](https://insytech.mx/tracking/): Trazabilidad, monitoreo en tiempo real, OEE, andon digital y control en piso de planta.
 - [Automatización industrial — PLC, SCADA e IoT](https://insytech.mx/control/): Integración de sistemas de control PLC, SCADA e IoT para la manufactura inteligente.
 - [Inteligencia artificial para la industria](https://insytech.mx/ai/): IA aplicada a manufactura: inspección visual, analítica de producción, monitoreo predictivo, agentes sobre ERP y CRM, y RPA para procesos repetitivos.

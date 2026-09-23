@@ -1,0 +1,213 @@
+---
+// Four-card row with mini UIs, ported from the approved mockup. Heading
+// deliberately differs from the mockup's "Lo que viene incluido desde el
+// arranque" — not every project includes payments, so it reads as things we
+// can integrate, not a blanket promise.
+import FloatIcon from "./FloatIcon.astro";
+---
+
+<div class="ih-wrap mx-auto max-w-7xl px-4 sm:px-8 md:px-14 lg:px-5 pt-16">
+    <div class="text-center max-w-3xl mx-auto mb-6">
+        <h2 class="ih-h2 text-[1.8rem] sm:text-3xl lg:text-4xl">
+            Lo que podemos integrar en su proyecto
+        </h2>
+    </div>
+
+    <div class="ih-row">
+        <article class="ih-card">
+            <h3>Pagos en línea</h3>
+            <span class="ih-arrow"><FloatIcon name="arrow-up-right" class="w-4 h-4" /></span>
+            <div class="ih-ui">
+                <div class="ih-chip ih-t1">
+                    Tarjeta de crédito<small>Aprobado</small>
+                </div>
+                <div class="ih-chip ih-t2">
+                    Transferencia<small>En proceso</small>
+                </div>
+            </div>
+        </article>
+
+        <article class="ih-card">
+            <h3>Accesos por rol</h3>
+            <span class="ih-arrow"><FloatIcon name="arrow-up-right" class="w-4 h-4" /></span>
+            <div class="ih-ui">
+                <div class="ih-chip">Administrador<span class="ih-sw"></span></div>
+                <div class="ih-chip">Editar precios<span class="ih-sw ih-sw-off"></span></div>
+                <div class="ih-chip">Ver reportes<span class="ih-sw"></span></div>
+            </div>
+        </article>
+
+        <article class="ih-card">
+            <h3>Funciona sin conexión</h3>
+            <span class="ih-arrow"><FloatIcon name="arrow-up-right" class="w-4 h-4" /></span>
+            <div class="ih-ui">
+                <div class="ih-chip ih-t2">
+                    3 cambios pendientes<small>Sin señal</small>
+                </div>
+                <div class="ih-chip ih-t1">
+                    Sincronizado<small>Hace 1 min</small>
+                </div>
+            </div>
+        </article>
+
+        <article class="ih-card">
+            <h3>Integración con sus sistemas</h3>
+            <span class="ih-arrow"><FloatIcon name="arrow-up-right" class="w-4 h-4" /></span>
+            <div class="ih-ui">
+                <div class="ih-chip ih-t1">ERP<small>Conectado</small></div>
+                <div class="ih-chip">CRM<small>Conectado</small></div>
+                <div class="ih-chip ih-t2">Facturación<small>Conectado</small></div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<style>
+    .ih-h2 {
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+        color: #211915;
+        text-wrap: balance;
+    }
+    :global(.dark) .ih-h2 {
+        color: #ffffff;
+    }
+
+    .ih-row {
+        display: grid;
+        gap: 16px;
+        margin-top: 8px;
+    }
+    @media (min-width: 720px) {
+        .ih-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (min-width: 1100px) {
+        .ih-row {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .ih-card {
+        position: relative;
+        border-radius: 28px;
+        overflow: clip;
+        min-height: 300px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, #eef4fa, #e6f1fb);
+        border: 1px solid #e2e8f1;
+    }
+    :global(.dark) .ih-card {
+        background: linear-gradient(180deg, #0d1731, #13284a);
+        border-color: #1e2a44;
+    }
+
+    .ih-card h3 {
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        line-height: 1.15;
+        max-width: 12rem;
+        color: #211915;
+    }
+    :global(.dark) .ih-card h3 {
+        color: #f4f7fc;
+    }
+
+    .ih-arrow {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: grid;
+        place-items: center;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 20, 137, 0.28),
+            0 2px 6px rgba(0, 20, 137, 0.06);
+        color: #005eb8;
+    }
+    :global(.dark) .ih-arrow {
+        background: #141d33;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 0, 0, 0.6),
+            0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .ih-ui {
+        margin-top: auto;
+        display: grid;
+        gap: 8px;
+    }
+    .ih-chip {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 10px 12px;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 20, 137, 0.28),
+            0 2px 6px rgba(0, 20, 137, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: #211915;
+    }
+    :global(.dark) .ih-chip {
+        background: #141d33;
+        color: #f4f7fc;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 0, 0, 0.6),
+            0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .ih-chip small {
+        color: #6c7788;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+    :global(.dark) .ih-chip small {
+        color: #8893a6;
+    }
+    .ih-t1 {
+        transform: rotate(-4deg) translateX(-6px);
+    }
+    .ih-t2 {
+        transform: rotate(2deg) translateX(10px);
+    }
+
+    .ih-sw {
+        width: 34px;
+        height: 20px;
+        border-radius: 10px;
+        background: #005eb8;
+        position: relative;
+    }
+    .ih-sw::after {
+        content: "";
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+    }
+    .ih-sw-off {
+        background: #e7ecf3;
+    }
+    :global(.dark) .ih-sw-off {
+        background: #22304d;
+    }
+    .ih-sw-off::after {
+        right: auto;
+        left: 3px;
+    }
+</style>

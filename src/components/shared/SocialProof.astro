@@ -13,11 +13,14 @@ interface Props {
     class?: string;
     /** Segunda línea, sobre los logos. */
     caption?: string;
+    /** Línea principal. Si se omite, se usa la de años en planta. */
+    headline?: string;
 }
 
 const {
     class: className = "",
     caption = "Empresas que han confiado en nuestras soluciones",
+    headline,
 } = Astro.props;
 ---
 
@@ -28,8 +31,14 @@ const {
             data-animate="fade-up"
         >
             <p class="text-lg text-[#211915] dark:text-gray-200">
-                Más de <strong class="font-bold">8 años</strong> optimizando
-                procesos industriales en México
+                {
+                    headline || (
+                        <>
+                            Más de <strong class="font-bold">8 años</strong> optimizando
+                            procesos industriales en México
+                        </>
+                    )
+                }
             </p>
             <p class="text-sm text-gray-500 dark:text-gray-400">
                 {caption}

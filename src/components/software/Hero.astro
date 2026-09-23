@@ -1,388 +1,790 @@
 ---
-import Container from "../shared/Container.astro";
-import BtnLink from "../shared/BtnLink.astro";
-
-// Vendored from devicon (MIT) into public/logos/stack/. These were six requests
-// to cdn.jsdelivr.net inside the initial viewport: a third-party connection on
-// the critical path to render decoration at 40% opacity.
-const stack = [
-    { name: "React", file: "react" },
-    { name: "Node.js", file: "nodejs" },
-    { name: "TypeScript", file: "typescript" },
-    { name: "Python", file: "python" },
-    { name: "PostgreSQL", file: "postgresql" },
-    { name: "Docker", file: "docker" },
-] as const;
+// Rounded hero panel, ported from the approved grassfeld-inspired mockup
+// (odd/tasks/software-repositioning.md, T4). Two deliberate departures from
+// the mockup, both requested by the user: no sparkle decorations, and the
+// client row lives in the shared SocialProof section below the hero.
+import PhoneFrame from "./PhoneFrame.astro";
+import FloatIcon from "./FloatIcon.astro";
 ---
 
 <section
-    class="relative min-h-screen flex items-center overflow-hidden bg-[#fafafa] dark:bg-gray-950 pt-20"
+    class="hero-panel relative overflow-clip mx-2 mt-28 lg:mt-32 rounded-[28px] sm:rounded-[44px]"
+    data-software-hero
 >
-    <!-- Background Grid / Code Pattern -->
+    <div class="hero-wash" aria-hidden="true"></div>
+
     <div
-        class="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none"
+        class="relative grid gap-10 lg:grid-cols-2 items-center px-6 sm:px-10 lg:px-14 pt-12 pb-10 sm:pt-14 sm:pb-12 lg:min-h-[620px]"
     >
-        <div
-            class="absolute inset-0 font-mono text-[10px] leading-tight overflow-hidden whitespace-pre select-none"
-        >
-            {
-                Array.from({ length: 50 }).map(() => (
-                    <div class="flex gap-4">
-                        <span>const app = express();</span>
-                        <span>
-                            function optimizeData(stream) &#123; return
-                            stream.pipe(transformer); &#125;
-                        </span>
-                        <span>
-                            import &#123; connect &#125; from "@insytech/core";
-                        </span>
-                        <span>
-                            async function syncPLC() &#123; await
-                            plc.read("DB10.DBX0.0"); &#125;
-                        </span>
-                        <span>export default React.memo(DashboardLayout);</span>
-                    </div>
-                ))
-            }
-        </div>
-    </div>
-
-    <!-- Soft Gradients -->
-    <div class="absolute inset-0 z-0 overflow-hidden">
-        <div
-            class="absolute -top-24 -right-24 w-[500px] h-[500px] bg-[#005EB8]/5 dark:bg-[#005EB8]/10 rounded-full blur-[120px]"
-        >
-        </div>
-        <div
-            class="absolute -bottom-24 -left-24 w-[500px] h-[500px] bg-[#00B5E2]/5 dark:bg-[#00B5E2]/10 rounded-full blur-[120px]"
-        >
-        </div>
-    </div>
-
-    <Container className="relative z-10 w-full">
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <!-- Left Side: Content -->
-            <div class="max-w-2xl">
-                <h1
-                    class="text-5xl sm:text-6xl lg:text-7xl font-bold text-[#211915] dark:text-white leading-[1.1] mb-8"
-                    data-animate="fade-up"
-                >
-                    Desarrollo de <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
-                        >Software Industrial</span
-                    > y a la medida
-                </h1>
-
-                <p
-                    class="text-xl text-gray-600 dark:text-gray-400 mb-10 leading-relaxed"
-                    data-animate="fade-up"
-                    data-animate-delay="0.1s"
-                >
-                    Somos su aliado de desarrollo de software a la medida en
-                    Monterrey. El software industrial es nuestra especialidad
-                    —sistemas MES, interfaces HMI e integración con su ERP—, y
-                    con la misma ingeniería construimos e-commerce, aplicaciones
-                    web y móviles, landing pages y software de escritorio.
-                </p>
-
-                <div
-                    class="flex flex-col sm:flex-row gap-4"
-                    data-animate="fade-up"
-                    data-animate-delay="0.2s"
-                >
-                    <BtnLink
-                        text="Explorar Soluciones"
-                        href="#solutions"
-                        variant="primary"
-                        className="px-8 py-4 text-base"
-                    />
-                    <a
-                        href="/contact/"
-                        class="px-8 py-4 text-base font-semibold text-[#211915] dark:text-white border-2 border-gray-200 dark:border-gray-800 rounded-full hover:bg-gray-50 dark:hover:bg-gray-900 transition-all flex items-center justify-center gap-2"
-                    >
-                        Hablar con un experto
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            ><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"
-                            ></path></svg
-                        >
-                    </a>
-                </div>
-
-                <!-- Capabilities: what we build (scannable) -->
-                <div
-                    class="mt-10"
-                    data-animate="fade-up"
-                    data-animate-delay="0.25s"
-                >
-                    <p
-                        class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-4"
-                    >
-                        Lo que desarrollamos
-                    </p>
-                    <ul class="flex flex-wrap gap-2.5">
-                        {
-                            [
-                                "Software industrial",
-                                "E-commerce",
-                                "Aplicaciones web",
-                                "Landing pages",
-                                "Apps de escritorio",
-                                "Apps móviles",
-                            ].map((cap) => (
-                                <li class="rounded-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-1.5 text-sm font-medium text-[#211915] dark:text-gray-300">
-                                    {cap}
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-
-                <!-- Trusted Tech Stack -->
-                <div
-                    class="mt-16 pt-8 border-t border-gray-100 dark:border-gray-900"
-                    data-animate="fade-up"
-                    data-animate-delay="0.3s"
-                >
-                    <p
-                        class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-6"
-                    >
-                        Con estándares de la industria
-                    </p>
-                    <div
-                        class="flex flex-wrap items-center gap-8 opacity-40 grayscale transition-[opacity,filter] duration-300 hover:opacity-100 hover:grayscale-0"
-                    >
-                        {
-                            stack.map((tech) => (
-                                <img
-                                    src={`/logos/stack/${tech.file}.svg`}
-                                    alt={tech.name}
-                                    width="24"
-                                    height="24"
-                                    class="h-6 w-6"
-                                    loading="lazy"
-                                    decoding="async"
-                                />
-                            ))
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Side: Interactive UI Mockup -->
-            <div
-                class="relative lg:h-[600px] flex items-center justify-center"
-                data-animate="fade"
-                data-animate-delay="0.2s"
+        <div>
+            <h1
+                class="hero-h1 text-[2.6rem] sm:text-6xl lg:text-[4.4rem] text-[#211915] dark:text-white"
+                data-animate="fade-up"
             >
-                <!-- Main Window -->
-                <div
-                    class="relative z-20 w-full max-w-[500px] aspect-[4/3] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-800 p-1 overflow-hidden group"
-                >
-                    <!-- Browser Header -->
-                    <div
-                        class="h-8 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800 flex items-center px-4 gap-1.5"
-                    >
-                        <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-yellow-400">
+                Desarrollo de software{" "}
+                <span
+                    class="hero-h1-em text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                    >a la medida</span
+                >{" "}en Monterrey
+            </h1>
+
+            <p
+                class="mt-6 max-w-[30rem] text-lg text-[#4a5566] dark:text-gray-400"
+                data-animate="fade-up"
+                data-animate-delay="0.1s"
+            >
+                Construimos tiendas en línea, aplicaciones web, landing
+                pages, aplicaciones de escritorio y apps móviles para
+                empresas de Monterrey y el norte de México. Un solo
+                equipo, del diseño a la puesta en producción.
+            </p>
+
+            <div
+                class="mt-8 flex flex-wrap gap-3"
+                data-animate="fade-up"
+                data-animate-delay="0.15s"
+            >
+                <a href="#contact" class="hero-btn hero-btn-dark">
+                    Cotizar mi proyecto
+                </a>
+                <a href="#solutions" class="hero-btn hero-btn-line">
+                    Ver servicios
+                </a>
+            </div>
+
+        </div>
+
+        <div
+            class="hero-stage relative hidden lg:grid place-items-center"
+            aria-hidden="true"
+        >
+            <div class="hero-floor"></div>
+
+            <div class="hero-float hero-float-list hero-bob">
+                <div class="hero-float-list-head">
+                    <span class="hero-float-ic">
+                        <FloatIcon name="checklist" class="w-4 h-4" />
+                    </span>
+                    Pendientes del sprint
+                </div>
+                <div class="hero-float-row hero-float-row-done">
+                    Catálogo y carrito
+                </div>
+                <div class="hero-float-row hero-float-row-done">
+                    Pagos en línea
+                </div>
+                <div class="hero-float-row">Publicar en tiendas</div>
+            </div>
+
+            <PhoneFrame class="hero-phone">
+                <div class="hero-screen hero-screen-on" data-hero-screen>
+                    <div class="hero-screen-top">
+                        <div>
+                            <small>Buenos días</small>
+                            <b>Hola, Mariana</b>
                         </div>
-                        <div class="w-2.5 h-2.5 rounded-full bg-green-400">
-                        </div>
-                        <div
-                            class="ml-4 h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded flex items-center px-2"
+                        <span class="hero-avatar"></span>
+                    </div>
+                    <div class="hero-search">Buscar productos…</div>
+                    <div class="hero-chips">
+                        <span>Todo</span><span>Nuevos</span><span
+                            >Ofertas</span
                         >
-                            <div class="w-2 h-2 rounded-full bg-blue-400 mr-2">
-                            </div>
-                            <div
-                                class="w-16 h-1 bg-gray-300 dark:bg-gray-600 rounded"
-                            >
-                            </div>
+                    </div>
+                    <div class="hero-prod-grid">
+                        <div class="hero-prod">
+                            <div class="hero-prod-ph hero-prod-ph-1"></div>
+                            <div class="hero-prod-l"></div>
+                            <div class="hero-prod-l hero-prod-l-s"></div>
+                        </div>
+                        <div class="hero-prod">
+                            <div class="hero-prod-ph hero-prod-ph-2"></div>
+                            <div class="hero-prod-l"></div>
+                            <div class="hero-prod-l hero-prod-l-s"></div>
+                        </div>
+                        <div class="hero-prod">
+                            <div class="hero-prod-ph hero-prod-ph-3"></div>
+                            <div class="hero-prod-l"></div>
+                            <div class="hero-prod-l hero-prod-l-s"></div>
+                        </div>
+                        <div class="hero-prod">
+                            <div class="hero-prod-ph hero-prod-ph-4"></div>
+                            <div class="hero-prod-l"></div>
+                            <div class="hero-prod-l hero-prod-l-s"></div>
                         </div>
                     </div>
-                    <!-- App Content Simulation -->
-                    <div class="p-6 h-full bg-white dark:bg-[#0d1117]">
-                        <div class="flex gap-4 h-full">
-                            <!-- Sidebar -->
-                            <div
-                                class="w-12 flex flex-col gap-4 items-center pt-2"
-                            >
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        ><rect
-                                            width="7"
-                                            height="9"
-                                            x="3"
-                                            y="3"
-                                            rx="1"></rect><rect
-                                            width="7"
-                                            height="5"
-                                            x="14"
-                                            y="3"
-                                            rx="1"></rect><rect
-                                            width="7"
-                                            height="9"
-                                            x="14"
-                                            y="12"
-                                            rx="1"></rect><rect
-                                            width="7"
-                                            height="5"
-                                            x="3"
-                                            y="16"
-                                            rx="1"></rect></svg
-                                    >
-                                </div>
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        ><path
-                                            d="M7 10v4h3v7h4v-7h3l1-4h-4V7c0-.5.5-1 1-1h3V2h-3c-3 0-5 2-5 5v3H7z"
-                                        ></path></svg
-                                    >
-                                </div>
-                                <div
-                                    class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-400"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        ><path
-                                            d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                                        ></path><polyline
-                                            points="7 10 12 15 17 10"
-                                        ></polyline><line
-                                            x1="12"
-                                            x2="12"
-                                            y1="3"
-                                            y2="15"></line></svg
-                                    >
-                                </div>
-                            </div>
-                            <!-- Main View -->
-                            <div class="flex-1 space-y-6">
-                                <div
-                                    class="h-4 w-32 bg-gray-100 dark:bg-gray-800 rounded"
-                                >
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div
-                                        class="h-24 rounded-xl bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-800 border border-blue-100 dark:border-blue-900/30 p-4"
-                                    >
-                                        <div
-                                            class="w-8 h-1 bg-blue-300 rounded mb-2"
-                                        >
-                                        </div>
-                                        <div
-                                            class="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded"
-                                        >
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="h-24 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 p-4"
-                                    >
-                                        <div
-                                            class="w-8 h-1 bg-gray-300 rounded mb-2"
-                                        >
-                                        </div>
-                                        <div
-                                            class="w-16 h-4 bg-gray-200 dark:bg-gray-700 rounded"
-                                        >
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="h-40 rounded-xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-800 p-4 relative overflow-hidden"
-                                >
-                                    <!-- Chart Simulation -->
-                                    <svg
-                                        class="absolute bottom-0 left-0 w-full h-24"
-                                        viewBox="0 0 100 40"
-                                        preserveAspectRatio="none"
-                                    >
-                                        <path
-                                            d="M0,40 L0,30 Q20,10 40,25 T80,15 T100,20 L100,40 Z"
-                                            fill="rgba(59, 130, 246, 0.1)"
-                                        ></path>
-                                        <path
-                                            d="M0,30 Q20,10 40,25 T80,15 T100,20"
-                                            fill="none"
-                                            stroke="rgb(59, 130, 246)"
-                                            stroke-width="1"></path>
-                                    </svg>
-                                    <div
-                                        class="relative z-10 w-24 h-4 bg-gray-200 dark:bg-gray-700 rounded mb-4"
-                                    >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="hero-tabbar">
+                        <i></i><i></i><i></i><i></i>
                     </div>
                 </div>
 
-                <!-- Floating Elements - Abstract Code -->
-                <div
-                    class="absolute -top-12 -left-12 z-30 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 scale-90 group-hover:-translate-y-2 transition-transform duration-500"
-                >
-                    <div class="flex items-center gap-2 mb-2">
-                        <div class="w-3 h-3 rounded-full bg-blue-500"></div>
-                        <span class="text-[10px] font-mono dark:text-gray-300"
-                            >AuthMiddleware.ts</span
-                        >
-                    </div>
-                    <div class="space-y-1 font-mono text-[9px]">
-                        <div class="flex gap-2">
-                            <span class="text-purple-400">export</span>
-                            <span class="text-blue-400">const</span>
+                <div class="hero-screen" data-hero-screen>
+                    <div class="hero-screen-top">
+                        <div>
+                            <small>Pedido #1042</small>
+                            <b>Va en camino</b>
                         </div>
-                        <div class="pl-2">
-                            <span class="text-yellow-400">protect</span> = <span
-                                class="text-purple-400">async</span
-                            > (req) => &#123;
-                        </div>
-                        <div class="pl-4">token = req.headers.eval;</div>
-                        <div class="pl-2">&#125;</div>
+                        <span class="hero-avatar"></span>
                     </div>
+                    <div class="hero-card-block">
+                        <small>Entrega estimada</small>
+                        <b>Hoy, antes de las 6 pm</b>
+                    </div>
+                    <div class="hero-steps">
+                        <div class="hero-step hero-step-ok">
+                            <span></span>Pedido confirmado
+                        </div>
+                        <div class="hero-step hero-step-ok">
+                            <span></span>Pago aprobado
+                        </div>
+                        <div class="hero-step hero-step-now">
+                            <span></span>En ruta de entrega
+                        </div>
+                        <div class="hero-step"><span></span>Entregado</div>
+                    </div>
+                    <div class="hero-map"></div>
                 </div>
 
-                <!-- API Connectivity Lines -->
-                <div
-                    class="absolute inset-x-0 top-1/2 -z-10 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent"
-                >
+                <div class="hero-screen" data-hero-screen>
+                    <div class="hero-screen-top">
+                        <div>
+                            <small>Soporte</small>
+                            <b>¿En qué le ayudamos?</b>
+                        </div>
+                        <span class="hero-avatar"></span>
+                    </div>
+                    <div class="hero-bubble">
+                        Hola, soy el asistente de la tienda.
+                    </div>
+                    <div class="hero-bubble hero-bubble-me">
+                        ¿Puedo cambiar la dirección de mi pedido?
+                    </div>
+                    <div class="hero-bubble">
+                        Claro. Su pedido #1042 aún no sale de almacén, ¿a
+                        qué dirección lo enviamos?
+                    </div>
+                    <div class="hero-chat-input">
+                        Escriba un mensaje…<i></i>
+                    </div>
                 </div>
-                <div
-                    class="absolute inset-y-0 left-1/2 -z-10 w-px bg-gradient-to-b from-transparent via-blue-500/20 to-transparent"
-                >
+            </PhoneFrame>
+
+            <div class="hero-float hero-float-order hero-bob2">
+                <span class="hero-float-ic">
+                    <FloatIcon name="cart" class="w-[18px] h-[18px]" />
+                </span>
+                <div class="flex-1">
+                    <b>Nuevo pedido</b>
+                    <small>#1042 · 3 artículos</small>
+                    <div class="hero-progress">
+                        <i></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-float hero-float-pay hero-bob">
+                <span class="hero-float-ic hero-float-ic-blue">
+                    <FloatIcon name="card" class="w-[18px] h-[18px]" />
+                </span>
+                <div>
+                    <b>Pago aprobado</b>
+                    <small>Tarjeta terminación 4821</small>
                 </div>
             </div>
         </div>
-    </Container>
+    </div>
 </section>
+
+<script>
+    // Cycles the hero phone through its three screens. Pauses while the hero
+    // is off-screen and respects prefers-reduced-motion. Scoped to
+    // [data-software-hero] so it never touches another hero on the page.
+    (function () {
+        const root = document.querySelector("[data-software-hero]");
+        if (!root) return;
+
+        const reduce = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+        ).matches;
+        const screens = Array.from(
+            root.querySelectorAll<HTMLElement>("[data-hero-screen]"),
+        );
+        if (reduce || screens.length < 2) return;
+
+        let index = 0;
+        let timer: ReturnType<typeof setInterval> | null = null;
+
+        function start() {
+            if (timer) return;
+            timer = setInterval(() => {
+                screens[index].classList.remove("hero-screen-on");
+                index = (index + 1) % screens.length;
+                screens[index].classList.add("hero-screen-on");
+            }, 3600);
+        }
+        function stop() {
+            if (!timer) return;
+            clearInterval(timer);
+            timer = null;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) start();
+                    else stop();
+                }
+            },
+            { threshold: 0.1 },
+        );
+        observer.observe(root);
+    })();
+</script>
+
+<style>
+    .hero-panel {
+        background:
+            radial-gradient(
+                60% 80% at 85% 30%,
+                rgba(0, 181, 226, 0.2),
+                transparent 70%
+            ),
+            radial-gradient(
+                50% 70% at 10% 100%,
+                rgba(0, 94, 184, 0.12),
+                transparent 70%
+            ),
+            linear-gradient(180deg, #eef4fa, #e3eef9);
+    }
+    :global(.dark) .hero-panel {
+        background:
+            radial-gradient(
+                60% 80% at 85% 30%,
+                rgba(0, 181, 226, 0.16),
+                transparent 70%
+            ),
+            radial-gradient(
+                50% 70% at 10% 100%,
+                rgba(0, 94, 184, 0.14),
+                transparent 70%
+            ),
+            linear-gradient(180deg, #0d1731, #10203f);
+    }
+
+    .hero-h1 {
+        font-family: "FieldworkGeo", "Raleway", sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.025em;
+        line-height: 1.03;
+        text-wrap: balance;
+    }
+    .hero-h1-em {
+        font-style: normal;
+    }
+
+    .hero-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: "Raleway", sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        padding: 14px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+    }
+    .hero-btn-dark {
+        background: #211915;
+        color: #fff;
+    }
+    :global(.dark) .hero-btn-dark {
+        background: #ffffff;
+        color: #0d1530;
+    }
+    .hero-btn-line {
+        background: transparent;
+        color: #211915;
+        box-shadow: inset 0 0 0 1.5px #e2e8f1;
+    }
+    :global(.dark) .hero-btn-line {
+        color: #f4f7fc;
+        box-shadow: inset 0 0 0 1.5px #1e2a44;
+    }
+    .hero-btn:focus-visible {
+        outline: 2px solid #00b5e2;
+        outline-offset: 3px;
+    }
+
+    /* ---------- stage ---------- */
+    .hero-stage {
+        position: relative;
+        height: 560px;
+    }
+    .hero-floor {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        width: 70%;
+        height: 60px;
+        transform: translateX(-50%);
+        background: radial-gradient(
+            50% 50% at 50% 50%,
+            rgba(0, 20, 137, 0.25),
+            transparent 70%
+        );
+        filter: blur(6px);
+    }
+    :global(.dark) .hero-floor {
+        background: radial-gradient(
+            50% 50% at 50% 50%,
+            rgba(0, 0, 0, 0.4),
+            transparent 70%
+        );
+    }
+
+    .hero-screen {
+        position: absolute;
+        inset: 0;
+        padding: 52px 16px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+            opacity 0.6s ease,
+            transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        color: #211915;
+    }
+    :global(.dark) .hero-screen {
+        color: #f4f7fc;
+    }
+    .hero-screen-on {
+        opacity: 1;
+        transform: none;
+    }
+
+    .hero-screen-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .hero-screen-top b {
+        font-size: 0.95rem;
+    }
+    .hero-screen-top small {
+        display: block;
+        font-size: 0.68rem;
+        color: #6c7788;
+        font-weight: 600;
+    }
+    :global(.dark) .hero-screen-top small {
+        color: #8893a6;
+    }
+    .hero-avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #005eb8, #00b5e2);
+    }
+    .hero-search {
+        height: 34px;
+        border-radius: 12px;
+        background: #f3f6fb;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        font-size: 0.7rem;
+        color: #6c7788;
+    }
+    :global(.dark) .hero-search {
+        background: #16213a;
+        color: #8893a6;
+    }
+    .hero-chips {
+        display: flex;
+        gap: 6px;
+    }
+    .hero-chips span {
+        font-size: 0.62rem;
+        font-weight: 700;
+        padding: 5px 10px;
+        border-radius: 999px;
+        background: #f3f6fb;
+        color: #4a5566;
+    }
+    :global(.dark) .hero-chips span {
+        background: #16213a;
+        color: #a9b3c4;
+    }
+    .hero-chips span:first-child {
+        background: #211915;
+        color: #fff;
+    }
+    :global(.dark) .hero-chips span:first-child {
+        background: #f4f7fc;
+        color: #0d1530;
+    }
+    .hero-prod-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .hero-prod {
+        border-radius: 14px;
+        background: #f3f6fb;
+        padding: 7px;
+    }
+    :global(.dark) .hero-prod {
+        background: #16213a;
+    }
+    .hero-prod-ph {
+        aspect-ratio: 1;
+        border-radius: 10px;
+        margin-bottom: 6px;
+    }
+    .hero-prod-ph-1 {
+        background: linear-gradient(135deg, #cfe6fb, #7fb7ec);
+    }
+    .hero-prod-ph-2 {
+        background: linear-gradient(135deg, #c9f1fb, #5fd3ef);
+    }
+    .hero-prod-ph-3 {
+        background: linear-gradient(135deg, #d3e9fa, #5aa7e6);
+    }
+    .hero-prod-ph-4 {
+        background: linear-gradient(135deg, #dff0fb, #9cd6f2);
+    }
+    .hero-prod-l {
+        height: 6px;
+        border-radius: 3px;
+        background: #e7ecf3;
+        margin-bottom: 4px;
+    }
+    :global(.dark) .hero-prod-l {
+        background: #22304d;
+    }
+    .hero-prod-l-s {
+        width: 55%;
+    }
+    .hero-tabbar {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-around;
+        padding-top: 10px;
+        border-top: 1px solid #e7ecf3;
+    }
+    :global(.dark) .hero-tabbar {
+        border-top-color: #22304d;
+    }
+    .hero-tabbar i {
+        width: 18px;
+        height: 18px;
+        border-radius: 6px;
+        background: #e7ecf3;
+        display: block;
+    }
+    :global(.dark) .hero-tabbar i {
+        background: #22304d;
+    }
+    .hero-tabbar i:first-child {
+        background: #005eb8;
+    }
+
+    .hero-card-block {
+        border-radius: 16px;
+        padding: 14px;
+        background: linear-gradient(135deg, #001489, #005eb8 60%, #00b5e2);
+        color: #fff;
+    }
+    .hero-card-block small {
+        font-size: 0.62rem;
+        opacity: 0.85;
+        font-weight: 600;
+    }
+    .hero-card-block b {
+        display: block;
+        font-size: 1rem;
+        margin-top: 2px;
+    }
+    .hero-steps {
+        display: grid;
+        gap: 10px;
+    }
+    .hero-step {
+        display: grid;
+        grid-template-columns: 18px 1fr;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #6c7788;
+    }
+    :global(.dark) .hero-step {
+        color: #8893a6;
+    }
+    .hero-step span {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid #e7ecf3;
+    }
+    :global(.dark) .hero-step span {
+        border-color: #22304d;
+    }
+    .hero-step-ok span {
+        background: #005eb8;
+        border-color: #005eb8;
+    }
+    .hero-step-now span {
+        border-color: #00b5e2;
+        box-shadow: 0 0 0 4px rgba(0, 181, 226, 0.2);
+    }
+    .hero-step-ok,
+    .hero-step-now {
+        color: #211915;
+    }
+    :global(.dark) .hero-step-ok,
+    :global(.dark) .hero-step-now {
+        color: #f4f7fc;
+    }
+    .hero-map {
+        flex: 1;
+        border-radius: 14px;
+        background:
+            repeating-linear-gradient(
+                35deg,
+                transparent 0 22px,
+                #e7ecf3 22px 23px
+            ),
+            repeating-linear-gradient(
+                -55deg,
+                transparent 0 30px,
+                #e7ecf3 30px 31px
+            ),
+            #f3f6fb;
+        position: relative;
+    }
+    :global(.dark) .hero-map {
+        background:
+            repeating-linear-gradient(
+                35deg,
+                transparent 0 22px,
+                #22304d 22px 23px
+            ),
+            repeating-linear-gradient(
+                -55deg,
+                transparent 0 30px,
+                #22304d 30px 31px
+            ),
+            #16213a;
+    }
+    .hero-map::after {
+        content: "";
+        position: absolute;
+        left: 58%;
+        top: 40%;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #00b5e2;
+        box-shadow: 0 0 0 6px rgba(0, 181, 226, 0.25);
+    }
+    .hero-bubble {
+        max-width: 80%;
+        font-size: 0.7rem;
+        padding: 8px 11px;
+        border-radius: 14px;
+        background: #f3f6fb;
+        color: #211915;
+        border-bottom-left-radius: 4px;
+    }
+    :global(.dark) .hero-bubble {
+        background: #16213a;
+        color: #f4f7fc;
+    }
+    .hero-bubble-me {
+        align-self: flex-end;
+        background: #005eb8;
+        color: #fff;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 14px;
+    }
+    .hero-chat-input {
+        margin-top: auto;
+        height: 36px;
+        border-radius: 18px;
+        background: #f3f6fb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 6px 0 14px;
+        font-size: 0.68rem;
+        color: #6c7788;
+    }
+    :global(.dark) .hero-chat-input {
+        background: #16213a;
+        color: #8893a6;
+    }
+    .hero-chat-input i {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #005eb8;
+    }
+
+    /* ---------- floating cards ---------- */
+    .hero-float {
+        position: absolute;
+        z-index: 3;
+        background: #ffffff;
+        color: #211915;
+        border-radius: 18px;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 20, 137, 0.28),
+            0 2px 6px rgba(0, 20, 137, 0.06);
+        padding: 12px 14px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        font-size: 0.82rem;
+        will-change: transform;
+    }
+    :global(.dark) .hero-float {
+        background: #141d33;
+        color: #f4f7fc;
+        box-shadow:
+            0 18px 40px -16px rgba(0, 0, 0, 0.6),
+            0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+    .hero-float b {
+        display: block;
+        font-size: 0.86rem;
+    }
+    .hero-float small {
+        color: #6c7788;
+        font-size: 0.72rem;
+    }
+    :global(.dark) .hero-float small {
+        color: #8893a6;
+    }
+    .hero-float-ic {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        flex: none;
+        background: rgba(0, 181, 226, 0.14);
+        color: #005eb8;
+    }
+    .hero-float-ic-blue {
+        background: rgba(0, 94, 184, 0.12);
+    }
+
+    .hero-float-list {
+        left: 0;
+        top: 70px;
+        width: 210px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        transform: perspective(900px) rotateX(10deg) rotateY(18deg)
+            rotateZ(6deg);
+    }
+    .hero-float-list-head {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-weight: 800;
+    }
+    .hero-float-list-head .hero-float-ic {
+        width: 28px;
+        height: 28px;
+    }
+    .hero-float-row {
+        font-size: 0.78rem;
+        padding: 6px 8px;
+        border-radius: 10px;
+        background: #f3f6fb;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+    }
+    :global(.dark) .hero-float-row {
+        background: #16213a;
+    }
+    .hero-float-row::before {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        border: 2px solid #005eb8;
+        flex: none;
+    }
+    .hero-float-row-done::before {
+        background: #005eb8;
+    }
+    .hero-float-row-done {
+        color: #6c7788;
+        text-decoration: line-through;
+    }
+    :global(.dark) .hero-float-row-done {
+        color: #8893a6;
+    }
+
+    .hero-float-order {
+        right: -6px;
+        bottom: 120px;
+        width: 250px;
+        transform: rotateZ(-3deg);
+    }
+    .hero-float-pay {
+        left: 20px;
+        bottom: 60px;
+        width: 230px;
+    }
+    .hero-progress {
+        height: 6px;
+        border-radius: 3px;
+        background: #e7ecf3;
+        overflow: clip;
+        margin-top: 6px;
+    }
+    :global(.dark) .hero-progress {
+        background: #22304d;
+    }
+    .hero-progress i {
+        display: block;
+        height: 100%;
+        width: 70%;
+        background: linear-gradient(90deg, #005eb8, #00b5e2);
+    }
+
+    @keyframes hero-bob {
+        50% {
+            translate: 0 -10px;
+        }
+    }
+    @keyframes hero-bob2 {
+        50% {
+            translate: 0 8px;
+        }
+    }
+    .hero-bob {
+        animation: hero-bob 6s ease-in-out infinite;
+    }
+    .hero-bob2 {
+        animation: hero-bob2 7s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .hero-bob,
+        .hero-bob2 {
+            animation: none;
+        }
+        .hero-screen {
+            transition: none;
+        }
+    }
+</style>

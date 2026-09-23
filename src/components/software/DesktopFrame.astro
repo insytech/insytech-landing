@@ -1,0 +1,132 @@
+---
+// Desktop app window chrome (title bar + optional sidebar). Reused by the
+// "Escritorio" tab pane.
+interface Props {
+    title: string;
+    class?: string;
+}
+
+const { title, class: className = "" } = Astro.props;
+const hasSidebar = Astro.slots.has("sidebar");
+---
+
+<div class:list={["desktop-frame", className]}>
+    <div class="desktop-bar">
+        <span>{title}</span>
+        <span class="desktop-controls" aria-hidden="true">
+            <span>–</span>
+            <span>&#9633;</span>
+            <span>&times;</span>
+        </span>
+    </div>
+    <div class:list={["desktop-body", { "desktop-body-split": hasSidebar }]}>
+        {
+            hasSidebar && (
+                <div class="desktop-side">
+                    <slot name="sidebar" />
+                </div>
+            )
+        }
+        <div class="desktop-main">
+            <slot />
+        </div>
+    </div>
+</div>
+
+<style>
+    .desktop-frame {
+        position: absolute;
+        left: 6%;
+        right: 6%;
+        top: 64px;
+        bottom: -30px;
+        border-radius: 14px;
+        background: #ffffff;
+        box-shadow:
+            0 40px 80px -24px rgba(0, 20, 137, 0.35),
+            0 12px 24px -12px rgba(0, 20, 137, 0.18),
+            inset 0 0 0 1px #e2e8f1;
+        overflow: clip;
+        display: grid;
+        grid-template-rows: 36px 1fr;
+    }
+    :global(.dark) .desktop-frame {
+        background: #0f172b;
+        box-shadow:
+            0 40px 80px -24px rgba(0, 0, 0, 0.7),
+            0 12px 24px -12px rgba(0, 0, 0, 0.5),
+            inset 0 0 0 1px #1e2a44;
+    }
+
+    .desktop-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 0 14px;
+        background: #f3f6fb;
+        border-bottom: 1px solid #e7ecf3;
+        font: 600 0.74rem "Raleway", sans-serif;
+        color: #4a5566;
+    }
+    :global(.dark) .desktop-bar {
+        background: #16213a;
+        border-bottom-color: #22304d;
+        color: #a9b3c4;
+    }
+
+    .desktop-controls {
+        display: flex;
+        height: 100%;
+    }
+    .desktop-controls span {
+        width: 42px;
+        display: grid;
+        place-items: center;
+        font-size: 0.8rem;
+        color: #6c7788;
+    }
+    :global(.dark) .desktop-controls span {
+        color: #8893a6;
+    }
+
+    .desktop-body {
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: 0;
+    }
+    .desktop-body-split {
+        grid-template-columns: 150px 1fr;
+    }
+
+    .desktop-side {
+        border-right: 1px solid #e7ecf3;
+        padding: 14px 10px;
+        display: grid;
+        gap: 4px;
+        align-content: start;
+        font-size: 0.74rem;
+        font-weight: 600;
+        color: #4a5566;
+    }
+    :global(.dark) .desktop-side {
+        border-right-color: #22304d;
+        color: #a9b3c4;
+    }
+
+    .desktop-main {
+        padding: 16px;
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        min-width: 0;
+    }
+
+    @media (max-width: 640px) {
+        .desktop-body-split {
+            grid-template-columns: 1fr;
+        }
+        .desktop-side {
+            display: none;
+        }
+    }
+</style>

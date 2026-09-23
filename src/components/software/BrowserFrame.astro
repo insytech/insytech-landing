@@ -1,0 +1,117 @@
+---
+// Browser window chrome (traffic-light dots + URL bar). Reused by the
+// e-commerce, web-apps and landing-page tab panes. The page content goes in
+// the default slot.
+interface Props {
+    url: string;
+    class?: string;
+}
+
+const { url, class: className = "" } = Astro.props;
+---
+
+<div class:list={["browser-frame", className]}>
+    <div class="browser-bar">
+        <i class="browser-dot browser-dot-red" aria-hidden="true"></i>
+        <i class="browser-dot browser-dot-yellow" aria-hidden="true"></i>
+        <i class="browser-dot browser-dot-green" aria-hidden="true"></i>
+        <span class="browser-url">
+            <svg
+                width="9"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+            >
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            {url}
+        </span>
+    </div>
+    <div class="browser-body">
+        <slot />
+    </div>
+</div>
+
+<style>
+    .browser-frame {
+        position: absolute;
+        left: 7%;
+        right: 7%;
+        top: 56px;
+        bottom: -40px;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow:
+            0 40px 80px -24px rgba(0, 20, 137, 0.35),
+            0 12px 24px -12px rgba(0, 20, 137, 0.18),
+            inset 0 0 0 1px #e2e8f1;
+        overflow: clip;
+    }
+    :global(.dark) .browser-frame {
+        background: #0f172b;
+        box-shadow:
+            0 40px 80px -24px rgba(0, 0, 0, 0.7),
+            0 12px 24px -12px rgba(0, 0, 0, 0.5),
+            inset 0 0 0 1px #1e2a44;
+    }
+
+    .browser-bar {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0 14px;
+        background: #f3f6fb;
+        border-bottom: 1px solid #e7ecf3;
+    }
+    :global(.dark) .browser-bar {
+        background: #16213a;
+        border-bottom-color: #22304d;
+    }
+
+    .browser-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: block;
+    }
+    .browser-dot-red {
+        background: #ff5f57;
+    }
+    .browser-dot-yellow {
+        background: #febc2e;
+    }
+    .browser-dot-green {
+        background: #28c840;
+    }
+
+    .browser-url {
+        margin-left: 14px;
+        flex: 1;
+        max-width: 300px;
+        height: 24px;
+        border-radius: 8px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0 10px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace;
+        font-size: 0.7rem;
+        color: #6c7788;
+    }
+    :global(.dark) .browser-url {
+        background: #0f172b;
+        color: #8893a6;
+    }
+
+    .browser-body {
+        padding: 20px;
+        display: grid;
+        gap: 14px;
+    }
+</style>
