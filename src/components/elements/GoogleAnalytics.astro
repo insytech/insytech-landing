@@ -2,26 +2,88 @@
 const GA_ID = import.meta.env.PUBLIC_GA_ID;
 ---
 
-{GA_ID && (
-  <>
-    <!-- Google tag (gtag.js) -->
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-    <script is:inline set:html={`
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GA_ID}');
+{
+    GA_ID && (
+        <script
+            is:inline
+            set:html={`
+(function () {
+  var ID = ${JSON.stringify(GA_ID)};
 
-      // Leads por clic directo: mailto / tel / WhatsApp
-      document.addEventListener('click', function (e) {
-        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-        if (!a) return;
-        var h = a.getAttribute('href') || '';
-        var method = h.indexOf('mailto:') === 0 ? 'email'
-          : h.indexOf('tel:') === 0 ? 'phone'
-          : h.indexOf('wa.me') !== -1 ? 'whatsapp' : null;
-        if (method) gtag('event', 'contact_click', { method: method, link_url: h });
-      });
-    `} />
-  </>
-)}
+  // Consentimiento tácito, el modelo que permite la LFPDPPP: se mide desde la
+  // llegada y la persona puede oponerse. Lo que NO se vale es prometer que no
+  // se mide hasta que acepten y medir igual, que es lo que hacía el sitio: el
+  // banner guardaba la decisión y nadie la leía.
+  function rejected() {
+    try {
+      var v = localStorage.getItem('cookieConsent');
+      if (!v) {
+        var m = document.cookie.match(/(?:^|; )cookie_consent=([^;]*)/);
+        v = m ? decodeURIComponent(m[1]) : '';
+      }
+      return v === 'rejected';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // \`ga-disable-<ID>\` es la bandera de exclusión que documenta Google. Puesta
+  // antes de cargar gtag, no se envía nada; puesta después, corta los envíos
+  // que quedaran. Aquí ni siquiera se pide el script.
+  var started = false;
+
+  // Carga gtag bajo demanda. Hace falta como función aparte porque alguien
+  // puede rechazar al llegar y luego reabrir el aviso desde el pie y aceptar
+  // en la misma carga de página: antes, ese "Aceptar" no reactivaba nada hasta
+  // el siguiente reload, porque gtag nunca había llegado a definirse.
+  function start() {
+    if (started) return;
+    started = true;
+    window['ga-disable-' + ID] = false;
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    // Global explícito: FormBase lo invoca como window.gtag para generate_lead,
+    // y dentro de esta función anónima no quedaría colgado de window solo.
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', ID);
+
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ID;
+    document.head.appendChild(s);
+  }
+
+  if (rejected()) {
+    window['ga-disable-' + ID] = true;
+  } else {
+    start();
+  }
+
+  // Rechazo en caliente: deja de enviar en el acto, sin esperar a la recarga.
+  // La vista de página que ya salió no se puede deshacer; de ahí en adelante,
+  // silencio. Y si acepta tras haber rechazado en esta misma carga, arranca
+  // gtag ahora en vez de dejarlo pendiente hasta la siguiente página.
+  window.addEventListener('cookie-consent', function (e) {
+    if (e.detail === 'rejected') window['ga-disable-' + ID] = true;
+    else if (e.detail === 'accepted') start();
+  });
+
+  // Leads por clic directo: mailto / tel / WhatsApp. Sigue registrado aunque
+  // se llegue rechazado, para que "Aceptar" en la reapertura los cubra también.
+  document.addEventListener('click', function (e) {
+    if (typeof window.gtag !== 'function') return;
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    var method = h.indexOf('mailto:') === 0 ? 'email'
+      : h.indexOf('tel:') === 0 ? 'phone'
+      : h.indexOf('wa.me') !== -1 ? 'whatsapp' : null;
+    if (method) window.gtag('event', 'contact_click', { method: method, link_url: h });
+  });
+})();
+`}
+        />
+    )
+}
