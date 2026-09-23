@@ -421,17 +421,29 @@ const productTints = [
             select(tabs[(currentIndex + 1) % tabs.length]);
         });
 
-        function pause(on: boolean) {
-            tablist.classList.toggle("svc-tabs-paused", on);
+        // Hover and visibility are separate reasons to pause; tracked apart so
+        // one never cancels the other (scrolling back in while hovered, or
+        // leaving with the pointer while off screen).
+        let hovered = false;
+        let offscreen = false;
+        function syncPause() {
+            tablist.classList.toggle("svc-tabs-paused", hovered || offscreen);
+        }
+        function syncHover() {
+            hovered = tablist.matches(":hover") || tabwrap.matches(":hover");
+            syncPause();
         }
         [tablist, tabwrap].forEach((el) => {
-            el.addEventListener("pointerenter", () => pause(true));
-            el.addEventListener("pointerleave", () => pause(false));
+            el.addEventListener("pointerenter", syncHover);
+            el.addEventListener("pointerleave", syncHover);
         });
 
         if ("IntersectionObserver" in window) {
             new IntersectionObserver(
-                (entries) => pause(!entries[0].isIntersecting),
+                (entries) => {
+                    offscreen = !entries[0].isIntersecting;
+                    syncPause();
+                },
                 { threshold: 0.35 },
             ).observe(tabwrap);
         }
