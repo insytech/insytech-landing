@@ -3,6 +3,11 @@ title: "Sistema MES en Monterrey: trazabilidad para plantas de Nuevo León"
 description: "Qué resuelve un sistema MES en Monterrey, qué exigen los OEM de Nuevo León en trazabilidad de piezas y qué equipos necesitas en piso. Agenda un diagnóstico."
 pubDate: 2026-08-28
 author: "rene-andrade"
+category: "mes"
+image:
+  src: "/images/tracking1.webp"
+  alt: "Operador con lector de código de barras frente a un tablero de indicadores de producción"
+
 ---
 
 Buscar un sistema MES en Monterrey casi nunca es una decisión de software: es la consecuencia de un requisito que llegó del cliente. El corredor industrial de Nuevo León —Apodaca, Santa Catarina, Escobedo, García, Ciénega de Flores— concentra plantas que abastecen a OEM y Tier 1 globales, y esa posición en la cadena trae una exigencia constante: poder reconstruir la historia de cada pieza que sale por el andén. En este artículo explicamos qué resuelve un MES en el contexto específico de la industria regia, qué piden los clientes de la región en trazabilidad de piezas industriales, qué equipos hacen falta en piso y qué cambia cuando el integrador está a veinte minutos de tu línea y no a un océano de distancia.

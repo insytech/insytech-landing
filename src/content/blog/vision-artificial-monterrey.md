@@ -3,6 +3,11 @@ title: "Visión artificial en Monterrey: aplicaciones reales en la industria reg
 description: "Cómo se usa la visión artificial en Monterrey y Nuevo León: aplicaciones en automotriz, metalmecánica y línea blanca, y la ventaja de un proveedor local."
 pubDate: 2026-07-16
 author: "edgar-olivan"
+category: "vision"
+image:
+  src: "/images/sector_automotriz.webp"
+  alt: "Equipo técnico revisando datos de un arnés automotriz junto a un banco de pruebas"
+
 ---
 
 La visión artificial en Monterrey dejó de ser un tema de conferencias para convertirse en tecnología operando en piso de planta. La zona metropolitana y su corredor industrial —Apodaca, Santa Catarina, Escobedo, García, Ciénega de Flores— concentran una de las bases de manufactura más densas de América Latina, y esa densidad explica por qué la inspección visual automatizada ha encontrado aquí terreno tan fértil. En este artículo repasamos qué aplicaciones se están implementando en la industria regia, sector por sector, y por qué trabajar con un proveedor local cambia el resultado del proyecto.
