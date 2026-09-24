@@ -1,27 +1,27 @@
 ---
+// /control/ hero: a full-bleed section (the floating navbar sits over it) with
+// the copy on the left and the PLC ladder screen on the right, bleeding off
+// the viewport's right edge. The ladder geometry, SVG markup and scan-cycle
+// script are the same ones this hero always had. Surface and screen follow the
+// site theme: light is a soft brand-tinted surface with a light, IDE-like
+// ladder editor; dark uses the /software/ dark recipe with the dark screen.
 import BtnLink from "../shared/BtnLink.astro";
-import Container from "../shared/Container.astro";
 
-// Datos ciertos por construcción: la fundación en 2018 la confirmó el cliente, y
-// las marcas de PLC, las plataformas de SCADA y el soporte los declara esta
-// misma página más abajo y el FAQ. Ninguno es una promesa.
+// Verifiable facts, copied verbatim from Hero.astro.
 const stats = [
     { value: "Desde 2018", label: "En planta" },
     { value: "4", label: "Marcas de PLC" },
     { value: "4", label: "Plataformas SCADA" },
 ];
 
-// Diagrama escalera del hero. La geometría vive aquí y el estado lo mueve el
-// script de abajo: el servidor ya pinta un estado energizado (motor en marcha,
-// pieza detectada, timer cumplido) para que la primera imagen y quien no
-// ejecute JS vean el diagrama "vivo". Las direcciones son IEC genéricas a
-// propósito, para no atar el hero a una sola marca de PLC.
+// Ladder diagram geometry, copied verbatim from Hero.astro. The state is driven
+// by the script below; IEC-generic addresses on purpose, not tied to one PLC brand.
 const R0 = 64; // rung 0
-const B0 = 114; // rama de retención del rung 0
+const B0 = 114; // rung 0 seal-in branch
 const R1 = 210; // rung 1
 const R2 = 300; // rung 2
 
-// `s` es la clave de energía del tramo; el script la resuelve en cada scan.
+// `s` is the energization key for the segment; the script resolves it each scan.
 const wires = [
     { s: "t", x1: 24, y1: R0, x2: 92, y2: R0 },
     { s: "start", x1: 108, y1: R0, x2: 150, y2: R0 },
@@ -43,10 +43,10 @@ const wires = [
     { s: "r2", x1: 490, y1: R2, x2: 536, y2: R2 },
 ];
 
-// `c` es la clave de estado del contacto: "t" cuando deja pasar corriente.
+// `c` is the contact state key: "t" when it passes current.
 const contacts = [
     { c: "start", x: 100, y: R0, tag: "PB_ARRANQUE", addr: "%I0.0", nc: false },
-    // La retención lleva sus etiquetas debajo: arriba chocarían con la dirección de PB_ARRANQUE.
+    // The seal-in label sits below: above it would collide with PB_ARRANQUE's address.
     { c: "seal", x: 100, y: B0, tag: "MOTOR_M1", addr: "%Q0.0", nc: false, below: true },
     { c: "stop", x: 220, y: R0, tag: "PB_PARO", addr: "%I0.1", nc: true },
     { c: "estop", x: 320, y: R0, tag: "PARO_EMERG_OK", addr: "%I0.2", nc: false },
@@ -67,104 +67,49 @@ const rungs = [
     { n: 2, y: R2, text: "Marcha de la banda con enclavamiento de falla" },
 ];
 
-// Estado que pinta el servidor. Todo energizado salvo el botón de arranque,
-// que ya se soltó: el motor sigue por la retención.
+// Server-painted state: everything energized except the start button, already
+// released, with the motor held by the seal-in contact.
 const initialPower = new Set(["t", "seal", "pA", "pB", "pC", "q1", "q2", "r1", "r2"]);
 const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", "dnc", "fault", "conv"]);
 ---
 
 <section
-    data-control-hero
-    class="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950"
+    data-control-hero-panel
+    class="hero-section relative overflow-clip"
 >
-    <!-- Animated grid pattern -->
-    <div class="absolute inset-0 opacity-30 dark:opacity-20">
-        <div
-            class="absolute inset-0"
-            style="background-image: linear-gradient(rgba(0, 94, 184, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 94, 184, 0.1) 1px, transparent 1px); background-size: 60px 60px;"
-        >
-        </div>
-    </div>
+    <!-- Full-bleed hero, not a card: no radius/border/shadow, background spans
+         the viewport edge to edge and starts at the very top of the page —
+         the fixed navbar floats over it, same as the live Hero.astro. Only
+         the content column below (.hero-content) gets nav-clearance padding. -->
 
-    <!-- Floating industrial elements -->
-    <div class="absolute inset-0 overflow-hidden">
-        <!-- Glowing orbs -->
-        <div
-            class="absolute top-1/4 right-1/4 w-96 h-96 bg-[#00B5E2]/5 rounded-full blur-3xl animate-pulse"
-        >
-        </div>
-        <div
-            class="absolute bottom-1/3 left-1/4 w-72 h-72 bg-[#005EB8]/5 rounded-full blur-3xl animate-pulse"
-            style="animation-delay: 1s;"
-        >
-        </div>
-
-        <!-- Circuit lines -->
-        <svg
-            class="absolute top-0 right-0 w-1/2 h-full opacity-10 dark:opacity-20"
-            viewBox="0 0 400 800"
-        >
-            <path
-                d="M 50 0 L 50 200 L 150 200 L 150 400 L 250 400 L 250 600 L 350 600 L 350 800"
-                stroke="url(#circuitGradient)"
-                stroke-width="2"
-                fill="none"
-                class="circuit-path"></path>
-            <path
-                d="M 150 0 L 150 100 L 250 100 L 250 300 L 350 300 L 350 500"
-                stroke="url(#circuitGradient)"
-                stroke-width="2"
-                fill="none"
-                class="circuit-path"
-                style="animation-delay: 0.5s;"></path>
-            <path
-                d="M 300 0 L 300 150 L 200 150 L 200 350 L 100 350 L 100 550 L 50 550"
-                stroke="url(#circuitGradient)"
-                stroke-width="2"
-                fill="none"
-                class="circuit-path"
-                style="animation-delay: 1s;"></path>
-            <!-- Nodes -->
-            <circle cx="150" cy="200" r="4" fill="#00B5E2"></circle>
-            <circle cx="250" cy="400" r="4" fill="#00B5E2"></circle>
-            <circle cx="250" cy="100" r="4" fill="#00B5E2"></circle>
-            <circle cx="200" cy="350" r="4" fill="#00B5E2"></circle>
-            <defs>
-                <linearGradient
-                    id="circuitGradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="0%"
-                    y2="100%"
-                >
-                    <stop offset="0%" stop-color="#005EB8"></stop>
-                    <stop offset="50%" stop-color="#00B5E2"></stop>
-                    <stop offset="100%" stop-color="#005EB8"></stop>
-                </linearGradient>
-            </defs>
+    <!-- Background lines drawn once with stroke-dashoffset. -->
+    <div class="hero-bg pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+        <svg viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid slice">
+            <path d="M60 580 H420 L470 530 H640"></path>
+            <path d="M40 70 H300 L340 30 H560"></path>
+            <path d="M600 610 H1180"></path>
+            <path d="M620 40 H1180"></path>
         </svg>
     </div>
 
-    <Container className="relative z-10">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            <!-- Content -->
-            <div class="py-20 lg:py-32">
-
-                <!-- Title -->
+    <!-- Content column: aligned like the rest of the page (same left inset as
+         <Container>), but not wrapped in it — the right side has no padding,
+         so the PLC screen can bleed all the way to the viewport's right edge
+         (see `.plc-col`'s margin-right). -->
+    <div class="hero-content mx-auto w-full max-w-7xl pl-4 sm:pl-8 md:pl-14 lg:pl-5">
+        <div class="hero-grid grid items-center gap-6 lg:gap-10">
+            <!-- Copy column -->
+            <div class="hero-copy grid content-center gap-6 pr-4 sm:pr-8 md:pr-14 lg:pr-5">
                 <h1
-                    class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6"
+                    class="text-4xl sm:text-5xl lg:text-[clamp(32px,3.7vw,50px)] font-extrabold leading-tight"
                     data-animate="fade-up"
                     data-animate-delay=".1s"
                 >
                     {
-                        /* El {" "} va explícito porque Astro 7 se come el
-                           espacio entre una palabra y un span contiguo. Los dos
-                           spans son `block`, así que en pantalla no se notaba,
-                           pero el nombre accesible del H1 y el texto que indexa
-                           el buscador salían como "para tulínea". */
+                        /* Explicit {" "} because Astro eats the space before an
+                           adjacent block-level span; see Hero.astro. */
                     }
-                    <span class="block text-[#211915] dark:text-white"
-                        >Automatización industrial para tu</span
+                    <span class="block text-[#211915] dark:text-white">Automatización industrial para tu</span
                     >{" "}
                     <span
                         class="block text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
@@ -173,9 +118,8 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
                     </span>
                 </h1>
 
-                <!-- Description -->
                 <p
-                    class="text-lg text-gray-600 dark:text-gray-400 max-w-xl mb-10 leading-relaxed"
+                    class="max-w-xl text-lg leading-relaxed text-gray-600 dark:text-[#9AA6C8]"
                     data-animate="fade-up"
                     data-animate-delay=".2s"
                 >
@@ -183,256 +127,207 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
                     maximizar tu eficiencia operativa y reducir tiempos muertos.
                 </p>
 
-                <!-- CTAs -->
-                <div
-                    class="flex flex-wrap gap-4 mb-12"
-                    data-animate="fade-up"
-                    data-animate-delay=".3s"
-                >
+                <div class="flex flex-wrap gap-4" data-animate="fade-up" data-animate-delay=".3s">
                     <BtnLink
                         href="#contact"
                         text="Solicitar cotización"
                         variant="primary"
                         className="px-8 py-4"
                     />
+                    {
+                        /* Light theme: the live Hero.astro's normal secondary
+                           look (`text-primary` #005EB8, `border-gray-300`).
+                           Dark theme: `--primary` is redefined to #00B5E2 via
+                           `dark:[--primary:...]` on the outer <a>, which
+                           `className` reaches (the `secondary` variant's
+                           `text-primary` span itself is not reachable via
+                           `className` — see CTAPanel.astro's comment, which
+                           still needs the override unconditionally since that
+                           panel stays dark in both themes). */
+                    }
                     <BtnLink
                         href="#services"
                         text="Ver soluciones"
                         variant="secondary"
-                        className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
+                        className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600 dark:[--primary:#00B5E2]"
                     />
                 </div>
 
-                <!-- Cuatro datos verificables, no cifras de folleto: los años
-                     vienen del deck de ventas, y las marcas, las plataformas y el
-                     soporte los declara esta misma página más abajo y el FAQ.
-                     Antes aquí vivía un conteo de proyectos y un porcentaje de
-                     uptime que no decía uptime de qué, ninguno con respaldo. -->
-                <!-- Rejilla y no flex-wrap: los separadores son bordes, así que
-                     solo existen donde hay vecino y no queda ninguno colgando al
-                     final de la fila. Tres columnas desde móvil: los tres valores
-                     son cortos y caben. -->
                 <div
-                    class="grid grid-cols-3 gap-y-6"
+                    class="hero-facts grid grid-cols-[repeat(3,auto)] justify-start gap-y-6 border-t pt-5"
                     data-animate="fade-up"
                     data-animate-delay=".4s"
                 >
                     {
-                        stats.map((stat, i) => (
-                            <div
-                                class:list={[
-                                    "px-5 first:pl-0",
-                                    "border-l border-gray-200 dark:border-gray-700 first:border-l-0",
-                                ]}
-                            >
-                                <div class="text-3xl font-bold text-[#005EB8] dark:text-[#00B5E2]">
+                        /* Smaller gaps and type at mobile: the auto-sized
+                           grid columns don't shrink below their content's
+                           own minimum, so at 390px three `pr-5 mr-5`
+                           (40px each) gaps plus a 24px value left no room
+                           for the "Plataformas SCADA" column and it
+                           overflowed the panel. */
+                    }
+                    {
+                        stats.map((stat) => (
+                            <div class="hero-fact pr-2 mr-2 sm:pr-5 sm:mr-5">
+                                <div class="whitespace-nowrap text-lg sm:text-2xl font-extrabold text-[#211915] dark:text-white">
                                     {stat.value}
                                 </div>
-                                <div class="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                                    {stat.label}
+                                <div class="text-[9px] sm:text-[10.5px] uppercase tracking-wide sm:tracking-wider text-gray-500 dark:text-[#9AA6C8]">
+                                        {stat.label}
+                                    </div>
                                 </div>
-                            </div>
-                        ))
-                    }
-                </div>
-            </div>
-
-            <!-- Visual: diagrama escalera en modo en línea, con SCADA y sensores flotando -->
-            <div class="relative hidden lg:block" data-animate="slide-left">
-                <div class="relative">
-                    <!-- Escalera en lugar de Structured Text: es lo que ingeniería
-                         de automatización y mantenimiento lee de un vistazo en el
-                         software de programación o en un tablero. -->
-                    <div
-                        class="relative text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-800 rounded-2xl shadow-2xl shadow-gray-900/30 dark:shadow-black/50 p-5 border border-gray-300 dark:border-gray-600 ld-mono"
-                    >
-                        <!-- Header -->
-                        <div class="flex items-center justify-between mb-3 text-xs text-gray-500 dark:text-gray-400">
-                            <span>OB1 · Main · LD</span>
-                            <span class="ld-run">EN LÍNEA · RUN</span>
-                        </div>
-
-                        <svg
-                            class="ld"
-                            data-ladder
-                            viewBox="0 0 576 342"
-                            role="img"
-                            aria-label="Diagrama escalera: arranque de motor con retención, temporizador TON por sensor de pieza y marcha de la banda"
-                        >
-                            <g transform="translate(16,0)">
-                                <line class="rail-l" x1="24" y1="30" x2="24" y2="322"></line>
-                                <line class="rail-r" x1="536" y1="30" x2="536" y2="322"></line>
-
-                                {
-                                    rungs.map((r) => (
-                                        <Fragment>
-                                            <text class="num" x="4" y={r.y + 4} text-anchor="middle">{r.n}</text>
-                                            <text class="cmt" x="34" y={r.y - 40}>{`(* ${r.text} *)`}</text>
-                                        </Fragment>
-                                    ))
-                                }
-
-                                {
-                                    wires.map((w) => (
-                                        <line
-                                            class:list={["w", { on: initialPower.has(w.s) }]}
-                                            data-s={w.s}
-                                            x1={w.x1}
-                                            y1={w.y1}
-                                            x2={w.x2}
-                                            y2={w.y2}
-                                        />
-                                    ))
-                                }
-
-                                {
-                                    contacts.map((ct) => (
-                                        <g data-c={ct.c} class:list={{ t: initialPass.has(ct.c) }}>
-                                            <rect class="fill" x={ct.x - 8} y={ct.y - 13} width="16" height="26" />
-                                            <line class="bar" x1={ct.x - 8} y1={ct.y - 13} x2={ct.x - 8} y2={ct.y + 13} />
-                                            <line class="bar" x1={ct.x + 8} y1={ct.y - 13} x2={ct.x + 8} y2={ct.y + 13} />
-                                            {ct.nc && (
-                                                <line class="bar" x1={ct.x - 12} y1={ct.y + 11} x2={ct.x + 12} y2={ct.y - 11} />
-                                            )}
-                                            <text class="tag" x={ct.x} y={ct.below ? ct.y + 26 : ct.y - 21} text-anchor="middle">{ct.tag}</text>
-                                            {ct.addr && (
-                                                <text class="addr" x={ct.x} y={ct.below ? ct.y + 38 : ct.y + 28} text-anchor="middle">{ct.addr}</text>
-                                            )}
-                                        </g>
-                                    ))
-                                }
-
-                                {
-                                    coils.map((cl) => (
-                                        <g data-c={cl.c} class:list={{ t: initialPass.has(cl.c) }}>
-                                            <ellipse class="fill" cx={cl.x} cy={cl.y} rx="10" ry="12" />
-                                            <path class="bar" d={`M${cl.x - 5} ${cl.y - 13} Q${cl.x - 15} ${cl.y} ${cl.x - 5} ${cl.y + 13}`} />
-                                            <path class="bar" d={`M${cl.x + 5} ${cl.y - 13} Q${cl.x + 15} ${cl.y} ${cl.x + 5} ${cl.y + 13}`} />
-                                            <text class="tag" x={cl.x} y={cl.y - 21} text-anchor="middle">{cl.tag}</text>
-                                            <text class="addr" x={cl.x} y={cl.y + 28} text-anchor="middle">{cl.addr}</text>
-                                        </g>
-                                    ))
-                                }
-
-                                <!-- Temporizador TON del rung 1 -->
-                                <g data-c="q2" class="t">
-                                    <rect class="box" x="300" y={R1 - 30} width="140" height="62" rx="4"></rect>
-                                </g>
-                                <text class="tag" x="370" y={R1 - 38} text-anchor="middle">T_ESPERA</text>
-                                <text class="box-t" x="312" y={R1 - 12}>TON</text>
-                                <text class="box-v" x="312" y={R1 + 8}>PT  T#2s</text>
-                                <text class="box-v" data-et x="312" y={R1 + 23}>ET  T#2.0s</text>
-                                <text class="dn t" data-dn x="430" y={R1 + 8} text-anchor="end">DN</text>
-                            </g>
-                        </svg>
-
-                        <div class="flex justify-end gap-4 mt-1 text-[0.68rem] text-gray-500 dark:text-gray-400">
-                            <span class="inline-flex items-center gap-1.5"><i class="ld-key ld-key-on"></i>Energizado</span>
-                            <span class="inline-flex items-center gap-1.5"><i class="ld-key ld-key-off"></i>Sin flujo</span>
-                        </div>
+                            ))
+                        }
                     </div>
+                </div>
 
-                    <!-- SCADA Panel floating card: refleja el mismo estado que el diagrama -->
-                    <div
-                        class="absolute -top-20 -right-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-4 border border-gray-100 dark:border-gray-700 w-48"
-                    >
-                        <div class="flex items-center gap-2 mb-3">
-                            <div
-                                class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#005EB8] to-[#00B5E2] flex items-center justify-center"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="w-4 h-4 text-white"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"
-                                    ></path>
+                <!-- Visual: online ladder screen, bleeding off the right edge on
+                     desktop; contained and horizontally scrollable on mobile. -->
+                <div class="plc-col relative" data-animate="slide-left">
+                    <!-- SCADA floating card: mirrors the diagram's state -->
+                    <div class="float-card absolute z-10 w-48 rounded-xl border border-[#D9DFEA] dark:border-white/10 bg-white dark:bg-[rgb(20,29,51)] p-4 text-[#211915] dark:text-white shadow-xl">
+                        <div class="mb-3 flex items-center gap-2">
+                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#005EB8] to-[#00B5E2]">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4 text-white">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"></path>
                                 </svg>
                             </div>
-                            <span
-                                class="text-sm font-semibold text-gray-900 dark:text-white"
-                                >SCADA</span
-                            >
+                            <span class="text-sm font-semibold text-gray-900 dark:text-white">SCADA</span>
                         </div>
                         <div class="space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-500">Motor 1</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Motor 1</span>
                                 <span class="led on-g" data-led="m1"></span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-500">Banda</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Banda</span>
                                 <span class="led on-g" data-led="conv"></span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-xs text-gray-500">Sensor pieza</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Sensor pieza</span>
                                 <span class="led on-y" data-led="sens"></span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sensors floating card -->
-                    <div
-                        class="absolute -bottom-4 -left-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl p-4 border border-gray-100 dark:border-gray-700"
-                    >
-                        <div class="flex items-center gap-3">
-                            <div
-                                class="w-10 h-10 rounded-lg bg-[#00B5E2]/10 flex items-center justify-center"
+                    <div class="plc-screen relative overflow-hidden shadow-2xl">
+                        <div class="plc-header flex items-center justify-between gap-2 px-3.5 py-2 font-mono text-[11px]">
+                            <span>OB1 · Main · LD</span>
+                            <span class="run-badge">EN LÍNEA · RUN</span>
+                        </div>
+
+                        <div class="plc-body overflow-x-auto">
+                            <svg
+                                class="ld"
+                                data-ladder
+                                viewBox="0 0 576 342"
+                                role="img"
+                                aria-label="Diagrama escalera: arranque de motor con retención, temporizador TON por sensor de pieza y marcha de la banda"
                             >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="2"
-                                    stroke="currentColor"
-                                    class="w-5 h-5 text-[#00B5E2]"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"
-                                    ></path>
+                                <g transform="translate(16,0)">
+                                    <line class="rail-l" fill="none" x1="24" y1="30" x2="24" y2="322"></line>
+                                    <line class="rail-r" fill="none" x1="536" y1="30" x2="536" y2="322"></line>
+
+                                    {
+                                        rungs.map((r) => (
+                                            <Fragment>
+                                                <text class="num" x="4" y={r.y + 4} text-anchor="middle">{r.n}</text>
+                                                <text class="cmt" x="34" y={r.y - 40}>{`(* ${r.text} *)`}</text>
+                                            </Fragment>
+                                        ))
+                                    }
+
+                                    {
+                                        wires.map((w) => (
+                                            <line
+                                                class:list={["w", { on: initialPower.has(w.s) }]}
+                                                data-s={w.s}
+                                                x1={w.x1}
+                                                y1={w.y1}
+                                                x2={w.x2}
+                                                y2={w.y2}
+                                            />
+                                        ))
+                                    }
+
+                                    {
+                                        contacts.map((ct) => (
+                                            <g data-c={ct.c} class:list={{ t: initialPass.has(ct.c) }}>
+                                                <rect class="fill" x={ct.x - 8} y={ct.y - 13} width="16" height="26" />
+                                                <line class="bar" fill="none" x1={ct.x - 8} y1={ct.y - 13} x2={ct.x - 8} y2={ct.y + 13} />
+                                                <line class="bar" fill="none" x1={ct.x + 8} y1={ct.y - 13} x2={ct.x + 8} y2={ct.y + 13} />
+                                                {ct.nc && (
+                                                    <line class="bar" fill="none" x1={ct.x - 12} y1={ct.y + 11} x2={ct.x + 12} y2={ct.y - 11} />
+                                                )}
+                                                <text class="tag" x={ct.x} y={ct.below ? ct.y + 26 : ct.y - 21} text-anchor="middle">{ct.tag}</text>
+                                                {ct.addr && (
+                                                    <text class="addr" x={ct.x} y={ct.below ? ct.y + 38 : ct.y + 28} text-anchor="middle">{ct.addr}</text>
+                                                )}
+                                            </g>
+                                        ))
+                                    }
+
+                                    {
+                                        coils.map((cl) => (
+                                            <g data-c={cl.c} class:list={{ t: initialPass.has(cl.c) }}>
+                                                <ellipse class="fill" cx={cl.x} cy={cl.y} rx="10" ry="12" />
+                                                <path class="bar" fill="none" d={`M${cl.x - 5} ${cl.y - 13} Q${cl.x - 15} ${cl.y} ${cl.x - 5} ${cl.y + 13}`} />
+                                                <path class="bar" fill="none" d={`M${cl.x + 5} ${cl.y - 13} Q${cl.x + 15} ${cl.y} ${cl.x + 5} ${cl.y + 13}`} />
+                                                <text class="tag" x={cl.x} y={cl.y - 21} text-anchor="middle">{cl.tag}</text>
+                                                <text class="addr" x={cl.x} y={cl.y + 28} text-anchor="middle">{cl.addr}</text>
+                                            </g>
+                                        ))
+                                    }
+
+                                    <!-- Rung 1 timer (TON) -->
+                                    <g data-c="q2" class="t">
+                                        <rect class="box" x="300" y={R1 - 30} width="140" height="62" rx="4"></rect>
+                                    </g>
+                                    <text class="tag" x="370" y={R1 - 38} text-anchor="middle">T_ESPERA</text>
+                                    <text class="box-t" x="312" y={R1 - 12}>TON</text>
+                                    <text class="box-v" x="312" y={R1 + 8}>PT  T#2s</text>
+                                    <text class="box-v" data-et x="312" y={R1 + 23}>ET  T#2.0s</text>
+                                    <text class="dn t" data-dn x="430" y={R1 + 8} text-anchor="end">DN</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div class="ld-legend flex justify-end gap-4 px-3.5 py-2 text-[10px] font-mono">
+                            <span class="inline-flex items-center gap-1.5"><i class="ld-key ld-key-on"></i>Energizado</span>
+                            <span class="inline-flex items-center gap-1.5"><i class="ld-key ld-key-off"></i>Sin flujo</span>
+                        </div>
+                    </div>
+
+                    <!-- Sensors floating card -->
+                    <div class="float-card sens-card absolute z-10 rounded-xl border border-[#D9DFEA] dark:border-white/10 bg-white dark:bg-[rgb(20,29,51)] p-4 text-[#211915] dark:text-white shadow-xl">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00B5E2]/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-5 w-5 text-[#00B5E2]">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.288 15.038a5.25 5.25 0 017.424 0M5.106 11.856c3.807-3.808 9.98-3.808 13.788 0M1.924 8.674c5.565-5.565 14.587-5.565 20.152 0M12.53 18.22l-.53.53-.53-.53a.75.75 0 011.06 0z"></path>
                                 </svg>
                             </div>
                             <div>
-                                <div
-                                    class="text-sm font-semibold text-gray-900 dark:text-white"
-                                >
-                                    12 Sensores
-                                </div>
-                                <div class="text-xs text-gray-500">
-                                    Conectados vía OPC-UA
-                                </div>
+                                <div class="text-sm font-semibold text-gray-900 dark:text-white">12 Sensores</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Conectados vía OPC-UA</div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-    </Container>
 
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
-        <div
-            class="w-6 h-10 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-start justify-center p-1"
-        >
-            <div
-                class="w-1 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce"
-            >
-            </div>
-        </div>
-    </div>
+    <!-- Right-edge fade so the bleeding screen dissolves into the section
+         background. Anchored to the section itself (full viewport width),
+         not `.hero-content` (which is narrower) — the section is what
+         actually reaches the edge the screen bleeds to. Desktop only. -->
+    <div class="edge-fade pointer-events-none absolute inset-y-0 right-0 z-20" aria-hidden="true"></div>
 </section>
 
 <script>
-    // Simulación del modo "en línea": cada cuadro evalúa los tres rungs como un
-    // scan de PLC y marca qué tramos llevan corriente. La secuencia se repite:
-    // arranque, pieza detectada, cuenta del timer, banda en marcha, paro.
+    // Online-mode simulation: each frame evaluates the three rungs as one PLC
+    // scan and marks which segments carry current. Sequence: start, part
+    // detected, timer counts, conveyor runs, stop. Same logic as Hero.astro.
     const CYCLE_MS = 11000;
     const PRESET_MS = 2000;
 
@@ -453,15 +348,15 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
         const parts = svg.querySelectorAll<SVGElement>("[data-c]");
         const et = svg.querySelector<SVGTextElement>("[data-et]");
         const dn = svg.querySelector<SVGTextElement>("[data-dn]");
-        // LEDs acotados al hero para no tocar otro `data-led` de la página.
-        const leds = (svg.closest("[data-control-hero]") ?? svg).querySelectorAll<HTMLElement>("[data-led]");
+        // LEDs scoped to this hero so we never touch another `data-led`.
+        const leds = (svg.closest("[data-control-hero-panel]") ?? svg).querySelectorAll<HTMLElement>("[data-led]");
 
-        // Mismo estado que pinta el servidor, para que el primer cuadro no salte.
+        // Same state the server paints, so the first frame doesn't jump.
         let m1 = true;
         let acc = PRESET_MS;
 
         function scan(i: Inputs, dt: number) {
-            // Rung 0 se evalúa dos veces para que la retención tome su propio valor.
+            // Rung 0 evaluates twice so the seal-in takes its own value.
             let pA = i.start || m1;
             let pB = pA && !i.stop;
             let pC = pB && i.estop;
@@ -494,17 +389,16 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
             });
         }
 
-        // Con movimiento reducido se queda el estado energizado del servidor.
+        // Reduced motion keeps the server-painted energized state.
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-        // Solo corre mientras el diagrama está en pantalla. En móvil la tarjeta
-        // está oculta (`hidden lg:block`), así que ahí nunca arranca.
+        // Only runs while the diagram is on screen.
         let clock = 0;
         let last = 0;
         let raf = 0;
         let visible = false;
-        // El primer arranque deja ver el estado energizado del servidor un
-        // momento antes de reiniciar la secuencia desde cero.
+        // First run holds the server's energized state a moment before
+        // restarting the sequence from zero.
         let warmup = true;
         let warmupTimer = 0;
 
@@ -516,7 +410,6 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
             raf = requestAnimationFrame(frame);
         }
 
-        // Único punto que arranca el loop, así nunca hay dos corriendo.
         function start() {
             if (raf || !visible) return;
             last = 0;
@@ -545,141 +438,246 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
         }).observe(svg);
     }
 
-    const ladder = document.querySelector<SVGSVGElement>("[data-ladder]");
-    if (ladder) runLadder(ladder);
+    document.querySelectorAll<SVGSVGElement>("[data-ladder]").forEach(runLadder);
 </script>
 
 <style>
-    /* Diagrama escalera. Colores como tokens para cambiar de tema con .dark. */
-    .ld-mono {
-        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
-        --ld-wire: #9ca3af;
-        --ld-on: #16a34a;
-        --ld-on-fill: rgba(22, 163, 74, 0.16);
-        --ld-tag: #374151;
+    /* Theme tokens. Light is the default (no `.dark` ancestor); dark
+       overrides via `:global(.dark)`, same pattern as Hero.astro's own
+       `.ld-mono` tokens. */
+    .hero-section {
+        /* `isolation: isolate` makes the section establish its own stacking
+           context even though it only has `position: relative` (no z-index):
+           without one, the -z-10/-z-20 background layers below stack against
+           whatever ancestor DOES establish a context, which could paint them
+           behind unrelated content instead of just behind this section's own
+           background. */
+        isolation: isolate;
+        --panel: #ffffff;
+        --panel-line: rgba(0, 94, 184, 0.14);
+        --bg-line: #005eb8;
+        background: radial-gradient(120% 70% at 88% 0%, rgba(0, 181, 226, 0.16) 0%, #eef3fb 45%, #ffffff 100%);
+    }
+    /* Dark theme: the brand's actual dark identity (measured on /software/'s
+       dark hero), not an invented saturated navy. */
+    :global(.dark) .hero-section {
+        --panel: #10203f;
+        --panel-line: rgba(0, 181, 226, 0.18);
+        --bg-line: #00b5e2;
+        background:
+            radial-gradient(60% 80% at 85% 30%, rgba(0, 181, 226, 0.16), transparent 70%),
+            radial-gradient(50% 70% at 10% 100%, rgba(0, 94, 184, 0.14), transparent 70%),
+            linear-gradient(#0d1731, #10203f);
+    }
+
+    /* The PLC screen now has its own light/dark treatment (owner-reversed
+       decision — it no longer stays dark in both themes, since a dark screen
+       bleeding into a light hero via `.edge-fade` looked like a smear).
+       Light: white/blue "engineering IDE" screen, brand blue for energized.
+       Dark: the previous always-dark look, unchanged. */
+    .plc-screen {
+        --energized: #005eb8;
+        --dead: #9aa6bf;
+        --ld-bg: #f7f9fc;
+        --ld-border: #d9dfea;
+        --ld-shadow: 0 20px 40px -20px rgba(0, 20, 137, 0.15), 0 0 0 1px rgba(0, 94, 184, 0.05);
+        --ld-header-bg: rgba(0, 94, 184, 0.04);
+        --ld-header-text: #5b6275;
+        --ld-divider: rgba(0, 94, 184, 0.12);
+        --ld-tag: #211915;
         --ld-addr: #6b7280;
-        --ld-box: #f3f4f6;
+        --ld-cmt: #9ca3af;
+        --ld-box-bg: #ffffff;
+        --ld-box-border: #9aa6bf;
+        --ld-fill-on: rgba(0, 94, 184, 0.12);
+        --ld-glow: drop-shadow(0 0 3px rgba(0, 94, 184, 0.35));
     }
-    :global(.dark) .ld-mono {
-        --ld-wire: #6b7280;
-        --ld-on: #4ade80;
-        --ld-on-fill: rgba(74, 222, 128, 0.16);
-        --ld-tag: #e5e7eb;
-        --ld-addr: #9ca3af;
-        --ld-box: #1f2937;
+    :global(.dark) .plc-screen {
+        --energized: #00b5e2;
+        --dead: #3a4670;
+        --ld-bg: #0a0c18;
+        --ld-border: rgba(0, 181, 226, 0.2);
+        --ld-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7), 0 0 0 6px rgba(0, 181, 226, 0.05);
+        --ld-header-bg: transparent;
+        --ld-header-text: #8fa0cc;
+        --ld-divider: rgba(0, 181, 226, 0.16);
+        --ld-tag: #c9d5f2;
+        --ld-addr: #7c8bb5;
+        --ld-cmt: #5e6c98;
+        --ld-box-bg: #071236;
+        --ld-box-border: #8190bd;
+        --ld-fill-on: rgba(0, 181, 226, 0.28);
+        --ld-glow: drop-shadow(0 0 3px rgba(0, 181, 226, 0.8));
     }
-    .ld {
-        display: block;
+
+    /* Nav clearance on the content only — the background above spans the
+       full section, starting at the very top of the page, and the fixed
+       navbar floats over it (same as the live Hero.astro). 100px matches
+       ProjectRung.astro/ServicesSelector.astro's own pinned `top` (nav
+       height ~76px + a gap), so this hero's content starts exactly where
+       their pinned content will later sit. */
+    .hero-content {
+        padding-top: 100px;
+        padding-bottom: clamp(32px, 5vw, 64px);
+    }
+
+    .hero-bg svg {
         width: 100%;
-        height: auto;
+        height: 100%;
     }
-    .ld .w {
-        stroke: var(--ld-wire);
-        stroke-width: 2;
-        stroke-linecap: square;
-        transition: stroke 0.15s;
-    }
-    .ld .w.on {
-        stroke: var(--ld-on);
-        stroke-width: 3;
-    }
-    .ld .rail-l {
-        stroke: var(--ld-on);
-        stroke-width: 4;
-    }
-    .ld .rail-r {
-        stroke: var(--ld-wire);
-        stroke-width: 4;
-    }
-    .ld .bar {
-        stroke: var(--ld-wire);
-        stroke-width: 2.5;
+    .hero-bg path {
         fill: none;
+        stroke: var(--bg-line);
+        stroke-width: 1;
+        opacity: 0.2;
+        stroke-dasharray: 1400;
+        stroke-dashoffset: 1400;
+        animation: draw-lines 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
     }
-    .ld .fill {
-        fill: transparent;
-        transition: fill 0.15s;
+    .hero-bg path:nth-child(2) {
+        animation-delay: 0.6s;
     }
-    .ld .t .bar {
-        stroke: var(--ld-on);
+    .hero-bg path:nth-child(3) {
+        animation-delay: 1.2s;
     }
-    .ld .t .fill {
-        fill: var(--ld-on-fill);
+    .hero-bg path:nth-child(4) {
+        animation-delay: 1.8s;
     }
-    .ld .box {
-        fill: var(--ld-box);
-        stroke: var(--ld-wire);
-        stroke-width: 2;
+    @keyframes draw-lines {
+        to {
+            stroke-dashoffset: 0;
+        }
     }
-    .ld .t .box {
-        stroke: var(--ld-on);
+
+    .hero-grid {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     }
-    .ld .tag {
-        fill: var(--ld-tag);
-        font-size: 10.5px;
-        font-weight: 500;
+    @media (max-width: 900px) {
+        .hero-grid {
+            grid-template-columns: minmax(0, 1fr);
+        }
     }
-    .ld .addr,
-    .ld .num,
-    .ld .box-v {
-        fill: var(--ld-addr);
-        font-size: 9.5px;
+    /* Grid items default to `min-width: auto`, i.e. their content's min-content
+       size. A nested grid (.hero-copy) can report a larger automatic minimum
+       than its text actually needs, which blows the track past the container
+       and overflows the viewport. `minmax(0, ...)` above overrides the
+       *track's* minimum; this overrides the *item's*. */
+    .hero-copy,
+    .plc-col {
+        min-width: 0;
     }
-    .ld .cmt {
-        fill: var(--ld-addr);
-        font-size: 9.5px;
-        font-style: italic;
+
+    .hero-facts {
+        border-color: var(--panel-line);
     }
-    .ld .box-t {
-        fill: var(--ld-tag);
-        font-size: 11px;
-        font-weight: 500;
+    .hero-fact {
+        border-left: 1px solid var(--panel-line);
     }
-    .ld .dn {
-        fill: var(--ld-addr);
-        font-size: 10px;
-        font-weight: 500;
+    .hero-fact:first-child {
+        border-left: 0;
+        padding-left: 0;
+        margin-left: 0;
     }
-    .ld .dn.t {
-        fill: var(--ld-on);
+    .hero-fact:last-child {
+        border-right: 0;
+        margin-right: 0;
+        padding-right: 0;
     }
-    .ld-run {
+
+    /* Desktop: the screen bleeds all the way to the viewport's right edge.
+       `.hero-content` is `max-w-7xl` (1280px) centered with no right padding,
+       so its content box's right edge normally sits `(100vw - 1280px) / 2`
+       short of the viewport edge once the viewport is wider than that; this
+       margin cancels exactly that gap (clamped to 0 below 1280px, where
+       `max-w-7xl` itself is already the full available width). Mobile:
+       contained, no bleed, horizontally scrollable if it needs to. */
+    .plc-col {
+        margin-right: calc(-1 * max(0px, (100vw - 1280px) / 2));
+    }
+    .plc-screen {
+        position: relative;
+        background: var(--ld-bg);
+        border: 1px solid var(--ld-border);
+        border-radius: 16px 0 0 16px;
+        border-right: 0;
+        box-shadow: var(--ld-shadow);
+    }
+    .plc-header {
+        background: var(--ld-header-bg);
+        color: var(--ld-header-text);
+        border-bottom: 1px solid var(--ld-divider);
+    }
+    .ld-legend {
+        border-top: 1px solid var(--ld-divider);
+        color: var(--ld-addr);
+    }
+    /* Desktop: the diagram is sized to fit, no scroll needed. */
+    .plc-body .ld {
+        min-width: 0;
+    }
+    @media (max-width: 900px) {
+        .plc-col {
+            margin-right: 0;
+        }
+        .plc-screen {
+            border-radius: 16px;
+            border-right: 1px solid var(--ld-border);
+        }
+        /* Mobile: keep the diagram at a legible minimum width and let the
+           `.plc-body` wrapper (`overflow-x: auto`) scroll it horizontally. */
+        .plc-body .ld {
+            min-width: 520px;
+        }
+        .edge-fade {
+            display: none;
+        }
+    }
+
+    .edge-fade {
+        width: 18%;
+        background: linear-gradient(90deg, transparent, var(--panel));
+    }
+
+    .run-badge {
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        font-weight: 500;
+        color: var(--energized);
         letter-spacing: 0.06em;
-        color: var(--ld-on);
-        background: var(--ld-on-fill);
-        padding: 3px 9px;
-        border-radius: 999px;
     }
-    .ld-run::before {
+    .run-badge::before {
         content: "";
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: var(--ld-on);
-        animation: ldBlink 1.4s ease-in-out infinite;
+        background: var(--energized);
+        box-shadow: 0 0 8px var(--energized);
+        animation: run-blink 1.4s steps(2) infinite;
+        display: inline-block;
     }
-    .ld-key {
-        display: block;
-        width: 18px;
-        height: 3px;
-    }
-    .ld-key-on {
-        background: var(--ld-on);
-    }
-    .ld-key-off {
-        background: var(--ld-wire);
-    }
-    @keyframes ldBlink {
+    @keyframes run-blink {
         50% {
-            opacity: 0.3;
+            opacity: 0.25;
         }
     }
 
-    /* LEDs del SCADA flotante; el script los enciende con el mismo scan. */
+    .float-card {
+        top: auto;
+    }
+    .plc-col .float-card:first-of-type {
+        bottom: -20px;
+        right: 26%;
+    }
+    .sens-card {
+        bottom: -18px;
+        left: -26px;
+    }
+    @media (max-width: 900px) {
+        .sens-card {
+            left: 10px;
+        }
+    }
+
     .led {
         width: 0.5rem;
         height: 0.5rem;
@@ -693,31 +691,111 @@ const initialPass = new Set(["seal", "stop", "estop", "m1", "q1", "sens", "q2", 
         background: #facc15;
     }
 
+    /* Ladder diagram colors — always the dark-panel palette. */
+    .ld {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .ld .w {
+        stroke: var(--dead);
+        stroke-width: 2;
+        stroke-linecap: square;
+        transition: stroke 0.15s;
+    }
+    .ld .w.on {
+        stroke: var(--energized);
+        stroke-width: 3;
+        filter: var(--ld-glow);
+    }
+    .ld .rail-l {
+        stroke: var(--energized);
+        stroke-width: 4;
+    }
+    .ld .rail-r {
+        stroke: var(--dead);
+        stroke-width: 4;
+    }
+    .ld .bar {
+        stroke: var(--dead);
+        stroke-width: 2.5;
+        fill: none;
+    }
+    .ld .fill {
+        fill: transparent;
+        transition: fill 0.15s;
+    }
+    .ld .t .bar {
+        stroke: var(--energized);
+    }
+    .ld .t .fill {
+        fill: var(--ld-fill-on);
+    }
+    .ld .box {
+        fill: var(--ld-box-bg);
+        stroke: var(--ld-box-border);
+        stroke-width: 2;
+    }
+    .ld .t .box {
+        stroke: var(--energized);
+    }
+    .ld .tag {
+        fill: var(--ld-tag);
+        font-size: 10.5px;
+        font-weight: 500;
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .ld .addr,
+    .ld .num,
+    .ld .box-v {
+        fill: var(--ld-addr);
+        font-size: 9.5px;
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .ld .cmt {
+        fill: var(--ld-cmt);
+        font-size: 9.5px;
+        font-style: italic;
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .ld .box-t {
+        fill: var(--ld-tag);
+        font-size: 11px;
+        font-weight: 500;
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .ld .dn {
+        fill: var(--ld-addr);
+        font-size: 10px;
+        font-weight: 500;
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .ld .dn.t {
+        fill: var(--energized);
+    }
+    .ld-key {
+        display: block;
+        width: 18px;
+        height: 3px;
+    }
+    .ld-key-on {
+        background: var(--energized);
+    }
+    .ld-key-off {
+        background: var(--dead);
+    }
+
     @media (prefers-reduced-motion: reduce) {
-        .ld-run::before {
+        .hero-bg path {
+            animation: none;
+            stroke-dashoffset: 0;
+        }
+        .run-badge::before {
             animation: none;
         }
         .ld .w,
         .ld .fill {
             transition: none;
-        }
-    }
-
-    .circuit-path {
-        stroke-dasharray: 1000;
-        stroke-dashoffset: 1000;
-        animation: drawCircuit 4s ease-in-out infinite;
-    }
-
-    @keyframes drawCircuit {
-        0% {
-            stroke-dashoffset: 1000;
-        }
-        50% {
-            stroke-dashoffset: 0;
-        }
-        100% {
-            stroke-dashoffset: -1000;
         }
     }
 </style>
