@@ -4,18 +4,47 @@ import Layout from "../layouts/Layout.astro";
 import Container from "../components/shared/Container.astro";
 import Title from "../components/shared/Title.astro";
 import Paragraph from "../components/shared/Paragraph.astro";
-
-const posts = (await getCollection("blog")).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+import { authors } from "../utils/authors";
+import {
+    CATEGORIES,
+    CATEGORY_LABEL,
+    readingTime,
+    isGeoLocal,
+    type Category,
+} from "../utils/blog";
 
 const formatDate = (date: Date) =>
     date.toLocaleDateString("es-MX", {
         year: "numeric",
-        month: "long",
+        month: "short",
         day: "numeric",
         timeZone: "UTC",
     });
+
+const posts = (await getCollection("blog"))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+    .map((post) => ({
+        post,
+        href: `/blog/${post.id}/`,
+        date: formatDate(post.data.pubDate),
+        minutes: readingTime(post.body ?? ""),
+        geo: isGeoLocal(post.id),
+    }));
+
+const newest = posts[0];
+const newestAuthor = authors[newest.post.data.author];
+
+// "Todos" plus one tab per category, with the real post count.
+const tabs: { id: "all" | Category; label: string; count: number }[] = [
+    { id: "all", label: "Todos", count: posts.length },
+    ...CATEGORIES.map((id) => ({
+        id,
+        label: CATEGORY_LABEL[id],
+        count: posts.filter((p) => p.post.data.category === id).length,
+    })),
+];
+
+const geoPosts = posts.filter((p) => p.geo);
 ---
 
 <Layout
@@ -23,46 +52,363 @@ const formatDate = (date: Date) =>
     description="Artículos sobre visión artificial, automatización inteligente, control PLC/SCADA y trazabilidad MES para la industria en México, escritos por el equipo de Insytech."
 >
     <main class="pt-28 lg:pt-32 pb-16 sm:pb-20">
-        <Container className="max-w-4xl mx-auto space-y-10">
-            <header class="space-y-4 text-center">
-                <Title>Blog de Insytech</Title>
-                <Paragraph className="max-w-2xl mx-auto">
-                    Automatización industrial, visión artificial y software
-                    para manufactura: guías prácticas escritas desde el piso
-                    de planta.
-                </Paragraph>
-            </header>
-
-            <div class="grid gap-6">
-                {
-                    posts.map((post) => (
-                        <a
-                            href={`/blog/${post.id}/`}
-                            class="block p-5 sm:p-6 lg:p-8 rounded-3xl border border-box-border bg-box-bg shadow-lg shadow-box-shadow hover:border-[#00B5E2] transition-colors duration-300"
+        <div id="blog-app" data-filter="all" data-view="grid">
+            <Container className="max-w-3xl lg:max-w-[1240px]">
+                <header
+                    class="lg:flex lg:items-end lg:justify-between lg:gap-16 text-center lg:text-left"
+                    data-animate="fade-up"
+                >
+                    <div class="space-y-4">
+                        <p
+                            class="font-mono text-xs tracking-[0.3em] uppercase text-primary"
                         >
-                            <article class="space-y-3">
-                                <time
-                                    datetime={post.data.pubDate
-                                        .toISOString()
-                                        .split("T")[0]}
-                                    class="text-sm text-heading-3"
+                            Guías técnicas
+                        </p>
+                        <Title as="h1" className="lg:text-5xl">
+                            Blog de Insytech
+                        </Title>
+                    </div>
+                    <Paragraph className="max-w-md mx-auto lg:mx-0 mt-4 lg:mt-0">
+                        Automatización industrial, visión artificial y
+                        software para manufactura: guías prácticas escritas
+                        desde el piso de planta.
+                    </Paragraph>
+                </header>
+
+                <!-- Newest-post featured card: only visible with the "Todos"
+                     filter in grid view (CSS rule further down). -->
+                <a
+                    href={newest.href}
+                    data-featured-hero
+                    class="mt-10 lg:mt-14 group relative block overflow-hidden rounded-3xl aspect-[4/3] sm:aspect-[16/9] lg:h-[420px] lg:aspect-auto"
+                    data-animate="fade-up"
+                >
+                    <img
+                        src={newest.post.data.image.src}
+                        alt={newest.post.data.image.alt}
+                        class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:group-hover:scale-100"
+                        loading="eager"
+                    />
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#001489]/70 via-[#001489]/20 to-transparent lg:from-[#001489]/60 lg:via-transparent"
+                    >
+                    </div>
+                    <div
+                        class="absolute left-4 right-4 bottom-4 sm:left-8 sm:right-auto sm:bottom-8 sm:w-[420px] lg:left-10 lg:bottom-10 lg:w-[480px] rounded-2xl bg-box-bg p-5 sm:p-7 flex flex-col gap-3"
+                    >
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span
+                                class="font-mono text-[11px] tracking-[0.25em] uppercase text-primary"
+                            >
+                                {CATEGORY_LABEL[newest.post.data.category]}
+                            </span>
+                            <span
+                                class="text-xs px-2.5 py-1 rounded-full bg-[#E6F7FC] text-[#001489] dark:bg-[#00243d] dark:text-[#7fe0f7]"
+                            >
+                                Más reciente
+                            </span>
+                        </div>
+                        <h2
+                            class="font-heading font-extrabold text-xl sm:text-2xl leading-tight text-heading-1 group-hover:text-primary transition-colors"
+                        >
+                            {newest.post.data.title}
+                        </h2>
+                        <p class="text-sm text-heading-3 leading-relaxed line-clamp-2">
+                            {newest.post.data.description}
+                        </p>
+                        <div
+                            class="flex items-center gap-3 mt-1 text-sm text-heading-3"
+                        >
+                            {
+                                newestAuthor.photo && (
+                                    <img
+                                        src={newestAuthor.photo}
+                                        alt=""
+                                        class="w-8 h-8 rounded-full object-cover object-top"
+                                    />
+                                )
+                            }
+                            <span class="font-semibold text-heading-1">
+                                {newestAuthor.name}
+                            </span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span>{newest.date}</span>
+                            <span aria-hidden="true">&middot;</span>
+                            <span>{newest.minutes} min de lectura</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tabs + view toggle (desktop and mobile share the
+                     data-tab / data-view-grid / data-view-list attributes; the
+                     active style comes from Tailwind's aria-selected/aria-pressed
+                     variants below, not classes the script has to toggle). -->
+                <div
+                    class="mt-12 lg:mt-16 pb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between lg:border-b border-box-border"
+                >
+                    <div
+                        role="tablist"
+                        aria-label="Filtrar por tema"
+                        class="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 lg:mx-0 lg:px-0 lg:pb-0 lg:flex-wrap"
+                    >
+                        {
+                            tabs.map((tab) => (
+                                <button
+                                    type="button"
+                                    role="tab"
+                                    data-tab={tab.id}
+                                    aria-selected={tab.id === "all"}
+                                    class="tab-btn flex-shrink-0 h-11 px-4 rounded-full border border-box-border text-heading-1 text-sm whitespace-nowrap transition-colors aria-selected:bg-[#005EB8] aria-selected:border-[#005EB8] aria-selected:text-white aria-selected:font-semibold"
                                 >
-                                    {formatDate(post.data.pubDate)}
-                                </time>
-                                <h2 class="text-heading-1 font-semibold text-xl sm:text-2xl">
+                                    {tab.label}{" "}
+                                    <span class="opacity-60">{tab.count}</span>
+                                </button>
+                            ))
+                        }
+                    </div>
+                    <div
+                        class="hidden lg:flex gap-1 p-1 border border-box-border rounded-full self-end"
+                    >
+                        <button
+                            type="button"
+                            data-view-grid
+                            aria-label="Vista en cuadrícula"
+                            aria-pressed="true"
+                            class="view-btn w-11 h-10 rounded-full flex items-center justify-center text-heading-3 aria-pressed:bg-[#005EB8] aria-pressed:text-white transition-colors"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect></svg>
+                        </button>
+                        <button
+                            type="button"
+                            data-view-list
+                            aria-label="Vista en lista"
+                            aria-pressed="false"
+                            class="view-btn w-11 h-10 rounded-full flex items-center justify-center text-heading-3 aria-pressed:bg-[#005EB8] aria-pressed:text-white transition-colors"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"></path><circle cx="3.5" cy="6" r="1"></circle><circle cx="3.5" cy="12" r="1"></circle><circle cx="3.5" cy="18" r="1"></circle></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card grid (desktop) -->
+                <div
+                    data-grid-container
+                    class="hidden lg:grid grid-cols-3 gap-x-8 gap-y-14 mt-12"
+                >
+                    {
+                        posts.map(({ post, href, date, minutes }) => (
+                            <a
+                                href={href}
+                                data-card
+                                data-category={post.data.category}
+                                data-featured={post.id === newest.post.id ? "true" : undefined}
+                                class="group flex flex-col gap-4"
+                                data-animate="fade-up"
+                            >
+                                <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-box-bg">
+                                    <img
+                                        src={post.data.image.src}
+                                        alt={post.data.image.alt}
+                                        loading="lazy"
+                                        class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:group-hover:scale-100"
+                                    />
+                                </div>
+                                <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-primary">
+                                    {CATEGORY_LABEL[post.data.category]}
+                                </span>
+                                <h3 class="font-heading font-extrabold text-xl leading-tight text-heading-1 group-hover:text-primary transition-colors">
                                     {post.data.title}
-                                </h2>
-                                <p class="text-heading-3">
+                                </h3>
+                                <p class="text-sm leading-relaxed text-heading-3 line-clamp-3">
                                     {post.data.description}
                                 </p>
-                                <span class="inline-block text-[#005EB8] font-medium">
-                                    Leer artículo &rarr;
+                                <div class="text-xs text-heading-3">
+                                    {date} &middot; {minutes} min de lectura
+                                </div>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <!-- Card list (desktop, list view) -->
+                <div data-list-container class="hidden lg:flex lg:flex-col mt-6">
+                    {
+                        posts.map(({ post, href, date, minutes }) => (
+                            <a
+                                href={href}
+                                data-card
+                                data-category={post.data.category}
+                                data-featured={post.id === newest.post.id ? "true" : undefined}
+                                class="group grid grid-cols-[200px_1fr_180px] gap-8 items-center py-6 border-b border-box-border"
+                            >
+                                <span class="font-mono text-[11px] tracking-[0.2em] uppercase text-primary">
+                                    {CATEGORY_LABEL[post.data.category]}
                                 </span>
-                            </article>
-                        </a>
-                    ))
-                }
-            </div>
-        </Container>
+                                <div class="flex flex-col gap-1.5">
+                                    <h3 class="font-heading font-extrabold text-lg leading-tight text-heading-1 group-hover:text-primary transition-colors">
+                                        {post.data.title}
+                                    </h3>
+                                    <p class="text-sm leading-snug text-heading-3">
+                                        {post.data.description}
+                                    </p>
+                                </div>
+                                <div class="text-xs text-heading-3 text-right">
+                                    <div>{date}</div>
+                                    <div>{minutes} min</div>
+                                </div>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <!-- List with thumbnail (mobile, always a list) -->
+                <div class="mt-2 flex flex-col lg:hidden">
+                    {
+                        posts.map(({ post, href, date, minutes }) => (
+                            <a
+                                href={href}
+                                data-card
+                                data-category={post.data.category}
+                                data-featured={post.id === newest.post.id ? "true" : undefined}
+                                class="grid grid-cols-[96px_1fr] gap-4 py-5 border-b border-box-border"
+                            >
+                                <img
+                                    src={post.data.image.src}
+                                    alt={post.data.image.alt}
+                                    loading="lazy"
+                                    class="w-24 h-24 rounded-2xl object-cover"
+                                />
+                                <div class="flex flex-col gap-1.5">
+                                    <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-primary">
+                                        {CATEGORY_LABEL[post.data.category]}
+                                    </span>
+                                    <h3 class="font-heading font-extrabold text-base leading-snug text-heading-1">
+                                        {post.data.title}
+                                    </h3>
+                                    <span class="text-xs text-heading-3">
+                                        {date} &middot; {minutes} min
+                                    </span>
+                                </div>
+                            </a>
+                        ))
+                    }
+                </div>
+
+                <!-- "Desde Monterrey" band: only visible with the "Todos" filter. -->
+                <section
+                    data-geo-band
+                    class="mt-16 lg:mt-28 p-7 sm:p-10 lg:p-14 rounded-3xl bg-[#001489] text-white grid lg:grid-cols-[380px_1fr] gap-8 lg:gap-16"
+                    data-animate="fade-up"
+                >
+                    <div class="space-y-3">
+                        <p class="font-mono text-xs tracking-[0.3em] uppercase text-[#00B5E2]">
+                            Desde Monterrey
+                        </p>
+                        <h2 class="font-heading font-black text-3xl lg:text-4xl leading-tight">
+                            Automatización en Nuevo León
+                        </h2>
+                        <p class="text-white/75">
+                            Guías escritas para el corredor industrial regio.
+                        </p>
+                    </div>
+                    <div class="flex flex-col">
+                        {
+                            geoPosts.map(({ post, href }) => (
+                                <a
+                                    href={href}
+                                    class="flex items-center justify-between gap-6 py-4 border-b border-white/15 last:border-0"
+                                >
+                                    <span class="font-heading font-bold text-base sm:text-lg">
+                                        {post.data.title}
+                                    </span>
+                                    <span class="flex-shrink-0 text-sm text-[#00B5E2]">
+                                        {CATEGORY_LABEL[post.data.category]} &rarr;
+                                    </span>
+                                </a>
+                            ))
+                        }
+                    </div>
+                </section>
+            </Container>
+        </div>
     </main>
 </Layout>
+
+<style>
+    /* Category filter: driven by the root container's data-filter attribute,
+       which the script below updates. A post is ALWAYS in the DOM (crawlable),
+       only its visibility changes. */
+    #blog-app[data-filter="vision"] [data-card]:not([data-category="vision"]),
+    #blog-app[data-filter="control"] [data-card]:not([data-category="control"]),
+    #blog-app[data-filter="mes"] [data-card]:not([data-category="mes"]),
+    #blog-app[data-filter="software"] [data-card]:not([data-category="software"]) {
+        display: none;
+    }
+    /* In "Todos" the newest post isn't repeated: it's already the featured card above. */
+    #blog-app[data-filter="all"] [data-card][data-featured="true"] {
+        display: none;
+    }
+
+    /* Grid/list (desktop): only one container visible at a time. */
+    #blog-app[data-view="list"] [data-grid-container] {
+        display: none;
+    }
+    #blog-app[data-view="grid"] [data-list-container] {
+        display: none;
+    }
+
+    /* The featured card only applies to the "Todos" filter in grid view. */
+    #blog-app:not([data-filter="all"]) [data-featured-hero],
+    #blog-app[data-view="list"] [data-featured-hero] {
+        display: none;
+    }
+
+    /* The geo-local band is a navigation shortcut, not a search result: it
+       only makes sense when no topic is already selected. */
+    #blog-app:not([data-filter="all"]) [data-geo-band] {
+        display: none;
+    }
+</style>
+
+<script>
+    // Progressively enhanced: without JS, the markup above already shows the
+    // featured card + the full grid (13 posts), so there's no broken state to
+    // fix. With JS, this only toggles attributes; the CSS above resolves what's
+    // visible.
+    const app = document.getElementById("blog-app");
+    if (app) {
+        const tabs = Array.from(
+            app.querySelectorAll<HTMLButtonElement>("[data-tab]"),
+        );
+        const gridBtn = app.querySelector<HTMLButtonElement>("[data-view-grid]");
+        const listBtn = app.querySelector<HTMLButtonElement>("[data-view-list]");
+
+        const setFilter = (id: string) => {
+            app.dataset.filter = id;
+            tabs.forEach((tab) => {
+                tab.setAttribute(
+                    "aria-selected",
+                    String(tab.dataset.tab === id),
+                );
+            });
+        };
+
+        const setView = (view: "grid" | "list") => {
+            app.dataset.view = view;
+            gridBtn?.setAttribute("aria-pressed", String(view === "grid"));
+            listBtn?.setAttribute("aria-pressed", String(view === "list"));
+        };
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                if (tab.dataset.tab) setFilter(tab.dataset.tab);
+            });
+        });
+        gridBtn?.addEventListener("click", () => setView("grid"));
+        listBtn?.addEventListener("click", () => setView("list"));
+
+        const validTabs = new Set(tabs.map((tab) => tab.dataset.tab));
+        const tema = new URLSearchParams(location.search).get("tema");
+        if (tema && validTabs.has(tema)) setFilter(tema);
+    }
+</script>

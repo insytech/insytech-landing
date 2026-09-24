@@ -3,6 +3,11 @@ title: "Sistema SCADA en Monterrey: cómo elegir plataforma e integrador"
 description: "Guía para elegir un sistema SCADA en Monterrey: qué resuelve en piso de planta, cómo comparar Ignition, Aveva y WinCC, y por qué conviene un integrador local."
 pubDate: 2026-08-28
 author: "edgar-olivan"
+category: "control"
+image:
+  src: "/images/control/scada.webp"
+  alt: "Sala de control con operadores frente a pantallas de un sistema SCADA"
+
 ---
 
 Instalar un sistema SCADA en Monterrey es hoy una de las decisiones de arquitectura más consecuentes que toma una planta, y también una de las que más se toma a ciegas. El corredor industrial de Nuevo León —Apodaca, Santa Catarina, Escobedo, García— concentra plantas con equipo de muchas generaciones y muchas marcas conviviendo en la misma nave: celdas nuevas junto a máquinas que llevan veinte años funcionando. El SCADA es la capa que las hace hablar entre sí y convierte lo que pasa en el piso en información con la que se puede decidir. En este artículo explicamos qué resuelve realmente un SCADA en una planta regia, cómo se comparan las plataformas que más vemos —Ignition, AVEVA System Platform, WinCC y AVEVA Edge—, y qué cambia cuando el integrador está a veinte minutos de tu línea en lugar de a un océano de distancia.
