@@ -1,19 +1,13 @@
 ---
+// /control/ "how we work" section: the five phases as a real ladder rung
+// (rails, four NO contacts in series, coil at the end). Heading and screen pin
+// below the navbar while GSAP ScrollTrigger scrubs the step: at step k the
+// power front sits on contact k, earlier contacts are closed, and the coil
+// energizes at the last step. Vertical list with an energized left rail on
+// mobile / reduced motion. Light and dark screens follow the site theme.
 import Container from "../shared/Container.astro";
-import { HEADING, PAD, SURFACE } from "@utils/typography";
+import { PAD, SURFACE } from "@utils/typography";
 
-// Ocupa el hueco que dejó la sección de Proyectos, que eran tres testimonios sin
-// cliente identificable. El cluster de consultas de esta página es de intención
-// de proveedor —`integrador ignition monterrey`, `integrador scada mexico`,
-// `especialistas en automatizacion de procesos por proyecto`, `cómo elegir un
-// proveedor de automatización`—, así que quien llega aquí quiere saber cómo
-// trabajamos, no cuánto presumimos.
-//
-// Las cinco fases NO son inventadas: son las que el FAQ de esta misma página ya
-// describe al responder cómo se moderniza un sistema de control sin detener la
-// producción. Van SIN plazos a propósito: el único cronograma medido que
-// tenemos es de un proyecto de captura de datos, no de una migración de PLCs, y
-// extrapolarlo sería inventar un compromiso con apariencia de dato.
 const phases = [
     {
         number: "01",
@@ -41,47 +35,618 @@ const phases = [
         body: "Acompañamos el arranque con nuestro equipo en sitio y dejamos la documentación para que su equipo pueda operar sin depender de nosotros.",
     },
 ];
+
+// Rung geometry: 5 columns (4 NO contacts + 1 coil), matching the phase grid.
+const Y = 86;
+const COLS = [100, 300, 500, 700, 900];
+// Segment i sits between column i-1 and column i (segment 0 is the lead-in from
+// the left rail, segment 5 is the tail into the right rail / coil return).
+const SEGMENTS = [14, ...COLS.flatMap((x) => [x - 14, x + 14]), 986].reduce<
+    { x1: number; x2: number }[]
+>((acc, _, i, arr) => {
+    if (i % 2 === 0 && i + 1 < arr.length) acc.push({ x1: arr[i], x2: arr[i + 1] });
+    return acc;
+}, []);
+
+const labels = [
+    { tag: "FASE_01", addr: "%M1.0" },
+    { tag: "FASE_02", addr: "%M1.1" },
+    { tag: "FASE_03", addr: "%M1.2" },
+    { tag: "FASE_04", addr: "%M1.3" },
+    { tag: "PUESTA_EN_MARCHA", addr: "%Q1.0" },
+];
 ---
 
 <section id="project" class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}>
+    <!-- The heading is pinned together with the card (coordinator requirement,
+         same as ServicesSelector.astro), not scrolled away before the pin
+         engages. The subtitle is dropped at short viewports (`.rung-subtitle`
+         media query below) rather than fixed height, so eyebrow + title stay
+         pinned everywhere and the group never overflows the pinned box. -->
     <Container className="relative z-10">
-        <div class="max-w-3xl mb-12">
-            <p
-                class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
-            >
-                Cómo trabajamos
-            </p>
-            <h2 data-reveal="heading" class={`${HEADING.section} mb-4`}>
-                Cómo es un proyecto de automatización industrial
-            </h2>
-            <p class="text-lg text-gray-600 dark:text-gray-400">
-                Modernizar un sistema de control sin detener la producción no es
-                cuestión de trabajar de noche: es cuestión de orden. Este es el
-                nuestro.
-            </p>
-        </div>
+        <div class="rung-track relative" data-rung-track style={`--rung-steps: ${phases.length}`}>
+            <div class="rung-pin" data-rung-pin>
+                <div class="rung-pin-inner">
+                <div class="rung-head max-w-3xl mb-6 md:mb-8">
+                    <p class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4">
+                        Cómo trabajamos
+                    </p>
+                    <h2 class="text-2xl md:text-3xl lg:text-4xl leading-[1.1] font-black font-heading text-[#211915] dark:text-white tracking-tight text-balance mb-4">
+                        Cómo es un proyecto de automatización industrial
+                    </h2>
+                    <p class="rung-subtitle text-lg text-gray-600 dark:text-gray-400">
+                        Modernizar un sistema de control sin detener la producción no es
+                        cuestión de trabajar de noche: es cuestión de orden. Este es el
+                        nuestro.
+                    </p>
+                </div>
+                <div class="rung-screen overflow-hidden">
+                    <div class="rung-header flex items-center justify-between gap-2 px-3.5 py-2 font-mono text-[11px]">
+                        <span><b class="rung-header-strong font-medium">Proyecto</b> · Rung 0 · LD</span>
+                        <span class="run-badge">SCAN</span>
+                    </div>
 
-        <ol class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" data-reveal="group">
-            {
-                phases.map((phase) => (
-                    <li class="relative p-6 rounded-2xl bg-white dark:bg-gray-950 border border-gray-100 dark:border-gray-800 overflow-hidden">
-                        <div
-                            class="absolute -right-3 -top-6 text-7xl font-bold italic text-gray-50 dark:text-gray-900 pointer-events-none select-none"
-                            aria-hidden="true"
-                        >
-                            {phase.number}
-                        </div>
-                        <div class="relative z-10">
-                            <h3 class="text-lg font-bold text-[#211915] dark:text-white mb-2">
-                                {phase.title}
-                            </h3>
-                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                                {phase.body}
-                            </p>
-                        </div>
-                    </li>
-                ))
-            }
-        </ol>
+                    <!-- Rung diagram: rails + 4 NO contacts in series + coil -->
+                    <svg class="rung-svg" viewBox="0 0 1000 150" aria-hidden="true" data-rung-svg>
+                        {
+                            /* Left rail (L+) is always live, like a real bus
+                               bar — it's not part of the scroll-driven state.
+                               Right rail only reads as energized once the
+                               circuit actually completes (phase 5 / the
+                               coil), toggled by the script below. */
+                        }
+                        <line class="rail rail-left" x1="14" y1="22" x2="14" y2="140"></line>
+                        <line class="rail rail-right" data-rail-right x1="986" y1="22" x2="986" y2="140"></line>
+
+                        {
+                            SEGMENTS.map((seg, i) => (
+                                <Fragment>
+                                    <line class:list={["w", { on: true }]} data-seg={i} x1={seg.x1} y1={Y} x2={seg.x2} y2={Y} />
+                                    <line class="flow" x1={seg.x1} y1={Y} x2={seg.x2} y2={Y} />
+                                </Fragment>
+                            ))
+                        }
+
+                        {
+                            COLS.map((x, i) => {
+                                const isCoil = i === COLS.length - 1;
+                                const label = labels[i];
+                                return (
+                                    /* `class="t"` here is the SSR/no-JS fallback (matches
+                                       every other default in this file: all phases read as
+                                       closed, like the cards' own hardcoded `"on"` below).
+                                       The `.fl`/`.el`/`.tag` children below intentionally do
+                                       NOT carry their own "t" — they pick up the energized
+                                       look from THIS ancestor via a descendant selector
+                                       (`g[data-phase].t .fl` etc.), so the script's
+                                       `phaseGroups[i].classList.toggle("t", …)` actually
+                                       reaches them. A previous version hardcoded "t" on the
+                                       children too, which made every contact always render
+                                       energized regardless of the actual phase. */
+                                    <g data-phase={i} class="t">
+                                        {isCoil ? (
+                                            <Fragment>
+                                                <circle class="fl" cx={x} cy={Y} r="10" />
+                                                <path
+                                                    class="el"
+                                                    d={`M${x - 6} ${Y - 16} A17 17 0 0 0 ${x - 6} ${Y + 16} M${x + 6} ${Y - 16} A17 17 0 0 1 ${x + 6} ${Y + 16}`}
+                                                />
+                                            </Fragment>
+                                        ) : (
+                                            <Fragment>
+                                                <rect class="fl" x={x - 10} y={Y - 15} width="20" height="30" />
+                                                <path class="el" d={`M${x - 11} ${Y - 17} V${Y + 17} M${x + 11} ${Y - 17} V${Y + 17}`} />
+                                            </Fragment>
+                                        )}
+                                        <text class="tag" x={x} y={Y - 30} text-anchor="middle">{label.tag}</text>
+                                        <text class="addr" x={x} y={Y + 36} text-anchor="middle">{label.addr}</text>
+                                    </g>
+                                );
+                            })
+                        }
+                    </svg>
+
+                    <!-- Phase texts, aligned with the 5 diagram columns -->
+                    <ol class="phgrid" data-rung-grid>
+                        {
+                            phases.map((phase, i) => (
+                                <li class:list={["pc", "on", { cur: i === phases.length - 1 }]} data-phase-card={i}>
+                                    <span class="num">FASE {phase.number}</span>
+                                    <h3>{phase.title}</h3>
+                                    <p>{phase.body}</p>
+                                </li>
+                            ))
+                        }
+                    </ol>
+
+                    <div class="scanbar">
+                        <span class="scanbar-label">Fase activa <b data-scan-label>{phases[phases.length - 1].title}</b></span>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
     </Container>
 </section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { prefersReducedMotion } from "@utils/motion";
+
+    function init() {
+        const track = document.querySelector<HTMLElement>("[data-rung-track]");
+        if (!track) return;
+
+        const svg = track.querySelector<SVGSVGElement>("[data-rung-svg]");
+        const segs = Array.from(svg?.querySelectorAll<SVGLineElement>("[data-seg]") ?? []);
+        const phaseGroups = Array.from(svg?.querySelectorAll<SVGGElement>("[data-phase]") ?? []);
+        const rightRail = svg?.querySelector<SVGLineElement>("[data-rail-right]") ?? null;
+        const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-phase-card]"));
+        const label = track.querySelector<HTMLElement>("[data-scan-label]");
+        const names = cards.map((c) => c.querySelector("h3")?.textContent ?? "");
+        const PHASE_COUNT = cards.length;
+        const lastSegIndex = segs.length - 1; // the tail: coil -> right rail
+
+        // k = number of fully closed phases (0..PHASE_COUNT). Phase k-1 (0
+        // indexed) is the one CURRENTLY being addressed: its contact/coil
+        // still reads as energized (same as an already-closed one — a real
+        // contact is either passing current or not, there's no half-state),
+        // but the segment immediately AFTER it stays dark until k advances
+        // past it. That's what keeps the power front pointing at the active
+        // phase's own contact instead of one step ahead of it. k=0 is the
+        // moment the pin just engaged: nothing energized except the L+ rail
+        // (always live, styled unconditionally in CSS, not toggled here).
+        function setPhase(k: number) {
+            segs.forEach((seg) => {
+                const idx = Number(seg.dataset.seg);
+                // The tail segment (coil -> right rail) only energizes once
+                // the coil itself (the last phase) has closed, i.e. k has
+                // reached PHASE_COUNT — every other segment energizes once
+                // the front has passed it, i.e. idx < k.
+                const on = idx === lastSegIndex ? k === PHASE_COUNT : idx < k;
+                seg.classList.toggle("on", on);
+            });
+            phaseGroups.forEach((g, i) => {
+                g.classList.toggle("t", i < k);
+                g.classList.toggle("cur", i === k - 1);
+            });
+            rightRail?.classList.toggle("on", k === PHASE_COUNT);
+            cards.forEach((card, i) => {
+                card.classList.toggle("on", i < k);
+                card.classList.toggle("cur", i === k - 1);
+            });
+            // "—" at k=0 (nothing active yet), not a fallback phase name —
+            // the rung front, the phase columns and this label all have to
+            // agree on the same "nothing is active" state.
+            if (label) label.textContent = k > 0 ? names[k - 1] : "—";
+        }
+
+        // Reduced motion or narrow viewports: no pin, all phases lit, plain
+        // vertical list (handled by CSS); keep the fully-energized state.
+        if (prefersReducedMotion() || window.matchMedia("(max-width: 860px)").matches) {
+            setPhase(PHASE_COUNT);
+            return;
+        }
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // PIN_TOP/GAP must match `.rung-pin`'s CSS `top` and the height
+        // formula below exactly, so progress is 0 the instant the pin
+        // engages (track top reaches PIN_TOP) and 1 the instant it releases
+        // (track bottom reaches PIN_TOP + pin height) — not relative to the
+        // viewport's own top edge, which would start the count early/late.
+        const PIN_TOP = 100;
+        const GAP = 24;
+
+        // PHASE_COUNT + 1 equal buckets (0 closed phases .. all 5 closed),
+        // not PHASE_COUNT: with only PHASE_COUNT buckets, the last state (the
+        // coil energized) only ever occupied the single instant
+        // progress === 1, i.e. exactly when the pin releases — so it was
+        // never actually seen while pinned. This gives every state,
+        // including the coil, an equal dwell inside [0, 1), with the coil's
+        // dwell held for the last slice before release.
+        const STEPS = PHASE_COUNT + 1;
+        const phaseFromProgress = (p: number) => Math.min(PHASE_COUNT, Math.max(0, Math.floor(p * STEPS)));
+
+        const st = ScrollTrigger.create({
+            trigger: track,
+            start: `top ${PIN_TOP}px`,
+            end: () => `+=${track.offsetHeight - (window.innerHeight - PIN_TOP - GAP)}`,
+            scrub: true,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => setPhase(phaseFromProgress(self.progress)),
+        });
+
+        // Sync to the current scroll position immediately, instead of waiting
+        // for the next scroll event.
+        setPhase(phaseFromProgress(st.progress));
+    }
+
+    init();
+</script>
+
+<style>
+    .rung-track {
+        /* --rung-steps is set inline per phases.length, so the ~45vh-per-step
+           scroll budget (coordinator: "5 x 45vh") tracks the data instead of
+           a hardcoded total. */
+        height: calc(var(--rung-steps) * 45vh);
+    }
+    .rung-pin {
+        position: sticky;
+        /* The site's floating navbar is a fixed `<header>` ~76px tall
+           (measured); pinning any closer lets it cover the top of this card
+           (the rung's phase tags). Must match PIN_TOP in the script exactly. */
+        top: 100px;
+        /* Fills the viewport below the nav (plus a small bottom gap) instead
+           of only the card's own content height, so the pinned block has no
+           dead space and never lets the card slide under the nav. */
+        height: calc(100svh - 100px - 24px);
+        display: flex;
+        align-items: center;
+    }
+    .rung-pin-inner {
+        width: 100%;
+    }
+    /* Dropped rather than height-clamped at short viewports (see the
+       `max-height` query far below): keeps eyebrow + title pinned everywhere
+       while the group never overflows the pinned box. */
+    .rung-subtitle {
+        margin: 0;
+    }
+    /* Light/dark tokens, same "engineering IDE" treatment as HeroPanel.astro's
+       `.plc-screen` (reused for consistency). Light is the default; dark
+       reproduces the previous always-dark look exactly. */
+    .rung-screen {
+        --energized: #005eb8;
+        --dead: #9aa6bf;
+        --rung-bg: #f7f9fc;
+        --rung-border: #d9dfea;
+        --rung-shadow: 0 20px 40px -20px rgba(0, 20, 137, 0.15), 0 0 0 1px rgba(0, 94, 184, 0.05);
+        --rung-text: #211915;
+        --rung-header-bg: rgba(0, 94, 184, 0.04);
+        --rung-header-text: #5b6275;
+        --rung-divider: rgba(0, 94, 184, 0.12);
+        --rung-divider-soft: rgba(0, 94, 184, 0.08);
+        --rung-tag: #211915;
+        --rung-addr: #6b7280;
+        --rung-body: #4b5563;
+        --rung-active-tint: rgba(0, 94, 184, 0.06);
+        --rung-fill-on: rgba(0, 94, 184, 0.12);
+        --rung-glow: drop-shadow(0 0 3px rgba(0, 94, 184, 0.35));
+        --rung-flow: #7fb3e0;
+        --rung-pc-title: #211915;
+        /* The dark theme's brighter cyan used for a few small high-emphasis
+           bits (the active tag label, the scanbar's phase name, the run
+           badge text) — one shade lighter than --energized there for extra
+           glow-y contrast against the very dark screen. Light theme has no
+           such contrast problem, so it's just --energized. */
+        --rung-bright: var(--energized);
+
+        background: var(--rung-bg);
+        color: var(--rung-text);
+        border: 1px solid var(--rung-border);
+        border-radius: 18px;
+        box-shadow: var(--rung-shadow);
+    }
+    :global(.dark) .rung-screen {
+        /* Brand's actual dark-surface identity (measured on live pages'
+           device-like dark boxes), not an invented saturated navy. */
+        --energized: #00b5e2;
+        --dead: #3a4670;
+        --rung-bg: #0a0c18;
+        --rung-border: rgba(0, 181, 226, 0.2);
+        --rung-shadow: none;
+        --rung-text: #e9eefa;
+        --rung-header-bg: transparent;
+        --rung-header-text: #8fa0cc;
+        --rung-divider: rgba(0, 181, 226, 0.14);
+        --rung-divider-soft: rgba(0, 181, 226, 0.1);
+        --rung-tag: #c9d5f2;
+        --rung-addr: #6e7ca8;
+        --rung-body: #9aa6c8;
+        --rung-active-tint: rgba(0, 181, 226, 0.07);
+        --rung-fill-on: rgba(0, 181, 226, 0.3);
+        --rung-glow: drop-shadow(0 0 3px rgba(0, 181, 226, 0.8));
+        --rung-flow: #bff1ff;
+        --rung-pc-title: #ffffff;
+        --rung-bright: #9fe6ff;
+    }
+    .rung-header {
+        background: var(--rung-header-bg);
+        color: var(--rung-header-text);
+        border-bottom: 1px solid var(--rung-divider);
+    }
+    .rung-header-strong {
+        color: var(--rung-tag);
+    }
+    .rung-svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        /* Breathing room from the header bar above and the phase columns
+           below — previously flush against both. */
+        margin: 18px 0 22px;
+    }
+    .rung-svg text {
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+    }
+    .rail {
+        stroke-width: 2.5;
+    }
+    /* Left rail (L+) always reads as live; right rail only once the circuit
+       actually completes (script toggles `.on` on phase 5 / the coil). */
+    .rail-left {
+        stroke: var(--energized);
+    }
+    .rail-right {
+        stroke: var(--dead);
+    }
+    .rail-right.on {
+        stroke: var(--energized);
+    }
+    .w {
+        stroke: var(--dead);
+        stroke-width: 2;
+        transition: stroke 0.25s;
+    }
+    .w.on {
+        stroke: var(--energized);
+        filter: var(--rung-glow);
+    }
+    .flow {
+        stroke: var(--rung-flow);
+        stroke-width: 2;
+        stroke-dasharray: 3 9;
+        opacity: 0;
+        animation: flow-dash 1s linear infinite;
+    }
+    .w.on + .flow {
+        opacity: 0.9;
+    }
+    @keyframes flow-dash {
+        to {
+            stroke-dashoffset: -24;
+        }
+    }
+    .el {
+        stroke: var(--dead);
+        stroke-width: 2;
+        fill: none;
+        transition: stroke 0.25s;
+    }
+    .fl {
+        fill: transparent;
+        transition: fill 0.25s;
+    }
+    .tag {
+        fill: var(--rung-tag);
+        font-size: 12px;
+    }
+    /* Descendant selectors, not compound (`.el.t`): the energized look comes
+       from the phase `<g>` wrapper's own "t" class (toggled by the script),
+       not a class on `.el`/`.fl`/`.tag` themselves — see the template
+       comment above `<g data-phase>`. */
+    g[data-phase].t .el {
+        stroke: var(--energized);
+    }
+    g[data-phase].t .fl {
+        fill: var(--rung-fill-on);
+    }
+    g[data-phase].t .tag {
+        fill: var(--rung-bright);
+    }
+    /* The one phase currently being addressed (not yet fully "closed" — see
+       the script's k/i-1 split) gets a subtle pulse on top of the energized
+       fill, so it reads as "evaluating" rather than merely "passed". */
+    @keyframes contact-pulse {
+        50% {
+            opacity: 0.55;
+        }
+    }
+    g[data-phase].cur .fl {
+        animation: contact-pulse 1.2s ease-in-out infinite;
+    }
+    .addr {
+        fill: var(--rung-addr);
+        font-size: 10px;
+    }
+
+    .phgrid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        /* Named rows (number, title, body), shared via `subgrid` below, so
+           all five phases start each line at the same y regardless of how
+           many lines any one title/body wraps to — previously each `.pc` was
+           its own independent grid, so a longer title in one column pushed
+           only that column's body text down. */
+        grid-template-rows: auto auto 1fr;
+        gap: 0;
+        border-top: 1px solid var(--rung-divider);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .pc {
+        grid-row: span 3;
+        display: grid;
+        grid-template-rows: subgrid;
+        row-gap: 10px;
+        padding: 18px 20px 22px;
+        align-content: start;
+        border-right: 1px solid var(--rung-divider-soft);
+        opacity: 0.42;
+        transition: opacity 0.35s, background-color 0.35s;
+    }
+    .pc:last-child {
+        border-right: 0;
+    }
+    .pc.on {
+        opacity: 1;
+    }
+    .pc.cur {
+        background: var(--rung-active-tint);
+    }
+    .pc .num {
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+        font-size: 11px;
+        color: var(--rung-addr);
+        letter-spacing: 0.08em;
+    }
+    .pc.on .num {
+        color: var(--energized);
+    }
+    .pc h3 {
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--rung-pc-title);
+        line-height: 1.25;
+        margin: 0;
+    }
+    .pc p {
+        font-size: 13.5px;
+        color: var(--rung-body);
+        margin: 0;
+    }
+
+    .scanbar {
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 8px 14px;
+        border-top: 1px solid var(--rung-divider);
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+        font-size: 10.5px;
+        color: var(--rung-addr);
+    }
+    /* Fixes the phase-5 name ("Puesta en marcha con soporte") getting cut off
+       against the screen's right edge: a flex item's default `min-width:
+       auto` keeps it at its own content's full (unwrapped) width, which
+       `justify-content: flex-end` then pushes past the screen's left edge
+       for `overflow: hidden` to clip. `min-width: 0` lets it shrink to the
+       row's available width and wrap normally instead. */
+    .scanbar-label {
+        min-width: 0;
+    }
+    .scanbar b {
+        color: var(--rung-bright);
+        font-weight: 500;
+    }
+
+    .run-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--rung-bright);
+        letter-spacing: 0.06em;
+    }
+    .run-badge::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--energized);
+        box-shadow: 0 0 8px var(--energized);
+        animation: run-blink 1.4s steps(2) infinite;
+        display: inline-block;
+    }
+    @keyframes run-blink {
+        50% {
+            opacity: 0.25;
+        }
+    }
+
+    /* Matches the script's own gate (`prefersReducedMotion() ||
+       matchMedia("(max-width: 860px)")`): reduced motion also drops the pin
+       regardless of viewport width, not just narrow ones. */
+    @media (max-width: 860px), (prefers-reduced-motion: reduce) {
+        .rung-track {
+            height: auto;
+        }
+        .rung-pin {
+            position: relative;
+            top: auto;
+            height: auto;
+            display: block;
+        }
+        .rung-svg {
+            display: none;
+        }
+        .phgrid {
+            grid-template-columns: 1fr;
+            border-top: 0;
+            position: relative;
+            padding-left: 28px;
+        }
+        .phgrid::before {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--energized);
+            box-shadow: 0 0 5px var(--energized);
+        }
+        .pc {
+            opacity: 1;
+            border-right: 0;
+            border-bottom: 1px solid var(--rung-divider-soft);
+        }
+    }
+
+    /* Short desktop viewports (e.g. 1280x720): dropping the subtitle keeps
+       eyebrow + title pinned with the card without the group overflowing the
+       pinned box. Only reachable on desktop anyway — the block above already
+       takes narrow/reduced-motion viewports out of the pinned layout
+       entirely, so this never fires there. 780px sits clear of both the
+       1280x720 (hide) and 1440x900 (show) cases the coordinator tested. */
+    @media (max-height: 780px) {
+        .rung-subtitle {
+            display: none;
+        }
+        /* Dropping the subtitle alone wasn't enough at 1280x720 — the
+           remaining eyebrow + title + card (673px) still exceeded the pinned
+           box (596px), which pushed the heading's top ~15px above the nav's
+           bottom edge once centered. Tighten the rest of the vertical rhythm
+           too so the whole group fits inside the pinned box with room to
+           spare. Overrides Tailwind's `mb-6 md:mb-8`/etc: this scoped style
+           is unlayered and wins regardless of source order or specificity
+           (same cascade-layer behavior relied on elsewhere in this file). */
+        .rung-head {
+            margin-bottom: 14px;
+        }
+        .rung-head p:first-child {
+            margin-bottom: 8px;
+        }
+        .rung-head h2 {
+            margin-bottom: 0;
+        }
+        .rung-svg {
+            margin: 10px 0 12px;
+        }
+        .pc {
+            padding: 12px 18px 14px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .flow {
+            animation: none;
+        }
+        .run-badge::before {
+            animation: none;
+        }
+        g[data-phase].cur .fl {
+            animation: none;
+        }
+        .w,
+        .el,
+        .fl,
+        .pc {
+            transition: none;
+        }
+    }
+</style>
