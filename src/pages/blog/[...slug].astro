@@ -411,10 +411,12 @@ const breadcrumbSchema = {
         </Container>
     </main>
 
-    <!-- Floating pill (mobile): current section + access to the TOC. -->
+    <!-- Floating pill (mobile): current section + access to the TOC. It stops
+         short of the shared WhatsApp button (fixed bottom-6 right-6, 56px) and
+         shares its baseline and height, so the two sit side by side. -->
     {
         toc.length > 0 && (
-            <div class="lg:hidden fixed left-4 right-4 bottom-4 z-40 flex items-center justify-between gap-3 rounded-full bg-box-bg/95 backdrop-blur border border-box-border shadow-lg px-5 py-2">
+            <div class="lg:hidden fixed left-4 right-[92px] bottom-6 h-14 z-40 flex items-center justify-between gap-3 rounded-full bg-box-bg/95 backdrop-blur border border-box-border shadow-lg pl-5 pr-1.5">
                 <span id="mobile-toc-current" class="text-sm text-heading-3 truncate">
                     {`01 · ${toc[0].text}`}
                 </span>

@@ -344,8 +344,10 @@ const geoPosts = posts.filter((p) => p.geo);
     #blog-app[data-filter="software"] [data-card]:not([data-category="software"]) {
         display: none;
     }
-    /* In "Todos" the newest post isn't repeated: it's already the featured card above. */
-    #blog-app[data-filter="all"] [data-card][data-featured="true"] {
+    /* In "Todos" + grid the newest post isn't repeated: it's already the
+       featured card above. The list view has no featured card, so the newest
+       post stays in the list. */
+    #blog-app[data-filter="all"][data-view="grid"] [data-card][data-featured="true"] {
         display: none;
     }
 
