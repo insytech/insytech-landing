@@ -2,9 +2,15 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
-import Title from "../../components/shared/Title.astro";
 import PostCTA from "../../components/blog/PostCTA.astro";
+import BtnLink from "../../components/shared/BtnLink.astro";
 import { authors, authorUrl } from "../../utils/authors";
+import {
+    CATEGORY_LABEL,
+    CATEGORY_SERVICE_HREF,
+    CATEGORY_SERVICE_NAME,
+    readingTime,
+} from "../../utils/blog";
 
 export async function getStaticPaths() {
     const posts = await getCollection("blog");
@@ -15,7 +21,8 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
 
 const formatDate = (date: Date) =>
     date.toLocaleDateString("es-MX", {
@@ -34,12 +41,26 @@ const formattedUpdated = post.data.updatedDate
     : undefined;
 
 const author = authors[post.data.author];
+const minutes = readingTime(post.body ?? "");
+const category = post.data.category;
+const imageUrl = new URL(post.data.image.src, Astro.site).href;
+
+// "Sigue leyendo": up to 2 posts from the same category (newest first); if
+// the category doesn't have two, fill in with the newest posts from others.
+const allPosts = (await getCollection("blog")).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const others = allPosts.filter((p) => p.id !== post.id);
+const sameCategory = others.filter((p) => p.data.category === category);
+const rest = others.filter((p) => p.data.category !== category);
+const related = [...sameCategory, ...rest].slice(0, 2);
 
 const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.data.title,
     description: post.data.description,
+    image: imageUrl,
     datePublished: pubDateISO,
     ...(updatedISO && { dateModified: updatedISO }),
     inLanguage: "es-MX",
@@ -79,6 +100,8 @@ const breadcrumbSchema = {
     itemListElement: [
         { "@type": "ListItem", position: 1, name: "Inicio", item: "https://insytech.mx" },
         { "@type": "ListItem", position: 2, name: "Blog", item: new URL("/blog/", Astro.site).href },
+        // The category level stays out of the schema: /blog/?tema=<cat> is a
+        // filtered view canonicalized to /blog/, not an indexable page.
         {
             "@type": "ListItem",
             position: 3,
@@ -89,7 +112,11 @@ const breadcrumbSchema = {
 };
 ---
 
-<Layout title={post.data.title} description={post.data.description}>
+<Layout
+    title={post.data.title}
+    description={post.data.description}
+    ogImage={post.data.image.src}
+>
     <script
         type="application/ld+json"
         is:inline
@@ -100,43 +127,456 @@ const breadcrumbSchema = {
         is:inline
         set:html={JSON.stringify(breadcrumbSchema)}
     />
-    <main class="pt-28 lg:pt-32 pb-16 sm:pb-20">
-        <Container className="max-w-3xl mx-auto">
-            <article class="space-y-6">
-                <header class="space-y-4">
-                    <nav class="text-sm">
-                        <a href="/blog/" class="text-[#005EB8] hover:underline">
-                            &larr; Volver al blog
-                        </a>
-                    </nav>
-                    <Title>{post.data.title}</Title>
-                    <p class="text-sm text-heading-3">
-                        Por <a
-                            href={`/nosotros/#${post.data.author}`}
-                            class="font-medium text-[#005EB8] dark:text-[#71b5f5] hover:underline"
-                            >{author.name}</a
-                        >{author.jobTitle && `, ${author.jobTitle}`} ·
-                        <time datetime={pubDateISO}>{formattedDate}</time>
-                        {
-                            formattedUpdated && (
-                                <>
+
+    <!-- Reading progress bar. `motion-reduce:hidden` removes it entirely
+         under prefers-reduced-motion, and the script below also skips the
+         scroll listener in that case. -->
+    <div
+        id="reading-progress"
+        aria-hidden="true"
+        class="fixed top-0 left-0 w-full h-[3px] bg-box-border z-50 motion-reduce:hidden"
+    >
+        <div
+            id="reading-progress-fill"
+            class="h-full w-full bg-[#00B5E2] origin-left scale-x-0"
+            style="will-change: transform"
+        >
+        </div>
+    </div>
+
+    <main class="pt-24 lg:pt-28 pb-16 sm:pb-20">
+        <Container className="max-w-3xl lg:max-w-[1240px]">
+            <article>
+                <nav aria-label="Ruta" class="flex gap-2 text-sm text-heading-3">
+                    <a href="/blog/" class="hover:underline">Blog</a>
+                    <span aria-hidden="true">/</span>
+                    <a
+                        href={`/blog/?tema=${category}`}
+                        class="text-primary hover:underline"
+                    >
+                        {CATEGORY_LABEL[category]}
+                    </a>
+                    <span aria-hidden="true" class="hidden sm:inline">/</span>
+                    <span class="hidden sm:inline text-heading-1 truncate">
+                        {post.data.title}
+                    </span>
+                </nav>
+
+                <header
+                    class="mt-6 lg:mt-8 lg:grid lg:grid-cols-2 lg:gap-24 lg:items-end"
+                >
+                    <div class="space-y-4">
+                        <span
+                            class="font-mono text-xs tracking-[0.3em] uppercase text-primary"
+                        >
+                            {CATEGORY_LABEL[category]}
+                        </span>
+                        <h1
+                            class="font-heading font-black text-3xl sm:text-4xl lg:text-5xl leading-[1.08] tracking-tight text-heading-1"
+                        >
+                            {post.data.title}
+                        </h1>
+                    </div>
+                    <div class="mt-6 lg:mt-0 space-y-5">
+                        <p class="text-lg text-heading-3 leading-relaxed">
+                            {post.data.description}
+                        </p>
+                        <div
+                            class="flex items-center gap-3 pt-5 border-t border-box-border text-sm"
+                        >
+                            {
+                                author.photo && (
+                                    <img
+                                        src={author.photo}
+                                        alt=""
+                                        class="w-11 h-11 rounded-full object-cover object-top"
+                                    />
+                                )
+                            }
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-heading-3">
+                                    Por{" "}
+                                    <a
+                                        href={`/nosotros/#${post.data.author}`}
+                                        class="font-bold text-heading-1 hover:text-primary"
+                                    >
+                                        {author.name}
+                                    </a>
+                                    {author.jobTitle && `, ${author.jobTitle}`}
+                                </span>
+                                <span class="text-heading-3">
+                                    <time datetime={pubDateISO}>{formattedDate}</time>
+                                    {
+                                        formattedUpdated && (
+                                            <>
+                                                {" · "}
+                                                <span>
+                                                    Actualizado el{" "}
+                                                    <time datetime={updatedISO}>
+                                                        {formattedUpdated}
+                                                    </time>
+                                                </span>
+                                            </>
+                                        )
+                                    }
                                     {" · "}
-                                    <span>
-                                        Actualizado el{" "}
-                                        <time datetime={updatedISO}>
-                                            {formattedUpdated}
-                                        </time>
-                                    </span>
-                                </>
+                                    {minutes} min de lectura
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div
+                    class="mt-8 lg:mt-14 rounded-3xl overflow-hidden bg-box-bg lg:h-[480px]"
+                >
+                    <img
+                        src={post.data.image.src}
+                        alt={post.data.image.alt}
+                        class="w-full h-full object-cover aspect-[4/3] lg:aspect-auto"
+                    />
+                </div>
+
+                <!-- Mobile TOC: collapsible, above the body. Hidden on desktop,
+                     where the sticky sidebar version takes over. -->
+                {
+                    toc.length > 0 && (
+                        <details
+                            id="toc-mobile"
+                            open
+                            class="lg:hidden mt-7 rounded-2xl border border-box-border px-4"
+                        >
+                            <summary class="min-h-11 flex items-center font-mono text-[11px] tracking-[0.3em] uppercase text-heading-3 cursor-pointer">
+                                En este artículo · {toc.length} secciones
+                            </summary>
+                            <div class="flex flex-col pb-3 text-sm leading-snug">
+                                {toc.map((h, i) => (
+                                    <a
+                                        href={`#${h.slug}`}
+                                        data-toc-link
+                                        data-toc-target={h.slug}
+                                        class="py-2.5 text-heading-1"
+                                    >
+                                        {String(i + 1).padStart(2, "0")} · {h.text}
+                                    </a>
+                                ))}
+                            </div>
+                        </details>
+                    )
+                }
+
+                <div class="mt-8 lg:mt-16 lg:grid lg:grid-cols-[260px_1fr] lg:gap-24 lg:items-start">
+                    <!-- TOC + share (desktop, sticky below the navbar) -->
+                    <aside class="hidden lg:flex lg:flex-col lg:gap-7 lg:sticky lg:top-[112px]">
+                        {
+                            toc.length > 0 && (
+                                <nav aria-label="En este artículo" class="flex flex-col gap-1">
+                                    <p class="mb-2 font-mono text-[11px] tracking-[0.3em] uppercase text-heading-3">
+                                        En este artículo
+                                    </p>
+                                    {toc.map((h, i) => (
+                                        <a
+                                            href={`#${h.slug}`}
+                                            data-toc-link
+                                            data-toc-target={h.slug}
+                                            class="flex gap-3 items-baseline py-2 text-sm leading-snug text-heading-3 aria-[current=true]:text-primary aria-[current=true]:font-bold"
+                                        >
+                                            <span class="font-mono text-[11px] text-heading-3">
+                                                {String(i + 1).padStart(2, "0")}
+                                            </span>
+                                            {h.text}
+                                        </a>
+                                    ))}
+                                </nav>
                             )
                         }
-                    </p>
-                </header>
-                <div class="content-typography">
-                    <Content />
+                        <div class="flex flex-col gap-2.5 pt-6 border-t border-box-border">
+                            <p class="font-mono text-[11px] tracking-[0.3em] uppercase text-heading-3">
+                                Compartir
+                            </p>
+                            <div class="flex gap-2">
+                                <button
+                                    type="button"
+                                    id="share-linkedin"
+                                    aria-label="Compartir en LinkedIn"
+                                    class="w-11 h-11 rounded-full border border-box-border flex items-center justify-center text-heading-1 hover:border-primary hover:text-primary transition-colors"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/></svg>
+                                </button>
+                                <button
+                                    type="button"
+                                    id="share-copy"
+                                    aria-label="Copiar enlace"
+                                    class="w-11 h-11 rounded-full border border-box-border flex items-center justify-center text-heading-1 hover:border-primary hover:text-primary transition-colors"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+                                </button>
+                            </div>
+                            <p id="share-copy-feedback" role="status" class="text-xs text-primary h-4 opacity-0 transition-opacity">
+                                Enlace copiado
+                            </p>
+                        </div>
+                    </aside>
+
+                    <div class="content-typography">
+                        <Content />
+                    </div>
                 </div>
+
+                <!-- Share (mobile): no sidebar, shown after the body. -->
+                <div class="lg:hidden mt-8 flex items-center gap-3">
+                    <span class="font-mono text-[11px] tracking-[0.3em] uppercase text-heading-3">
+                        Compartir
+                    </span>
+                    <button
+                        type="button"
+                        id="share-linkedin-mobile"
+                        aria-label="Compartir en LinkedIn"
+                        class="w-11 h-11 rounded-full border border-box-border flex items-center justify-center text-heading-1"
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 0 0-4 0"/></svg>
+                    </button>
+                    <button
+                        type="button"
+                        id="share-copy-mobile"
+                        aria-label="Copiar enlace"
+                        class="w-11 h-11 rounded-full border border-box-border flex items-center justify-center text-heading-1"
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+                    </button>
+                    <span id="share-copy-feedback-mobile" role="status" class="text-xs text-primary opacity-0 transition-opacity">
+                        Enlace copiado
+                    </span>
+                </div>
+
                 <PostCTA />
+
+                <!-- "Sigue leyendo" section -->
+                <section class="mt-20 lg:mt-28" data-animate="fade-up">
+                    <div class="flex items-end justify-between gap-6 mb-8">
+                        <h2 class="font-heading font-black text-2xl sm:text-3xl tracking-tight text-heading-1">
+                            Sigue leyendo
+                        </h2>
+                        <a
+                            href={`/blog/?tema=${category}`}
+                            class="hidden sm:inline font-semibold text-primary hover:underline whitespace-nowrap"
+                        >
+                            Ver todo {CATEGORY_LABEL[category]} &rarr;
+                        </a>
+                    </div>
+                    <div class="grid sm:grid-cols-3 gap-6 lg:gap-8">
+                        {
+                            related.map((p) => (
+                                <a
+                                    href={`/blog/${p.id}/`}
+                                    class="group flex flex-col gap-3.5"
+                                >
+                                    <div class="aspect-[4/3] rounded-2xl overflow-hidden bg-box-bg">
+                                        <img
+                                            src={p.data.image.src}
+                                            alt={p.data.image.alt}
+                                            loading="lazy"
+                                            class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:group-hover:scale-100"
+                                        />
+                                    </div>
+                                    <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-primary">
+                                        {CATEGORY_LABEL[p.data.category]}
+                                    </span>
+                                    <h3 class="font-heading font-extrabold text-lg leading-snug text-heading-1 group-hover:text-primary transition-colors">
+                                        {p.data.title}
+                                    </h3>
+                                </a>
+                            ))
+                        }
+                        <div class="flex flex-col justify-between gap-6 p-7 rounded-2xl bg-[#001489] text-white">
+                            <div class="space-y-3">
+                                <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-[#00B5E2]">
+                                    Servicio
+                                </span>
+                                <h3 class="font-heading font-extrabold text-xl leading-tight">
+                                    {CATEGORY_SERVICE_NAME[category]}
+                                </h3>
+                            </div>
+                            <BtnLink
+                                href={CATEGORY_SERVICE_HREF[category]}
+                                text="Conoce el servicio"
+                                variant="inverse"
+                                className="self-start"
+                            />
+                        </div>
+                    </div>
+                </section>
             </article>
         </Container>
     </main>
+
+    <!-- Floating pill (mobile): current section + access to the TOC. -->
+    {
+        toc.length > 0 && (
+            <div class="lg:hidden fixed left-4 right-4 bottom-4 z-40 flex items-center justify-between gap-3 rounded-full bg-box-bg/95 backdrop-blur border border-box-border shadow-lg px-5 py-2">
+                <span id="mobile-toc-current" class="text-sm text-heading-3 truncate">
+                    {`01 · ${toc[0].text}`}
+                </span>
+                <button
+                    type="button"
+                    id="mobile-toc-open"
+                    class="flex-shrink-0 h-11 px-4 rounded-full bg-[#005EB8] text-white text-sm font-bold"
+                >
+                    Índice
+                </button>
+            </div>
+        )
+    }
 </Layout>
+
+<script>
+    // Progress bar: turns itself off under prefers-reduced-motion (not just
+    // hidden by CSS — it also skips the scroll listener).
+    const progressFill = document.getElementById("reading-progress-fill");
+    const article = document.querySelector("article");
+    const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (progressFill && article && !prefersReducedMotion) {
+        const updateProgress = () => {
+            const rect = article.getBoundingClientRect();
+            const total = rect.height - window.innerHeight;
+            const scrolled = Math.min(
+                Math.max(-rect.top, 0),
+                Math.max(total, 1),
+            );
+            const ratio = total > 0 ? scrolled / total : 0;
+            progressFill.style.transform = `scaleX(${ratio})`;
+        };
+        updateProgress();
+        window.addEventListener("scroll", updateProgress, { passive: true });
+        window.addEventListener("resize", updateProgress);
+    }
+
+    // Active TOC item by scroll position (desktop + mobile share the same
+    // data-toc-link anchors, pointing at the same set of H2 headings).
+    //
+    // An IntersectionObserver watching a thin band near the top only fires
+    // while a heading actually crosses that band: after a hash jump, or on
+    // load already scrolled mid-article, no heading crosses it and nothing
+    // gets marked active. Instead: the active heading is the LAST one whose
+    // top has scrolled past a line drawn below the navbar, recomputed from
+    // scroll position — always exactly one heading (or the first, as a
+    // fallback while still above all of them).
+    const tocLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"),
+    );
+    const headingEls = tocLinks
+        .map((link) => {
+            const id = link.dataset.tocTarget;
+            return id ? document.getElementById(id) : null;
+        })
+        .filter((el): el is HTMLElement => el !== null);
+
+    const mobileCurrent = document.getElementById("mobile-toc-current");
+    const headerEl = document.getElementById("header");
+
+    const setActive = (id: string) => {
+        tocLinks.forEach((link) => {
+            if (link.dataset.tocTarget === id) {
+                link.setAttribute("aria-current", "true");
+            } else {
+                link.removeAttribute("aria-current");
+            }
+        });
+        if (mobileCurrent) {
+            const index = headingEls.findIndex((el) => el.id === id);
+            const heading = headingEls[index];
+            if (heading) {
+                mobileCurrent.textContent = `${String(index + 1).padStart(2, "0")} · ${heading.textContent ?? ""}`;
+            }
+        }
+    };
+
+    if (headingEls.length > 0) {
+        // Fixed navbar height varies (44-52px logo + padding); read it live
+        // instead of hardcoding the sticky-TOC offset here too.
+        const getActivationLine = () =>
+            (headerEl?.getBoundingClientRect().bottom ?? 96) +
+            window.innerHeight * 0.35;
+
+        const computeActive = () => {
+            const line = getActivationLine();
+            let active = headingEls[0];
+            for (const heading of headingEls) {
+                if (heading.getBoundingClientRect().top <= line) {
+                    active = heading;
+                } else {
+                    break;
+                }
+            }
+            setActive(active.id);
+        };
+
+        let ticking = false;
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                computeActive();
+                ticking = false;
+            });
+        };
+
+        computeActive();
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", computeActive);
+    }
+
+    // Share: LinkedIn opens its share-offsite dialog; copy link uses the
+    // clipboard API and shows visible feedback instead of an alert().
+    const shareUrl = window.location.href;
+    const openLinkedInShare = () => {
+        window.open(
+            `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+            "_blank",
+            "noopener,noreferrer",
+        );
+    };
+    document
+        .getElementById("share-linkedin")
+        ?.addEventListener("click", openLinkedInShare);
+    document
+        .getElementById("share-linkedin-mobile")
+        ?.addEventListener("click", openLinkedInShare);
+
+    const showCopyFeedback = (el: HTMLElement | null) => {
+        if (!el) return;
+        el.style.opacity = "1";
+        window.setTimeout(() => {
+            el.style.opacity = "0";
+        }, 2000);
+    };
+    const copyLink = async (feedbackId: string) => {
+        try {
+            await navigator.clipboard.writeText(shareUrl);
+            showCopyFeedback(document.getElementById(feedbackId));
+        } catch {
+            // Clipboard unavailable (permission denied, insecure context):
+            // fail silently, no alert() or noisy console.
+        }
+    };
+    document
+        .getElementById("share-copy")
+        ?.addEventListener("click", () => copyLink("share-copy-feedback"));
+    document
+        .getElementById("share-copy-mobile")
+        ?.addEventListener("click", () =>
+            copyLink("share-copy-feedback-mobile"),
+        );
+
+    // Mobile pill: opens and scrolls to the collapsible TOC above.
+    document.getElementById("mobile-toc-open")?.addEventListener("click", () => {
+        const toc = document.getElementById("toc-mobile");
+        if (toc instanceof HTMLDetailsElement) {
+            toc.open = true;
+            toc.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    });
+</script>
