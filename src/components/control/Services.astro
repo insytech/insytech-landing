@@ -1,96 +1,568 @@
 ---
+// /control/ services selector: a card with a vertical rail (one row per
+// solution) on the left and a photo + detail stage on the right. Desktop with
+// motion allowed: the heading and card pin below the navbar while scroll
+// drives the active solution (PLC -> SCADA -> IoT, one step each) and a rail
+// progress line fills. Mobile / reduced motion: no pin, all three solutions
+// stacked. Light and dark card versions follow the site theme.
 import Container from "../shared/Container.astro";
+import { PAD, SURFACE } from "@utils/typography";
 
 const services = [
     {
+        id: "plc",
         title: "Programación de PLCs",
         description: "Desarrollo de lógica de control para Allen-Bradley, Siemens, Omron y Mitsubishi. Migración de sistemas legacy.",
         image: "/images/control/plc.webp",
         alt: "Programación de un PLC Allen-Bradley en el tablero de control de una línea de producción industrial",
-        tags: ["Ladder", "ST", "FBD"]
+        tags: ["Ladder", "ST", "FBD"],
     },
     {
+        id: "scada",
         title: "Sistemas SCADA",
         description: "Interfaces de supervisión y control en tiempo real. Integración con bases de datos y sistemas empresariales.",
         image: "/images/control/scada.webp",
         alt: "Interfaz de sistema SCADA supervisando procesos de una planta industrial en tiempo real",
-        tags: ["Ignition", "Aveva", "WinCC", "AVEVA Edge"]
+        tags: ["Ignition", "Aveva", "WinCC", "AVEVA Edge"],
     },
     {
+        id: "iot",
         title: "IoT Industrial",
         description: "Conectividad de máquinas, sensores y actuadores. Monitoreo remoto y análisis predictivo.",
         image: "/images/control/iot.webp",
         alt: "Sensores de IoT industrial conectados a maquinaria para monitoreo remoto y análisis predictivo",
-        tags: ["OPC-UA", "MQTT", "Edge"]
-    }
+        tags: ["OPC-UA", "MQTT", "Edge"],
+    },
 ];
 ---
 
-<section id="services" class="relative py-24 bg-white dark:bg-gray-950">
-    <Container>
-        <!-- Header -->
-        <div class="text-center mb-16" data-animate="fade-up">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight">
-                Soluciones de{" "}
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]">
-                    automatización industrial
-                </span>
-            </h2>
-        </div>
+<!-- overflow-clip, not overflow-hidden: hidden creates a scroll container and
+     breaks the `position: sticky` pin below (see ProjectRung.astro / the
+     page's own `main`). Same section surface, heading style and Container
+     structure as ProjectRung.astro: the section itself sits on the normal
+     page surface, and only the pinned rail/stage is a dark card — not the
+     whole track. -->
+<section id="services" class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}>
+    <!-- The heading is pinned together with the rail/stage (coordinator
+         requirement), not scrolled away before the pin engages, but it is
+         NOT part of the dark card — same as ProjectRung.astro's title sitting
+         on the light/dark surface, not inside `.rung-screen`. -->
+    <Container className="relative z-10">
+        <div class="sv-pin-track" data-sv-track style={`--sv-steps: ${services.length}`}>
+            <div class="sv-pin">
+                <div class="sv-pin-inner">
+                    <div class="sv-head">
+                        {
+                            /* Normal text color and the light/dark brand
+                               gradient, not white-forced — this heading lives
+                               on the page's own surface now, not on the dark
+                               card. */
+                        }
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight">
+                            Soluciones de{" "}
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]">
+                                automatización industrial
+                            </span>
+                        </h2>
+                    </div>
+                    <div class="sv-card">
+                    <div class="sv-shell">
+                        <div
+                            class="sv-rail"
+                            role="tablist"
+                            aria-label="Soluciones de automatización industrial"
+                            aria-orientation="vertical"
+                        >
+                            <div class="sv-progress" aria-hidden="true">
+                                <i class="sv-progress-fill" data-sv-progress></i>
+                            </div>
+                            {
+                                services.map((s, i) => (
+                                    <button
+                                        type="button"
+                                        class="sv-row"
+                                        role="tab"
+                                        id={`sv-tab-${s.id}`}
+                                        aria-selected={i === 0}
+                                        aria-controls={`sv-panel-${s.id}`}
+                                        data-sv-tab={i}
+                                    >
+                                        <span class="sv-row-main">
+                                            <b>{s.title}</b>
+                                            <span class="sv-tags">
+                                                {s.tags.map((tag) => (
+                                                    <span>{tag}</span>
+                                                ))}
+                                            </span>
+                                        </span>
+                                    </button>
+                                ))
+                            }
+                        </div>
 
-        <!-- Services Grid -->
-        <div class="grid lg:grid-cols-3 gap-8" data-reveal="group">
-            {services.map((service) => (
-                <div class="group relative bg-gray-50 dark:bg-gray-900 rounded-sm overflow-hidden border border-gray-100 dark:border-gray-800 hover:border-[#005EB8]/50 transition-all duration-500">
-                    <!-- Image -->
-                    <div class="relative h-56 overflow-hidden">
-                        <!-- Placeholder gradient if image not found -->
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#001489] to-[#005EB8] z-0"></div>
-                        <!-- Image -->
-                        <img
-                            src={service.image}
-                            alt={service.alt}
-                            class="relative z-10 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                            loading="lazy"
-                        />
-                        <!-- Overlay gradient for text readability -->
-                        <div class="absolute inset-0 z-20 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent"></div>
-                        
-                        <!-- Tags -->
-                        <div class="absolute bottom-4 left-4 flex gap-2 z-30">
-                            {service.tags.map(tag => (
-                                <span class="px-2 py-1 text-xs font-medium text-white bg-white/20 backdrop-blur-sm rounded">
-                                    {tag}
-                                </span>
-                            ))}
+                        <div class="sv-stage">
+                            {
+                                services.map((s, i) => (
+                                    <div
+                                        class="sv-panel"
+                                        id={`sv-panel-${s.id}`}
+                                        role="tabpanel"
+                                        aria-labelledby={`sv-tab-${s.id}`}
+                                        hidden={i !== 0}
+                                        data-sv-panel={i}
+                                    >
+                                        <div class="sv-photo">
+                                            <img src={s.image} alt={s.alt} loading="lazy" />
+                                        </div>
+                                        <div class="sv-details">
+                                            <h3 class="sv-title">{s.title}</h3>
+                                            <span class="sv-tags sv-tags--details">
+                                                {s.tags.map((tag) => (
+                                                    <span>{tag}</span>
+                                                ))}
+                                            </span>
+                                            <p>{s.description}</p>
+                                            <a class="sv-more" href="#contact">
+                                                <span>Más información</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                ))
+                            }
                         </div>
                     </div>
-
-                    <!-- Content -->
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-[#211915] dark:text-white mb-3 group-hover:text-[#005EB8] dark:group-hover:text-[#00B5E2] transition-colors">
-                            {service.title}
-                        </h3>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-                            {service.description}
-                        </p>
-                        
-                        <!-- Learn more link -->
-                        <a 
-                            href="#contact"
-                            class="inline-flex items-center gap-2 text-[#005EB8] dark:text-[#00B5E2] font-medium group-hover:gap-3 transition-all"
-                        >
-                            <span>Más información</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </a>
-                    </div>
-
-                    <!-- Accent line -->
-                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                 </div>
-            ))}
+                </div>
+            </div>
         </div>
     </Container>
 </section>
+
+<script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    import { prefersReducedMotion } from "@utils/motion";
+    import { getLenis } from "@utils/smoothScroll";
+
+    function init() {
+        const trackEl = document.querySelector<HTMLElement>("[data-sv-track]");
+        if (!trackEl) return;
+        // Narrowed once into a non-null binding: nested `function` declarations
+        // below don't retain the null-check narrowing from a closed-over `let`.
+        const track: HTMLElement = trackEl;
+
+        const tabs = Array.from(track.querySelectorAll<HTMLButtonElement>("[data-sv-tab]"));
+        if (!tabs.length) return;
+        const panels = tabs.map((t) => document.getElementById(t.getAttribute("aria-controls") ?? ""));
+        const fill = track.querySelector<HTMLElement>("[data-sv-progress]");
+
+        function setActive(index: number) {
+            tabs.forEach((t, i) => {
+                const on = i === index;
+                t.setAttribute("aria-selected", String(on));
+                const panel = panels[i];
+                if (panel) panel.hidden = !on;
+            });
+        }
+
+        function showAllStacked() {
+            tabs.forEach((t, i) => {
+                t.setAttribute("aria-selected", String(i === 0));
+                const panel = panels[i];
+                if (panel) panel.hidden = false;
+            });
+            if (fill) fill.style.height = "0%";
+        }
+
+        function scrollToIndex(index: number) {
+            tabs[index]?.focus();
+            // No pin outside the desktop-and-motion-allowed branch: there is no
+            // third of a track to scroll to.
+            if (window.matchMedia("(max-width: 860px)").matches || prefersReducedMotion()) return;
+
+            const rect = track.getBoundingClientRect();
+            const scrollable = rect.height - window.innerHeight;
+            if (scrollable <= 0) return;
+            const targetProgress = (index + 0.5) / tabs.length;
+            const trackAbsoluteTop = rect.top + window.scrollY;
+            const targetScroll = trackAbsoluteTop + targetProgress * scrollable;
+
+            const lenis = getLenis();
+            if (lenis) {
+                lenis.scrollTo(targetScroll, { immediate: prefersReducedMotion() });
+            } else {
+                window.scrollTo({ top: targetScroll, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+            }
+        }
+
+        tabs.forEach((tab, i) => {
+            tab.addEventListener("click", () => scrollToIndex(i));
+            tab.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+                    e.preventDefault();
+                    scrollToIndex(Math.min(tabs.length - 1, i + 1));
+                } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+                    e.preventDefault();
+                    scrollToIndex(Math.max(0, i - 1));
+                } else if (e.key === "Home") {
+                    e.preventDefault();
+                    scrollToIndex(0);
+                } else if (e.key === "End") {
+                    e.preventDefault();
+                    scrollToIndex(tabs.length - 1);
+                }
+            });
+        });
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Responsive scroll-driving, matching ProjectRung.astro's pattern:
+        // CSS position:sticky for the pin, ScrollTrigger scrub for progress.
+        // gsap.matchMedia() (ScrollTrigger.matchMedia is deprecated as of
+        // 3.11) re-creates/tears down the trigger itself whenever the query
+        // crosses, instead of a manual listener.
+        gsap.matchMedia().add(
+            {
+                isPinned: "(min-width: 861px) and (prefers-reduced-motion: no-preference)",
+                isStacked: "(max-width: 860px), (prefers-reduced-motion: reduce)",
+            },
+            (context) => {
+                const { isPinned } = context.conditions as { isPinned: boolean; isStacked: boolean };
+                if (!isPinned) {
+                    showAllStacked();
+                    return;
+                }
+
+                // PIN_TOP/GAP must match `.sv-pin`'s CSS `top`/height formula
+                // exactly (ProjectRung.astro uses the same pair), so progress
+                // is 0 the instant the pin engages and 1 the instant it
+                // releases — not relative to the viewport's own top edge.
+                const PIN_TOP = 100;
+                const GAP = 24;
+
+                const st = ScrollTrigger.create({
+                    trigger: track,
+                    start: `top ${PIN_TOP}px`,
+                    end: () => `+=${track.offsetHeight - (window.innerHeight - PIN_TOP - GAP)}`,
+                    scrub: true,
+                    invalidateOnRefresh: true,
+                    onUpdate: (self) => {
+                        const index = Math.min(tabs.length - 1, Math.floor(self.progress * tabs.length));
+                        setActive(index);
+                        if (fill) fill.style.height = `${Math.round(self.progress * 100)}%`;
+                    },
+                });
+                // Sync immediately instead of waiting for the next scroll event.
+                const index = Math.min(tabs.length - 1, Math.floor(st.progress * tabs.length));
+                setActive(index);
+                if (fill) fill.style.height = `${Math.round(st.progress * 100)}%`;
+
+                return () => st.kill();
+            }
+        );
+    }
+
+    init();
+</script>
+
+<style>
+    /* Tokens for the card (`.sv-card`) only — the section itself sits on the
+       normal page surface (${SURFACE.raised}), same as ProjectRung.astro.
+       Light is the default (no `.dark` ancestor); dark overrides via
+       `:global(.dark)` reproduce the previous always-dark look exactly. */
+    .sv-pin-track {
+        --panel: #ffffff;
+        --panel-line: rgba(0, 94, 184, 0.14);
+        --panel-muted: #6b7280;
+        --panel-text: #4b5563;
+        --energized: #005eb8;
+        --card-border: 1px solid #d9dfea;
+        --card-shadow: 0 20px 45px -25px rgba(0, 20, 137, 0.18), 0 0 0 1px rgba(0, 94, 184, 0.04);
+        --row-bg: #f7f9fc;
+        --row-bg-active: rgba(0, 94, 184, 0.06);
+        --row-title: #211915;
+        --row-title-active: var(--energized);
+        --tag-bg: rgba(0, 94, 184, 0.05);
+        --stage-title: #211915;
+    }
+    :global(.dark) .sv-pin-track {
+        --panel: #0a0c18;
+        --panel-line: rgba(0, 181, 226, 0.18);
+        --panel-muted: #9aa6c8;
+        --panel-text: #e9eefa;
+        --energized: #00b5e2;
+        --card-border: none;
+        --card-shadow: none;
+        --row-bg: rgba(255, 255, 255, 0.02);
+        --row-bg-active: rgba(0, 181, 226, 0.08);
+        --row-title: var(--panel-muted);
+        --row-title-active: #ffffff;
+        --tag-bg: transparent;
+        --stage-title: #ffffff;
+    }
+    .sv-card {
+        background: var(--panel);
+        border: var(--card-border);
+        box-shadow: var(--card-shadow);
+        border-radius: 22px;
+        padding: clamp(26px, 4vw, 48px);
+    }
+    .sv-head {
+        margin-bottom: clamp(20px, 3vw, 32px);
+    }
+
+    .sv-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+        gap: clamp(18px, 3vw, 32px);
+        align-items: stretch;
+    }
+    .sv-rail {
+        position: relative;
+        display: grid;
+        gap: 10px;
+        align-content: start;
+        padding: 0 0 0 20px;
+        margin: 0;
+        min-width: 0;
+    }
+    .sv-progress {
+        position: absolute;
+        left: 0;
+        top: 4px;
+        bottom: 4px;
+        width: 3px;
+        border-radius: 3px;
+        background: var(--panel-line);
+    }
+    .sv-progress-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 0%;
+        border-radius: 3px;
+        background: var(--energized);
+        box-shadow: 0 0 8px var(--energized);
+    }
+    .sv-row {
+        all: unset;
+        display: block;
+        cursor: pointer;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: 1px solid var(--panel-line);
+        background: var(--row-bg);
+        transition: border-color 0.2s, background-color 0.2s;
+    }
+    .sv-row:hover {
+        border-color: rgba(0, 181, 226, 0.4);
+    }
+    .sv-row:focus-visible {
+        outline: 2px solid var(--energized);
+        outline-offset: 2px;
+    }
+    .sv-row-main {
+        display: grid;
+        gap: 8px;
+    }
+    .sv-row-main b {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--row-title);
+        transition: color 0.2s;
+    }
+    .sv-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .sv-tags span {
+        font-family: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--panel-muted);
+        background: var(--tag-bg);
+        border: 1px solid var(--panel-line);
+        border-radius: 99px;
+        padding: 2px 9px;
+    }
+    .sv-row[aria-selected="true"] {
+        background: var(--row-bg-active);
+        border-color: var(--energized);
+    }
+    .sv-row[aria-selected="true"] .sv-row-main b {
+        color: var(--row-title-active);
+    }
+
+    .sv-stage {
+        position: relative;
+        border: 1px solid var(--panel-line);
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--panel);
+        min-height: 340px;
+        min-width: 0;
+    }
+    .sv-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: stretch;
+        height: 100%;
+    }
+    .sv-panel[hidden] {
+        display: none;
+    }
+    .sv-panel:not([hidden]) {
+        animation: sv-in 0.35s ease-out;
+    }
+    @keyframes sv-in {
+        from {
+            opacity: 0;
+        }
+    }
+    .sv-photo {
+        position: relative;
+        min-height: 240px;
+    }
+    .sv-photo img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .sv-details {
+        padding: clamp(22px, 3vw, 36px);
+        display: grid;
+        gap: 16px;
+        align-content: center;
+    }
+    .sv-title {
+        display: none;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--stage-title);
+        margin: 0;
+    }
+    .sv-tags--details {
+        display: none;
+    }
+    .sv-details p {
+        color: var(--panel-text);
+        font-size: 16px;
+        line-height: 1.55;
+        margin: 0;
+    }
+    .sv-more {
+        all: unset;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--energized);
+        font-weight: 500;
+        font-size: 15px;
+        transition: gap 0.2s;
+    }
+    .sv-more:hover {
+        gap: 12px;
+    }
+    .sv-more svg {
+        width: 16px;
+        height: 16px;
+    }
+    .sv-more:focus-visible {
+        outline: 2px solid var(--energized);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+
+    /* Desktop with motion allowed: the section pins and scroll drives thirds.
+       ~70vh of scroll per solution (coordinator: "3 x 70vh"), from
+       `--sv-steps` (set inline from services.length) so it tracks the data. */
+    @media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+        .sv-pin-track {
+            height: calc(var(--sv-steps) * 70vh);
+        }
+        .sv-pin {
+            position: sticky;
+            /* Same navbar-clearance offset as ProjectRung.astro's `.rung-pin`:
+               the site's floating navbar is a fixed `<header>` ~76px tall.
+               Must match PIN_TOP in the script exactly. */
+            top: 100px;
+            /* Fills the viewport below the nav (plus a small bottom gap)
+               instead of only the content's own height, so there's no dead
+               area and the heading/rail never slide under the nav. */
+            height: calc(100svh - 100px - 24px);
+            display: flex;
+            align-items: center;
+        }
+        .sv-pin-inner {
+            width: 100%;
+        }
+    }
+
+    /* Mobile, or reduced motion: no pin, no tabs — all three stacked and
+       fully visible, overriding the `hidden` attribute the server renders on
+       panels 2 and 3. */
+    @media (max-width: 860px), (prefers-reduced-motion: reduce) {
+        .sv-pin-track {
+            height: auto;
+        }
+        .sv-pin {
+            position: static;
+            top: auto;
+            height: auto;
+            display: block;
+        }
+        .sv-card {
+            /* No outer card on mobile: each stacked `.sv-panel` already looks
+               like its own card (see below), so a wrapping one would just
+               double-box them. */
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+        }
+        .sv-shell {
+            grid-template-columns: 1fr;
+        }
+        .sv-rail {
+            display: none;
+        }
+        .sv-stage {
+            display: grid;
+            gap: 20px;
+            border: 0;
+            border-radius: 0;
+            overflow: visible;
+            background: transparent;
+            min-height: 0;
+        }
+        .sv-panel[hidden] {
+            display: grid;
+        }
+        .sv-panel {
+            grid-template-columns: 1fr;
+            border: 1px solid var(--panel-line);
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--panel);
+            animation: none;
+        }
+        .sv-photo {
+            min-height: 220px;
+        }
+        .sv-title {
+            display: block;
+        }
+        .sv-tags--details {
+            display: flex;
+        }
+    }
+</style>
