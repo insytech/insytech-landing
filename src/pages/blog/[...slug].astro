@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import Container from "../../components/shared/Container.astro";
 import PostCTA from "../../components/blog/PostCTA.astro";
 import BtnLink from "../../components/shared/BtnLink.astro";
+import { OUTLINED_BUTTON } from "../../utils/buttons";
 import { authors, authorUrl } from "../../utils/authors";
 import {
     CATEGORY_LABEL,
@@ -400,8 +401,8 @@ const breadcrumbSchema = {
                             <BtnLink
                                 href={CATEGORY_SERVICE_HREF[category]}
                                 text="Conoce el servicio"
-                                variant="inverse"
-                                className="self-start"
+                                variant="secondary"
+                                className={`self-start bg-white dark:bg-transparent ${OUTLINED_BUTTON}`}
                             />
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 ---
 import BtnLink from "../shared/BtnLink.astro";
+import { OUTLINED_BUTTON } from "../../utils/buttons";
 import Container from "../shared/Container.astro";
 import Brands from "./Brands.astro";
 import Silk from "../react-bits/Silk";
@@ -95,7 +96,7 @@ import DashboardShowcase from "../hero/DashboardShowcase";
                 <BtnLink
                     text="Ver Servicios"
                     href="#services"
-                    className="w-full sm:w-auto py-4 px-10 font-semibold border-2 border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-white/5 transition-all rounded-full"
+                    className={`w-full sm:w-auto ${OUTLINED_BUTTON}`}
                     variant="secondary"
                 />
             </div>
