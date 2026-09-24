@@ -1,11 +1,11 @@
 ---
+// /control/ results panel: the performance.webp photo as a full-bleed left
+// half of a near full-bleed dark panel, the three returns as ruled rows, and
+// the brand gradient bar on the panel's bottom edge. The returns are said
+// without percentages on purpose: the mechanism holds, the magnitude depends
+// on the line and has not been measured.
 import BtnLink from "../shared/BtnLink.astro";
-import Container from "../shared/Container.astro";
 
-// Los tres frentes por los que se paga un proyecto de automatización, dichos
-// sin porcentaje. Antes había aquí dos cifras de reducción y de ahorro sin
-// respaldo: el mecanismo es cierto y se sostiene contra el FAQ, la magnitud
-// depende de la línea y no la hemos medido.
 const returns = [
     {
         title: "Menos tiempos muertos",
@@ -22,167 +22,136 @@ const returns = [
 ];
 ---
 
-<section class="relative py-24 bg-gray-50 dark:bg-gray-900 overflow-hidden">
-    <Container>
-        <div class="grid lg:grid-cols-2 gap-16 items-center">
-            <!-- Image Side -->
-            <div class="relative" data-animate="slide-left">
-                <div class="relative rounded-sm overflow-hidden">
-                    <!-- Main image -->
-                    <div
-                        class="aspect-[4/3] bg-gradient-to-br from-[#001489] to-[#005EB8]"
-                    >
-                        <img
-                            src="/images/control/performance.webp"
-                            alt="Operador supervisando la línea de producción desde el tablero de control y automatización de una planta industrial"
-                            class="w-full h-full object-cover"
-                            loading="lazy"
-                        />
-                    </div>
-
-                    <!-- Overlay accent -->
-                    <div
-                        class="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2]"
-                    >
-                    </div>
-                </div>
-
-                <!-- Decorative elements -->
-                <div
-                    class="absolute -bottom-6 -right-6 w-32 h-32 border-4 border-[#005EB8]/20 rounded-sm -z-10"
-                >
-                </div>
-                <div
-                    class="absolute -top-6 -left-6 w-24 h-24 bg-[#00B5E2]/10 rounded-sm -z-10"
-                >
-                </div>
-
+<!-- Not wrapped in <Container>: the panel is near full-bleed, matching
+     HeroPanel.astro's outer width (a viewport gutter, not the content
+     column's max-width). -->
+<section class="relative py-24 overflow-clip">
+        <div class="results-panel relative grid overflow-hidden rounded-[22px] text-white">
+            <!-- Photo half, full-bleed, fading into the panel -->
+            <div class="results-photo relative">
+                <img
+                    src="/images/control/performance.webp"
+                    alt="Operador supervisando la línea de producción desde el tablero de control y automatización de una planta industrial"
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                />
+                <div class="results-photo-fade pointer-events-none absolute inset-0" aria-hidden="true"></div>
             </div>
 
-            <!-- Content Side -->
-            <div data-animate="fade-up">
-
-                <h2
-                    class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211915] dark:text-white leading-tight mb-6"
-                >
+            <!-- Copy half -->
+            <div class="grid content-center gap-6 px-6 py-12 sm:px-10 lg:py-16" data-animate="fade-up">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight text-white">
                     Resultados de automatizar{" "}
                     <span
-                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2] dark:from-[#4da6ff] dark:via-[#00B5E2] dark:to-[#6de0ff]"
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#4da6ff] via-[#00B5E2] to-[#6de0ff]"
                     >
                         el control de procesos
                     </span>
                 </h2>
 
-                <p
-                    class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-8"
-                >
+                <p class="max-w-[56ch] text-base leading-relaxed text-[#9AA6C8]">
                     Automatizar el control no es comprar un tablero: es que la
                     línea deje de depender de que alguien se dé cuenta. El
                     retorno viene de tres frentes, y todo se integra con nuestros
                     sistemas de <a
                         href="/tracking/"
-                        class="font-medium text-[#005EB8] dark:text-[#00B5E2] underline underline-offset-2 hover:opacity-80 transition-opacity"
+                        class="font-medium text-[#00B5E2] underline underline-offset-2 hover:opacity-80 transition-opacity"
                         >trazabilidad y monitoreo</a
                     > y de <a
                         href="/vision/"
-                        class="font-medium text-[#005EB8] dark:text-[#00B5E2] underline underline-offset-2 hover:opacity-80 transition-opacity"
+                        class="font-medium text-[#00B5E2] underline underline-offset-2 hover:opacity-80 transition-opacity"
                         >visión con inteligencia artificial</a
                     >.
                 </p>
 
-                <!-- De dónde viene el retorno -->
-                <div class="grid sm:grid-cols-3 gap-4 mb-8">
+                <!-- Returns as ruled rows -->
+                <ul class="returns-list grid border-t">
                     {
                         returns.map((item) => (
-                            <div class="p-4 bg-white dark:bg-gray-800 rounded-sm border border-gray-100 dark:border-gray-700">
-                                <div class="font-bold text-[#211915] dark:text-white mb-1">
-                                    {item.title}
-                                </div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                    {item.body}
-                                </div>
-                            </div>
+                            <li class="grid grid-cols-[40px_1fr] gap-x-3.5 gap-y-1 border-b py-3.5">
+                                <svg viewBox="0 0 30 30" aria-hidden="true" class="row-span-2 mt-0.5 h-[30px] w-[30px]">
+                                    <circle cx="15" cy="15" r="12" fill="none" stroke="#00B5E2" stroke-width="1.6" />
+                                    <path d="M15 8 V15 L20 18" fill="none" stroke="#00B5E2" stroke-width="1.8" />
+                                </svg>
+                                <b class="text-base font-semibold text-white">{item.title}</b>
+                                <span class="text-sm text-[#9AA6C8]">{item.body}</span>
+                            </li>
                         ))
                     }
-                </div>
+                </ul>
 
                 <!-- Features list -->
-                <ul class="space-y-3 mb-8">
-                    <li
-                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                    >
-                        <div
-                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="w-4 h-4 text-[#00B5E2]"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.5 12.75l6 6 9-13.5"></path>
-                            </svg>
-                        </div>
-                        <span>Diagnóstico remoto</span>
+                <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#E9EEFA]">
+                    <li class="flex items-center gap-2">
+                        <span class="feat-check inline-block h-[18px] w-[18px] rounded-sm" aria-hidden="true"></span>
+                        Diagnóstico remoto
                     </li>
-                    <li
-                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                    >
-                        <div
-                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="w-4 h-4 text-[#00B5E2]"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.5 12.75l6 6 9-13.5"></path>
-                            </svg>
-                        </div>
-                        <span>Integración con sistemas existentes</span>
+                    <li class="flex items-center gap-2">
+                        <span class="feat-check inline-block h-[18px] w-[18px] rounded-sm" aria-hidden="true"></span>
+                        Integración con sistemas existentes
                     </li>
-                    <li
-                        class="flex items-center gap-3 text-gray-700 dark:text-gray-300"
-                    >
-                        <div
-                            class="w-6 h-6 rounded-sm bg-[#00B5E2]/10 flex items-center justify-center flex-shrink-0"
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="2"
-                                stroke="currentColor"
-                                class="w-4 h-4 text-[#00B5E2]"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4.5 12.75l6 6 9-13.5"></path>
-                            </svg>
-                        </div>
-                        <span>Capacitación completa de operadores</span>
+                    <li class="flex items-center gap-2">
+                        <span class="feat-check inline-block h-[18px] w-[18px] rounded-sm" aria-hidden="true"></span>
+                        Capacitación completa de operadores
                     </li>
                 </ul>
 
-                <BtnLink
+                <div>
+                    <BtnLink
                         href="#contact"
                         text="Conocer más"
                         variant="primary"
                         className="px-8 py-4"
                     />
+                </div>
             </div>
+
+            <!-- Brand gradient bar on the panel's bottom edge -->
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1.5 bg-gradient-to-r from-[#001489] via-[#005EB8] to-[#00B5E2]" aria-hidden="true"></div>
         </div>
-    </Container>
 </section>
+
+<style>
+    .results-panel {
+        /* Brand's actual dark-surface identity, not an invented navy. */
+        --panel: #0a0c18;
+        --panel-line: rgba(0, 181, 226, 0.18);
+        background: var(--panel);
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        min-height: 560px;
+        /* Near full-bleed, matching HeroPanel.astro's outer width. */
+        width: min(1680px, calc(100% - 32px));
+        margin-inline: auto;
+    }
+    @media (min-width: 640px) {
+        .results-panel {
+            width: min(1680px, calc(100% - 48px));
+        }
+    }
+    .results-photo {
+        min-height: 320px;
+    }
+    .results-photo-fade {
+        background:
+            linear-gradient(90deg, rgba(4, 10, 46, 0) 45%, var(--panel) 100%),
+            linear-gradient(0deg, rgba(4, 10, 46, 0.55), rgba(4, 10, 46, 0) 40%);
+    }
+    .returns-list,
+    .returns-list li {
+        border-color: var(--panel-line);
+    }
+    .feat-check {
+        background: rgba(0, 181, 226, 0.14)
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300B5E2' stroke-width='3'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E")
+            center / 12px no-repeat;
+    }
+
+    @media (max-width: 900px) {
+        .results-panel {
+            grid-template-columns: 1fr;
+        }
+        .results-photo-fade {
+            background: linear-gradient(0deg, var(--panel) 0%, rgba(4, 10, 46, 0) 55%);
+        }
+    }
+</style>
