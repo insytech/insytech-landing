@@ -1,70 +1,79 @@
 ---
+// /control/ CTA: inset dark card with the phone number visible, using the
+// `inverse` + `primary` BtnLink variants. The white quote button delays its
+// `hover:bg-[#172554]` by 220ms (third entry of BtnLink's transition list:
+// transform, border-color, background-color) so the #172554 circle visibly grows
+// first, like the navbar's primary "Contáctanos", and the fill only catches up to
+// hide the corner halo. `!` is needed to beat BtnLink's scoped transition rule.
 import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
 ---
 
-<section
-    class="relative py-24 bg-gray-50 dark:bg-[#0B1121] overflow-hidden transition-colors duration-300"
->
-    <!-- Background pattern -->
-    <div class="absolute inset-0">
-        <!-- Grid pattern overlay - Subtle & Clean -->
-        <div
-            class="absolute w-full h-full bg-[linear-gradient(60deg,transparent_25%,rgba(0,181,226,0.03)_25%,rgba(0,181,226,0.03)_50%,transparent_50%)] bg-[length:60px_60px] dark:opacity-10"
-        >
-        </div>
-
-        <!-- Subtle gradient mask for depth -->
-        <div
-            class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50/50 dark:to-[#0B1121]/80"
-        >
-        </div>
-    </div>
-
-    <Container className="relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-
-            <h2
-                class="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading text-gray-900 dark:text-white leading-tight mb-6 tracking-tight"
-                data-animate="fade-up"
-                data-animate-delay=".1s"
-            >
-                Automatiza tu planta con{" "}
-                <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-[#005EB8] via-[#00B5E2] to-[#4da6ff] dark:from-[#38bdf8] dark:via-[#00B5E2] dark:to-[#005EB8]"
+<section class="relative py-24 overflow-hidden">
+    <Container>
+        <div class="cta-panel grid items-center gap-6 rounded-[22px] text-white">
+            <div>
+                <h2
+                    class="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight"
+                    data-animate="fade-up"
+                    data-animate-delay=".1s"
                 >
-                    tecnología probada
-                </span>
-            </h2>
+                    Automatiza tu planta con{" "}
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-[#38bdf8] via-[#00B5E2] to-[#005EB8]"
+                    >
+                        tecnología probada
+                    </span>
+                </h2>
 
-            <p
-                class="text-xl text-gray-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto"
-                data-animate="fade-up"
-                data-animate-delay=".2s"
-            >
-                Agenda una consulta sin costo y descubre cómo podemos optimizar
-                tu operación con soluciones de automatización a tu medida.
-            </p>
+                <p
+                    class="mt-3 max-w-[54ch] text-base text-[#B8C4E6]"
+                    data-animate="fade-up"
+                    data-animate-delay=".2s"
+                >
+                    Agenda una consulta sin costo y descubre cómo podemos optimizar
+                    tu operación con soluciones de automatización a tu medida.
+                </p>
+            </div>
 
-            <!-- CTAs -->
-            <div
-                class="flex flex-wrap justify-center gap-4"
-                data-animate="fade-up"
-                data-animate-delay=".3s"
-            >
-                <BtnLink
+            <div class="cta-side grid justify-items-start gap-4" data-animate="fade-up" data-animate-delay=".3s">
+                <div class="flex flex-wrap gap-3">
+                    <BtnLink
                         href="#contact"
                         text="Solicitar cotización"
+                        variant="inverse"
+                        className="px-8 py-4 ![transition-delay:0ms,0ms,220ms]"
+                    />
+                    <BtnLink
+                        href="tel:+528128927509"
+                        text="Llamar ahora"
                         variant="primary"
                         className="px-8 py-4"
                     />
-                <BtnLink
-                    href="tel:+528128927509"
-                    text="Llamar ahora"
-                    variant="secondary"
-                    className="px-8 py-4 border-2 border-gray-300 dark:border-gray-600"
-                />
+                </div>
+                <div class="grid gap-0.5">
+                    <span class="font-mono text-[10.5px] uppercase tracking-[0.12em] text-[#9fb3e8]">
+                        O márcanos directo
+                    </span>
+                    <b class="select-all font-mono text-[17px] font-semibold">+52 81 2892 7509</b>
+                </div>
             </div>
         </div>
     </Container>
 </section>
+
+<style>
+    .cta-panel {
+        /* #001489 is an official brand color, kept; the dark endpoint moves
+           to the brand's actual dark-surface family instead of an invented
+           navy. */
+        background: linear-gradient(120deg, #001489, #10203f 70%);
+        padding: clamp(26px, 4vw, 46px);
+        grid-template-columns: minmax(0, 1.3fr) auto;
+    }
+    @media (max-width: 860px) {
+        .cta-panel {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
