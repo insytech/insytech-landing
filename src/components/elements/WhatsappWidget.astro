@@ -137,7 +137,12 @@ const tooltipText =
 <script>
     // Utilidades: construir URL y abrir chat
     const WA_PHONE = "528128927509";
-    const WA_TEXT = "Hola, me interesa una solución de automatización.";
+    // The page path in the preset text tags the chat with its origin, since
+    // the site cannot see what happens once WhatsApp opens.
+    function presetText() {
+        const page = "insytech.mx" + (location.pathname === "/" ? "" : location.pathname);
+        return `Hola, vengo de ${page} y me gustaría más información.`;
+    }
 
     function buildWhatsAppUrl(phone: any, text: string | number | boolean) {
         const msg = typeof text === "string" ? encodeURIComponent(text) : "";
@@ -147,7 +152,13 @@ const tooltipText =
 
     function openWhatsApp(phone: string, text: string) {
         const url = buildWhatsAppUrl(phone, text);
-        const w = window.open(url, "_blank", "noopener");
+        // Same event the GA click tracker sends for wa.me links. It only
+        // reaches GA when cookies were accepted; gtag is undefined otherwise.
+        (window as any).gtag?.("event", "contact_click", {
+            method: "whatsapp",
+            link_url: url,
+        });
+        window.open(url, "_blank", "noopener");
     }
 
     // Control del panel
@@ -180,7 +191,7 @@ const tooltipText =
 
         openers.forEach((el) =>
             el.addEventListener("click", () => {
-                openWhatsApp(WA_PHONE, WA_TEXT);
+                openWhatsApp(WA_PHONE, presetText());
                 closePanel();
             }),
         );
