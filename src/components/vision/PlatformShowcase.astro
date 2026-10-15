@@ -1,0 +1,132 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// Cuatro clips cortos y mudos grabados sobre la plataforma real de InsyTech
+// Vision (cuenta demo, sin datos de clientes). Lo que se ve ocurrió: el
+// entrenamiento corrió en GPU y se muestra acelerado; las cajas de etiquetado
+// son detecciones reales del modelo EPP; el despliegue llegó a un dispositivo.
+// Imágenes: Pexels 10817415 (licencia Pexels) y Roboflow Universe "Safety PPE"
+// (MIT). Fuente y pipeline: insytech-vision/marketing/platform-clips.
+//
+// Reproducción: muted + loop + playsinline y preload="none"; un
+// IntersectionObserver los arranca solo cuando entran en pantalla y los pausa
+// al salir. Con prefers-reduced-motion no se reproducen solos: queda el poster
+// y los controles nativos.
+interface Clip {
+    id: string;
+    title: string;
+    text: string;
+    note?: string;
+    span: string;
+}
+
+const clips: Clip[] = [
+    {
+        id: "train",
+        title: "Entrena con tus datos",
+        text: "Elige el tipo de modelo, carga tus imágenes y entrena en tu propia GPU con avance y métricas en vivo.",
+        note: "Entrenamiento real, acelerado",
+        span: "",
+    },
+    {
+        id: "label",
+        title: "Etiqueta en minutos",
+        text: "Crea las clases y marca los objetos en la herramienta de anotación.",
+        span: "",
+    },
+    {
+        id: "review",
+        title: "Revisa el resultado",
+        text: "Métricas por época, ejemplos con detecciones y prueba del modelo con tus propias imágenes.",
+        span: "",
+    },
+    {
+        id: "deploy",
+        title: "Despliega a la línea",
+        text: "Elige un equipo en línea y envíale el modelo con un clic; el dispositivo confirma la instalación.",
+        span: "",
+    },
+];
+---
+
+<section id="plataforma" class={`${SURFACE.base} ${PAD.section}`}>
+    <Container>
+        <div class="max-w-3xl mb-10" data-animate="fade-up">
+            <h2 class={`${HEADING.section} mb-4`}>
+                De tus imágenes al modelo en producción
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                Así se ve el flujo completo dentro de la plataforma: entrenar,
+                etiquetar, revisar y desplegar, sin salir del navegador.
+            </p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2">
+            {
+                clips.map((clip, i) => (
+                    <figure
+                        class={`group flex flex-col overflow-clip rounded-2xl border border-[#211915]/10 dark:border-white/10 bg-white dark:bg-gray-900 shadow-[0_20px_50px_-24px_rgba(15,23,42,0.25)] ${clip.span}`}
+                        data-animate="fade-up"
+                        data-animate-delay={`${0.05 * i}s`}
+                    >
+                        <div class="relative bg-gray-100 dark:bg-gray-800 aspect-[16/10]">
+                            <video
+                                class="showcase-clip absolute inset-0 h-full w-full object-contain"
+                                width="1280"
+                                height="800"
+                                muted
+                                loop
+                                playsinline
+                                preload="none"
+                                poster={`/videos/showcase/${clip.id}.webp`}
+                                aria-label={`Video: ${clip.title}`}
+                            >
+                                <source src={`/videos/showcase/${clip.id}.mp4`} type="video/mp4" />
+                            </video>
+                            {clip.note && (
+                                <span class="absolute right-3 top-3 rounded-full bg-white/90 dark:bg-gray-900/90 px-2.5 py-1 text-xs font-medium text-gray-700 dark:text-gray-300 shadow-sm">
+                                    {clip.note}
+                                </span>
+                            )}
+                        </div>
+                        <figcaption class="p-5">
+                            <h3 class="font-semibold text-gray-900 dark:text-white mb-1">
+                                {clip.title}
+                            </h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                {clip.text}
+                            </p>
+                        </figcaption>
+                    </figure>
+                ))
+            }
+        </div>
+
+        <p class="mt-6 text-xs text-gray-500 dark:text-gray-500">
+            Grabado en la plataforma con una cuenta de demostración. Imágenes:
+            Pexels y Roboflow Universe "Safety PPE" (MIT).
+        </p>
+    </Container>
+</section>
+
+<script>
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const clips = document.querySelectorAll<HTMLVideoElement>(".showcase-clip");
+
+    if (reduce.matches) {
+        clips.forEach((v) => (v.controls = true));
+    } else {
+        const io = new IntersectionObserver(
+            (entries) => {
+                for (const { target, isIntersecting } of entries) {
+                    const v = target as HTMLVideoElement;
+                    if (isIntersecting) v.play().catch(() => (v.controls = true));
+                    else v.pause();
+                }
+            },
+            { threshold: 0.35 },
+        );
+        clips.forEach((v) => io.observe(v));
+    }
+</script>
