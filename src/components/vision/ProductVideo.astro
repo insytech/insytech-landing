@@ -1,0 +1,80 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// Explainer de 41 s hecho con la propia interfaz de InsyTech Vision (pantalla
+// Operation del dispositivo). La detección de EPP y el conteo de montacargas
+// son salida real de los modelos "EPP DEMO" e "Industrial Vehicles" sobre clips
+// de Pexels (licencia de uso comercial); el OCR es lectura real de EasyOCR sobre
+// una etiqueta de ejemplo y la placa con rayón es ilustrativa (ambas rotuladas
+// "Ejemplo ilustrativo" en el video).
+// Fuente y pipeline: insytech-vision/marketing/vision-explainer.
+//
+// Sin autoplay: el video está narrado y el navegador lo arrancaría mudo. Con
+// preload="none" no se descarga nada hasta que el visitante le da play; el
+// poster ocupa el lugar y width/height reservan el espacio (sin salto de layout).
+const video = {
+    src: "/videos/vision-explainer.mp4",
+    poster: "/videos/vision-explainer-poster.webp",
+    captions: "/videos/vision-explainer.vtt",
+    duration: "PT41S",
+    uploadDate: "2026-10-14",
+};
+
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: "InsyTech Vision: inspección de calidad y EPP con visión artificial",
+    description:
+        "Cómo InsyTech Vision verifica casco y chaleco, cuenta y da seguimiento a objetos en movimiento, detecta defectos en piezas y lee lotes y fechas, con el veredicto enviado al PLC y la foto de cada caso como evidencia.",
+    thumbnailUrl: `https://insytech.mx${video.poster}`,
+    contentUrl: `https://insytech.mx${video.src}`,
+    uploadDate: video.uploadDate,
+    duration: video.duration,
+    inLanguage: "es-MX",
+};
+---
+
+<section id="video" class={`${SURFACE.base} ${PAD.section}`}>
+    <Container>
+        <div class="max-w-3xl mb-10" data-animate="fade-up">
+            <h2 class={`${HEADING.section} mb-4`}>
+                Así se ve InsyTech Vision en operación
+            </h2>
+            <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+                Verificación de equipo de protección, conteo y seguimiento,
+                detección de defectos y lectura de lotes y fechas, con el
+                veredicto enviado al PLC y la foto de cada caso como evidencia.
+                41 segundos.
+            </p>
+        </div>
+
+        <div
+            class="overflow-clip rounded-2xl border border-[#211915]/10 dark:border-white/10 shadow-[0_20px_50px_-20px_rgba(15,23,42,0.25)] bg-gray-100 dark:bg-gray-900"
+            data-animate="fade-up"
+            data-animate-delay=".1s"
+        >
+            <video
+                class="block w-full h-auto"
+                width="1920"
+                height="1080"
+                controls
+                playsinline
+                preload="none"
+                poster={video.poster}
+                aria-label="Video: InsyTech Vision en operación — EPP, conteo, defectos y OCR"
+            >
+                <source src={video.src} type="video/mp4" />
+                <track
+                    kind="captions"
+                    src={video.captions}
+                    srclang="es"
+                    label="Español"
+                    default
+                />
+            </video>
+        </div>
+    </Container>
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+</section>
