@@ -121,7 +121,14 @@ const clips: Clip[] = [
             (entries) => {
                 for (const { target, isIntersecting } of entries) {
                     const v = target as HTMLVideoElement;
-                    if (isIntersecting) v.play().catch(() => (v.controls = true));
+                    // Controles solo si el navegador bloquea el autoplay
+                    // (NotAllowedError, p. ej. ahorro de energía en iOS). Un
+                    // AbortError es un play() aún cargando que interrumpió el
+                    // pause() de abajo al salir de pantalla: no es un fallo.
+                    if (isIntersecting)
+                        v.play().catch((e) => {
+                            if (e.name === "NotAllowedError") v.controls = true;
+                        });
                     else v.pause();
                 }
             },
