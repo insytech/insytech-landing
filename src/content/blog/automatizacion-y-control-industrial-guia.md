@@ -50,7 +50,7 @@ No necesitas ser ingeniero de control, pero conviene reconocer las piezas del ro
 
 - **PLC (Controlador Lógico Programable):** el cerebro de la línea. Marcas como Siemens (S7-1200/1500) y Allen-Bradley (CompactLogix/ControlLogix) dominan la industria; la elección depende de tu ecosistema instalado y del soporte disponible en tu región.
 - **HMI (Interfaz Hombre-Máquina):** la pantalla donde el operador ve estados y alarmas y ajusta parámetros. Una buena HMI reduce errores y tiempos de paro más que casi cualquier otra mejora.
-- **SCADA:** el nivel de supervisión que junta varios PLC y HMI para monitoreo, históricos y alarmas a escala de planta.
+- **SCADA:** el nivel de supervisión que junta varios PLC y HMI para monitoreo, históricos y alarmas a escala de planta. Si estás comparando plataformas, revisa [cómo elegir un sistema SCADA en Monterrey](/blog/sistema-scada-monterrey/).
 - **Redes y protocolos industriales:** EtherNet/IP, Modbus TCP, PROFINET y, cada vez más, OPC-UA para que máquinas de distintas marcas hablen entre sí. La integración de máquinas heterogéneas suele ser la parte más laboriosa del proyecto.
 - **Capas superiores:** el enlace con [trazabilidad y MES](/tracking/), con [software a la medida](/software/) para tu lógica de negocio, con [visión artificial](/vision/) para inspección de calidad y con [inteligencia artificial](/ai/) para decisiones o mantenimiento predictivo sobre los datos que genera el control.
 
