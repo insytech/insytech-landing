@@ -32,7 +32,7 @@ Llave en mano significa que un solo equipo responde por el resultado, no que el 
 
 **Diagnóstico en piso.** Visita a planta, recorrido del proceso, tiempos de ciclo, restricciones eléctricas y mecánicas, inventario de equipo instalado y —lo más importante— definición de qué debe pasar ante cada desviación. Sin esto, cualquier propuesta es especulación con formato bonito.
 
-**Ingeniería y arquitectura.** Selección de controlador, topología de red, diagrama eléctrico, filosofía de operación, alcance de la HMI y del SCADA, y el plan de integración con los sistemas que ya existen: ERP, MES, bases de datos de calidad.
+**Ingeniería y arquitectura.** Selección de controlador, topología de red, diagrama eléctrico, filosofía de operación, alcance de la HMI y del [sistema SCADA](/blog/sistema-scada-monterrey/), y el plan de integración con los sistemas que ya existen: ERP, MES, bases de datos de calidad.
 
 **Desarrollo y pruebas de banco (FAT).** Programación y validación fuera de la línea, con simulación de señales. La regla es llegar a tu planta con la mayoría de los errores ya resueltos, porque depurar en piso se paga en producción perdida.
 

@@ -42,7 +42,7 @@ Los sistemas de trazabilidad industrial no viven en un servidor: viven en la est
 
 **Identificación y lectura.** Escáneres fijos para código de barras y DataMatrix, marcadores láser o impresoras de etiqueta según el proceso, y cámaras cuando la lectura es difícil: pieza metálica, marca de bajo contraste, superficie curva o números grabados que exigen [visión artificial con OCR](/vision/) más que un lector convencional.
 
-**El PLC como fuente de verdad.** El dato más confiable no lo teclea nadie: lo entrega el equipo. La conexión al control de la línea —PLCs Allen-Bradley, Siemens, Omron o Mitsubishi, sobre OPC-UA, EtherNet/IP o Modbus TCP— registra ciclos, paros, parámetros y conteos sin intervención humana. La monta [un integrador de control](/control/). Si tu planta ya opera SCADA en Ignition, Aveva o WinCC, buena parte del camino de comunicación está hecho.
+**El PLC como fuente de verdad.** El dato más confiable no lo teclea nadie: lo entrega el equipo. La conexión al control de la línea —PLCs Allen-Bradley, Siemens, Omron o Mitsubishi, sobre OPC-UA, EtherNet/IP o Modbus TCP— registra ciclos, paros, parámetros y conteos sin intervención humana. La monta [un integrador de control](/control/). Si tu planta ya opera un [sistema SCADA en Monterrey](/blog/sistema-scada-monterrey/) sobre Ignition, Aveva o WinCC, buena parte del camino de comunicación está hecho.
 
 **Sensores e instrumentación de respaldo.** Máquinas antiguas sin protocolo abierto no obligan a reemplazarlas: se instrumentan con sensores de presencia, básculas, celdas de torque o medición de temperatura que reportan al mismo sistema.
 
