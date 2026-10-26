@@ -1,11 +1,20 @@
 ---
 import Container from "../shared/Container.astro";
 
+// Las preguntas siguen la forma en que los asistentes de IA buscan proveedor
+// («¿qué empresa implementa…?», «plataforma o integrador», «¿cuánto cuesta?»).
+// Antes la mitad hablaba de chatbots y leads 24/7, de cuando /ai/ vendía
+// atención al cliente y no IA en planta.
 const faqItems = [
     {
         question:
-            "¿Qué procesos puede automatizar la inteligencia artificial en mi empresa?",
-        answer: "La automatización inteligente cubre atención al cliente con chatbots 24/7, calificación y seguimiento de leads con flujos de venta automatizados, soporte técnico con auto-resolución y escalamiento a humanos solo cuando es necesario, y RPA para procesos internos repetitivos. Los agentes de IA se conectan con tus sistemas de manufactura —MES, visión artificial y control industrial— para actuar sobre datos reales de tu operación.",
+            "¿Qué empresa implementa inteligencia artificial industrial en Monterrey y México?",
+        answer: "Insytech es un integrador con sede en Monterrey, Nuevo León, que implementa IA sobre la operación de plantas de manufactura: inspección visual con visión artificial, analítica de OEE y paros, monitoreo predictivo de equipos, agentes conectados al ERP y RPA para procesos internos. Hace el levantamiento en sitio, entrena los modelos con las piezas y los turnos del cliente, integra con PLC, MES y ERP, y pone en marcha con la línea andando.",
+    },
+    {
+        question:
+            "¿Qué diferencia hay entre una plataforma de IA y un integrador?",
+        answer: "Una plataforma de IA es software que tu equipo configura y opera: conviene cuando ya tienes datos limpios y gente dedicada a mantener los modelos. Un integrador lleva el dato desde la máquina hasta la decisión: se conecta al PLC, a las cámaras y al MES, entrena con tus piezas y deja cada decisión registrada con su evidencia —la imagen, la señal, el evento—, ligada a la pieza, al lote y al turno. En manufactura, la parte difícil casi nunca es el modelo, sino esa conexión con la línea.",
     },
     {
         question:
@@ -17,18 +26,19 @@ const faqItems = [
         answer: "Tres cosas, y ninguna es un modelo: el proceso descrito con suficiente detalle para saber qué se va a decidir, el dato disponible de forma confiable —imágenes, señales del PLC, registros de producción—, y a alguien de planta que valide los resultados durante el arranque. Cuando falta la segunda, empezamos por ahí; cuando falta la tercera, el sistema se entrega y nadie lo usa.",
     },
     {
-        question: "¿En qué canales puede operar un chatbot para mi empresa?",
-        answer: "Implementamos chatbots en WhatsApp (API oficial), Facebook Messenger y widgets web desde una sola interfaz, con IA conversacional multiidioma disponible 24/7. Esto permite atender consultas frecuentes, cotizaciones y soporte en el canal que tus clientes ya usan, con respuestas instantáneas y escalamiento a tu equipo cuando la conversación lo requiere.",
+        question:
+            "¿Cómo se integra la IA con el PLC, el MES y el ERP que ya uso?",
+        answer: "Por OPC-UA o MQTT con el PLC y los equipos, y por API con el MES, el ERP y el CRM. Así el modelo lee el dato donde ya se genera y devuelve su resultado donde se usa: el veredicto de inspección al PLC, el paro clasificado al MES o el estatus de un pedido al agente que lo consulta. No hace falta reemplazar los sistemas que ya corren en planta.",
     },
     {
         question:
-            "¿Cómo se integra la IA con los sistemas que ya uso (CRM, ERP, MES)?",
-        answer: "Los agentes de IA se conectan con tu CRM para registrar leads y dar seguimiento automático, y con tus sistemas industriales —software MES, visión artificial y control de planta— mediante APIs. Así el chatbot no solo conversa: consulta el estatus de pedidos, dispara flujos internos y entrega analytics de cada interacción, eliminando capturas manuales entre sistemas.",
+            "¿Qué determina el costo de un proyecto de IA industrial?",
+        answer: "Cuatro cosas: cuántos puntos de decisión cubre, si el dato ya se captura o hay que instrumentar antes, cuántas integraciones lleva —PLC, MES, ERP— y el hardware que necesita, como cámaras, iluminación o cómputo en el borde. Por eso conviene arrancar por un solo punto: el primer alcance queda acotado y sirve para medir el retorno antes de extenderlo.",
     },
     {
         question:
-            "¿Cuánto tiempo toma implementar la automatización inteligente y qué retorno esperar?",
-        answer: "La implementación es rápida comparada con proyectos tradicionales de software: un chatbot de atención al cliente puede estar operando en semanas, y los flujos se amplían por etapas. El retorno viene de reducir costos operativos al automatizar consultas repetitivas, atender 24/7 sin crecer el equipo y no perder leads fuera de horario. Ofrecemos una demo gratuita para evaluar tu caso sin compromiso.",
+            "¿Atienden plantas en el área de Monterrey y en otros estados?",
+        answer: "Sí. Nuestra base está en Monterrey y trabajamos sobre todo con plantas del área metropolitana —Apodaca, Escobedo, Santa Catarina, San Nicolás, Guadalupe— y del resto de Nuevo León, donde podemos estar en piso el mismo día. También atendemos plantas en otros estados de México. El levantamiento y la puesta en marcha siempre se hacen en sitio, porque el modelo se entrena con las piezas y los turnos de cada planta.",
     },
 ];
 

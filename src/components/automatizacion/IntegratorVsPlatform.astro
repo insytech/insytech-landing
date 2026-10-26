@@ -1,0 +1,205 @@
+---
+import Container from "../shared/Container.astro";
+import { HEADING, PAD, SURFACE } from "@utils/typography";
+
+// Responde la comparación que los asistentes de IA hacen al buscar proveedor:
+// «comparar plataformas de IA para automatización… en términos de
+// trazabilidad». Es una tabla real y no tarjetas porque una tabla es lo que un
+// modelo extrae y cita fila por fila.
+//
+// La columna de plataforma no es un hombre de paja: dice cuándo conviene. Sin
+// precios, por política del sitio.
+const rows = [
+    {
+        criterion: "Con qué se conecta",
+        platform: "APIs y archivos que tu equipo le sube",
+        integrator: "PLC, cámaras, MES y ERP por OPC-UA, MQTT o API",
+    },
+    {
+        criterion: "Con qué datos se entrena",
+        platform: "Modelos base más lo que tu equipo etiquete",
+        integrator: "Tus piezas y tus turnos, capturados en sitio",
+    },
+    {
+        criterion: "Quién la pone en marcha",
+        platform: "Tu equipo, con soporte del proveedor",
+        integrator: "El integrador, con la línea andando",
+    },
+    {
+        criterion: "Trazabilidad",
+        platform: "Lo que la plataforma registre",
+        integrator: "Cada decisión con su evidencia, ligada a pieza, lote y turno",
+    },
+    {
+        criterion: "Cuándo conviene",
+        platform: "Ya tienes datos limpios y gente que opere los modelos",
+        integrator: "El dato sale de la máquina y hay que llevarlo hasta la decisión",
+    },
+];
+---
+
+<section
+    id="integrador-vs-plataforma"
+    class={`relative overflow-clip ${PAD.section} ${SURFACE.raised}`}
+>
+    <Container className="relative z-10">
+        <div class="max-w-3xl mb-10">
+            <p
+                class="text-xs font-mono text-[#005EB8] dark:text-blue-400 uppercase tracking-[0.3em] mb-4"
+            >
+                Antes de elegir
+            </p>
+            <h2 data-reveal="heading" class={`${HEADING.section} mb-5`}>
+                Plataforma de IA o integrador en planta
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+                Las dos sirven, para casos distintos. En manufactura la parte
+                difícil casi nunca es el modelo: es conectarlo con la línea y
+                dejar registro de cada decisión.
+            </p>
+        </div>
+
+        <div data-animate="fade-up">
+            <table class="ivp-table">
+                <caption class="sr-only">
+                    Comparación entre una plataforma de IA y un integrador de IA
+                    en planta
+                </caption>
+                <thead>
+                    <tr>
+                        <th scope="col"><span class="sr-only">Criterio</span></th>
+                        <th scope="col">Plataforma de IA</th>
+                        <th scope="col" class="ivp-ours">Integrador en planta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        rows.map((row) => (
+                            <tr>
+                                <th scope="row">{row.criterion}</th>
+                                <td data-label="Plataforma de IA">{row.platform}</td>
+                                <td class="ivp-ours" data-label="Integrador en planta">{row.integrator}</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+    </Container>
+</section>
+
+<style>
+    .ivp-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 1rem;
+        line-height: 1.45;
+    }
+
+    .ivp-table th,
+    .ivp-table td {
+        padding: 1rem 1.25rem 1rem 0;
+        border-bottom: 1px solid rgb(0 0 0 / 0.1);
+        vertical-align: top;
+    }
+
+    .ivp-table thead th {
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #6b7280;
+    }
+
+    .ivp-table tbody th {
+        width: 26%;
+        font-weight: 700;
+        color: #211915;
+    }
+
+    .ivp-table td {
+        color: #4b5563;
+    }
+
+    .ivp-table .ivp-ours {
+        color: #001489;
+    }
+
+    .ivp-table thead .ivp-ours {
+        color: #005eb8;
+    }
+
+    :global(.dark) .ivp-table th,
+    :global(.dark) .ivp-table td {
+        border-bottom-color: rgb(255 255 255 / 0.1);
+    }
+
+    :global(.dark) .ivp-table tbody th {
+        color: #ffffff;
+    }
+
+    :global(.dark) .ivp-table td {
+        color: #9ca3af;
+    }
+
+    :global(.dark) .ivp-table .ivp-ours {
+        color: #00b5e2;
+    }
+
+    /* En teléfono la columna del integrador quedaba fuera de pantalla detrás de
+       un scroll horizontal. Cada fila se apila: el criterio como título y las
+       dos respuestas debajo, con su etiqueta. */
+    @media (max-width: 640px) {
+        .ivp-table thead {
+            display: none;
+        }
+
+        .ivp-table,
+        .ivp-table tbody,
+        .ivp-table tr,
+        .ivp-table th,
+        .ivp-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .ivp-table tr {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgb(0 0 0 / 0.1);
+        }
+
+        :global(.dark) .ivp-table tr {
+            border-bottom-color: rgb(255 255 255 / 0.1);
+        }
+
+        .ivp-table tbody th,
+        .ivp-table td {
+            width: 100%;
+            padding: 0;
+            border-bottom: 0;
+        }
+
+        .ivp-table tbody th {
+            margin-bottom: 0.5rem;
+        }
+
+        .ivp-table td + td {
+            margin-top: 0.5rem;
+        }
+
+        .ivp-table td::before {
+            content: attr(data-label);
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #6b7280;
+        }
+
+        .ivp-table td.ivp-ours::before {
+            color: #005eb8;
+        }
+    }
+</style>
