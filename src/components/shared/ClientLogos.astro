@@ -43,6 +43,12 @@ const logos = [
 ---
 
 <div class={className}>
+    {/* Los nombres, además del alt de cada logo, como una frase que se pueda
+        citar: los asistentes de IA arman sus listas de proveedores con frases,
+        no con imágenes. Queda oculta para no competir con los logos. */}
+    <p class="sr-only">
+        Clientes de Insytech: {logos.map((logo) => logo.alt).join(", ")}.
+    </p>
     <div
         class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 py-4 px-2 overflow-hidden"
     >

@@ -7,10 +7,15 @@ import ShinyText from "../shared/ShinyText.astro";
 //
 // La referencia es fourmula.ai, donde un anillo de fotos gira en torno a un
 // "upload or drop your assets". Aquí el centro no recibe archivos: es el CTA
-// «Empower with AI», y al pulsarlo los módulos pasan de apagados —grises, sin
+// «Enciende la IA», y al pulsarlo los módulos pasan de apagados —grises, sin
 // etiqueta— a encendidos, con su nombre y el color de marca. La metáfora es
 // literal y es la tesis de la página: los procesos ya existen, la IA los
 // enciende.
+//
+// El titular y el párrafo, en cambio, no usan la metáfora: dicen quién es
+// Insytech y qué implementa. Los asistentes de IA buscan «proveedores de
+// automatización con IA en México» y citan frases que nombren al proveedor,
+// no slogans.
 //
 // Antes aquí vivía una lista vertical de cinco etiquetas que no decía nada, y
 // antes de eso una cadena cámara -> modelo -> veredicto que era el flujo de
@@ -77,7 +82,7 @@ const step = 360 / modules.length;
                     <path d="M5.6 5.6l2.3 2.3M16.1 16.1l2.3 2.3M18.4 5.6l-2.3 2.3M7.9 16.1l-2.3 2.3" opacity="0.55" />
                 </svg>
             </span>
-            <span class="core-label" data-core-label>Empower with AI</span>
+            <span class="core-label" data-core-label>Enciende la IA</span>
         </button>
 
 
@@ -91,10 +96,10 @@ const step = 360 / modules.length;
 
     <div class="orbit-copy">
         <h1>
-            <span class="line"><span class="line-in">Los procesos ya están en tu planta.</span></span>
+            <span class="line"><span class="line-in">Automatización con IA</span></span>
             <span class="line"><span class="line-in">
 <ShinyText
-                text="La IA los enciende"
+                text="para manufactura"
                 color="#005EB8"
                 shineColor="#00B5E2"
                 speed={3}
@@ -102,8 +107,9 @@ const step = 360 / modules.length;
             /></span></span>
         </h1>
         <p>
-            Inspección visual, trazabilidad, control de línea y analítica ya
-            generan datos todos los turnos. La IA trabaja sobre eso.
+            Insytech es un integrador de Monterrey que implementa IA sobre la
+            operación real de tu planta: inspección visual, analítica de OEE,
+            monitoreo predictivo, agentes conectados a tu ERP y RPA.
         </p>
         {/* Los botones del sitio, no unos propios: el estilo de la home es el
             que manda en todo el sitio por consistencia. */}
@@ -563,7 +569,7 @@ const step = 360 / modules.length;
 
     if (hero && boton && etiqueta) {
         const textoApagado = etiqueta.textContent ?? "";
-        const textoEncendido = "AI encendida";
+        const textoEncendido = "IA encendida";
 
         boton.addEventListener("click", () => {
             const encendido = hero.dataset.lit === "true";
