@@ -78,7 +78,7 @@ El retorno se construye con números que tu planta ya conoce, no con promesas de
 - **Trazabilidad y datos:** cada registro automático es evidencia para atacar causas raíz y cumplir requisitos de auditoría.
 - **Seguridad:** menos exposición del personal a riesgos, con su impacto directo en incidentes y costos asociados.
 
-Compara esos ahorros anuales contra la inversión total —ingeniería, hardware, integración y soporte— y obtendrás un periodo de recuperación honesto, casi siempre en meses o pocos años según el caso. Y si tu proyecto incluye inspección visual, la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia/) es un buen complemento.
+Compara esos ahorros anuales contra la inversión total —ingeniería, hardware, integración y soporte— y obtendrás un periodo de recuperación honesto, casi siempre en meses o pocos años según el caso. Si además necesitas registrar cada pieza, revisa qué determina el [costo de un sistema de trazabilidad industrial](/blog/costo-sistema-trazabilidad-industrial/). Y si tu proyecto incluye inspección visual, la [guía práctica de computer vision para empresas](/blog/computer-vision-empresas-guia/) es un buen complemento.
 
 ## ¿Listo para automatizar el proceso correcto?
 

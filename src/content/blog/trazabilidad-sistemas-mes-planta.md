@@ -61,7 +61,7 @@ Quien monta la trazabilidad y MES es [un integrador de trazabilidad y MES](/trac
 - **OEE:** el MES calcula el **OEE** (disponibilidad × rendimiento × calidad) con datos automáticos en vez de estimaciones. Ver el OEE real, con sus paros clasificados por causa, revela pérdidas que nadie estaba midiendo.
 - **Costo de captura manual:** horas de personal llenando reportes y conciliando cifras que el sistema entrega solo.
 
-Compara ese valor anual contra la inversión total —licencias o desarrollo, integración, hardware de captura y soporte— para un periodo de recuperación honesto. Desglosamos partida por partida qué determina el [costo de un sistema de trazabilidad industrial](/blog/costo-sistema-trazabilidad-industrial/), incluyendo los gastos que casi nadie cotiza.
+Compara ese valor anual contra lo que cuesta el proyecto completo para un periodo de recuperación honesto. Qué entra en esa cuenta, incluidos los gastos que casi nadie cotiza, lo desglosamos en [cuánto cuesta implementar trazabilidad](/blog/costo-sistema-trazabilidad-industrial/).
 
 ## ¿Qué errores evitar al implementar trazabilidad y MES?
 
