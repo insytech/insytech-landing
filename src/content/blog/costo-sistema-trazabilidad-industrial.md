@@ -1,5 +1,5 @@
 ---
-title: "¿Cuánto cuesta un sistema de trazabilidad industrial?"
+title: "Costo de un sistema de trazabilidad industrial: qué lo determina"
 description: "Qué determina el costo de un sistema de trazabilidad industrial en México: estaciones, tipo de marcado, integración con ERP y los gastos que casi nadie cotiza."
 pubDate: 2026-07-30
 author: "rene-andrade"
