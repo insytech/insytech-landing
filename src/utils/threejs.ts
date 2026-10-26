@@ -49,12 +49,18 @@ export default function ThreeHero() {
         powerPreference: "high-performance"
     });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Tope en 1.5: a 2x una pantalla retina pinta casi el doble de píxeles que
+    // a 1.5x y en una banda de 460 px la diferencia no se ve.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setClearColor(0x000000, 0);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
+    // El canvas entra con un fundido sobre el poster cuando los shaders ya están
+    // compilados (ver el arranque al final). `position: relative` lo pinta por
+    // encima del poster, que va en absoluto.
+    renderer.domElement.style.cssText += 'position:relative;opacity:0;transition:opacity 500ms ease-out;';
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -241,8 +247,11 @@ export default function ThreeHero() {
 
     function makeAcrylic(baseOpacity: number): THREE.MeshPhysicalMaterial {
         const mat = new THREE.MeshPhysicalMaterial({
-            color: 0xc8e6f2, metalness: 0, roughness: 0.06, transmission: 0.9,
-            thickness: 0.35, transparent: true, side: THREE.DoubleSide,
+            // Sin `transmission`: con ella three vuelve a pintar la escena entera en
+            // un render target en cada frame solo para refractar lo de detrás. En
+            // paneles delgados un velo transparente se ve igual.
+            color: 0xc8e6f2, metalness: 0, roughness: 0.06,
+            transparent: true, side: THREE.DoubleSide,
             // Sin esto el panel escribe profundidad y recorta los láseres de detrás.
             depthWrite: false
         });
@@ -550,7 +559,7 @@ export default function ThreeHero() {
     stationGroup.add(handleLever);
 
     // Logo de Insytech en la puerta
-    const logoTex = new THREE.TextureLoader().load('/images/Versiones de logotipo-01.webp');
+    const logoTex = new THREE.TextureLoader().load('/images/logo-estacion-vision.webp');
     logoTex.colorSpace = THREE.SRGBColorSpace;
     const logoPlate = new THREE.Mesh(
         new THREE.PlaneGeometry(1.06, 1.06 * (1134 / 5028)),
@@ -704,7 +713,7 @@ export default function ThreeHero() {
         new THREE.CircleGeometry(0.22, 32),
         new THREE.MeshPhysicalMaterial({
             color: 0x6fb7d8, metalness: 0.1, roughness: 0.02,
-            transmission: 0.55, thickness: 0.1, clearcoat: 1, reflectivity: 1
+            clearcoat: 1, reflectivity: 1
         })
     );
     lensGlass.position.set(0, 0, -1.74);
@@ -1088,9 +1097,13 @@ export default function ThreeHero() {
         rejected: boolean = false;
         fallSpeed: number = 0;
 
-        constructor(type: typeof productTypes[0], position: THREE.Vector3) {
+        constructor(
+            type: typeof productTypes[0],
+            position: THREE.Vector3,
+            isDefective = Math.random() < type.defectRate
+        ) {
             this.type = type;
-            this.isDefective = Math.random() < type.defectRate;
+            this.isDefective = isDefective;
             this.mesh = new THREE.Group();
 
             const built = buildProduct(type);
@@ -1385,11 +1398,17 @@ export default function ThreeHero() {
 
     // Arranque en caliente: sin esto la primera pieza tardaba ~16 s en llegar a
     // la cortina y el visitante veía una línea vacía.
-    for (const startX of [-16, -11.5, -7, -2.5, 1.5, 6]) {
-        products.push(new Product(
-            productTypes[Math.floor(Math.random() * productTypes.length)],
-            new THREE.Vector3(startX, BELT_TOP, 0)
-        ));
+    //
+    // Las seis primeras piezas son fijas, sin azar, porque el poster
+    // (public/images/vision-hero-poster*.webp) es una captura de este mismo
+    // frame: si cambian, el fundido mezcla piezas distintas. Si se toca esta
+    // lista o el encuadre, hay que volver a capturar el poster.
+    const warmStart = [
+        { x: -16, type: 3 }, { x: -11.5, type: 0 }, { x: -7, type: 1 },
+        { x: -2.5, type: 4 }, { x: 1.5, type: 2 }, { x: 6, type: 3 },
+    ];
+    for (const { x, type } of warmStart) {
+        products.push(new Product(productTypes[type], new THREE.Vector3(x, BELT_TOP, 0), false));
     }
     let time = 0;
 
@@ -1478,53 +1497,66 @@ export default function ThreeHero() {
     // línea no corre. Con movimiento permitido, el bucle solo gira mientras el
     // canvas está en pantalla — si no, seguiría renderizando a 60 fps con el
     // visitante seis secciones más abajo.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        renderer.render(scene, camera);
-    } else {
-        gsap.registerPlugin(ScrollTrigger);
+    function start(): void {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            renderer.render(scene, camera);
+        } else {
+            gsap.registerPlugin(ScrollTrigger);
 
-        // Entrada: la celda se acerca desde un plano más abierto.
-        gsap.fromTo(camFx,
-            { dolly: 3.4, lift: 0.7 },
-            { dolly: 0, lift: 0, duration: 1.6, ease: "power3.out", delay: 0.15 }
-        );
+            // Sin entrada con acercamiento: el poster ya muestra este mismo encuadre,
+            // y un dolly desde un plano abierto se leía como un salto al cruzarse.
 
-        // Scroll: al salir el hero, la cámara retrocede y sube, y la escena se
-        // atenúa para no competir con la sección siguiente.
-        // El id permite matar este trigger por nombre. Sin él, cualquier
-        // navegación que reemplace el contenedor deja el trigger apuntando a un
-        // nodo huérfano y ScrollTrigger sigue midiéndolo en cada refresh.
-        const scrollFx = gsap.timeline({
-            scrollTrigger: {
-                id: "vision-hero-scene",
-                trigger: container,
-                start: "top top",
-                end: "bottom top",
-                scrub: 0.5,
-                // Lenis mueve el scroll dentro del ticker de GSAP; sin
-                // invalidateOnRefresh el scrub conserva medidas de antes del
-                // resize y la cámara queda desfasada del scroll real.
-                invalidateOnRefresh: true
-            }
-        });
-        scrollFx.to(camFx, { dolly: 2.6, lift: 1.2, pan: 1.4, ease: "none" }, 0);
-        scrollFx.to(container, { opacity: 0.45, ease: "none" }, 0);
+            // Scroll: al salir el hero, la cámara retrocede y sube, y la escena se
+            // atenúa para no competir con la sección siguiente.
+            // El id permite matar este trigger por nombre. Sin él, cualquier
+            // navegación que reemplace el contenedor deja el trigger apuntando a un
+            // nodo huérfano y ScrollTrigger sigue midiéndolo en cada refresh.
+            const scrollFx = gsap.timeline({
+                scrollTrigger: {
+                    id: "vision-hero-scene",
+                    trigger: container,
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: 0.5,
+                    // Lenis mueve el scroll dentro del ticker de GSAP; sin
+                    // invalidateOnRefresh el scrub conserva medidas de antes del
+                    // resize y la cámara queda desfasada del scroll real.
+                    invalidateOnRefresh: true
+                }
+            });
+            scrollFx.to(camFx, { dolly: 2.6, lift: 1.2, pan: 1.4, ease: "none" }, 0);
+            scrollFx.to(container, { opacity: 0.45, ease: "none" }, 0);
 
-        let playing = false;
-        const play = () => {
-            if (playing) return;
-            playing = true;
-            animate();
-        };
-        const pause = () => {
-            if (!playing) return;
-            playing = false;
-            cancelAnimationFrame(rafId);
-        };
-        new IntersectionObserver(([entry]) => {
-            entry.isIntersecting ? play() : pause();
-        }).observe(container);
+            let playing = false;
+            const play = () => {
+                if (playing) return;
+                playing = true;
+                animate();
+            };
+            const pause = () => {
+                if (!playing) return;
+                playing = false;
+                cancelAnimationFrame(rafId);
+            };
+            new IntersectionObserver(([entry]) => {
+                entry.isIntersecting ? play() : pause();
+            }).observe(container);
+        }
     }
+
+    // Arranque: los ~30 programas de shader se compilan en paralelo antes del
+    // primer frame. Sin esto se compilaban dentro del primer render y congelaban
+    // el hilo principal ~300 ms, y más de 2 s con la caché de shaders vacía. El
+    // poster cubre la espera; el canvas entra cuando ya pintó su primer frame.
+    renderer.compileAsync(scene, camera)
+        .catch(() => undefined)
+        .then(() => {
+            start();
+            requestAnimationFrame(() => {
+                renderer.domElement.style.opacity = '1';
+                container.dataset.ready = 'true';
+            });
+        });
 
     // Responsividad
     window.addEventListener('resize', () => {
