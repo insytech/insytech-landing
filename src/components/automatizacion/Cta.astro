@@ -1,177 +1,26 @@
 ---
-import BtnLink from "../shared/BtnLink.astro";
 import { Zap, Brain, Workflow, LifeBuoy } from "@lucide/astro";
+import StepsPanel from "../shared/StepsPanel.astro";
+
+// Los cuatro pasos salen del FAQ de esta página: se arranca por un punto, el
+// modelo se entrena con datos del cliente, se integra con lo que ya corre en
+// planta y se pone en marcha con la línea andando.
+//
+// El cuarto paso decía «Con soporte 24/7». Se cambió porque el CTA no es el
+// lugar para comprometer un nivel de servicio que se negocia por contrato.
+const steps = [
+    { icon: Zap, title: "Arranque", detail: "Por un punto de inspección" },
+    { icon: Brain, title: "Entrenamiento", detail: "Con tus piezas y tus turnos" },
+    { icon: Workflow, title: "Integración", detail: "Con lo que ya corre en planta" },
+    { icon: LifeBuoy, title: "Puesta en marcha", detail: "Con la línea andando" },
+];
 ---
 
-<section id="cta" class="pt-10">
-    <div class="container mx-auto px-6">
-        <div
-            class="w-full relative py-8 my-8 md:py-10 sm:py-10 px-6 md:px-8 rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 dark:from-gray-900 dark:to-transparent"
-        >
-            <!-- Elementos decorativos superior derecho -->
-            <div class="absolute right-0 top-0 h-full w-full flex justify-end">
-                <div
-                    class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl"
-                >
-                    <span
-                        class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
-                    ></span>
-                    <span
-                        class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
-                    ></span>
-                    <span
-                        class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
-                    ></span>
-                </div>
-            </div>
-
-            <!-- Elementos decorativos inferior izquierdo -->
-            <div
-                class="absolute left-0 bottom-1/5 h-full w-full flex items-end"
-            >
-                <div
-                    class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl"
-                >
-                    <span
-                        class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
-                    ></span>
-                    <span
-                        class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
-                    ></span>
-                    <span
-                        class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
-                    ></span>
-                </div>
-            </div>
-
-            <!-- Contenido principal -->
-            <div class="mx-auto text-center max-w-xl md:max-w-2xl relative">
-                <h2
-                    class="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight font-bold font-heading text-heading-1"
-                    data-animate="fade-up"
-                >
-                    Empecemos por{" "}
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-40% via-[#001489] to-[#00B5E2] to-95% dark:from-[#00B5E2] dark:via-[#005EB8] dark:to-[#71b5f5] block"
-                    >
-                        un punto de inspección
-                    </span>
-                </h2>
-
-                <p
-                    class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-6 mb-8 leading-relaxed"
-                    data-animate="fade-up"
-                    data-animate-delay=".1s"
-                >
-                    Así arranca un proyecto de IA en planta con nosotros.
-                </p>
-
-                {
-                    /* Las mismas tejas circulares del bloque "Nuestro enfoque
-                       técnico, paso a paso" de la home: círculo blanco con borde
-                       Light Blue al 30% y sombra, en reja de dos por dos. Antes
-                       aquí había un párrafo largo sin iconos, que ni se leía
-                       rápido ni se parecía a nada del sitio.
-
-                       Los cuatro pasos salen del FAQ de esta página: se arranca
-                       por un punto, el modelo se entrena con datos del cliente,
-                       se integra con lo que ya corre en planta y se pone en
-                       marcha con la línea andando.
-
-                       El cuarto paso decía «Con soporte 24/7». Se cambió porque
-                       el CTA no es el lugar para comprometer un nivel de
-                       servicio que se negocia por contrato. */
-                }
-                <div
-                    class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto mt-10 mb-10"
-                    data-animate="fade-up"
-                    data-animate-delay=".15s"
-                >
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
-                            <Zap width={22} height={22} />
-                        </div>
-                        <div>
-                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
-                                1. Arranque
-                            </p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Por un punto de inspección
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
-                            <Brain width={22} height={22} />
-                        </div>
-                        <div>
-                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
-                                2. Entrenamiento
-                            </p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Con tus piezas y tus turnos
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
-                            <Workflow width={22} height={22} />
-                        </div>
-                        <div>
-                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
-                                3. Integración
-                            </p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Con lo que ya corre en planta
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 text-left">
-                        <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
-                            <LifeBuoy width={22} height={22} />
-                        </div>
-                        <div>
-                            <p class="font-bold text-[#211915] dark:text-white leading-tight">
-                                4. Puesta en marcha
-                            </p>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">
-                                Con la línea andando
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Botón de acción -->
-                <div
-                    class="mx-auto max-w-md sm:max-w-xl"
-                    data-animate="fade"
-                    data-animate-delay=".2s"
-                >
-                    {
-                        /* El botón del sitio, no uno propio. Este llevaba un
-                           degradado, sombra y `hover:scale-105` con
-                           `transition-all`, que no existen en ningún otro CTA:
-                           el resto del sitio usa BtnLink, con el relleno
-                           circular que crece desde el centro y transiciones
-                           acotadas por propiedad. */
-                    }
-                    <BtnLink
-                        href="#contact"
-                        text="Solicita tu demo gratuita"
-                        variant="primary"
-                        className="px-8 py-4 text-base"
-                    />
-                </div>
-
-                <!-- Texto adicional -->
-                <p
-                    class="text-sm text-gray-500 dark:text-gray-400 mt-4"
-                    data-animate="fade-up"
-                    data-animate-delay=".25s"
-                >
-                    Sin compromiso • Consulta gratuita • Diagnóstico de tu caso
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
+<StepsPanel
+    title="Empecemos por"
+    accent="un punto de inspección"
+    intro="Así arranca un proyecto de IA en planta con nosotros."
+    steps={steps}
+    cta={{ text: "Solicita tu demo gratuita", href: "#contact" }}
+    note="Sin compromiso • Consulta gratuita • Diagnóstico de tu caso"
+/>

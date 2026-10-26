@@ -75,6 +75,11 @@ const indice = [
             id="three-hero"
             class="relative w-full h-[300px] sm:h-[380px] lg:h-[460px]"
         >
+            {/* Poster: un frame fijo de la misma escena mientras llegan three.js
+                y los shaders. La escena entra encima con un fundido y el poster
+                se va al mismo tiempo; sin él, la banda se quedaba vacía hasta
+                un segundo y luego aparecía de golpe. */}
+            <div class="hero-poster" aria-hidden="true"></div>
             <ThreeHero client:idle />
         </div>
 
@@ -152,6 +157,39 @@ const indice = [
        porque el <ul> vive en este componente. */
     :global(#verdict-log li.verdict-in) {
         animation: verdict-in 320ms cubic-bezier(0.23, 1, 0.32, 1) both;
+    }
+
+    /* Fondo y no <img>: así el navegador baja solo la versión del tema activo. */
+    .hero-poster {
+        position: absolute;
+        inset: 0;
+        background: url("/images/vision-hero-poster.webp") center / cover no-repeat;
+        transition-property: opacity;
+    }
+
+    :global(.dark) .hero-poster {
+        background-image: url("/images/vision-hero-poster-dark.webp");
+    }
+
+    /* En teléfono la cámara se acerca a la estación (frameCamera), así que el
+       poster de escritorio recortado no coincidía con lo que entra después. */
+    @media (max-width: 639px) {
+        .hero-poster {
+            background-image: url("/images/vision-hero-poster-mobile.webp");
+        }
+
+        :global(.dark) .hero-poster {
+            background-image: url("/images/vision-hero-poster-mobile-dark.webp");
+        }
+    }
+
+    /* El poster no se desvanece: se queda opaco debajo mientras el canvas entra
+       encima, y se quita al terminar. Si los dos se cruzaran a la vez, a mitad
+       del fundido se asomaba el fondo de la banda y la escena se lavaba. */
+    #three-hero[data-ready="true"] .hero-poster {
+        opacity: 0;
+        transition-delay: 500ms;
+        transition-duration: 0ms;
     }
 
     @keyframes verdict-in {

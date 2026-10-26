@@ -33,7 +33,10 @@ export function initReveals(): void {
     registerMotion();
     gsap.registerPlugin(SplitText);
 
-    if (window.matchMedia("(min-width: 1024px)").matches) {
+    // Desde 1280 px y no 1024: entre esos anchos el texto de cada paso se parte
+    // en más líneas y el bloque fijado mide ~700 px. Ahí se queda la lista
+    // apilada. initCapabilityStepper revisa además que quepa en la altura.
+    if (window.matchMedia("(min-width: 1280px)").matches) {
         initCapabilityStepper();
     }
 
@@ -144,17 +147,24 @@ function initCapabilityStepper(): void {
 
     pin.dataset.enabled = "true";
 
+    // El bloque fijado tiene que caber dentro de la losa. En pantallas bajas
+    // (una laptop de 1280x720 deja ~620 px de ventana) no cabe: ahí se apaga y
+    // queda la lista apilada, en vez de un texto que se sale de su fondo.
+    const panel = pin.querySelector<HTMLElement>(".capability-panel");
+    const content = panel?.firstElementChild as HTMLElement | null;
+    if (panel && content && content.offsetHeight > panel.clientHeight - 32) {
+        delete pin.dataset.enabled;
+        return;
+    }
+
     show(0, false);
 
     const st = ScrollTrigger.create({
         trigger: pin,
-        // Se fija al centro. Antes anclaba en "top top" porque el contenedor
-        // media una ventana completa y centraba su contenido por CSS; ese
-        // `min-height: 100vh` repartia casi 600 px de aire alrededor de un
-        // bloque de 480 px, y se veia como un hueco enorme antes del titular.
-        // Quitado el 100vh, el bloque mide lo suyo y es el pin el que lo deja
-        // centrado en la ventana al engancharse.
-        start: "center center",
+        // El bloque mide una ventana y lleva la losa oscura como panel interior
+        // (ServiceDetails.astro), asi que se fija arriba y la losa y el
+        // contenido se mueven siempre juntos.
+        start: "top top",
         // One viewport of scroll per step. Less feels like the content is being
         // yanked past; more and the visitor wonders whether the page is stuck.
         end: () => "+=" + window.innerHeight * steps.length,

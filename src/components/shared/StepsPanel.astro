@@ -1,0 +1,167 @@
+---
+import BtnLink from "./BtnLink.astro";
+
+// Panel de cierre "paso a paso": tarjeta gris con las dos manchas difuminadas de
+// los azules oficiales, titular en dos tonos y los pasos como tejas circulares
+// (círculo blanco, borde Light Blue al 30% y sombra) con su texto al lado.
+//
+// Nació en la home (sections/Process.astro) y /ai/ lo copió a mano. Al pedirlo
+// también /vision/ se extrajo aquí en vez de copiarlo una tercera vez: los pasos
+// cambian de página en página, la estética no.
+interface Step {
+    /** Ícono de @lucide/astro. */
+    icon: any;
+    title: string;
+    /** Línea corta en azul bajo el título, p. ej. una duración. */
+    meta?: string;
+    /** Texto de apoyo en gris. */
+    detail?: string;
+}
+
+interface Props {
+    id?: string;
+    /** Primera línea del titular, en el color del texto. */
+    title: string;
+    /** Segunda línea del titular, en degradado de marca. */
+    accent: string;
+    intro?: string;
+    steps: Step[];
+    /** Columnas de la reja en escritorio: 2 para cuatro pasos, 3 para tres. */
+    columns?: 2 | 3;
+    cta: { text: string; href: string };
+    note?: string;
+}
+
+const { id = "cta", title, accent, intro, steps, columns = 2, cta, note } =
+    Astro.props;
+
+const gridCols = columns === 3 ? "md:grid-cols-3 md:gap-8 max-w-5xl" : "sm:grid-cols-2 max-w-3xl";
+---
+
+<section id={id} class="pt-10">
+    <div class="container mx-auto px-6">
+        <div
+            class="w-full relative py-8 my-8 md:py-10 sm:py-10 px-6 md:px-8 rounded-2xl bg-gradient-to-tr from-gray-100 to-gray-200 dark:from-gray-900 dark:to-transparent"
+        >
+            <!-- Elementos decorativos superior derecho -->
+            <div class="absolute right-0 top-0 h-full w-full flex justify-end">
+                <div
+                    class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl"
+                >
+                    <span
+                        class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
+                    ></span>
+                </div>
+            </div>
+
+            <!-- Elementos decorativos inferior izquierdo -->
+            <div
+                class="absolute left-0 bottom-1/5 h-full w-full flex items-end"
+            >
+                <div
+                    class="w-28 h-28 overflow-auto flex rounded-xl relative blur-2xl"
+                >
+                    <span
+                        class="absolute w-16 h-16 -top-1 -right-1 bg-[#00B5E2] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -right-1 bg-[#005EB8] rounded-md rotate-45"
+                    ></span>
+                    <span
+                        class="absolute w-16 h-16 -bottom-1 -left-1 bg-[#001489] rounded-md rotate-45"
+                    ></span>
+                </div>
+            </div>
+
+            <div class="mx-auto text-center relative">
+                <h2
+                    class="mx-auto max-w-xl md:max-w-2xl text-3xl/tight sm:text-4xl/tight md:text-5xl/tight font-bold font-heading text-heading-1"
+                    data-animate="fade-up"
+                >
+                    {title}{" "}
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-br from-[#005EB8] from-5% via-40% via-[#001489] to-[#00B5E2] to-95% dark:from-[#00B5E2] dark:via-[#005EB8] dark:to-[#71b5f5] block"
+                    >
+                        {accent}
+                    </span>
+                </h2>
+
+                {
+                    intro && (
+                        <p
+                            class="mx-auto max-w-xl md:max-w-2xl text-lg md:text-xl text-gray-600 dark:text-gray-300 mt-6 mb-8 leading-relaxed"
+                            data-animate="fade-up"
+                            data-animate-delay=".1s"
+                        >
+                            {intro}
+                        </p>
+                    )
+                }
+
+                <div
+                    class={`grid gap-6 mx-auto mt-10 mb-10 ${gridCols}`}
+                    data-animate="fade-up"
+                    data-animate-delay=".15s"
+                >
+                    {
+                        steps.map((step, i) => (
+                            <div
+                                class={`flex gap-4 text-left ${step.meta ? "items-start" : "items-center"}`}
+                            >
+                                <div class="flex-none w-12 h-12 flex items-center justify-center rounded-full bg-white dark:bg-[#020617] border-2 border-[#00B5E2]/30 text-[#005EB8] dark:text-[#71b5f5] shadow-lg z-10">
+                                    <step.icon width={22} height={22} />
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-[#211915] dark:text-white leading-tight">
+                                        {i + 1}. {step.title}
+                                    </h3>
+                                    {step.meta && (
+                                        <p class="mt-1 text-sm font-semibold text-[#005EB8] dark:text-[#71b5f5]">
+                                            {step.meta}
+                                        </p>
+                                    )}
+                                    {step.detail && (
+                                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                                            {step.detail}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div
+                    class="mx-auto max-w-md sm:max-w-xl"
+                    data-animate="fade"
+                    data-animate-delay=".2s"
+                >
+                    <BtnLink
+                        href={cta.href}
+                        text={cta.text}
+                        variant="primary"
+                        className="px-8 py-4 text-base"
+                    />
+                </div>
+
+                {
+                    note && (
+                        <p
+                            class="text-sm text-gray-500 dark:text-gray-400 mt-4"
+                            data-animate="fade-up"
+                            data-animate-delay=".25s"
+                        >
+                            {note}
+                        </p>
+                    )
+                }
+            </div>
+        </div>
+    </div>
+</section>
