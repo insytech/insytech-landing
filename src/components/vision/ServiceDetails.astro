@@ -120,6 +120,7 @@ const capabilities = [
     </div>
 
     <div data-capability-pin class="capability-pin">
+    <div class="capability-panel">
     <Container className="relative z-10">
         <div class="max-w-3xl mb-10" data-animate="fade-up">
             <h2
@@ -206,6 +207,7 @@ const capabilities = [
 
     </Container>
     </div>
+    </div>
 </section>
 
 <style>
@@ -268,18 +270,41 @@ const capabilities = [
         display: none;
     }
 
-    /* El bloque medía una ventana completa (`min-height: 100vh`) y centraba su
-       contenido dentro. Como el contenido real son unos 480 px, eso repartía
-       casi 600 px de aire sobrante: 327 px por encima del titular —el hueco
-       enorme que se veía entre este bloque y las tarjetas de arriba— y 271 px
-       por debajo.
-       Ahora el bloque mide lo que mide su contenido y el centrado lo hace el
-       propio pin, que engancha en `center center`: al fijarse queda centrado en
-       la ventana igual que antes, pero en el flujo normal no arrastra el hueco. */
+    /* Con el stepper encendido, la losa deja de ser una pieza aparte y pasa a
+       ser el fondo del propio bloque fijado. Antes eran dos cosas que se movían
+       por separado: la losa `sticky` se pegaba a 32 px del borde y el contenido
+       se fijaba al centro con GSAP, en momentos distintos. Al entrar la losa
+       seguía subiendo bajo un contenido ya quieto, y al salir se iba 126 px
+       mientras el contenido se movía 29: el fondo se deslizaba bajo el texto.
+       Ahora el bloque mide una ventana, la losa es su panel interior con el
+       mismo hueco a los cuatro lados, y entran, se fijan y salen juntos. */
     @media (min-width: 1024px) {
         .capability-pin[data-enabled="true"] {
+            height: 100svh;
+            padding: var(--slab-gutter);
+        }
+
+        /* Con alto de sobra, arriba se suma el del header fijo (76 px): con el
+           mismo hueco en los cuatro lados, el navbar flotante tapaba las esquinas
+           superiores de la losa mientras estaba fijada. En laptops de poca altura
+           no cabe: el contenido mide ~530 px y se saldría de la losa. */
+        @media (min-height: 760px) {
+            .capability-pin[data-enabled="true"] {
+                padding-top: calc(4.75rem + var(--slab-gutter));
+            }
+        }
+
+        [data-enabled="true"] .capability-panel {
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            border-radius: 3rem;
+            background: #020617;
+        }
+
+        .capability-section:has([data-enabled="true"]) .capability-slab-track {
+            display: none;
         }
     }
 
