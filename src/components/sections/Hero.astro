@@ -4,7 +4,36 @@ import { OUTLINED_BUTTON } from "../../utils/buttons";
 import Container from "../shared/Container.astro";
 import Brands from "./Brands.astro";
 import Silk from "../react-bits/Silk";
-import DashboardShowcase from "../hero/DashboardShowcase";
+
+// The production line: one station per discipline. Each piece changes as it
+// crosses a station, so the order here is the order of the process.
+const stations = [
+    {
+        num: "01",
+        name: "Ingeniería",
+        text: "Diseñamos la solución sobre tu proceso real antes de tocar la línea.",
+    },
+    {
+        num: "02",
+        name: "Automatización",
+        text: "Integramos PLC, robots y control en piso.",
+    },
+    {
+        num: "03",
+        name: "Visión e IA",
+        text: "Inspeccionamos cada pieza en la línea, sin detenerla.",
+    },
+    {
+        num: "04",
+        name: "Software",
+        text: "Registramos y trazamos el resultado de cada pieza.",
+    },
+];
+
+// Every layer draws the same nine slots moving in sync; a clip window per
+// layer decides which state of the piece is visible at each stretch of the belt.
+const pieceStates = ["plan", "blank", "drilled", "checked", "done"] as const;
+const slots = Array.from({ length: 9 }, (_, i) => `${(i * 100) / 9}%`);
 ---
 
 <section class="relative overflow-hidden pt-32 lg:pt-40 pb-0">
@@ -136,26 +165,133 @@ import DashboardShowcase from "../hero/DashboardShowcase";
 
                 <!-- Centered Image Card on top of shapes -->
                 <div
-                    class="absolute inset-0 z-10 flex items-center justify-center p-0 lg:px-28 lg:py-32"
+                    class="hl-root absolute inset-0 z-10 flex flex-col items-center justify-center gap-7 p-0 lg:px-28 lg:pt-32 lg:pb-14"
+                    data-hero-line
+                    data-auto="true"
                 >
-                    <div class="relative group w-full max-w-3xl lg:max-w-4xl">
-                        <!-- Subtle glow on hover -->
-                        <div
-                            class="absolute -inset-2 bg-white/20 rounded-2xl blur-xl opacity-0 lg:group-hover:opacity-50 transition duration-700 hidden lg:block"
-                        >
-                        </div>
+                    <div class="hl relative w-full max-w-[1040px]">
+                        <div class="hl-card shadow-2xl">
+                            <!-- Stations: each column is a full-height button -->
+                            <div class="hl-tabs">
+                                {
+                                    stations.map((s, i) => (
+                                        <button
+                                            type="button"
+                                            class="hl-tab"
+                                            aria-pressed={
+                                                i === 0 ? "true" : "false"
+                                            }
+                                        >
+                                            <span class="hl-num">{s.num}</span>
+                                            {s.name}
+                                        </button>
+                                    ))
+                                }
+                            </div>
 
-                        <div class="relative w-full mx-auto z-10">
-                            <!-- Main AR Card Container -->
-                            <div
-                                class="hero-showcase-card relative rounded-xl lg:rounded-2xl shadow-2xl bg-gray-900 aspect-video flex items-center justify-center p-0 overflow-hidden group"
-                            >
-                                <!-- Dynamic Isometric Dashboard Component -->
-                                <DashboardShowcase
-                                    client:media="(min-width: 1024px)"
-                                />
+                            <!-- Decorative scene: what it claims is in the captions below -->
+                            <div class="hl-scene" aria-hidden="true">
+                                <span class="hl-tick"></span>
+                                <span class="hl-rail"></span>
+                                <span class="hl-progress"
+                                    ><span class="hl-fill"></span></span
+                                >
+
+                                <span class="hl-grid"></span>
+                                <span class="hl-divider"></span>
+
+                                <span class="hl-gate hl-gate--plan hl-glow"
+                                ></span>
+                                <span class="hl-cap hl-cap--plan"></span>
+
+                                <span class="hl-camera"></span>
+                                <span class="hl-lens"></span>
+                                <span class="hl-cone"></span>
+                                <span class="hl-gate hl-gate--scan hl-glow"
+                                ></span>
+
+                                <span class="hl-gate hl-gate--log hl-glow"
+                                ></span>
+                                <span class="hl-cap hl-cap--log"></span>
+
+                                <div class="hl-readout">
+                                    <span class="hl-readout-label"
+                                        ><span class="hl-dot"></span>Pieza</span
+                                    >
+                                    <span class="hl-count">0001</span>
+                                </div>
+
+                                <span class="hl-belt"
+                                    ><span class="hl-belt-ticks hl-move"
+                                    ></span></span
+                                >
+                                <span class="hl-floor"></span>
+
+                                {
+                                    pieceStates.map((state) => (
+                                        <div
+                                            class={`hl-layer hl-layer--${state}`}
+                                        >
+                                            <div class="hl-run hl-move">
+                                                {slots.map((left) => (
+                                                    <div
+                                                        class="hl-slot"
+                                                        style={`left:${left}`}
+                                                    >
+                                                        <div class="hl-piece">
+                                                            {state ===
+                                                                "done" && (
+                                                                <svg
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    stroke-width="3.5"
+                                                                    stroke-linecap="round"
+                                                                    stroke-linejoin="round"
+                                                                >
+                                                                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                                                                </svg>
+                                                            )}
+                                                            {state !== "done" &&
+                                                                state !==
+                                                                    "blank" && (
+                                                                    <span class="hl-hole" />
+                                                                )}
+                                                            {state ===
+                                                                "checked" && (
+                                                                <span class="hl-ok">
+                                                                    OK
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+
+                                <span class="hl-shock"></span>
+                                <div class="hl-press">
+                                    <div class="hl-punch">
+                                        <span class="hl-rod"></span>
+                                        <span class="hl-head"></span>
+                                    </div>
+                                </div>
+                                <span class="hl-housing"></span>
                             </div>
                         </div>
+                        <span class="hl-caret" aria-hidden="true"></span>
+                    </div>
+
+                    <div class="hl-captions">
+                        {
+                            stations.map((s, i) => (
+                                <p class="hl-caption" hidden={i !== 0}>
+                                    <strong>{s.name}.</strong> {s.text}
+                                </p>
+                            ))
+                        }
                     </div>
                 </div>
             </div>
@@ -221,8 +357,72 @@ import DashboardShowcase from "../hero/DashboardShowcase";
             });
         };
 
+        // Stations of the production line: auto-advance until the visitor
+        // picks one, then the choice is theirs.
+        const initHeroLine = () => {
+            const root = document.querySelector<HTMLElement>(
+                "[data-hero-line]",
+            );
+            if (!root) return;
+
+            const tabs = Array.from(
+                root.querySelectorAll<HTMLButtonElement>(".hl-tab"),
+            );
+            const captions = Array.from(
+                root.querySelectorAll<HTMLElement>(".hl-caption"),
+            );
+            const fill = root.querySelector<HTMLElement>(".hl-fill");
+            const count = root.querySelector<HTMLElement>(".hl-count");
+            const tick = root.querySelector<HTMLElement>(".hl-tick");
+            let active = 0;
+            let pieces = 1;
+
+            const select = (index: number) => {
+                active = index;
+                root.style.setProperty("--hl-i", String(index));
+                tabs.forEach((tab, n) =>
+                    tab.setAttribute("aria-pressed", String(n === index)),
+                );
+                captions.forEach((caption, n) => {
+                    caption.hidden = n !== index;
+                });
+                // Restart the progress bar for the new station.
+                if (fill) {
+                    fill.style.animation = "none";
+                    void fill.offsetWidth;
+                    fill.style.animation = "";
+                }
+            };
+
+            tabs.forEach((tab, n) =>
+                tab.addEventListener("click", () => {
+                    root.dataset.auto = "false";
+                    select(n);
+                }),
+            );
+
+            // The bar finishing is the clock: no timer to drift from the CSS.
+            fill?.addEventListener("animationend", () => {
+                if (root.dataset.auto !== "false") {
+                    select((active + 1) % tabs.length);
+                }
+            });
+
+            // One count per piece crossing the last gate, in phase with the belt.
+            tick?.addEventListener("animationiteration", () => {
+                pieces = (pieces % 9999) + 1;
+                if (count) count.textContent = String(pieces).padStart(4, "0");
+            });
+
+            // Same rule as Silk: nothing animates while off screen.
+            new IntersectionObserver(([entry]) => {
+                root.dataset.paused = String(!entry.isIntersecting);
+            }).observe(root);
+        };
+
         // Run on load
         document.addEventListener("DOMContentLoaded", initHero);
+        document.addEventListener("DOMContentLoaded", initHeroLine);
     </script>
 
     <style>
@@ -231,16 +431,620 @@ import DashboardShowcase from "../hero/DashboardShowcase";
             will-change: transform, opacity;
         }
 
-        .hero-showcase-card {
-            background-image: none;
-            background-size: cover;
-            background-position: center;
+        /* ── Production line ──────────────────────────────────────────────
+           Color tokens live here so dark mode is a token swap, the same way
+           Services does it with --deck-*. Text and accent reuse the global
+           tokens (--heading-1, --primary), which already switch on .dark. */
+        .hl-root {
+            --hl-i: 0;
+            --hl-p: clamp(26px, 4.2vw, 60px);
+            --hl-step: 3s;
+            --hl-navy: #001489;
+            --hl-blue: #005eb8;
+            --hl-cyan: #00b5e2;
+
+            --hl-ink: rgb(var(--heading-1));
+            --hl-accent: var(--primary);
+            --hl-muted: rgb(107 114 128);
+            --hl-scene: #f1f7fc;
+            --hl-selected: #ffffff;
+            --hl-surface: #ffffff;
+            --hl-border: rgb(0 94 184 / 0.2);
+            --hl-divider: rgb(0 20 137 / 0.2);
+            --hl-grid-line: rgb(0 94 184 / 0.14);
+            --hl-floor: rgb(0 20 137 / 0.06);
+            --hl-machine: var(--hl-navy);
+            --hl-machine-ink: #ffffff;
+            --hl-hole: var(--hl-navy);
+            --hl-belt: var(--hl-navy);
         }
 
-        @media (min-width: 1024px) {
-            .hero-showcase-card {
-                background-image: url("/images/hero-insytech.webp");
-                background-color: #020617; /* Fallback dark color */
+        :global(.dark) .hl-root {
+            --hl-muted: rgb(156 163 175);
+            --hl-scene: rgb(var(--color-box));
+            --hl-selected: rgb(255 255 255 / 0.06);
+            --hl-surface: #111528;
+            --hl-border: rgb(var(--box-border));
+            --hl-divider: rgb(255 255 255 / 0.16);
+            --hl-grid-line: rgb(0 181 226 / 0.14);
+            --hl-floor: rgb(255 255 255 / 0.03);
+            --hl-machine: #e5e7eb;
+            --hl-machine-ink: var(--hl-navy);
+            --hl-hole: rgb(var(--color-bg));
+            --hl-belt: var(--hl-blue);
+        }
+
+        .hl-card {
+            position: relative;
+            height: 340px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: var(--hl-scene);
+        }
+
+        .hl-tabs {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .hl-tab {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4em;
+            padding: 22px clamp(8px, 1.6vw, 24px) 18px;
+            text-align: left;
+            font-family: var(--font-heading);
+            font-size: clamp(11px, 1.3vw, 17px);
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--hl-muted);
+            cursor: pointer;
+            transition:
+                background-color 200ms ease,
+                color 200ms ease;
+        }
+
+        .hl-tab:hover,
+        .hl-tab[aria-pressed="true"] {
+            background: var(--hl-selected);
+            color: var(--hl-ink);
+        }
+
+        .hl-tab:focus-visible {
+            outline: 3px solid var(--hl-accent);
+            outline-offset: -3px;
+        }
+
+        .hl-num {
+            color: var(--hl-accent);
+        }
+
+        .hl-scene {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .hl-scene > span,
+        .hl-scene > div {
+            position: absolute;
+        }
+
+        .hl-tick {
+            width: 1px;
+            height: 1px;
+            top: 0;
+            left: 0;
+            animation: hl-tick var(--hl-step) linear infinite;
+            animation-delay: calc(var(--hl-step) / -2);
+        }
+
+        .hl-rail {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--hl-divider);
+        }
+
+        .hl-progress {
+            top: 0;
+            left: calc(var(--hl-i) * 25%);
+            width: 25%;
+            height: 4px;
+        }
+
+        .hl-fill {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--hl-accent);
+            /* scaleX, not width: the bar runs on the compositor. */
+            transform-origin: left center;
+            animation: hl-progress 6s linear both;
+        }
+
+        .hl-root[data-auto="false"] .hl-fill {
+            animation: none;
+        }
+
+        .hl:hover .hl-fill,
+        .hl:focus-within .hl-fill {
+            animation-play-state: paused;
+        }
+
+        .hl-grid {
+            top: 60px;
+            bottom: 70px;
+            left: 0;
+            width: 25%;
+            background-image:
+                linear-gradient(var(--hl-grid-line) 1px, transparent 1px),
+                linear-gradient(
+                    90deg,
+                    var(--hl-grid-line) 1px,
+                    transparent 1px
+                );
+            background-size: 24px 24px;
+        }
+
+        .hl-divider {
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 1px dashed var(--hl-divider);
+        }
+
+        .hl-gate {
+            width: 2px;
+            top: 60px;
+            bottom: 70px;
+            background: var(--hl-cyan);
+            box-shadow: 0 0 14px 3px rgb(0 181 226 / 0.75);
+        }
+
+        .hl-gate--plan {
+            left: calc(25% - 1px);
+            background: var(--hl-blue);
+            box-shadow: 0 0 14px 3px rgb(0 94 184 / 0.55);
+        }
+
+        .hl-gate--scan {
+            left: calc(62.5% - 1px);
+            top: 110px;
+        }
+
+        .hl-gate--log {
+            left: calc(75% - 1px);
+        }
+
+        .hl-glow {
+            animation: hl-glow var(--hl-step) ease-in-out infinite;
+        }
+
+        .hl-cap {
+            width: 14px;
+            height: 8px;
+            top: 56px;
+            border-radius: 2px;
+            background: var(--hl-machine);
+        }
+
+        .hl-cap--plan {
+            left: calc(25% - 7px);
+        }
+
+        .hl-cap--log {
+            left: calc(75% - 7px);
+        }
+
+        .hl-camera {
+            left: calc(62.5% - 24px);
+            top: 72px;
+            width: 48px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--hl-machine);
+        }
+
+        .hl-lens {
+            left: calc(62.5% - 8px);
+            top: 100px;
+            width: 16px;
+            height: 10px;
+            border-radius: 0 0 8px 8px;
+            background: var(--hl-cyan);
+        }
+
+        .hl-cone {
+            left: 56.5%;
+            width: 12%;
+            top: 110px;
+            bottom: 70px;
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+            background: rgb(0 181 226 / 0.14);
+        }
+
+        .hl-readout {
+            left: 79%;
+            width: 18%;
+            top: 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: clamp(6px, 1vw, 14px);
+            border: 1px solid var(--hl-border);
+            border-radius: 10px;
+            background: var(--hl-surface);
+            overflow: hidden;
+        }
+
+        .hl-readout-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--hl-accent);
+        }
+
+        .hl-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--hl-cyan);
+            animation: hl-blink 1.5s ease-in-out infinite;
+        }
+
+        .hl-count {
+            align-self: flex-start;
+            transform-origin: left center;
+            font-family: var(--font-heading);
+            font-size: clamp(14px, 2vw, 28px);
+            line-height: 1;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: var(--hl-ink);
+            animation: hl-bump var(--hl-step) ease-out infinite;
+            animation-delay: calc(var(--hl-step) / -2);
+        }
+
+        .hl-belt {
+            left: 0;
+            right: 0;
+            bottom: 56px;
+            height: 14px;
+            overflow: hidden;
+            background: var(--hl-belt);
+        }
+
+        .hl-belt-ticks {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -12.5%;
+            width: 112.5%;
+            background-image: linear-gradient(
+                90deg,
+                rgb(255 255 255 / 0.45) 2px,
+                transparent 2px
+            );
+            background-size: calc(100% / 72) 100%;
+        }
+
+        .hl-floor {
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 56px;
+            background: var(--hl-floor);
+        }
+
+        /* One spacing per step: the track is 9 slots wide and shifts one
+           slot (1/9 of itself), so the loop is seamless. */
+        .hl-move {
+            animation: hl-move var(--hl-step) linear infinite;
+        }
+
+        /* Each layer is a window over one stretch of the belt (--hl-from and
+           --hl-span, as fractions of the card). overflow, not clip-path: a
+           plain rectangular clip stays on the compositor in every engine. */
+        .hl-layer {
+            top: 0;
+            bottom: 0;
+            left: calc(var(--hl-from) * 100%);
+            width: calc(var(--hl-span) * 100%);
+            overflow: hidden;
+        }
+
+        .hl-layer--plan {
+            --hl-from: 0;
+            --hl-span: 0.25;
+        }
+        .hl-layer--blank {
+            --hl-from: 0.25;
+            --hl-span: 0.125;
+        }
+        .hl-layer--drilled {
+            --hl-from: 0.375;
+            --hl-span: 0.25;
+        }
+        .hl-layer--checked {
+            --hl-from: 0.625;
+            --hl-span: 0.125;
+        }
+        .hl-layer--done {
+            --hl-from: 0.75;
+            --hl-span: 0.25;
+        }
+
+        /* Same track in every window: 112.5% of the card, starting one slot
+           to the left of it, expressed in the window's own width. */
+        .hl-run {
+            position: absolute;
+            left: calc((-0.125 - var(--hl-from)) / var(--hl-span) * 100%);
+            width: calc(1.125 / var(--hl-span) * 100%);
+            bottom: 70px;
+            height: var(--hl-p);
+        }
+
+        .hl-slot {
+            position: absolute;
+            bottom: 0;
+            width: 11.1111%;
+            height: var(--hl-p);
+            display: flex;
+            justify-content: center;
+        }
+
+        .hl-piece {
+            position: relative;
+            width: var(--hl-p);
+            height: var(--hl-p);
+            border-radius: 6px;
+            background: var(--hl-blue);
+            color: var(--hl-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hl-piece svg {
+            width: 58%;
+            height: 58%;
+        }
+
+        .hl-hole {
+            width: 42%;
+            height: 42%;
+            border-radius: 50%;
+            background: var(--hl-hole);
+        }
+
+        .hl-layer--plan .hl-piece {
+            background: transparent;
+            border: 1.5px dashed var(--hl-accent);
+        }
+
+        .hl-layer--plan .hl-hole {
+            background: transparent;
+            border: 1.5px dashed var(--hl-accent);
+        }
+
+        .hl-layer--checked .hl-piece {
+            outline: 2px solid var(--hl-cyan);
+            outline-offset: 6px;
+        }
+
+        .hl-layer--done .hl-piece {
+            background: var(--hl-cyan);
+        }
+
+        .hl-ok {
+            position: absolute;
+            left: -8px;
+            bottom: calc(100% + 10px);
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: var(--hl-machine);
+            color: var(--hl-machine-ink);
+            font-size: 11px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .hl-shock {
+            left: calc(37.5% - var(--hl-p));
+            width: calc(var(--hl-p) * 2);
+            bottom: 70px;
+            height: 3px;
+            border-radius: 2px;
+            background: var(--hl-cyan);
+            animation: hl-shock var(--hl-step) linear infinite;
+        }
+
+        .hl-press {
+            left: calc(37.5% - (var(--hl-p) + 24px) / 2);
+            width: calc(var(--hl-p) + 24px);
+            top: 76px;
+            bottom: 70px;
+            overflow: hidden;
+        }
+
+        .hl-punch {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: hl-punch var(--hl-step) linear infinite;
+        }
+
+        .hl-rod {
+            width: 10px;
+            height: 240px;
+            background: var(--hl-machine);
+        }
+
+        .hl-head {
+            width: 100%;
+            height: calc(var(--hl-p) + 6px);
+            border-radius: 4px 4px 2px 2px;
+            background: var(--hl-machine);
+        }
+
+        .hl-housing {
+            left: calc(37.5% - 22px);
+            width: 44px;
+            top: 64px;
+            height: 16px;
+            border-radius: 4px;
+            background: var(--hl-machine);
+        }
+
+        /* Ties the caption to its station. */
+        .hl-caret {
+            position: absolute;
+            left: calc(var(--hl-i) * 25% + 12.5%);
+            bottom: -9px;
+            width: 20px;
+            height: 20px;
+            margin-left: -10px;
+            border-radius: 3px;
+            transform: rotate(45deg);
+            background: var(--hl-scene);
+            transition: left 450ms cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .hl-captions {
+            max-width: 42rem;
+            min-height: 3.5rem;
+            text-align: center;
+        }
+
+        /* Always over Silk, which is blue in both themes. */
+        .hl-caption {
+            font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+            line-height: 1.5;
+            font-weight: 500;
+            color: #ffffff;
+            text-shadow: 0 1px 12px rgb(0 20 137 / 0.6);
+        }
+
+        .hl-caption strong {
+            font-weight: 800;
+        }
+
+        .hl-root[data-paused="true"] * {
+            animation-play-state: paused;
+        }
+
+        @keyframes hl-move {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(11.1111%);
+            }
+        }
+
+        @keyframes hl-progress {
+            from {
+                transform: scaleX(0);
+            }
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes hl-punch {
+            0%,
+            36% {
+                transform: translateY(calc(-1 * (var(--hl-p) + 40px)));
+                animation-timing-function: cubic-bezier(0.7, 0, 1, 1);
+            }
+            44%,
+            56% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+            }
+            68%,
+            100% {
+                transform: translateY(calc(-1 * (var(--hl-p) + 40px)));
+            }
+        }
+
+        @keyframes hl-shock {
+            0%,
+            43% {
+                opacity: 0;
+                transform: scaleX(0.3);
+            }
+            46% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+            62%,
+            100% {
+                opacity: 0;
+                transform: scaleX(1.5);
+            }
+        }
+
+        @keyframes hl-glow {
+            0%,
+            22% {
+                opacity: 0.3;
+            }
+            36%,
+            64% {
+                opacity: 1;
+            }
+            78%,
+            100% {
+                opacity: 0.3;
+            }
+        }
+
+        @keyframes hl-blink {
+            0%,
+            100% {
+                opacity: 0.35;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes hl-bump {
+            /* Transform only: a color keyframe would pull it off the compositor. */
+            0% {
+                transform: scale(1.28);
+            }
+            14%,
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes hl-tick {
+            to {
+                opacity: 0.99;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .hl-root * {
+                animation: none !important;
+            }
+            .hl-caret {
+                transition: none;
             }
         }
 
