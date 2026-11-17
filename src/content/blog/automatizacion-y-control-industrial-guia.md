@@ -27,6 +27,7 @@ faq:
 - **Conviene** cuando el proceso es estable, repetitivo y con volumen suficiente.
 - **No conviene todavía** cuando el proceso cambia cada semana o la regla de decisión no está clara.
 - **El retorno se mide** con mano de obra reasignada, OEE, scrap y trazabilidad: números que tu planta ya conoce.
+- **¿No sabes si tu proceso califica?** [Cuéntanos tu caso](/contact/) y te damos una respuesta técnica, no una cotización.
 
 La automatización industrial dejó de ser un lujo de grandes corporativos: hoy es la vía más directa para que una planta en México gane capacidad, consistencia y trazabilidad sin contratar más gente en un mercado laboral apretado. Pero automatizar por moda es una forma cara de complicarse la vida. Esta guía práctica explica qué es realmente la automatización y el control de procesos, cuándo conviene y cuándo no, qué tecnologías intervienen (PLC, HMI, SCADA), cómo se ve un proyecto paso a paso y cómo medir su retorno con números que ya conoces.
 
